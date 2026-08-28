@@ -5,7 +5,9 @@ const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
 
 export function proxy(request: NextRequest) {
   const host =
-    request.headers.get("host")?.split(":", 1)[0]?.toLowerCase() ?? "";
+    (request.headers.get("x-forwarded-host") ?? request.headers.get("host"))
+      ?.split(":", 1)[0]
+      ?.toLowerCase() ?? "";
   const pathname = request.nextUrl.pathname;
 
   // The account root has its own landing page, but authentication and dashboard URLs remain stable and readable.
