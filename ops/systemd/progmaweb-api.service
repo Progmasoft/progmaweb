@@ -1,0 +1,32 @@
+[Unit]
+Description=Progmaweb account API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=progmaweb
+Group=progmaweb
+WorkingDirectory=/srv/progmaweb/current/api
+ExecStart=/usr/bin/env /srv/progmaweb/current/api/Progmaweb.Api
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5085
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=30s
+
+# The API currently has no writable application files. Runtime state belongs in external services, not in the release.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,34 @@
+[Unit]
+Description=Progmaweb Next.js frontend
+After=network-online.target progmaweb-api.service
+Wants=network-online.target
+Requires=progmaweb-api.service
+
+[Service]
+Type=exec
+User=progmaweb
+Group=progmaweb
+WorkingDirectory=/srv/progmaweb/current/web
+ExecStart=/opt/progmaweb/node/bin/node /srv/progmaweb/current/web/server.js
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3010
+Environment=PROGMAWEB_API_ORIGIN=http://127.0.0.1:5085
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=30s
+
+# Standalone Next.js only reads immutable release files and opens its loopback listener.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target
