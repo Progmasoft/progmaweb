@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/apps/">
+    <Project Path="apps/api/Progmaweb.Api.csproj" />
+    <Project Path="apps/api-tests/Progmaweb.Api.Tests.csproj" />
+  </Folder>
+</Solution>
+

@@ -1,0 +1,41 @@
+name: Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "apps/api-tests/**"
+      - "Directory.Build.props"
+      - "Progmaweb.slnx"
+      - ".github/workflows/backend.yml"
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "apps/api-tests/**"
+      - "Directory.Build.props"
+      - "Progmaweb.slnx"
+      - ".github/workflows/backend.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+          cache: true
+          cache-dependency-path: "**/*.csproj"
+      - run: dotnet restore Progmaweb.slnx --locked-mode
+      - run: dotnet build Progmaweb.slnx --configuration Release --no-restore
+      - run: dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --no-build

@@ -1,0 +1,63 @@
+# Progmaweb
+
+Progmaweb is the public web and account surface for Progmasoft. The repository intentionally keeps presentation and
+account policy in one deployable workspace while preserving a strict process boundary between the Next.js frontend and
+the ASP.NET Core API.
+
+## Public hosts
+
+- `www.progmasoft.com` serves the corporate homepage.
+- `account.progmasoft.com` serves account discovery and authentication.
+- `account.progmasoft.com/login` signs an existing account in.
+- `account.progmasoft.com/register` creates a new account after server-side validation.
+- `account.progmasoft.com/<AccountName>/dashboard` serves the authenticated account dashboard.
+
+Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
+duplicates. Email uniqueness is also evaluated case-insensitively by the API.
+
+## Architecture
+
+- `apps/web` is a Next.js App Router application. Host-aware routing keeps the corporate and account surfaces in one
+  build without coupling their page hierarchy.
+- `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, session issuance, secure
+  cookies, rate limiting, and authorization.
+- The browser never receives password hashes, session digests, deployment secrets, or database credentials.
+- Production account maintenance is an explicit operations workflow. The public API does not contain bulk-delete,
+  reset-all, seed-password, or environment-password endpoints.
+
+## Requirements
+
+- Node.js 24 or newer
+- pnpm 11 or newer
+- .NET SDK 10
+
+The initial Progmaweb release, Git tag, and GitHub Release use version `1.0.0`. Visual X# compiler versions belong to
+the language repositories and do not determine this website's version.
+
+## Development
+
+Install frontend dependencies and start Next.js:
+
+```text
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Start the account API in another terminal:
+
+```text
+dotnet run --project apps/api/Progmaweb.Api.csproj
+```
+
+The frontend defaults to `http://localhost:5085` for server-side API requests. Set `PROGMAWEB_API_ORIGIN` when the API
+uses another origin. Browser requests use the same-origin `/api` boundary so production can proxy them without exposing
+an internal address.
+
+## Verification
+
+```text
+pnpm check
+pnpm build
+dotnet build apps/api/Progmaweb.Api.csproj --configuration Release
+dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release
+```

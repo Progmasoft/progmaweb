@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+coverage/
+dist/
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+*.tsbuildinfo
+.env
+.env.*
+!.env.example

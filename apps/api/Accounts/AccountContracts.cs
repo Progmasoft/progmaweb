@@ -1,0 +1,24 @@
+namespace Progmasoft.Progmaweb.Api.Accounts;
+
+public sealed record RegisterAccountRequest(string? AccountName, string? Email, string? Password);
+
+public sealed record LoginAccountRequest(string? Email, string? Password);
+
+public sealed record AccountResponse(string AccountName, string Email, DateTimeOffset CreatedAt);
+
+internal sealed record AuthenticatedAccount(AccountRecord Account, string SessionToken, DateTimeOffset ExpiresAt);
+
+internal enum CreateAccountStatus
+{
+    Created,
+    AccountNameUnavailable,
+    EmailUnavailable
+}
+
+internal sealed record CreateAccountResult(CreateAccountStatus Status, AccountRecord? Account)
+{
+    public static CreateAccountResult Created(AccountRecord account) => new(CreateAccountStatus.Created, account);
+    public static CreateAccountResult AccountNameUnavailable() => new(CreateAccountStatus.AccountNameUnavailable, null);
+    public static CreateAccountResult EmailUnavailable() => new(CreateAccountStatus.EmailUnavailable, null);
+}
+

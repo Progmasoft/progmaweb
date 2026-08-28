@@ -1,0 +1,6 @@
+packages:
+  - apps/*
+allowBuilds:
+  # The ESLint resolver ships a small native lookup helper used during linting.
+  # Its package-local install script is the only dependency build approved here.
+  unrs-resolver: true
