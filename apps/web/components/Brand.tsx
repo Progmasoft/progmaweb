@@ -1,11 +1,10 @@
 import Link from "next/link";
 
 interface BrandProps {
-  compact?: boolean;
   account?: boolean;
 }
 
-export function Brand({ compact = false, account = false }: BrandProps) {
+export function Brand({ account = false }: BrandProps) {
   return (
     <Link
       className="brand"
@@ -16,12 +15,13 @@ export function Brand({ compact = false, account = false }: BrandProps) {
       }
     >
       <span className="brand-mark" aria-hidden="true">
-        P
+        <span className="brand-tile brand-tile-slate" />
+        <span className="brand-tile brand-tile-teal" />
+        <span className="brand-tile brand-tile-violet" />
+        <span className="brand-tile brand-tile-orange" />
       </span>
-      <span className="brand-copy">
-        <strong>Progmasoft</strong>
-        {!compact && <small>{account ? "Account" : "Developer systems"}</small>}
-      </span>
+      <strong className="brand-name">Progmasoft</strong>
+      {account && <span className="brand-product">Account</span>}
     </Link>
   );
 }

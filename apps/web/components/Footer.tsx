@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div>
-          <Brand compact />
+          <Brand />
           <p>
             Programming-language infrastructure and developer systems built with
             durable contracts.

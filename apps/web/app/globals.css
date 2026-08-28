@@ -105,32 +105,50 @@ a {
 }
 
 .brand-mark {
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   display: grid;
-  place-items: center;
-  border-radius: 3px 11px 3px 11px;
-  background: linear-gradient(145deg, var(--blue-500), var(--blue-700));
-  color: white;
-  font-size: 21px;
-  font-weight: 700;
-  box-shadow: 0 5px 14px rgb(0 102 184 / 25%);
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
 }
 
-.brand-copy {
-  display: grid;
-  line-height: 1.15;
+.brand-tile {
+  display: block;
 }
 
-.brand-copy strong {
-  font-size: 18px;
+.brand-tile-slate {
+  background: #3b4658;
+}
+
+.brand-tile-teal {
+  background: #1e7188;
+}
+
+.brand-tile-violet {
+  background: #7655fa;
+}
+
+.brand-tile-orange {
+  background: #dc7644;
+}
+
+.brand-name {
+  color: #8e0000;
+  font-size: 20px;
+  font-weight: 650;
   letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-.brand-copy small {
-  margin-top: 3px;
-  color: var(--ink-500);
-  font-size: 12px;
+.brand-product {
+  border-left: 2px solid var(--ink-800);
+  margin-left: 5px;
+  padding-left: 16px;
+  color: var(--ink-800);
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .primary-nav {
