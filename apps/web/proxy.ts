@@ -10,7 +10,13 @@ export function proxy(request: NextRequest) {
 
   // The account root has its own landing page, but authentication and dashboard URLs remain stable and readable.
   if (accountHosts.has(host) && pathname === "/") {
-    return NextResponse.rewrite(new URL("/account", request.url));
+    const destination = new URL("/account", request.url);
+
+    // TLS terminates at Nginx. Next derives the public scheme from X-Forwarded-Proto,
+    // so an unmodified absolute rewrite would attempt TLS against its HTTP-only
+    // loopback listener and fail before the account page can render.
+    destination.protocol = "http:";
+    return NextResponse.rewrite(destination);
   }
 
   // Corporate hosts must not accidentally expose the account-only landing page as a public navigation destination.
