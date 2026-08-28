@@ -12,14 +12,18 @@ release atomically. The account API and Next.js frontend listen only on loopback
     api/
       Progmaweb.Api
     web/
-      server.js
-      .next/static/
-      public/
+      node_modules/
+      apps/web/
+        server.js
+        .next/static/
+        public/
 ```
 
-The web directory is produced by Next.js standalone output. Copy `.next/static` beside the standalone `.next` directory
-because Next.js intentionally does not include static or public assets in the standalone bundle. The API is published as
-a framework-dependent Linux x64 executable and uses the server's supported .NET runtime.
+The web directory is the full Next.js standalone output. In this pnpm monorepo the runnable server is emitted at
+`apps/web/server.js`; root-level standalone modules must remain above it. Copy `.next/static` into
+`apps/web/.next/static` and `public` into `apps/web/public`, because Next.js intentionally excludes those assets from the
+standalone bundle. The API is published as a framework-dependent Linux x64 executable and uses the server's supported
+.NET runtime.
 
 ## Activation contract
 

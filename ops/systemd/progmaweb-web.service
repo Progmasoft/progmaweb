@@ -8,8 +8,8 @@ Requires=progmaweb-api.service
 Type=exec
 User=progmaweb
 Group=progmaweb
-WorkingDirectory=/srv/progmaweb/current/web
-ExecStart=/opt/progmaweb/node/bin/node /srv/progmaweb/current/web/server.js
+WorkingDirectory=/srv/progmaweb/current/web/apps/web
+ExecStart=/opt/progmaweb/node/bin/node /srv/progmaweb/current/web/apps/web/server.js
 Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3010
