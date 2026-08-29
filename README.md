@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0 -->
+
 # Progmaweb
 
 Progmaweb is the public web and account surface for Progmasoft. The repository intentionally keeps presentation and
@@ -61,3 +64,10 @@ pnpm build
 dotnet build apps/api/Progmaweb.Api.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release
 ```
+
+## License
+
+Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Visual X# website, with the
+additional Progmasoft Patent Grant, Version 1.0. See `LICENSE.txt`, `PATENTS`,
+`LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.0.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
+respective licenses.

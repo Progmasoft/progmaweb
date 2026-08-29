@@ -1,0 +1,5 @@
+Copyright 2026 Progmasoft <support@progmasoft.com>
+
+Project-owned source code is licensed under the GNU Affero General Public License, version 3 or any later version, with
+the Progmasoft Patent Grant, Version 1.0. See LICENSE.txt, PATENTS, and
+LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.0.txt.

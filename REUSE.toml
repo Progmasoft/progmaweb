@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "Progmaweb"
+SPDX-PackageSupplier = "Organization: Progmasoft"
+SPDX-PackageDownloadLocation = "https://github.com/Progmasoft/progmaweb"
+
+[[annotations]]
+path = ["**/*.json", "pnpm-lock.yaml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Progmasoft <support@progmasoft.com>"
+SPDX-License-Identifier = "AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0"

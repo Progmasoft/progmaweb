@@ -2,6 +2,11 @@
   "name": "@progmasoft/progmaweb",
   "version": "1.0.0",
   "private": true,
+  "license": "AGPL-3.0-or-later",
+  "author": {
+    "name": "Progmasoft",
+    "email": "support@progmasoft.com"
+  },
   "packageManager": "pnpm@11.24.0",
   "engines": {
     "node": ">=24.0.0",

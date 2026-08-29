@@ -2,6 +2,11 @@
   "name": "@progmasoft/web",
   "version": "1.0.0",
   "private": true,
+  "license": "AGPL-3.0-or-later",
+  "author": {
+    "name": "Progmasoft",
+    "email": "support@progmasoft.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
