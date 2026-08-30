@@ -18,6 +18,9 @@ the ASP.NET Core API.
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
 duplicates. Email uniqueness is also evaluated case-insensitively by the API.
 
+ViGet does not maintain a separate publisher name. A package coordinate's `<Publisher>` segment is exactly the
+canonical Progmasoft `<Account>` name, with the same spelling and case.
+
 ## Architecture
 
 - `apps/web` is a Next.js App Router application. Host-aware routing keeps the corporate and account surfaces in one

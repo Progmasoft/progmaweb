@@ -40,7 +40,7 @@ export default function AccountHomepage() {
               </div>
               <div>
                 <span>Account name</span>
-                <strong>Your durable public identity</strong>
+                <strong>Your durable public identity and ViGet publisher name</strong>
               </div>
               <div>
                 <span>Email</span>
@@ -68,7 +68,8 @@ export default function AccountHomepage() {
               <h2>Predictable names</h2>
               <p>
                 Canonical account names prevent ambiguous URLs and case-only
-                impersonation.
+                impersonation. ViGet uses this exact name as the package
+                publisher; it does not create a second identity.
               </p>
             </article>
             <article>

@@ -123,6 +123,10 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
                 <dd>{account.accountName}</dd>
               </div>
               <div>
+                <dt>ViGet publisher name</dt>
+                <dd>{account.accountName}</dd>
+              </div>
+              <div>
                 <dt>Email</dt>
                 <dd>{account.email}</dd>
               </div>
@@ -149,7 +153,9 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
             <div className="service-row">
               <div>
                 <strong>ViGet Package Registry</strong>
-                <span>Package and DSL-plugin identity</span>
+                <span>
+                  Publisher name: {account.accountName} (your Account name)
+                </span>
               </div>
               <span className="status-badge status-planned">Planned</span>
             </div>
