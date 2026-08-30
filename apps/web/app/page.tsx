@@ -19,7 +19,7 @@ const products = [
     name: "ViGet",
     description:
       "The canonical package and DSL-plugin registry for the Visual X# ecosystem, operated directly by Progmasoft.",
-    href: "https://viget.xsharp-lang.xyz/",
+    href: "https://viget.progmasoft.com/",
     action: "Open ViGet",
     accent: "blue",
   },

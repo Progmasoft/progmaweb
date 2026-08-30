@@ -17,7 +17,7 @@ export function Footer() {
         <div>
           <strong>Products</strong>
           <a href="https://xsharp-lang.xyz/">Visual X#</a>
-          <a href="https://viget.xsharp-lang.xyz/">ViGet</a>
+          <a href="https://viget.progmasoft.com/">ViGet</a>
           <a href="https://github.com/Progmasoft">Open source</a>
         </div>
         <div>

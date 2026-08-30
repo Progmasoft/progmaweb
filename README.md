@@ -13,7 +13,7 @@ the ASP.NET Core API.
 - `account.progmasoft.com` serves account discovery and authentication.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
-- `account.progmasoft.com/<AccountName>/dashboard` serves the authenticated account dashboard.
+- `account.progmasoft.com/<Account>/dashboard` serves the authenticated account dashboard.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
 duplicates. Email uniqueness is also evaluated case-insensitively by the API.
