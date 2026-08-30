@@ -14,6 +14,7 @@ WorkingDirectory=/srv/progmaweb/current/api
 ExecStart=/usr/bin/env /srv/progmaweb/current/api/Progmaweb.Api
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=http://127.0.0.1:5085
+EnvironmentFile=-/etc/progmaweb/account.env
 Restart=on-failure
 RestartSec=5s
 TimeoutStopSec=30s

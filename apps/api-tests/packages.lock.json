@@ -43,6 +43,11 @@
         "resolved": "2.23.0",
         "contentHash": "nWArUZTdU7iqZLycLKWe0TDms48KKGE6pONH2terYNa8REXiqixrMOkf1sk5DHGMaUTqONU2YkS4SAXBhLStgw=="
       },
+      "Microsoft.AspNetCore.Authentication.Google": {
+        "type": "Transitive",
+        "resolved": "10.0.11",
+        "contentHash": "v/OZld8HxGa5hudLWiChuCf5asMrE36n19sR1RK5cC65SGJoYvQAcwnz3yoAOLDSw90PYc3hgFCh1FW83sakUg=="
+      },
       "Microsoft.AspNetCore.TestHost": {
         "type": "Transitive",
         "resolved": "10.0.11",
@@ -469,7 +474,10 @@
         }
       },
       "progmaweb.api": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Google": "[10.0.11, )"
+        }
       }
     }
   }

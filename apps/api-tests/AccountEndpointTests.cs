@@ -10,6 +10,38 @@ namespace Progmasoft.Progmaweb.Api.Tests;
 public sealed class AccountEndpointTests
 {
     [Fact]
+    public async Task GoogleStartUsesTheConfiguredCallbackAndPreservesAccountNameInState()
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient(handleCookies: false);
+
+        HttpResponseMessage response = await client.GetAsync(
+            "/api/v1/accounts/oauth/google/start?accountName=GoogleUser",
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Uri location = Assert.IsType<Uri>(response.Headers.Location);
+        Assert.Equal("accounts.google.com", location.Host);
+        Assert.Contains("redirect_uri=https%3A%2F%2Flocalhost%2Fapi%2Fv1%2Faccounts%2Foauth%2Fgoogle%2Fcallback",
+            location.Query, StringComparison.Ordinal);
+        Assert.Contains("state=", location.Query, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task GoogleStartRejectsInvalidAccountNameBeforeLeavingTheSite()
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient(handleCookies: false);
+
+        HttpResponseMessage response = await client.GetAsync(
+            "/api/v1/accounts/oauth/google/start?accountName=lowercase",
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/register?google=invalid-account-name", response.Headers.Location?.OriginalString);
+    }
+
+    [Fact]
     public async Task RegisterCreatesSessionAndMeReturnsAccount()
     {
         await using AccountApiFactory factory = new();

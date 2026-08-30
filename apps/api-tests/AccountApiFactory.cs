@@ -17,7 +17,9 @@ internal sealed class AccountApiFactory : WebApplicationFactory<Program>
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["AccountSessions:LifetimeHours"] = "2",
-                ["AccountSessions:CookieName"] = "__Host-ProgmasoftSession"
+                ["AccountSessions:CookieName"] = "__Host-ProgmasoftSession",
+                ["Authentication:Google:ClientId"] = "test-client.apps.googleusercontent.com",
+                ["Authentication:Google:ClientSecret"] = "test-secret"
             });
         });
     }

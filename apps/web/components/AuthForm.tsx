@@ -5,11 +5,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useId, useState } from "react";
+import { type FormEvent, type MouseEvent, useId, useState } from "react";
 
 type AuthMode = "login" | "register";
 
 interface AuthFormProps {
+  initialMessage?: string;
   mode: AuthMode;
 }
 
@@ -30,12 +31,33 @@ function firstProblemMessage(problem: ProblemDetails): string {
   return firstError ?? problem.title ?? "The request could not be completed.";
 }
 
-export function AuthForm({ mode }: AuthFormProps) {
+export function AuthForm({ initialMessage, mode }: AuthFormProps) {
   const router = useRouter();
   const formId = useId();
   const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(initialMessage ?? null);
   const [showPassword, setShowPassword] = useState(false);
+
+  function continueWithGoogle(event: MouseEvent<HTMLButtonElement>) {
+    const form = event.currentTarget.form;
+    const parameters = new URLSearchParams();
+
+    if (mode === "register") {
+      const accountName = form?.elements.namedItem("accountName");
+      if (!(accountName instanceof HTMLInputElement)) {
+        setMessage("The Account name field could not be read.");
+        return;
+      }
+      if (!accountName.checkValidity()) {
+        accountName.reportValidity();
+        return;
+      }
+      parameters.set("accountName", accountName.value);
+    }
+
+    const query = parameters.size === 0 ? "" : `?${parameters.toString()}`;
+    window.open(`/api/v1/accounts/oauth/google/start${query}`, "_self");
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -215,6 +237,18 @@ export function AuthForm({ mode }: AuthFormProps) {
           : mode === "register"
             ? "Create account"
             : "Sign in"}
+      </button>
+
+      <div className="auth-divider" aria-hidden="true">
+        <span>or</span>
+      </div>
+      <button
+        className="button google-auth-button"
+        type="button"
+        disabled={pending}
+        onClick={continueWithGoogle}
+      >
+        Continue with Google
       </button>
 
       <p className="form-switch">

@@ -62,7 +62,7 @@ internal sealed class AccountService(
         }
 
         AccountRecord? account = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
-        if (account is null)
+        if (account is null || account.PasswordHash is null)
         {
             // A fixed dummy record keeps the missing-account path on the same password-hashing primitive.
             AccountRecord dummyBase = new(Guid.Empty, "Missing00", "MISSING00", "missing@example.invalid",
@@ -83,6 +83,61 @@ internal sealed class AccountService(
         }
 
         return await sessions.CreateAsync(account, cancellationToken);
+    }
+
+    public async ValueTask<(AuthenticatedAccount? Authentication, GoogleAccountFailure Failure)>
+        AuthenticateGoogleAsync(
+            string? providerEmail,
+            string? requestedAccountName,
+            SessionService sessions,
+            CancellationToken cancellationToken)
+    {
+        if (!EmailAddressPolicy.TryNormalize(providerEmail, out string email, out string normalizedEmail, out _))
+        {
+            return (null, GoogleAccountFailure.ProviderRejected);
+        }
+
+        AccountRecord? existing = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
+        if (existing is not null)
+        {
+            return (await sessions.CreateAsync(existing, cancellationToken), GoogleAccountFailure.None);
+        }
+
+        if (requestedAccountName is null)
+        {
+            return (null, GoogleAccountFailure.AccountNameRequired);
+        }
+
+        if (!AccountNamePolicy.TryNormalize(requestedAccountName, out string accountName, out _))
+        {
+            return (null, GoogleAccountFailure.InvalidAccountName);
+        }
+
+        AccountRecord account = new(
+            Guid.NewGuid(),
+            accountName,
+            AccountNamePolicy.NormalizeForLookup(accountName),
+            email,
+            normalizedEmail,
+            null,
+            timeProvider.GetUtcNow());
+        CreateAccountResult result = await store.CreateAsync(account, cancellationToken);
+
+        if (result.Status is CreateAccountStatus.AccountNameUnavailable)
+        {
+            return (null, GoogleAccountFailure.AccountNameUnavailable);
+        }
+
+        if (result.Status is CreateAccountStatus.EmailUnavailable)
+        {
+            // A concurrent callback may have created the same verified Google identity.
+            AccountRecord? concurrent = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
+            return concurrent is null
+                ? (null, GoogleAccountFailure.ProviderRejected)
+                : (await sessions.CreateAsync(concurrent, cancellationToken), GoogleAccountFailure.None);
+        }
+
+        return (await sessions.CreateAsync(account, cancellationToken), GoogleAccountFailure.None);
     }
 
     private static Dictionary<string, string[]> ValidateRegistration(
@@ -110,4 +165,13 @@ internal sealed class AccountService(
 
         return errors;
     }
+}
+
+internal enum GoogleAccountFailure
+{
+    None,
+    ProviderRejected,
+    AccountNameRequired,
+    InvalidAccountName,
+    AccountNameUnavailable
 }

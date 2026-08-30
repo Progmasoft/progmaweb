@@ -10,14 +10,24 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{ google?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { google } = await searchParams;
+  const initialMessage =
+    google === "failed"
+      ? "Google sign-in could not be completed. Try again."
+      : undefined;
+
   return (
     <AccountShell
       eyebrow="Progmasoft account"
       title="Sign in securely."
       description="Continue to your account dashboard and connected services."
     >
-      <AuthForm mode="login" />
+      <AuthForm initialMessage={initialMessage} mode="login" />
     </AccountShell>
   );
 }

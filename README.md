@@ -59,6 +59,12 @@ The frontend defaults to `http://localhost:5085` for server-side API requests. S
 uses another origin. Browser requests use the same-origin `/api` boundary so production can proxy them without exposing
 an internal address.
 
+Google sign-in uses a server-side authorization-code flow. Configure `Authentication__Google__ClientId` and
+`Authentication__Google__ClientSecret` only in the process environment or secret manager. The production OAuth client
+uses `https://account.progmasoft.com` as its JavaScript origin and
+`https://account.progmasoft.com/api/v1/accounts/oauth/google/callback` as its exact redirect URI. Never commit the
+downloaded Google client JSON.
+
 ## Verification
 
 ```text

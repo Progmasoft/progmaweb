@@ -3,8 +3,14 @@
 
 namespace Progmasoft.Progmaweb.Api.Accounts;
 
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+
 internal static class AccountEndpoints
 {
+    internal const string ExternalCookieScheme = "ProgmasoftExternal";
+
     public static IEndpointRouteBuilder MapAccountEndpoints(this IEndpointRouteBuilder endpoints)
     {
         RouteGroupBuilder accounts = endpoints.MapGroup("/api/v1/accounts");
@@ -13,8 +19,74 @@ internal static class AccountEndpoints
         accounts.MapPost("/login", LoginAsync).RequireRateLimiting("account-auth");
         accounts.MapPost("/logout", LogoutAsync);
         accounts.MapGet("/me", MeAsync);
+        accounts.MapGet("/oauth/google/start", StartGoogleAsync).RequireRateLimiting("account-auth");
+        accounts.MapGet("/oauth/google/complete", CompleteGoogleAsync).RequireRateLimiting("account-auth");
 
         return endpoints;
+    }
+
+    private static IResult StartGoogleAsync(string? accountName, IConfiguration configuration)
+    {
+        if (string.IsNullOrWhiteSpace(configuration["Authentication:Google:ClientId"]) ||
+            string.IsNullOrWhiteSpace(configuration["Authentication:Google:ClientSecret"]))
+        {
+            return Results.Problem(
+                title: "Google sign-in is unavailable",
+                detail: "The Google identity provider has not been configured.",
+                statusCode: StatusCodes.Status503ServiceUnavailable);
+        }
+
+        string? normalized = null;
+        if (accountName is not null && !AccountNamePolicy.TryNormalize(accountName, out normalized, out _))
+        {
+            return Results.Redirect("/register?google=invalid-account-name");
+        }
+
+        AuthenticationProperties properties = new()
+        {
+            RedirectUri = "/api/v1/accounts/oauth/google/complete"
+        };
+        if (normalized is not null)
+        {
+            properties.Items["accountName"] = normalized;
+        }
+
+        return Results.Challenge(properties, [GoogleDefaults.AuthenticationScheme]);
+    }
+
+    private static async Task<IResult> CompleteGoogleAsync(
+        AccountService accounts,
+        SessionService sessions,
+        HttpContext context,
+        CancellationToken cancellationToken)
+    {
+        AuthenticateResult external = await context.AuthenticateAsync(ExternalCookieScheme);
+        if (!external.Succeeded || external.Principal is null)
+        {
+            return Results.Redirect("/login?google=failed");
+        }
+
+        string? email = external.Principal.FindFirstValue(ClaimTypes.Email);
+        string? accountName = null;
+        external.Properties?.Items.TryGetValue("accountName", out accountName);
+        (AuthenticatedAccount? authentication, GoogleAccountFailure failure) =
+            await accounts.AuthenticateGoogleAsync(email, accountName, sessions, cancellationToken);
+        await context.SignOutAsync(ExternalCookieScheme);
+
+        if (authentication is null)
+        {
+            string destination = failure switch
+            {
+                GoogleAccountFailure.AccountNameRequired => "/register?google=account-name-required",
+                GoogleAccountFailure.InvalidAccountName => "/register?google=invalid-account-name",
+                GoogleAccountFailure.AccountNameUnavailable => "/register?google=account-name-unavailable",
+                _ => "/login?google=failed"
+            };
+            return Results.Redirect(destination);
+        }
+
+        WriteSessionCookie(context, sessions, authentication);
+        return Results.Redirect($"/{Uri.EscapeDataString(authentication.Account.AccountName)}/dashboard");
     }
 
     private static async Task<IResult> RegisterAsync(

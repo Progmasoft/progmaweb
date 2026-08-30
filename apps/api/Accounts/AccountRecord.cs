@@ -9,7 +9,7 @@ internal sealed record AccountRecord(
     string NormalizedAccountName,
     string Email,
     string NormalizedEmail,
-    string PasswordHash,
+    string? PasswordHash,
     DateTimeOffset CreatedAt);
 
 internal sealed record SessionRecord(
