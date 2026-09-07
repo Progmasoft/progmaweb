@@ -20,6 +20,10 @@ Environment=PROGMAWEB_API_ORIGIN=http://127.0.0.1:5085
 Restart=on-failure
 RestartSec=5s
 TimeoutStopSec=30s
+# Node reports SIGTERM as status 143 during an intentional systemd stop. Treat
+# that graceful shutdown as success so deployments do not leave a false failed
+# result in the service history.
+SuccessExitStatus=143
 
 # Standalone Next.js only reads immutable release files and opens its loopback listener.
 NoNewPrivileges=true
