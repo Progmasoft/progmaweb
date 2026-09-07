@@ -1,16 +1,18 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 "use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type MouseEvent, useId, useState } from "react";
+import { getMessages, type Locale } from "@/lib/localization";
 
 type AuthMode = "login" | "register";
 
 interface AuthFormProps {
   initialMessage?: string;
+  locale: Locale;
   mode: AuthMode;
 }
 
@@ -20,7 +22,10 @@ interface ProblemDetails {
   title?: string;
 }
 
-function firstProblemMessage(problem: ProblemDetails): string {
+function firstProblemMessage(
+  problem: ProblemDetails,
+  fallback: string,
+): string {
   if (problem.detail) {
     return problem.detail;
   }
@@ -28,10 +33,11 @@ function firstProblemMessage(problem: ProblemDetails): string {
   const firstError = problem.errors
     ? Object.values(problem.errors).flat()[0]
     : undefined;
-  return firstError ?? problem.title ?? "The request could not be completed.";
+  return firstError ?? problem.title ?? fallback;
 }
 
-export function AuthForm({ initialMessage, mode }: AuthFormProps) {
+export function AuthForm({ initialMessage, locale, mode }: AuthFormProps) {
+  const { auth } = getMessages(locale);
   const router = useRouter();
   const formId = useId();
   const [pending, setPending] = useState(false);
@@ -45,7 +51,7 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
     if (mode === "register") {
       const accountName = form?.elements.namedItem("accountName");
       if (!(accountName instanceof HTMLInputElement)) {
-        setMessage("The Account name field could not be read.");
+        setMessage(auth.unreadableName);
         return;
       }
       if (!accountName.checkValidity()) {
@@ -70,7 +76,7 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
       mode === "register" &&
       password !== String(form.get("confirmPassword") ?? "")
     ) {
-      setMessage("The password confirmation does not match.");
+      setMessage(auth.mismatch);
       return;
     }
 
@@ -101,22 +107,20 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
         .catch(() => ({}))) as ProblemDetails & { accountName?: string };
 
       if (!response.ok) {
-        setMessage(firstProblemMessage(result));
+        setMessage(firstProblemMessage(result, auth.requestFailed));
         return;
       }
 
       const accountName = result.accountName;
       if (!accountName) {
-        setMessage("The server did not return an account name.");
+        setMessage(auth.missingName);
         return;
       }
 
       router.push(`/${encodeURIComponent(accountName)}/dashboard`);
       router.refresh();
     } catch {
-      setMessage(
-        "The account service is temporarily unreachable. Try again shortly.",
-      );
+      setMessage(auth.unreachable);
     } finally {
       setPending(false);
     }
@@ -129,11 +133,9 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
       aria-describedby={message ? `${formId}-message` : undefined}
     >
       <div className="form-heading">
-        <h2>{mode === "register" ? "Create your account" : "Welcome back"}</h2>
+        <h2>{mode === "register" ? auth.createHeading : auth.loginHeading}</h2>
         <p>
-          {mode === "register"
-            ? "Use one Progmasoft identity across supported services."
-            : "Sign in with the email address attached to your Progmasoft account."}
+          {mode === "register" ? auth.createDescription : auth.loginDescription}
         </p>
       </div>
 
@@ -149,7 +151,7 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
 
       {mode === "register" && (
         <div className="field-group">
-          <label htmlFor={`${formId}-account-name`}>Account name</label>
+          <label htmlFor={`${formId}-account-name`}>{auth.accountName}</label>
           <input
             id={`${formId}-account-name`}
             name="accountName"
@@ -163,15 +165,12 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
             placeholder="MyAccount"
             required
           />
-          <small>
-            Use 8–128 ASCII letters or digits and begin with an uppercase
-            letter.
-          </small>
+          <small>{auth.accountHint}</small>
         </div>
       )}
 
       <div className="field-group">
-        <label htmlFor={`${formId}-email`}>Email address</label>
+        <label htmlFor={`${formId}-email`}>{auth.email}</label>
         <input
           id={`${formId}-email`}
           name="email"
@@ -186,8 +185,10 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
 
       <div className="field-group">
         <div className="field-label-row">
-          <label htmlFor={`${formId}-password`}>Password</label>
-          {mode === "login" && <Link href="/recover">Forgot password?</Link>}
+          <label htmlFor={`${formId}-password`}>{auth.password}</label>
+          {mode === "login" && (
+            <Link href="/recover">{auth.forgotPassword}</Link>
+          )}
         </div>
         <div className="password-field">
           <input
@@ -206,19 +207,17 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
             className="password-toggle"
             onClick={() => setShowPassword((visible) => !visible)}
           >
-            {showPassword ? "Hide" : "Show"}
+            {showPassword ? auth.hide : auth.show}
           </button>
         </div>
-        {mode === "register" && (
-          <small>
-            Use at least 12 characters. Long passphrases are supported.
-          </small>
-        )}
+        {mode === "register" && <small>{auth.passwordHint}</small>}
       </div>
 
       {mode === "register" && (
         <div className="field-group">
-          <label htmlFor={`${formId}-confirm-password`}>Confirm password</label>
+          <label htmlFor={`${formId}-confirm-password`}>
+            {auth.confirmPassword}
+          </label>
           <input
             id={`${formId}-confirm-password`}
             name="confirmPassword"
@@ -233,14 +232,14 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
 
       <button className="button auth-submit" type="submit" disabled={pending}>
         {pending
-          ? "Working…"
+          ? auth.working
           : mode === "register"
-            ? "Create account"
-            : "Sign in"}
+            ? auth.create
+            : auth.signIn}
       </button>
 
       <div className="auth-divider" aria-hidden="true">
-        <span>or</span>
+        <span>{auth.or}</span>
       </div>
       <button
         className="button google-auth-button"
@@ -248,15 +247,13 @@ export function AuthForm({ initialMessage, mode }: AuthFormProps) {
         disabled={pending}
         onClick={continueWithGoogle}
       >
-        Continue with Google
+        {auth.google}
       </button>
 
       <p className="form-switch">
-        {mode === "register"
-          ? "Already have an account?"
-          : "New to Progmasoft?"}{" "}
+        {mode === "register" ? auth.already : auth.newUser}{" "}
         <Link href={mode === "register" ? "/login" : "/register"}>
-          {mode === "register" ? "Sign in" : "Create an account"}
+          {mode === "register" ? auth.signIn : auth.createLink}
         </Link>
       </p>
     </form>

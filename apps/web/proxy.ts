@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { isLocale } from "@/lib/localization";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
 
@@ -12,6 +13,34 @@ export function proxy(request: NextRequest) {
       ?.split(":", 1)[0]
       ?.toLowerCase() ?? "";
   const pathname = request.nextUrl.pathname;
+
+  // Language selection is a user preference, not a second canonical URL.
+  // Consume the query parameter once, persist it across Progmasoft hosts, and
+  // redirect to the clean URL so crawlers never index preference variants.
+  const requestedLocale = request.nextUrl.searchParams.get("lang") ?? undefined;
+  if (isLocale(requestedLocale)) {
+    const destination = request.nextUrl.clone();
+    destination.searchParams.delete("lang");
+    const forwardedProtocol = request.headers.get("x-forwarded-proto");
+    const isProductionHost =
+      host === "progmasoft.com" || host.endsWith(".progmasoft.com");
+    destination.protocol = isProductionHost
+      ? "https:"
+      : request.nextUrl.protocol;
+    const response = NextResponse.redirect(destination);
+    response.cookies.set("progmasoft_locale", requestedLocale, {
+      domain:
+        host === "progmasoft.com" || host.endsWith(".progmasoft.com")
+          ? ".progmasoft.com"
+          : undefined,
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+      secure:
+        forwardedProtocol === "https" || request.nextUrl.protocol === "https:",
+    });
+    return response;
+  }
 
   // The account root has its own landing page, but authentication and dashboard URLs remain stable and readable.
   if (accountHosts.has(host) && pathname === "/") {

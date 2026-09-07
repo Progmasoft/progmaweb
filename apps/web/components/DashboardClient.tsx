@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 "use client";
 
 import { useEffect, useState } from "react";
+import { getMessages, type Locale } from "@/lib/localization";
 
 interface AccountSummary {
   accountName: string;
@@ -12,6 +13,7 @@ interface AccountSummary {
 }
 
 interface DashboardClientProps {
+  locale: Locale;
   routeAccountName: string;
 }
 
@@ -20,7 +22,11 @@ type LoadState =
   | { kind: "error"; message: string }
   | { kind: "ready"; account: AccountSummary };
 
-export function DashboardClient({ routeAccountName }: DashboardClientProps) {
+export function DashboardClient({
+  locale,
+  routeAccountName,
+}: DashboardClientProps) {
+  const { dashboard } = getMessages(locale);
   const [state, setState] = useState<LoadState>({ kind: "loading" });
 
   useEffect(() => {
@@ -43,7 +49,7 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
         if (!response.ok) {
           setState({
             kind: "error",
-            message: "The dashboard could not be loaded.",
+            message: dashboard.loadFailed,
           });
           return;
         }
@@ -61,7 +67,7 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
           setState({
             kind: "error",
-            message: "The account service is temporarily unreachable.",
+            message: dashboard.unreachable,
           });
         }
       }
@@ -69,7 +75,7 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
 
     void loadAccount();
     return () => controller.abort();
-  }, [routeAccountName]);
+  }, [dashboard.loadFailed, dashboard.unreachable, routeAccountName]);
 
   async function signOut() {
     await fetch("/api/v1/accounts/logout", {
@@ -80,7 +86,7 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
   }
 
   if (state.kind === "loading") {
-    return <div className="dashboard-loading">Loading account…</div>;
+    return <div className="dashboard-loading">{dashboard.loading}</div>;
   }
 
   if (state.kind === "error") {
@@ -96,75 +102,81 @@ export function DashboardClient({ routeAccountName }: DashboardClientProps) {
         </div>
         <strong>{account.accountName}</strong>
         <span>{account.email}</span>
-        <nav aria-label="Dashboard navigation">
+        <nav aria-label={dashboard.navigation}>
           <a className="active" href="#overview">
-            Overview
+            {dashboard.overview}
           </a>
-          <a href="#security">Security</a>
-          <a href="#services">Services</a>
+          <a href="#security">{dashboard.security}</a>
+          <a href="#services">{dashboard.services}</a>
         </nav>
         <button className="text-button" type="button" onClick={signOut}>
-          Sign out
+          {dashboard.signOut}
         </button>
       </aside>
       <main className="dashboard-content">
         <header className="dashboard-heading" id="overview">
-          <p className="eyebrow">Account overview</p>
-          <h1>Welcome, {account.accountName}.</h1>
-          <p>Manage the identity used by Progmasoft services.</p>
+          <p className="eyebrow">{dashboard.eyebrow}</p>
+          <h1>
+            {dashboard.welcome}, {account.accountName}.
+          </h1>
+          <p>{dashboard.description}</p>
         </header>
         <div className="dashboard-grid">
           <section className="dashboard-card">
-            <span className="card-kicker">Profile</span>
-            <h2>Account identity</h2>
+            <span className="card-kicker">{dashboard.profile}</span>
+            <h2>{dashboard.identity}</h2>
             <dl className="detail-list">
               <div>
-                <dt>Account name</dt>
+                <dt>{dashboard.accountName}</dt>
                 <dd>{account.accountName}</dd>
               </div>
               <div>
-                <dt>ViGet publisher name</dt>
+                <dt>{dashboard.publisherName}</dt>
                 <dd>{account.accountName}</dd>
               </div>
               <div>
-                <dt>Email</dt>
+                <dt>{dashboard.email}</dt>
                 <dd>{account.email}</dd>
               </div>
               <div>
-                <dt>Created</dt>
-                <dd>{new Date(account.createdAt).toLocaleDateString()}</dd>
+                <dt>{dashboard.created}</dt>
+                <dd>
+                  {new Date(account.createdAt).toLocaleDateString(locale)}
+                </dd>
               </div>
             </dl>
           </section>
           <section className="dashboard-card" id="security">
-            <span className="card-kicker">Security</span>
-            <h2>Password and sessions</h2>
-            <p>
-              Your browser uses an HttpOnly secure session cookie. Session
-              secrets are never stored as plaintext.
-            </p>
+            <span className="card-kicker">{dashboard.security}</span>
+            <h2>{dashboard.passwordSessions}</h2>
+            <p>{dashboard.securityDescription}</p>
             <button className="button button-secondary" type="button">
-              Change password
+              {dashboard.changePassword}
             </button>
           </section>
           <section className="dashboard-card dashboard-card-wide" id="services">
-            <span className="card-kicker">Services</span>
-            <h2>Connected Progmasoft products</h2>
+            <span className="card-kicker">{dashboard.services}</span>
+            <h2>{dashboard.products}</h2>
             <div className="service-row">
               <div>
                 <strong>ViGet Package Registry</strong>
                 <span>
-                  Publisher name: {account.accountName} (your Account name)
+                  {dashboard.publisherPrefix}: {account.accountName} (
+                  {dashboard.sameAccount})
                 </span>
               </div>
-              <span className="status-badge status-planned">Planned</span>
+              <span className="status-badge status-planned">
+                {dashboard.planned}
+              </span>
             </div>
             <div className="service-row">
               <div>
                 <strong>Visual X#</strong>
-                <span>Developer ecosystem profile</span>
+                <span>{dashboard.profileDescription}</span>
               </div>
-              <span className="status-badge status-planned">Planned</span>
+              <span className="status-badge status-planned">
+                {dashboard.planned}
+              </span>
             </div>
           </section>
         </div>

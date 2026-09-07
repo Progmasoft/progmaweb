@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import Link from "next/link";
 
@@ -12,9 +12,7 @@ export function Brand({ account = false }: BrandProps) {
     <Link
       className="brand"
       href={
-        account
-          ? "https://account.progmasoft.com/"
-          : "https://www.progmasoft.com/"
+        account ? "https://account.progmasoft.com/" : "https://progmasoft.com/"
       }
     >
       <span className="brand-mark" aria-hidden="true">

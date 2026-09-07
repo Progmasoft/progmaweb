@@ -1,86 +1,69 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
+import type { Metadata } from "next";
+import { Fragment } from "react";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getLocale } from "@/lib/locale.server";
+import { getMessages } from "@/lib/localization";
 
-const products = [
+export const metadata: Metadata = {
+  alternates: { canonical: "https://progmasoft.com/" },
+  robots: { index: true, follow: true },
+};
+
+const productLinks = [
   {
-    eyebrow: "Programming language",
-    name: "Visual X#",
-    description:
-      "A modern programming language developed by Progmasoft, with its own dedicated product and documentation site.",
     href: "https://xsharp-lang.xyz/",
-    action: "Explore Visual X#",
     accent: "violet",
   },
   {
-    eyebrow: "Package registry",
-    name: "ViGet",
-    description:
-      "The canonical package and DSL-plugin registry for the Visual X# ecosystem, operated directly by Progmasoft.",
     href: "https://viget.progmasoft.com/",
-    action: "Open ViGet",
     accent: "blue",
   },
   {
-    eyebrow: "Developer tooling",
-    name: "Open engineering",
-    description:
-      "Compiler, formatter, linter, analyzer, project-system, and editor work developed in public repositories.",
     href: "https://github.com/Progmasoft",
-    action: "View on GitHub",
     accent: "green",
   },
 ] as const;
 
-export default function Homepage() {
+export default async function Homepage() {
+  const locale = await getLocale();
+  const { home } = getMessages(locale);
   return (
     <>
-      <SiteHeader />
+      <SiteHeader locale={locale} />
       <main>
         <section className="hero corporate-hero">
           <div className="shell hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Developer systems by Progmasoft</p>
+              <p className="eyebrow">{home.heroEyebrow}</p>
               <h1>
-                Tools should make hard work <span>understandable.</span>
+                {home.heroTitleStart} <span>{home.heroTitleAccent}</span>
               </h1>
-              <p className="hero-lede">
-                We build programming-language infrastructure, package systems,
-                and developer tools around explicit contracts instead of
-                accidental complexity.
-              </p>
+              <p className="hero-lede">{home.heroDescription}</p>
               <div className="hero-actions">
                 <a className="button" href="#products">
-                  Explore products
+                  {home.exploreProducts}
                 </a>
                 <a
                   className="button button-secondary"
                   href="https://github.com/Progmasoft"
                 >
-                  Browse source
+                  {home.browseSource}
                 </a>
               </div>
               <dl className="hero-facts">
-                <div>
-                  <dt>Open</dt>
-                  <dd>Public engineering</dd>
-                </div>
-                <div>
-                  <dt>Typed</dt>
-                  <dd>Contracts before shortcuts</dd>
-                </div>
-                <div>
-                  <dt>Native</dt>
-                  <dd>Performance without mystery</dd>
-                </div>
+                {home.facts.map(([term, description]) => (
+                  <div key={term}>
+                    <dt>{term}</dt>
+                    <dd>{description}</dd>
+                  </div>
+                ))}
               </dl>
             </div>
-            <div
-              className="hero-visual"
-              aria-label="Progmasoft product principles"
-            >
+            <div className="hero-visual" aria-label={home.visualLabel}>
               <div className="system-window">
                 <div className="window-bar">
                   <span></span>
@@ -89,29 +72,22 @@ export default function Homepage() {
                   <code>progmasoft/company</code>
                 </div>
                 <div className="system-stack">
-                  <div className="stack-row stack-language">
-                    <span>Products</span>
-                    <strong>Focused experiences</strong>
-                    <small>
-                      Clear purpose · durable names · public identity
-                    </small>
-                  </div>
-                  <div className="stack-arrow" aria-hidden="true">
-                    ↓
-                  </div>
-                  <div className="stack-row stack-project">
-                    <span>Platform</span>
-                    <strong>Shared account foundation</strong>
-                    <small>Authentication · service access · recovery</small>
-                  </div>
-                  <div className="stack-arrow" aria-hidden="true">
-                    ↓
-                  </div>
-                  <div className="stack-row stack-native">
-                    <span>Operations</span>
-                    <strong>First-party infrastructure</strong>
-                    <small>Observable · maintainable · directly operated</small>
-                  </div>
+                  {home.stack.map(([label, title, description], index) => (
+                    <Fragment key={label}>
+                      {index > 0 && (
+                        <div className="stack-arrow" aria-hidden="true">
+                          ↓
+                        </div>
+                      )}
+                      <div
+                        className={`stack-row ${["stack-language", "stack-project", "stack-native"][index]}`}
+                      >
+                        <span>{label}</span>
+                        <strong>{title}</strong>
+                        <small>{description}</small>
+                      </div>
+                    </Fragment>
+                  ))}
                 </div>
               </div>
             </div>
@@ -122,26 +98,25 @@ export default function Homepage() {
           <div className="shell">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">Products and projects</p>
-                <h2>One ecosystem, clear boundaries.</h2>
+                <p className="eyebrow">{home.productsEyebrow}</p>
+                <h2>{home.productsTitle}</h2>
               </div>
-              <p>
-                Each surface has one responsibility and a documented contract
-                with the next layer.
-              </p>
+              <p>{home.productsDescription}</p>
             </div>
             <div className="product-grid">
-              {products.map((product) => (
-                <article
-                  className={`product-card accent-${product.accent}`}
-                  key={product.name}
-                >
-                  <p className="eyebrow">{product.eyebrow}</p>
-                  <h3>{product.name}</h3>
-                  <p>{product.description}</p>
-                  <a href={product.href}>{product.action} →</a>
-                </article>
-              ))}
+              {home.products.map(
+                ([eyebrow, name, description, action], index) => (
+                  <article
+                    className={`product-card accent-${productLinks[index]?.accent}`}
+                    key={name}
+                  >
+                    <p className="eyebrow">{eyebrow}</p>
+                    <h3>{name}</h3>
+                    <p>{description}</p>
+                    <a href={productLinks[index]?.href}>{action} →</a>
+                  </article>
+                ),
+              )}
             </div>
           </div>
         </section>
@@ -149,44 +124,20 @@ export default function Homepage() {
         <section className="section section-muted" id="principles">
           <div className="shell principles-grid">
             <div className="section-heading vertical">
-              <p className="eyebrow">Engineering principles</p>
-              <h2>Built to remain legible.</h2>
-              <p>
-                Architecture is useful only when a new contributor can
-                understand where a decision belongs and how to verify it.
-              </p>
+              <p className="eyebrow">{home.principlesEyebrow}</p>
+              <h2>{home.principlesTitle}</h2>
+              <p>{home.principlesDescription}</p>
             </div>
             <div className="principle-list">
-              <article>
-                <span>01</span>
-                <div>
-                  <h3>Explicit contracts</h3>
-                  <p>
-                    Typed boundaries make ownership, compatibility, and failure
-                    behavior visible.
-                  </p>
-                </div>
-              </article>
-              <article>
-                <span>02</span>
-                <div>
-                  <h3>Real verification</h3>
-                  <p>
-                    Tests exercise installed artifacts, production-shaped paths,
-                    and observable behavior.
-                  </p>
-                </div>
-              </article>
-              <article>
-                <span>03</span>
-                <div>
-                  <h3>Durable naming</h3>
-                  <p>
-                    Public vocabulary follows the product model rather than
-                    historical implementation accidents.
-                  </p>
-                </div>
-              </article>
+              {home.principles.map(([title, description], index) => (
+                <article key={title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -194,23 +145,20 @@ export default function Homepage() {
         <section className="section callout-section">
           <div className="shell callout">
             <div>
-              <p className="eyebrow">Progmasoft account</p>
-              <h2>A single identity for Progmasoft services.</h2>
-              <p>
-                Manage your profile and future service access from the dedicated
-                account surface.
-              </p>
+              <p className="eyebrow">{home.accountEyebrow}</p>
+              <h2>{home.accountTitle}</h2>
+              <p>{home.accountDescription}</p>
             </div>
             <a
               className="button button-light"
               href="https://account.progmasoft.com/"
             >
-              Open account
+              {home.openAccount}
             </a>
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }

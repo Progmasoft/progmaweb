@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+myhostname = mail.progmasoft.com
+mydomain = progmasoft.com
+myorigin = $mydomain
+inet_interfaces = all
+inet_protocols = ipv4
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+mynetworks = 127.0.0.0/8
+home_mailbox = Maildir/
+disable_vrfy_command = yes
+smtpd_relay_restrictions = permit_mynetworks,permit_sasl_authenticated,reject_unauth_destination
+smtpd_recipient_restrictions = permit_mynetworks,permit_sasl_authenticated,reject_unauth_destination
+smtp_tls_security_level = encrypt
+smtp_tls_CApath = /etc/pki/tls/certs
+smtp_tls_loglevel = 1
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.progmasoft.com/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.progmasoft.com/privkey.pem
+smtpd_tls_security_level = may
+smtpd_tls_auth_only = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = no
+milter_default_action = tempfail
+milter_protocol = 6
+smtpd_milters = inet:127.0.0.1:8891
+non_smtpd_milters = inet:127.0.0.1:8891

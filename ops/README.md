@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0 -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
 
 # Progmaweb operations
 
@@ -40,3 +40,12 @@ standalone bundle. The API is published as a framework-dependent Linux x64 execu
 
 The Progmasoft Nginx host must never reuse `/srv/xsharp/website/current`. Visual X# compiler and language content belongs
 to `xsharp-lang.xyz`; sharing an origin server does not imply sharing a document root or application process.
+
+## Mail boundary
+
+The `mail/` directory is the operational baseline for `mail.progmasoft.com`, transactional messages from Progmasoft
+Account, and the interactive `support@progmasoft.com` mailbox. It lives here because account verification and recovery
+are Progmaweb responsibilities; the Visual X# and ViGet website repository does not own identity or mail services.
+
+Apply those fragments deliberately rather than copying the directory over `/etc`. The accompanying mail README records
+the DNS, TLS, OpenDKIM, Postfix, Dovecot, sender-login, filesystem-permission, and secret-handling contract.

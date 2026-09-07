@@ -1,5 +1,7 @@
+#!/bin/sh
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 # SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-# Next.js server-side proxy target. Keep this address private in production.
-PROGMAWEB_API_ORIGIN=http://127.0.0.1:5085
+set -eu
+systemctl reload postfix
+systemctl reload dovecot

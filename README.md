@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0 -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
 
 # Progmaweb
 
@@ -9,7 +9,7 @@ the ASP.NET Core API.
 
 ## Public hosts
 
-- `www.progmasoft.com` serves the corporate homepage.
+- `progmasoft.com` serves the canonical corporate homepage; `www.progmasoft.com` redirects to it.
 - `account.progmasoft.com` serves account discovery and authentication.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
@@ -77,6 +77,6 @@ dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration 
 ## License
 
 Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Visual X# website, with the
-additional Progmasoft Patent Grant, Version 1.0. See `LICENSE.txt`, `PATENTS`,
-`LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.0.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
+additional Progmasoft Patent Grant, Version 1.1. See `LICENSE.txt`, `PATENTS`,
+`LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.1.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
 respective licenses.

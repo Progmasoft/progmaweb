@@ -1,36 +1,38 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.0
+// SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getLocale } from "@/lib/locale.server";
+import { getMessages } from "@/lib/localization";
 
 export const metadata: Metadata = {
   title: "Account",
   description: "Access and manage your Progmasoft account.",
+  robots: { index: false, follow: false },
 };
 
-export default function AccountHomepage() {
+export default async function AccountHomepage() {
+  const locale = await getLocale();
+  const { account, navigation } = getMessages(locale);
   return (
     <>
-      <SiteHeader account />
+      <SiteHeader account locale={locale} />
       <main className="account-landing">
         <section className="account-landing-hero">
           <div className="shell account-landing-grid">
             <div>
-              <p className="eyebrow">Progmasoft account</p>
-              <h1>One clear identity for every supported service.</h1>
-              <p>
-                Your account keeps profile, authentication, and service access
-                under a dedicated security boundary.
-              </p>
+              <p className="eyebrow">{account.landingEyebrow}</p>
+              <h1>{account.landingTitle}</h1>
+              <p>{account.landingDescription}</p>
               <div className="hero-actions">
                 <Link className="button" href="/login">
-                  Sign in
+                  {navigation.signIn}
                 </Link>
                 <Link className="button button-secondary" href="/register">
-                  Create account
+                  {navigation.createAccount}
                 </Link>
               </div>
             </div>
@@ -38,52 +40,28 @@ export default function AccountHomepage() {
               <div className="identity-icon" aria-hidden="true">
                 P
               </div>
-              <div>
-                <span>Account name</span>
-                <strong>Your durable public identity and ViGet publisher name</strong>
-              </div>
-              <div>
-                <span>Email</span>
-                <strong>Recovery and security notices</strong>
-              </div>
-              <div>
-                <span>Session</span>
-                <strong>Secure, revocable browser access</strong>
-              </div>
+              {account.identity.map(([label, description]) => (
+                <div key={label}>
+                  <span>{label}</span>
+                  <strong>{description}</strong>
+                </div>
+              ))}
             </div>
           </div>
         </section>
         <section className="section">
           <div className="shell feature-grid">
-            <article>
-              <span>01</span>
-              <h2>Deliberate security</h2>
-              <p>
-                Passwords are hashed server-side and session tokens are stored
-                only as digests.
-              </p>
-            </article>
-            <article>
-              <span>02</span>
-              <h2>Predictable names</h2>
-              <p>
-                Canonical account names prevent ambiguous URLs and case-only
-                impersonation. ViGet uses this exact name as the package
-                publisher; it does not create a second identity.
-              </p>
-            </article>
-            <article>
-              <span>03</span>
-              <h2>Service boundaries</h2>
-              <p>
-                Products request explicit account access instead of sharing
-                hidden application state.
-              </p>
-            </article>
+            {account.features.map(([title, description], index) => (
+              <article key={title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h2>{title}</h2>
+                <p>{description}</p>
+              </article>
+            ))}
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }
