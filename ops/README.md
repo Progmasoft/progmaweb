@@ -25,8 +25,9 @@ release atomically. The account API and Next.js frontend listen only on loopback
 The web directory is the full Next.js standalone output. In this pnpm monorepo the runnable server is emitted at
 `apps/web/server.js`; root-level standalone modules must remain above it. Copy `.next/static` into
 `apps/web/.next/static` and `public` into `apps/web/public`, because Next.js intentionally excludes those assets from the
-standalone bundle. The API is published as a framework-dependent Linux x64 executable and uses the server's supported
-.NET runtime.
+standalone bundle. The API is published as a framework-dependent Linux x64 deployment and is started explicitly as
+`/usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll`. Keeping the runtime invocation in the service contract
+avoids depending on an apphost inode copied from a build machine retaining an executable SELinux label.
 
 ## Activation contract
 

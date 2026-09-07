@@ -11,7 +11,10 @@ Type=exec
 User=progmaweb
 Group=progmaweb
 WorkingDirectory=/srv/progmaweb/current/api
-ExecStart=/usr/bin/env /srv/progmaweb/current/api/Progmaweb.Api
+# Invoke the framework-dependent deployment through the installed runtime. This
+# avoids relying on the copied apphost inode being executable under the host's
+# SELinux policy while preserving the same immutable application payload.
+ExecStart=/usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=http://127.0.0.1:5085
 EnvironmentFile=-/etc/progmaweb/account.env
