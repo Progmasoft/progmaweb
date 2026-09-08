@@ -20,7 +20,7 @@ export function Footer({ locale }: { locale: Locale }) {
           <a href="https://github.com/Progmasoft">{footer.openSource}</a>
         </div>
         <div>
-          <strong>{footer.company}</strong>
+          <strong>{footer.organization}</strong>
           <a href="mailto:support@progmasoft.com">{footer.support}</a>
           <a href="https://account.progmasoft.com/">
             {getMessages(locale).navigation.account}

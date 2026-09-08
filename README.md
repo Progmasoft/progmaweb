@@ -9,7 +9,7 @@ the ASP.NET Core API.
 
 ## Public hosts
 
-- `progmasoft.com` serves the canonical corporate homepage; `www.progmasoft.com` redirects to it.
+- `progmasoft.com` serves the canonical organization homepage; `www.progmasoft.com` redirects to it.
 - `account.progmasoft.com` serves account discovery and authentication.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
@@ -23,7 +23,7 @@ canonical Progmasoft `<Account>` name, with the same spelling and case.
 
 ## Architecture
 
-- `apps/web` is a Next.js App Router application. Host-aware routing keeps the corporate and account surfaces in one
+- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization and account surfaces in one
   build without coupling their page hierarchy.
 - `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, session issuance, secure
   cookies, rate limiting, and authorization.

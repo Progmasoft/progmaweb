@@ -25,7 +25,9 @@ export function SiteHeader({
         <nav className="primary-nav" aria-label={navigation.primary}>
           {account ? (
             <>
-              <Link href="https://progmasoft.com/">{navigation.company}</Link>
+              <Link href="https://progmasoft.com/">
+                {navigation.organization}
+              </Link>
               {signedInName ? (
                 <Link
                   className="button button-small"

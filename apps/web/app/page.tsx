@@ -35,7 +35,7 @@ export default async function Homepage() {
     <>
       <SiteHeader locale={locale} />
       <main>
-        <section className="hero corporate-hero">
+        <section className="hero organization-hero">
           <div className="shell hero-grid">
             <div className="hero-copy">
               <p className="eyebrow">{home.heroEyebrow}</p>
@@ -69,7 +69,7 @@ export default async function Homepage() {
                   <span></span>
                   <span></span>
                   <span></span>
-                  <code>progmasoft/company</code>
+                  <code>progmasoft/organization</code>
                 </div>
                 <div className="system-stack">
                   {home.stack.map(([label, title, description], index) => (

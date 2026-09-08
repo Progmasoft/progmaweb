@@ -12,7 +12,7 @@ export const messages = {
   "en-US": {
     navigation: {
       primary: "Primary navigation",
-      company: "Company",
+      organization: "Organization",
       products: "Products",
       principles: "Principles",
       account: "Account",
@@ -29,7 +29,7 @@ export const messages = {
         "Programming-language infrastructure and developer systems built with durable contracts.",
       products: "Products",
       openSource: "Open source",
-      company: "Company",
+      organization: "Organization",
       support: "Support",
       websiteSource: "Website source",
       closing: "Designed for clarity, security, and long-term maintenance.",
@@ -231,7 +231,7 @@ export const messages = {
   "de-DE": {
     navigation: {
       primary: "Hauptnavigation",
-      company: "Unternehmen",
+      organization: "Organisation",
       products: "Produkte",
       principles: "Grundsätze",
       account: "Konto",
@@ -248,7 +248,7 @@ export const messages = {
         "Programmiersprachen-Infrastruktur und Entwicklersysteme auf der Grundlage beständiger Verträge.",
       products: "Produkte",
       openSource: "Open Source",
-      company: "Unternehmen",
+      organization: "Organisation",
       support: "Support",
       websiteSource: "Quellcode der Website",
       closing:

@@ -7,7 +7,7 @@ import { getLocale } from "@/lib/locale.server";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  // The apex host is the only public corporate canonical. The www host is a
+  // The apex host is the only public organization canonical. The www host is a
   // transport-level redirect and account pages opt out of indexing below.
   metadataBase: new URL("https://progmasoft.com"),
   title: {
