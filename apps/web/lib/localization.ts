@@ -21,6 +21,12 @@ export const messages = {
       recoveryTitle: "Recover your account",
       recoveryDescription: "Get help regaining access to a Progmasoft account.",
       dashboardTitle: "Dashboard",
+      vigetTitle: "ViGet Package Registry by Progmasoft",
+      vigetDescription:
+        "The Visual X# package registry is online, but no packages have been published yet.",
+      dslPluginsTitle: "DSL Plugins · ViGet Package Registry by Progmasoft",
+      dslPluginsDescription:
+        "The ViGet Kotlin DSL plugin catalog is online, but no plugins have been published yet.",
     },
     navigation: {
       primary: "Primary navigation",
@@ -247,6 +253,90 @@ export const messages = {
       profileDescription: "Developer ecosystem profile",
       planned: "Planned",
     },
+    viget: {
+      navigationLabel: "Registry navigation",
+      packages: "Packages",
+      dslPlugins: "DSL plugins",
+      account: "Account",
+      login: "Log in",
+      register: "Register",
+      homeEyebrow: "ViGet package registry",
+      homeTitle: "Packages for the Visual X# ecosystem.",
+      homeDescription:
+        "ViGet is the canonical source for Visual X# packages and project DSL plugins, operated directly by Progmasoft.",
+      createAccount: "Create account",
+      exploreVisualXSharp: "Explore Visual X#",
+      available: "Registry available",
+      emptyTitle: "The public catalog is empty.",
+      emptyDescription:
+        "No package releases have been published yet. ViGet will show real packages here as they become available.",
+      packageFormat: "Package format",
+      publisherIdentity: "Publisher identity",
+      publishing: "Publishing",
+      publishingClosed: "Not open yet",
+      catalogsEyebrow: "Catalogs",
+      catalogsTitle: "Two artifact types, one registry.",
+      catalogsDescription:
+        "Packages and project DSL plugins have separate, predictable coordinate spaces.",
+      visualPackages: "Visual X# packages",
+      vipkgCatalog: "ViPkg catalog",
+      vipkgDescription:
+        "Libraries and applications authored in Visual X#, distributed as .vipkg artifacts.",
+      projectExtensions: "Project extensions",
+      kotlinPlugins: "Kotlin DSL plugins",
+      kotlinDescription:
+        "Kotlin JAR plugins that extend Visual.XSharp.kts project configuration.",
+      openCatalog: "Open catalog",
+      contractEyebrow: "Registry contract",
+      contractTitle: "Clear ownership from identity to artifact.",
+      principles: [
+        [
+          "One account name",
+          "Your Progmasoft Account name is also your ViGet publisher name.",
+        ],
+        [
+          "Case-sensitive coordinates",
+          "Publisher and package names retain their exact public spelling.",
+        ],
+        [
+          "No placeholder releases",
+          "The catalog stays honestly empty until a real signed artifact is published.",
+        ],
+      ],
+      pluginEyebrow: "ViGet · Kotlin DSL plugins",
+      pluginTitle: "Extend the project model.",
+      pluginDescription:
+        "Kotlin DSL plugins are JAR artifacts for Visual.XSharp.kts. They are separate from Visual X# .vipkg packages.",
+      backToPackages: "Back to packages",
+      followDevelopment: "Follow development",
+      pluginAvailable: "Catalog available",
+      pluginEmptyTitle: "No public DSL plugins yet.",
+      pluginEmptyDescription:
+        "The catalog is ready and intentionally contains no placeholder artifacts.",
+      guidance: [
+        [
+          "Format",
+          "Kotlin JAR",
+          "DSL plugins run as Kotlin/JVM project extensions.",
+        ],
+        [
+          "Location",
+          "Dedicated catalog",
+          "Plugin coordinates always begin with /dslplugins.",
+        ],
+        [
+          "Availability",
+          "Publishing closed",
+          "Publishing opens only after the signed plugin contract is complete.",
+        ],
+      ],
+      footerDescription:
+        "ViGet is the package and Kotlin DSL plugin registry for the Visual X# ecosystem.",
+      registry: "Registry",
+      support: "Support",
+      source: "Source",
+      footerClosing: "ViGet Package Registry by Progmasoft",
+    },
   },
   "de-DE": {
     metadata: {
@@ -261,6 +351,12 @@ export const messages = {
       recoveryDescription:
         "Erhalten Sie Hilfe beim Wiederherstellen des Zugriffs auf ein Progmasoft-Konto.",
       dashboardTitle: "Kontoübersicht",
+      vigetTitle: "ViGet-Paketregistrierung von Progmasoft",
+      vigetDescription:
+        "Die Visual-X#-Paketregistrierung ist online, enthält aber noch keine veröffentlichten Pakete.",
+      dslPluginsTitle: "DSL-Plugins · ViGet-Paketregistrierung von Progmasoft",
+      dslPluginsDescription:
+        "Der ViGet-Katalog für Kotlin-DSL-Plugins ist online, enthält aber noch keine veröffentlichten Plugins.",
     },
     navigation: {
       primary: "Hauptnavigation",
@@ -490,6 +586,90 @@ export const messages = {
       sameAccount: "Ihr Kontoname",
       profileDescription: "Profil im Entwicklerökosystem",
       planned: "Geplant",
+    },
+    viget: {
+      navigationLabel: "Navigation der Paketregistrierung",
+      packages: "Pakete",
+      dslPlugins: "DSL-Plugins",
+      account: "Konto",
+      login: "Anmelden",
+      register: "Registrieren",
+      homeEyebrow: "ViGet-Paketregistrierung",
+      homeTitle: "Pakete für das Visual-X#-Ökosystem.",
+      homeDescription:
+        "ViGet ist die kanonische Quelle für Visual-X#-Pakete und Projekt-DSL-Plugins und wird direkt von Progmasoft betrieben.",
+      createAccount: "Konto erstellen",
+      exploreVisualXSharp: "Visual X# entdecken",
+      available: "Paketregistrierung verfügbar",
+      emptyTitle: "Der öffentliche Katalog ist leer.",
+      emptyDescription:
+        "Es wurden noch keine Pakete veröffentlicht. ViGet zeigt hier echte Pakete, sobald sie verfügbar sind.",
+      packageFormat: "Paketformat",
+      publisherIdentity: "Publisher-Identität",
+      publishing: "Veröffentlichung",
+      publishingClosed: "Noch nicht geöffnet",
+      catalogsEyebrow: "Kataloge",
+      catalogsTitle: "Zwei Artefakttypen, eine Paketregistrierung.",
+      catalogsDescription:
+        "Pakete und Projekt-DSL-Plugins besitzen getrennte, vorhersehbare Koordinatenräume.",
+      visualPackages: "Visual-X#-Pakete",
+      vipkgCatalog: "ViPkg-Katalog",
+      vipkgDescription:
+        "In Visual X# entwickelte Bibliotheken und Anwendungen, verteilt als .vipkg-Artefakte.",
+      projectExtensions: "Projekterweiterungen",
+      kotlinPlugins: "Kotlin-DSL-Plugins",
+      kotlinDescription:
+        "Kotlin-JAR-Plugins, die die Projektkonfiguration Visual.XSharp.kts erweitern.",
+      openCatalog: "Katalog öffnen",
+      contractEyebrow: "Vertrag der Paketregistrierung",
+      contractTitle: "Klare Zuständigkeit von der Identität bis zum Artefakt.",
+      principles: [
+        [
+          "Ein Kontoname",
+          "Ihr Progmasoft-Kontoname ist zugleich Ihr ViGet-Publishername.",
+        ],
+        [
+          "Groß-/Kleinschreibung in Koordinaten",
+          "Publisher- und Paketnamen behalten ihre exakte öffentliche Schreibweise.",
+        ],
+        [
+          "Keine Platzhalter-Releases",
+          "Der Katalog bleibt ehrlich leer, bis ein echtes signiertes Artefakt veröffentlicht wird.",
+        ],
+      ],
+      pluginEyebrow: "ViGet · Kotlin-DSL-Plugins",
+      pluginTitle: "Das Projektmodell erweitern.",
+      pluginDescription:
+        "Kotlin-DSL-Plugins sind JAR-Artefakte für Visual.XSharp.kts. Sie sind von Visual-X#-.vipkg-Paketen getrennt.",
+      backToPackages: "Zurück zu den Paketen",
+      followDevelopment: "Entwicklung verfolgen",
+      pluginAvailable: "Katalog verfügbar",
+      pluginEmptyTitle: "Noch keine öffentlichen DSL-Plugins.",
+      pluginEmptyDescription:
+        "Der Katalog ist bereit und enthält absichtlich keine Platzhalter-Artefakte.",
+      guidance: [
+        [
+          "Format",
+          "Kotlin JAR",
+          "DSL-Plugins werden als Kotlin/JVM-Projekterweiterungen ausgeführt.",
+        ],
+        [
+          "Ort",
+          "Eigener Katalog",
+          "Plugin-Koordinaten beginnen immer mit /dslplugins.",
+        ],
+        [
+          "Verfügbarkeit",
+          "Veröffentlichung geschlossen",
+          "Die Veröffentlichung wird erst nach Fertigstellung des signierten Plugin-Vertrags geöffnet.",
+        ],
+      ],
+      footerDescription:
+        "ViGet ist die Paket- und Kotlin-DSL-Plugin-Registrierung für das Visual-X#-Ökosystem.",
+      registry: "Paketregistrierung",
+      support: "Support",
+      source: "Quellcode",
+      footerClosing: "ViGet-Paketregistrierung von Progmasoft",
     },
   },
 } as const;

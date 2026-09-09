@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { isLocale } from "@/lib/localization";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
+const vigetHosts = new Set(["viget.progmasoft.com", "viget.localhost"]);
 
 export function proxy(request: NextRequest) {
   const host =
@@ -53,12 +54,55 @@ export function proxy(request: NextRequest) {
     return NextResponse.rewrite(destination);
   }
 
+  // ViGet is deployed by Progmaweb but keeps short public catalog URLs. The
+  // internal /viget tree prevents those routes from colliding with the apex
+  // organization page and the account surface.
+  if (vigetHosts.has(host)) {
+    if (pathname === "/") {
+      return NextResponse.rewrite(internalRoute(request, "/viget"));
+    }
+    if (pathname === "/dslplugins" || pathname === "/dslplugins/") {
+      return NextResponse.rewrite(internalRoute(request, "/viget/dslplugins"));
+    }
+    if (pathname === "/login" || pathname === "/login/") {
+      return NextResponse.redirect(
+        new URL("https://account.progmasoft.com/login"),
+      );
+    }
+    if (pathname === "/register" || pathname === "/register/") {
+      return NextResponse.redirect(
+        new URL("https://account.progmasoft.com/register"),
+      );
+    }
+    if (pathname === "/recover" || pathname === "/recover/") {
+      return NextResponse.redirect(
+        new URL("https://account.progmasoft.com/recover"),
+      );
+    }
+  }
+
+  if (
+    !vigetHosts.has(host) &&
+    (pathname === "/viget" || pathname.startsWith("/viget/"))
+  ) {
+    const publicPath = pathname.replace(/^\/viget/, "") || "/";
+    return NextResponse.redirect(
+      new URL(publicPath, "https://viget.progmasoft.com"),
+    );
+  }
+
   // Corporate hosts must not accidentally expose the account-only landing page as a public navigation destination.
   if (!accountHosts.has(host) && pathname === "/account") {
     return NextResponse.redirect(new URL("https://account.progmasoft.com/"));
   }
 
   return NextResponse.next();
+}
+
+function internalRoute(request: NextRequest, pathname: string): URL {
+  const destination = new URL(pathname, request.url);
+  destination.protocol = "http:";
+  return destination;
 }
 
 export const config = {

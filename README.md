@@ -14,6 +14,8 @@ the ASP.NET Core API.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
 - `account.progmasoft.com/<Account>/dashboard` serves the authenticated account dashboard.
+- `viget.progmasoft.com` serves the public Visual X# package catalog.
+- `viget.progmasoft.com/dslplugins/` serves the separate Kotlin DSL plugin catalog.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
 duplicates. Email uniqueness is also evaluated case-insensitively by the API.
@@ -23,8 +25,8 @@ canonical Progmasoft `<Account>` name, with the same spelling and case.
 
 ## Architecture
 
-- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization and account surfaces in one
-  build without coupling their page hierarchy.
+- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization, account, and ViGet
+  surfaces in one build without coupling their page hierarchies.
 - `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, session issuance, secure
   cookies, rate limiting, and authorization.
 - The browser never receives password hashes, session digests, deployment secrets, or database credentials.

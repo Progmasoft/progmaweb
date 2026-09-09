@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   reactStrictMode: true,
+  // ViGet's public coordinate contract accepts catalog roots with a trailing
+  // slash. Host-aware proxy routing owns normalization for those URLs.
+  skipTrailingSlashRedirect: true,
   typedRoutes: true,
   async rewrites() {
     const apiOrigin =

@@ -1,0 +1,337 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 */
+
+/* ViGet shares the organization theme while keeping a denser registry-oriented hierarchy. */
+.viget-surface {
+  min-height: 100vh;
+  background: var(--surface);
+}
+
+.viget-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.viget-brand-lockup > span {
+  border-left: 2px solid var(--ink-800);
+  padding-left: 15px;
+  color: var(--ink-800);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.viget-hero,
+.viget-plugin-hero {
+  border-bottom: 1px solid var(--line);
+  background: var(--hero-background);
+}
+
+.viget-hero-grid,
+.viget-plugin-grid {
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.75fr);
+  align-items: center;
+  gap: 80px;
+  padding-block: 76px;
+}
+
+.viget-plugin-grid {
+  min-height: 520px;
+}
+
+.viget-hero-copy h1 {
+  max-width: 720px;
+  margin: 0;
+  font-size: clamp(44px, 6vw, 72px);
+  letter-spacing: -0.05em;
+  line-height: 1.04;
+}
+
+.viget-hero-copy > p:not(.eyebrow) {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: var(--ink-650);
+  font-size: 18px;
+}
+
+.viget-availability {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.viget-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--green-600);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.viget-status > span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--green-600);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--green-600) 14%, transparent);
+}
+
+.viget-availability h2 {
+  margin: 17px 0 10px;
+  font-size: 27px;
+  letter-spacing: -0.025em;
+}
+
+.viget-availability > p {
+  margin: 0;
+  color: var(--ink-650);
+}
+
+.viget-availability dl {
+  margin: 25px 0 0;
+}
+
+.viget-availability dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  padding-block: 12px;
+}
+
+.viget-availability dt {
+  color: var(--ink-500);
+}
+
+.viget-availability dd {
+  margin: 0;
+  color: var(--ink-800);
+  font-weight: 700;
+}
+
+.viget-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.viget-catalog-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 30px;
+  background: var(--surface);
+  color: var(--ink-950);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+a.viget-catalog-card:hover {
+  border-color: var(--blue-600);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.viget-catalog-card > span {
+  color: var(--blue-600);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.viget-catalog-card > p {
+  margin: 24px 0 5px;
+  color: var(--ink-500);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.viget-catalog-card h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.viget-catalog-card code,
+.viget-availability code {
+  overflow-wrap: anywhere;
+  margin-top: 24px;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--surface-blue);
+  color: var(--blue-700);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 13px;
+}
+
+.viget-catalog-card small {
+  margin-top: 19px;
+  color: var(--ink-650);
+  font-size: 14px;
+}
+
+.viget-catalog-card > strong:last-child {
+  margin-top: auto;
+  padding-top: 25px;
+  color: var(--blue-700);
+}
+
+.viget-catalog-primary {
+  border-color: var(--blue-600);
+}
+
+.viget-contract-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.7fr) 1.3fr;
+  gap: 80px;
+}
+
+.viget-contract h2 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 47px);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.viget-contract ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.viget-contract li {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding-block: 20px;
+}
+
+.viget-contract li > span {
+  color: var(--blue-600);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-weight: 700;
+}
+
+.viget-contract li strong {
+  color: var(--ink-800);
+  font-size: 18px;
+}
+
+.viget-contract li p {
+  margin: 5px 0 0;
+  color: var(--ink-650);
+}
+
+.viget-text-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue-700);
+  font-weight: 700;
+}
+
+.viget-guidance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.viget-guidance-grid article {
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid var(--blue-500);
+  padding: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.viget-guidance-grid article > span {
+  color: var(--blue-700);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.viget-guidance-grid article > strong {
+  margin-top: 10px;
+  color: var(--ink-800);
+  font-size: 20px;
+}
+
+.viget-guidance-grid article > p {
+  margin: 8px 0 0;
+  color: var(--ink-650);
+}
+
+.viget-footer {
+  margin-top: 0;
+}
+
+@media (max-width: 980px) {
+  .viget-header .header-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-block: 16px;
+  }
+
+  .viget-header .primary-nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .viget-hero-grid,
+  .viget-plugin-grid,
+  .viget-contract-grid {
+    grid-template-columns: 1fr;
+    gap: 46px;
+  }
+
+  .viget-hero-grid,
+  .viget-plugin-grid {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .viget-header .primary-nav {
+    gap: 14px;
+  }
+
+  .viget-header .primary-nav > a:not(.button) {
+    display: inline-flex;
+  }
+
+  .viget-hero-grid,
+  .viget-plugin-grid {
+    padding-block: 56px;
+  }
+
+  .viget-hero-copy h1 {
+    font-size: 43px;
+  }
+
+  .viget-catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viget-guidance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viget-availability,
+  .viget-catalog-card {
+    padding: 24px;
+  }
+}

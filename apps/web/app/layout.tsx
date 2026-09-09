@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getLocale } from "@/lib/locale.server";
 import "./globals.css";
+import "./viget.css";
 
 // Apply the stored theme before the body is painted. PreferenceControls keeps
 // this value synchronized after hydration, while this small bootstrap prevents

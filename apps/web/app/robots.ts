@@ -2,8 +2,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const requestHeaders = await headers();
+  const host =
+    requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "";
+  const canonicalHost = host.split(":", 1)[0]?.toLowerCase();
+  const sitemap =
+    canonicalHost === "viget.progmasoft.com"
+      ? "https://viget.progmasoft.com/sitemap.xml"
+      : "https://progmasoft.com/sitemap.xml";
   return {
     rules: [
       { userAgent: "Googlebot", allow: "/" },
@@ -18,6 +27,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "Bytespider", disallow: "/" },
       { userAgent: "*", allow: "/" },
     ],
-    sitemap: "https://progmasoft.com/sitemap.xml",
+    sitemap,
   };
 }
