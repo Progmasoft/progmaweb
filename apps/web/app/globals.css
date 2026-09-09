@@ -1038,6 +1038,17 @@ a {
   text-decoration: none;
 }
 
+.dashboard-sidebar-preferences {
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.dashboard-sidebar-preferences .preference-controls {
+  padding-left: 0;
+}
+
 .text-button {
   margin-top: auto;
   border: 0;
@@ -1173,14 +1184,24 @@ a {
   color: #004e8c;
 }
 
-.dashboard-loading,
-.dashboard-error {
+.dashboard-state {
+  position: relative;
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 40px;
   background: var(--surface-muted);
   color: var(--ink-650);
+}
+
+.dashboard-state > p {
+  margin: 0;
+}
+
+.dashboard-state-preferences {
+  position: absolute;
+  top: 24px;
+  right: 24px;
 }
 
 .dashboard-error {

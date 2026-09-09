@@ -5,9 +5,13 @@ import Link from "next/link";
 
 interface BrandProps {
   account?: boolean;
+  accountLabel?: string;
 }
 
-export function Brand({ account = false }: BrandProps) {
+export function Brand({
+  account = false,
+  accountLabel = "Account",
+}: BrandProps) {
   return (
     <Link
       className="brand"
@@ -22,7 +26,7 @@ export function Brand({ account = false }: BrandProps) {
         <span className="brand-tile brand-tile-orange" />
       </span>
       <strong className="brand-name">Progmasoft</strong>
-      {account && <span className="brand-product">Account</span>}
+      {account && <span className="brand-product">{accountLabel}</span>}
     </Link>
   );
 }

@@ -7,10 +7,13 @@ import { AuthForm } from "@/components/AuthForm";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  title: "Sign in",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.loginTitle,
+    robots: { index: false, follow: false },
+  };
+}
 
 interface LoginPageProps {
   searchParams: Promise<{ google?: string }>;
@@ -19,11 +22,9 @@ interface LoginPageProps {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { google } = await searchParams;
   const locale = await getLocale();
-  const { account } = getMessages(locale);
+  const { account, auth } = getMessages(locale);
   const initialMessage =
-    google === "failed"
-      ? "Google sign-in could not be completed. Try again."
-      : undefined;
+    google === "failed" ? auth.googleSignInFailed : undefined;
 
   return (
     <AccountShell

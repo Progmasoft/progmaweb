@@ -21,7 +21,7 @@ export function SiteHeader({
   return (
     <header className="site-header">
       <div className="shell header-inner">
-        <Brand account={account} />
+        <Brand account={account} accountLabel={navigation.account} />
         <nav className="primary-nav" aria-label={navigation.primary}>
           {account ? (
             <>

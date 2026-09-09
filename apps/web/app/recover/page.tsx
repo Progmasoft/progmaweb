@@ -8,11 +8,14 @@ import { AccountShell } from "@/components/AccountShell";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  title: "Recover your account",
-  description: "Get help regaining access to a Progmasoft account.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.recoveryTitle,
+    description: metadata.recoveryDescription,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function RecoverPage() {
   const locale = await getLocale();
@@ -35,7 +38,7 @@ export default async function RecoverPage() {
         </div>
         <a
           className="button auth-submit"
-          href="mailto:support@progmasoft.com?subject=Progmasoft%20account%20recovery"
+          href={`mailto:support@progmasoft.com?subject=${encodeURIComponent(account.recoveryEmailSubject)}`}
         >
           {account.contactSupport}
         </a>

@@ -6,6 +6,19 @@ import type { ReactNode } from "react";
 import { getLocale } from "@/lib/locale.server";
 import "./globals.css";
 
+// Apply the stored theme before the body is painted. PreferenceControls keeps
+// this value synchronized after hydration, while this small bootstrap prevents
+// a light flash on every route—including dashboard loading and error states.
+const themeBootstrap = `
+  (() => {
+    try {
+      const theme = localStorage.getItem("progmasoft_theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch {}
+  })();
+`;
+
 export const metadata: Metadata = {
   // The apex host is the only public organization canonical. The www host is a
   // transport-level redirect and account pages opt out of indexing below.
@@ -29,6 +42,9 @@ export default async function RootLayout({
   const locale = await getLocale();
   return (
     <html lang={locale} data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+      </head>
       <body>{children}</body>
     </html>
   );

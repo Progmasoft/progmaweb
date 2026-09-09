@@ -8,11 +8,14 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  title: "Account",
-  description: "Access and manage your Progmasoft account.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.accountTitle,
+    description: metadata.accountDescription,
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function AccountHomepage() {
   const locale = await getLocale();

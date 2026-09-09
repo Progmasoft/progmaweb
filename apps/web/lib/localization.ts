@@ -10,6 +10,18 @@ export function isLocale(value: string | undefined): value is Locale {
 
 export const messages = {
   "en-US": {
+    metadata: {
+      homeTitle: "Progmasoft",
+      homeDescription:
+        "Progmasoft builds programming-language, package-management, and developer-tooling systems.",
+      accountTitle: "Account",
+      accountDescription: "Access and manage your Progmasoft account.",
+      loginTitle: "Sign in",
+      registerTitle: "Create account",
+      recoveryTitle: "Recover your account",
+      recoveryDescription: "Get help regaining access to a Progmasoft account.",
+      dashboardTitle: "Dashboard",
+    },
     navigation: {
       primary: "Primary navigation",
       organization: "Organization",
@@ -162,6 +174,7 @@ export const messages = {
       recoveryPanelTitle: "Regain access safely",
       recoveryPanelDescription:
         "Automated password recovery is not available during the initial account-system rollout. Contact Progmasoft support from the email address registered to your account so ownership can be verified.",
+      recoveryEmailSubject: "Progmasoft account recovery",
       contactSupport: "Contact support",
       rememberedPassword: "Remembered your password?",
       returnToSignIn: "Return to sign in",
@@ -198,6 +211,13 @@ export const messages = {
       missingName: "The server did not return an account name.",
       unreadableName: "The Account name field could not be read.",
       requestFailed: "The request could not be completed.",
+      googleSignInFailed: "Google sign-in could not be completed. Try again.",
+      googleAccountNameRequired:
+        "Choose an Account name before continuing with Google.",
+      googleAccountNameUnavailable:
+        "That Account name is unavailable. Choose another name.",
+      googleInvalidAccountName:
+        "Use a valid Account name before continuing with Google.",
     },
     dashboard: {
       loading: "Loading account…",
@@ -229,6 +249,19 @@ export const messages = {
     },
   },
   "de-DE": {
+    metadata: {
+      homeTitle: "Progmasoft",
+      homeDescription:
+        "Progmasoft entwickelt Systeme für Programmiersprachen, Paketverwaltung und Entwicklerwerkzeuge.",
+      accountTitle: "Konto",
+      accountDescription: "Öffnen und verwalten Sie Ihr Progmasoft-Konto.",
+      loginTitle: "Anmelden",
+      registerTitle: "Konto erstellen",
+      recoveryTitle: "Konto wiederherstellen",
+      recoveryDescription:
+        "Erhalten Sie Hilfe beim Wiederherstellen des Zugriffs auf ein Progmasoft-Konto.",
+      dashboardTitle: "Kontoübersicht",
+    },
     navigation: {
       primary: "Hauptnavigation",
       organization: "Organisation",
@@ -382,6 +415,7 @@ export const messages = {
       recoveryPanelTitle: "Zugriff sicher wiederherstellen",
       recoveryPanelDescription:
         "Die automatische Passwortwiederherstellung ist während der ersten Einführung des Kontosystems nicht verfügbar. Kontaktieren Sie den Progmasoft-Support von der im Konto registrierten E-Mail-Adresse, damit die Inhaberschaft geprüft werden kann.",
+      recoveryEmailSubject: "Wiederherstellung des Progmasoft-Kontos",
       contactSupport: "Support kontaktieren",
       rememberedPassword: "Passwort wieder eingefallen?",
       returnToSignIn: "Zur Anmeldung",
@@ -419,6 +453,14 @@ export const messages = {
       unreadableName:
         "Das Feld für den Kontonamen konnte nicht gelesen werden.",
       requestFailed: "Die Anfrage konnte nicht abgeschlossen werden.",
+      googleSignInFailed:
+        "Die Anmeldung mit Google konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      googleAccountNameRequired:
+        "Wählen Sie einen Kontonamen, bevor Sie mit Google fortfahren.",
+      googleAccountNameUnavailable:
+        "Dieser Kontoname ist nicht verfügbar. Wählen Sie einen anderen Namen.",
+      googleInvalidAccountName:
+        "Verwenden Sie einen gültigen Kontonamen, bevor Sie mit Google fortfahren.",
     },
     dashboard: {
       loading: "Konto wird geladen…",

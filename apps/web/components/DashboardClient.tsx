@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { getMessages, type Locale } from "@/lib/localization";
+import { PreferenceControls } from "./PreferenceControls";
 
 interface AccountSummary {
   accountName: string;
@@ -26,7 +27,7 @@ export function DashboardClient({
   locale,
   routeAccountName,
 }: DashboardClientProps) {
-  const { dashboard } = getMessages(locale);
+  const { dashboard, navigation } = getMessages(locale);
   const [state, setState] = useState<LoadState>({ kind: "loading" });
 
   useEffect(() => {
@@ -86,11 +87,25 @@ export function DashboardClient({
   }
 
   if (state.kind === "loading") {
-    return <div className="dashboard-loading">{dashboard.loading}</div>;
+    return (
+      <div className="dashboard-state dashboard-loading">
+        <div className="dashboard-state-preferences">
+          <PreferenceControls locale={locale} labels={navigation} />
+        </div>
+        <p>{dashboard.loading}</p>
+      </div>
+    );
   }
 
   if (state.kind === "error") {
-    return <div className="dashboard-error">{state.message}</div>;
+    return (
+      <div className="dashboard-state dashboard-error">
+        <div className="dashboard-state-preferences">
+          <PreferenceControls locale={locale} labels={navigation} />
+        </div>
+        <p role="alert">{state.message}</p>
+      </div>
+    );
   }
 
   const { account } = state;
@@ -109,6 +124,9 @@ export function DashboardClient({
           <a href="#security">{dashboard.security}</a>
           <a href="#services">{dashboard.services}</a>
         </nav>
+        <div className="dashboard-sidebar-preferences">
+          <PreferenceControls locale={locale} labels={navigation} />
+        </div>
         <button className="text-button" type="button" onClick={signOut}>
           {dashboard.signOut}
         </button>

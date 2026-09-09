@@ -8,10 +8,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "https://progmasoft.com/" },
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.homeTitle,
+    description: metadata.homeDescription,
+    alternates: { canonical: "https://progmasoft.com/" },
+    robots: { index: true, follow: true },
+  };
+}
 
 const productLinks = [
   {

@@ -4,11 +4,15 @@
 import type { Metadata } from "next";
 import { DashboardClient } from "@/components/DashboardClient";
 import { getLocale } from "@/lib/locale.server";
+import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.dashboardTitle,
+    robots: { index: false, follow: false },
+  };
+}
 
 interface DashboardPageProps {
   params: Promise<{ accountName: string }>;

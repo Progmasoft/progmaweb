@@ -7,30 +7,29 @@ import { AuthForm } from "@/components/AuthForm";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 
-export const metadata: Metadata = {
-  title: "Create account",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { metadata } = getMessages(await getLocale());
+  return {
+    title: metadata.registerTitle,
+    robots: { index: false, follow: false },
+  };
+}
 
 interface RegisterPageProps {
   searchParams: Promise<{ google?: string }>;
 }
-
-const googleMessages: Record<string, string> = {
-  "account-name-required":
-    "Choose an Account name before continuing with Google.",
-  "account-name-unavailable":
-    "That Account name is unavailable. Choose another name.",
-  "invalid-account-name":
-    "Use a valid Account name before continuing with Google.",
-};
 
 export default async function RegisterPage({
   searchParams,
 }: RegisterPageProps) {
   const { google } = await searchParams;
   const locale = await getLocale();
-  const { account } = getMessages(locale);
+  const { account, auth } = getMessages(locale);
+  const googleMessages: Record<string, string> = {
+    "account-name-required": auth.googleAccountNameRequired,
+    "account-name-unavailable": auth.googleAccountNameUnavailable,
+    "invalid-account-name": auth.googleInvalidAccountName,
+  };
   const initialMessage = google ? googleMessages[google] : undefined;
 
   return (
