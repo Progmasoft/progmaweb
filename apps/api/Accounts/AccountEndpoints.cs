@@ -67,10 +67,11 @@ internal static class AccountEndpoints
         }
 
         string? email = external.Principal.FindFirstValue(ClaimTypes.Email);
+        string? subject = external.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
         string? accountName = null;
         external.Properties?.Items.TryGetValue("accountName", out accountName);
         (AuthenticatedAccount? authentication, GoogleAccountFailure failure) =
-            await accounts.AuthenticateGoogleAsync(email, accountName, sessions, cancellationToken);
+            await accounts.AuthenticateGoogleAsync(subject, email, accountName, sessions, cancellationToken);
         await context.SignOutAsync(ExternalCookieScheme);
 
         if (authentication is null)

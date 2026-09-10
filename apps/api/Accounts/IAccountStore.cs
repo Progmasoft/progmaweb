@@ -7,6 +7,7 @@ internal interface IAccountStore
 {
     ValueTask<CreateAccountResult> CreateAsync(AccountRecord account, CancellationToken cancellationToken);
     ValueTask<AccountRecord?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken);
+    ValueTask<AccountRecord?> FindByGoogleSubjectAsync(string googleSubject, CancellationToken cancellationToken);
     ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken);
     ValueTask StoreSessionAsync(SessionRecord session, CancellationToken cancellationToken);
     ValueTask<SessionRecord?> FindSessionAsync(byte[] tokenDigest, CancellationToken cancellationToken);

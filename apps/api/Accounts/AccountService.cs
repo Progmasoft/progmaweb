@@ -29,6 +29,7 @@ internal sealed class AccountService(
             AccountNamePolicy.NormalizeForLookup(accountName),
             email,
             normalizedEmail,
+            null,
             string.Empty,
             timeProvider.GetUtcNow());
 
@@ -66,7 +67,7 @@ internal sealed class AccountService(
         {
             // A fixed dummy record keeps the missing-account path on the same password-hashing primitive.
             AccountRecord dummyBase = new(Guid.Empty, "Missing00", "MISSING00", "missing@example.invalid",
-                "MISSING@EXAMPLE.INVALID", string.Empty, DateTimeOffset.UnixEpoch);
+                "MISSING@EXAMPLE.INVALID", null, string.Empty, DateTimeOffset.UnixEpoch);
             AccountRecord dummy = dummyBase with
             {
                 PasswordHash = passwordHasher.HashPassword(dummyBase, "not-the-provided-password")
@@ -87,20 +88,32 @@ internal sealed class AccountService(
 
     public async ValueTask<(AuthenticatedAccount? Authentication, GoogleAccountFailure Failure)>
         AuthenticateGoogleAsync(
+            string? providerSubject,
             string? providerEmail,
             string? requestedAccountName,
             SessionService sessions,
             CancellationToken cancellationToken)
     {
-        if (!EmailAddressPolicy.TryNormalize(providerEmail, out string email, out string normalizedEmail, out _))
+        if (string.IsNullOrWhiteSpace(providerSubject) ||
+            !EmailAddressPolicy.TryNormalize(providerEmail, out string email, out string normalizedEmail, out _))
         {
             return (null, GoogleAccountFailure.ProviderRejected);
+        }
+
+        AccountRecord? knownGoogleAccount =
+            await store.FindByGoogleSubjectAsync(providerSubject, cancellationToken);
+        if (knownGoogleAccount is not null)
+        {
+            return (await sessions.CreateAsync(knownGoogleAccount, cancellationToken), GoogleAccountFailure.None);
         }
 
         AccountRecord? existing = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
         if (existing is not null)
         {
-            return (await sessions.CreateAsync(existing, cancellationToken), GoogleAccountFailure.None);
+            // Password registrations do not verify ownership of the supplied email address yet. Automatically
+            // linking a verified Google identity by email would therefore let two unrelated people share an
+            // account (and any already-issued sessions) when one of them registered the other's address.
+            return (null, GoogleAccountFailure.ProviderRejected);
         }
 
         if (requestedAccountName is null)
@@ -119,6 +132,7 @@ internal sealed class AccountService(
             AccountNamePolicy.NormalizeForLookup(accountName),
             email,
             normalizedEmail,
+            providerSubject,
             null,
             timeProvider.GetUtcNow());
         CreateAccountResult result = await store.CreateAsync(account, cancellationToken);
@@ -130,8 +144,13 @@ internal sealed class AccountService(
 
         if (result.Status is CreateAccountStatus.EmailUnavailable)
         {
-            // A concurrent callback may have created the same verified Google identity.
-            AccountRecord? concurrent = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
+            // Any different identity can win the email race, including an unverified password registration.
+            return (null, GoogleAccountFailure.ProviderRejected);
+        }
+
+        if (result.Status is CreateAccountStatus.GoogleSubjectUnavailable)
+        {
+            AccountRecord? concurrent = await store.FindByGoogleSubjectAsync(providerSubject, cancellationToken);
             return concurrent is null
                 ? (null, GoogleAccountFailure.ProviderRejected)
                 : (await sessions.CreateAsync(concurrent, cancellationToken), GoogleAccountFailure.None);

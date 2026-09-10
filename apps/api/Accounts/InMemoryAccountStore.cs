@@ -10,6 +10,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
     private readonly Lock gate = new();
     private readonly Dictionary<Guid, AccountRecord> accountsById = [];
     private readonly Dictionary<string, Guid> accountIdsByEmail = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, Guid> accountIdsByGoogleSubject = new(StringComparer.Ordinal);
     private readonly Dictionary<string, Guid> accountIdsByName = new(StringComparer.Ordinal);
     private readonly Dictionary<string, SessionRecord> sessionsByDigest = new(StringComparer.Ordinal);
 
@@ -19,6 +20,11 @@ internal sealed class InMemoryAccountStore : IAccountStore
 
         lock (gate)
         {
+            if (account.GoogleSubject is not null && accountIdsByGoogleSubject.ContainsKey(account.GoogleSubject))
+            {
+                return ValueTask.FromResult(CreateAccountResult.GoogleSubjectUnavailable());
+            }
+
             if (accountIdsByName.ContainsKey(account.NormalizedAccountName))
             {
                 return ValueTask.FromResult(CreateAccountResult.AccountNameUnavailable());
@@ -32,7 +38,23 @@ internal sealed class InMemoryAccountStore : IAccountStore
             accountsById.Add(account.Id, account);
             accountIdsByName.Add(account.NormalizedAccountName, account.Id);
             accountIdsByEmail.Add(account.NormalizedEmail, account.Id);
+            if (account.GoogleSubject is not null)
+            {
+                accountIdsByGoogleSubject.Add(account.GoogleSubject, account.Id);
+            }
             return ValueTask.FromResult(CreateAccountResult.Created(account));
+        }
+    }
+
+    public ValueTask<AccountRecord?> FindByGoogleSubjectAsync(
+        string googleSubject,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (gate)
+        {
+            return ValueTask.FromResult(
+                accountIdsByGoogleSubject.TryGetValue(googleSubject, out Guid id) ? accountsById[id] : null);
         }
     }
 

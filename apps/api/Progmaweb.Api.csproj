@@ -11,4 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.11" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Progmaweb.Api.Tests" />
+  </ItemGroup>
 </Project>

@@ -3,7 +3,13 @@
 
 using System.Net;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Progmasoft.Progmaweb.Api.Accounts;
 
 namespace Progmasoft.Progmaweb.Api.Tests;
 
@@ -39,6 +45,43 @@ public sealed class AccountEndpointTests
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/register?google=invalid-account-name", response.Headers.Location?.OriginalString);
+    }
+
+    [Fact]
+    public async Task GoogleCompleteDoesNotIssueASessionForAnExistingPasswordAccountWithTheSameEmail()
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient registrationClient = factory.CreateAccountClient();
+        HttpResponseMessage registration =
+            await RegisterAsync(registrationClient, "PasswordUser", "victim@example.com");
+        Assert.Equal(HttpStatusCode.Created, registration.StatusCode);
+
+        IOptionsMonitor<CookieAuthenticationOptions> cookieOptions =
+            factory.Services.GetRequiredService<IOptionsMonitor<CookieAuthenticationOptions>>();
+        CookieAuthenticationOptions externalOptions = cookieOptions.Get(AccountEndpoints.ExternalCookieScheme);
+        ClaimsPrincipal googlePrincipal = new(new ClaimsIdentity(
+            [
+                new Claim(ClaimTypes.NameIdentifier, "google-subject-victim"),
+                new Claim(ClaimTypes.Email, "victim@example.com")
+            ],
+            "Google"));
+        AuthenticationTicket googleTicket = new(
+            googlePrincipal,
+            new AuthenticationProperties(),
+            AccountEndpoints.ExternalCookieScheme);
+        string protectedTicket = externalOptions.TicketDataFormat.Protect(googleTicket);
+
+        using HttpClient googleClient = factory.CreateAccountClient(handleCookies: false);
+        using HttpRequestMessage request = new(HttpMethod.Get, "/api/v1/accounts/oauth/google/complete");
+        request.Headers.Add("Cookie", $"{externalOptions.Cookie.Name}={protectedTicket}");
+        HttpResponseMessage response =
+            await googleClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/login?google=failed", response.Headers.Location?.OriginalString);
+        Assert.DoesNotContain(
+            response.Headers.GetValues("Set-Cookie"),
+            value => value.StartsWith("__Host-ProgmasoftSession=", StringComparison.Ordinal));
     }
 
     [Fact]

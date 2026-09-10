@@ -15,7 +15,8 @@ internal enum CreateAccountStatus
 {
     Created,
     AccountNameUnavailable,
-    EmailUnavailable
+    EmailUnavailable,
+    GoogleSubjectUnavailable
 }
 
 internal sealed record CreateAccountResult(CreateAccountStatus Status, AccountRecord? Account)
@@ -23,5 +24,7 @@ internal sealed record CreateAccountResult(CreateAccountStatus Status, AccountRe
     public static CreateAccountResult Created(AccountRecord account) => new(CreateAccountStatus.Created, account);
     public static CreateAccountResult AccountNameUnavailable() => new(CreateAccountStatus.AccountNameUnavailable, null);
     public static CreateAccountResult EmailUnavailable() => new(CreateAccountStatus.EmailUnavailable, null);
+    public static CreateAccountResult GoogleSubjectUnavailable() =>
+        new(CreateAccountStatus.GoogleSubjectUnavailable, null);
 }
 

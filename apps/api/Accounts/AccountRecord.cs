@@ -9,6 +9,7 @@ internal sealed record AccountRecord(
     string NormalizedAccountName,
     string Email,
     string NormalizedEmail,
+    string? GoogleSubject,
     string? PasswordHash,
     DateTimeOffset CreatedAt);
 
