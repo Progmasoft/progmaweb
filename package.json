@@ -16,6 +16,8 @@
     "dev": "pnpm --filter @progmasoft/web dev",
     "build": "pnpm --filter @progmasoft/web build",
     "check": "pnpm --filter @progmasoft/web check",
+    "test": "pnpm --filter @progmasoft/web test",
+    "test:coverage": "pnpm --filter @progmasoft/web test:coverage",
     "lint": "pnpm --filter @progmasoft/web lint",
     "format": "pnpm --filter @progmasoft/web format"
   }

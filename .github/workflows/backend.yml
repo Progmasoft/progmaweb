@@ -23,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: backend-${{ github.ref }}
@@ -41,4 +42,10 @@ jobs:
           cache-dependency-path: "**/*.csproj"
       - run: dotnet restore Progmaweb.slnx --locked-mode
       - run: dotnet build Progmaweb.slnx --configuration Release --no-restore
-      - run: dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --no-build
+      - run: dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --no-build --coverlet --coverlet-output-format cobertura
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          use_oidc: true
+          files: TestResults/coverage.cobertura.xml
+          flags: progmaweb-backend
+          fail_ci_if_error: true

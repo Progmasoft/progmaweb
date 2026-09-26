@@ -71,10 +71,17 @@ downloaded Google client JSON.
 
 ```text
 pnpm check
+pnpm test
+pnpm test:coverage
 pnpm build
 dotnet build apps/api/Progmaweb.Api.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release
+dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --coverlet --coverlet-output-format cobertura
 ```
+
+Frontend tests exercise the published locale contract and account/ViGet metadata without starting a production service.
+The frontend LCOV and API Cobertura reports are uploaded to Codecov as separate components in CI. CodeQL and Codacy
+provide static analysis; Dependabot proposes dependency updates without merging them automatically.
 
 ## License
 

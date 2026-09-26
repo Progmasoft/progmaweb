@@ -1,20 +1,11 @@
+---
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 # SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-node_modules/
-.next/
-out/
-coverage/
-TestResults/
-dist/
-bin/
-obj/
-.vs/
-.idea/
-*.user
-*.suo
-*.log
-*.tsbuildinfo
-.env
-.env.*
-!.env.example
+exclude_paths:
+  - '**/node_modules/**'
+  - '**/.next/**'
+  - '**/bin/**'
+  - '**/obj/**'
+  - 'coverage/**'
+

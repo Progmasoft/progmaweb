@@ -12,6 +12,8 @@
     "build": "next build",
     "start": "next start",
     "check": "next typegen && tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test:coverage": "c8 --reporter=lcov --reporter=text npm test",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write ."
   },
@@ -21,6 +23,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "c8": "12.0.0",
     "@types/node": "24.10.1",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

@@ -2,6 +2,17 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
+      "coverlet.MTP": {
+        "type": "Direct",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "r3+GPhzJd8G/qlw8UFOYGECZSFvpg0j+yRTGbSr8ikk1ed4Hui+Y56ghPcBT43S3DWYKEzZLGmZ/KFS28k1zHg==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.1",
+          "Microsoft.Extensions.DependencyInjection": "8.0.1",
+          "Microsoft.Testing.Platform": "2.0.2"
+        }
+      },
       "Microsoft.AspNetCore.Mvc.Testing": {
         "type": "Direct",
         "requested": "[10.0.11, )",
