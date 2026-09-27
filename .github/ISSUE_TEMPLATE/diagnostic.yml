@@ -1,0 +1,58 @@
+name: Diagnostic report
+description: Report a reproducible Progmaweb frontend, backend, or deployment failure.
+title: "[Diagnostic]: "
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Include the smallest reproducible case and relevant logs. Remove passwords, tokens, personal data, and
+        production secrets before submitting.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected area
+      options:
+        - Next.js frontend
+        - ASP.NET Core backend
+        - Authentication or account flows
+        - ViGet integration
+        - Deployment or infrastructure
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Failure summary
+      description: State what failed, where it failed, and any visible error identifier.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Give ordered steps and a minimal request, page, or code sample when possible.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS/browser, app version or commit, .NET SDK, and Node.js versions when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant diagnostics
+      description: Include redacted request IDs, browser console output, or server logs.
+      render: text
+    validations:
+      required: true
