@@ -2,11 +2,28 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
+using Progmasoft.Progmaweb.Api.Security;
 
 namespace Progmasoft.Progmaweb.Api.Tests;
 
 public sealed class SecurityHeaderTests
 {
+    [Fact]
+    public void ForwardedHeadersTrustOnlyTheLocalReverseProxy()
+    {
+        ForwardedHeadersOptions options = new();
+
+        ForwardedHeadersPolicy.Configure(options);
+
+        Assert.Equal(ForwardedHeadersPolicy.MaximumForwardedHops, options.ForwardLimit);
+        Assert.Equal(ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost |
+            ForwardedHeaders.XForwardedProto, options.ForwardedHeaders);
+        Assert.Equal(ForwardedHeadersPolicy.TrustedProxies, options.KnownProxies);
+        Assert.Empty(options.KnownIPNetworks);
+    }
+
     [Fact]
     public async Task ApiResponsesSetDefensiveHeaders()
     {

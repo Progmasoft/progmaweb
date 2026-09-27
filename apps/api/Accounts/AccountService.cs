@@ -9,6 +9,18 @@ internal sealed class AccountService(
     IAccountStore store,
     TimeProvider timeProvider)
 {
+    private static readonly AccountRecord DummyAccount = new(
+        Guid.Empty,
+        "Missing00",
+        "MISSING00",
+        "missing@example.invalid",
+        "MISSING@EXAMPLE.INVALID",
+        null,
+        string.Empty,
+        DateTimeOffset.UnixEpoch);
+    private static readonly string DummyPasswordHash =
+        new PasswordHasher<AccountRecord>().HashPassword(DummyAccount, "not-the-provided-password");
+
     private readonly PasswordHasher<AccountRecord> passwordHasher = new();
 
     public async ValueTask<(AuthenticatedAccount? Authentication, Dictionary<string, string[]> Errors)> RegisterAsync(
@@ -57,7 +69,7 @@ internal sealed class AccountService(
         CancellationToken cancellationToken)
     {
         if (!EmailAddressPolicy.TryNormalize(request.Email, out _, out string normalizedEmail, out _) ||
-            request.Password is null)
+            request.Password is null || request.Password.Length > PasswordPolicy.MaximumLength)
         {
             return null;
         }
@@ -65,14 +77,8 @@ internal sealed class AccountService(
         AccountRecord? account = await store.FindByEmailAsync(normalizedEmail, cancellationToken);
         if (account is null || account.PasswordHash is null)
         {
-            // A fixed dummy record keeps the missing-account path on the same password-hashing primitive.
-            AccountRecord dummyBase = new(Guid.Empty, "Missing00", "MISSING00", "missing@example.invalid",
-                "MISSING@EXAMPLE.INVALID", null, string.Empty, DateTimeOffset.UnixEpoch);
-            AccountRecord dummy = dummyBase with
-            {
-                PasswordHash = passwordHasher.HashPassword(dummyBase, "not-the-provided-password")
-            };
-            _ = passwordHasher.VerifyHashedPassword(dummy, dummy.PasswordHash, request.Password);
+            // Reuse one private hash so an unknown email follows one expensive verification, like a bad password.
+            _ = passwordHasher.VerifyHashedPassword(DummyAccount, DummyPasswordHash, request.Password);
             return null;
         }
 

@@ -80,8 +80,10 @@ dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration 
 ```
 
 Frontend tests exercise the published locale contract and account/ViGet metadata without starting a production service.
-The frontend LCOV and API Cobertura reports are uploaded to Codecov as separate components in CI. CodeQL and Codacy
-provide static analysis; Dependabot proposes dependency updates without merging them automatically.
+The frontend LCOV and API Cobertura reports are retained as one-day artifacts, then uploaded to Codecov by separate
+jobs. Only those upload jobs receive `id-token: write`; dependency installation, builds, and tests do not receive OIDC
+permissions, and fork-originated pull requests skip the upload jobs. CodeQL and Codacy provide static analysis;
+Dependabot proposes dependency updates without merging them automatically.
 
 ## License
 

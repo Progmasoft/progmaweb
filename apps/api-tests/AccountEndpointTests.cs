@@ -235,6 +235,22 @@ public sealed class AccountEndpointTests
     }
 
     [Fact]
+    public async Task LoginRejectsPasswordsAboveTheRegistrationLimit()
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient();
+
+        HttpResponseMessage response = await client.PostAsJsonAsync("/api/v1/accounts/login", new
+        {
+            email = "person@example.com",
+            password = new string('x', PasswordPolicy.MaximumLength + 1)
+        }, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.False(response.Headers.Contains("Set-Cookie"));
+    }
+
+    [Fact]
     public async Task StatusResponseAdvertisesProgmawebVersion()
     {
         await using AccountApiFactory factory = new();
