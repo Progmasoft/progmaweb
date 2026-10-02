@@ -216,7 +216,8 @@ a {
   padding-left: 4px;
 }
 
-.preference-controls button {
+.preference-controls button,
+.preference-controls select {
   min-height: 34px;
   display: inline-flex;
   gap: 6px;
@@ -231,9 +232,22 @@ a {
   font-weight: 700;
 }
 
-.preference-controls button:hover {
+.preference-controls button:hover,
+.preference-controls select:hover {
   border-color: var(--blue-600);
   background: var(--surface-blue);
+}
+
+/* The language menu is the native select: the browser supplies the list,
+   keyboard handling and the accessible name without any script. */
+.preference-controls select {
+  display: inline-block;
+  font-family: inherit;
+}
+
+.preference-controls select:disabled {
+  cursor: progress;
+  opacity: 0.7;
 }
 
 .primary-nav > a {

@@ -3,21 +3,28 @@
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { isLocale } from "@/lib/localization";
+import {
+  isLocale,
+  localeCookieName,
+  localeCookieOptions,
+  requestHost,
+} from "@/lib/localization";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
 const vigetHosts = new Set(["viget.progmasoft.com", "viget.localhost"]);
 
 export function proxy(request: NextRequest) {
-  const host =
-    (request.headers.get("x-forwarded-host") ?? request.headers.get("host"))
-      ?.split(":", 1)[0]
-      ?.toLowerCase() ?? "";
+  const host = requestHost(
+    request.headers.get("x-forwarded-host"),
+    request.headers.get("host"),
+  );
   const pathname = request.nextUrl.pathname;
 
   // Language selection is a user preference, not a second canonical URL.
   // Consume the query parameter once, persist it across Progmasoft hosts, and
   // redirect to the clean URL so crawlers never index preference variants.
+  // The header control switches in place through a server action; this
+  // parameter remains for links and for browsers that run no script.
   const requestedLocale = request.nextUrl.searchParams.get("lang") ?? undefined;
   if (isLocale(requestedLocale)) {
     const destination = request.nextUrl.clone();
@@ -29,17 +36,14 @@ export function proxy(request: NextRequest) {
       ? "https:"
       : request.nextUrl.protocol;
     const response = NextResponse.redirect(destination);
-    response.cookies.set("progmasoft_locale", requestedLocale, {
-      domain:
-        host === "progmasoft.com" || host.endsWith(".progmasoft.com")
-          ? ".progmasoft.com"
-          : undefined,
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-      secure:
+    response.cookies.set(
+      localeCookieName,
+      requestedLocale,
+      localeCookieOptions(
+        host,
         forwardedProtocol === "https" || request.nextUrl.protocol === "https:",
-    });
+      ),
+    );
     return response;
   }
 
