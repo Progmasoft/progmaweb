@@ -18,18 +18,6 @@ API process.
 - **What closes it.** A durable implementation of `IAccountStore`. The interface already states the uniqueness and
   session rules such a store must keep.
 
-## The API does not run without Google settings
-
-When `Authentication:Google:ClientId` or `Authentication:Google:ClientSecret` is empty, the API answers every request
-with 500, including registration, sign-in with a password and the status route. The validation of the Google options
-fails inside the authentication middleware, before any endpoint runs.
-
-- **Consequence.** The API cannot be started for local work without setting both values, and the "Google sign-in is
-  unavailable" answer of the start endpoint is never reached in that state.
-- **Workaround.** Set both values. Placeholders are enough when Google sign-in itself is not being tested; see
-  [Development](DEVELOPMENT.md).
-- **What closes it.** Registering the Google scheme only when it is configured.
-
 ## Email addresses are not verified
 
 Registration accepts any well-formed address. Nothing proves that the person who registered owns it.
