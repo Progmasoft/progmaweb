@@ -1,8 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-export const supportedLocales = ["en-US", "de-DE", "ru-RU"] as const;
+export const supportedLocales = ["en-US", "de-DE", "ru-RU", "he-IL"] as const;
 export type Locale = (typeof supportedLocales)[number];
+
+/** The language of a visitor whose browser asks for none that is published. */
+export const fallbackLocale: Locale = "en-US";
 
 export function isLocale(value: string | undefined): value is Locale {
   return supportedLocales.includes(value as Locale);
@@ -13,7 +16,74 @@ export const localeNames: Record<Locale, string> = {
   "en-US": "English",
   "de-DE": "Deutsch",
   "ru-RU": "Русский",
+  "he-IL": "עברית",
 };
+
+/**
+ * The direction in which the text of a language runs.
+ *
+ * Only text follows it. The page layout, the navigation and code samples keep
+ * their left-to-right arrangement in every language.
+ */
+export function textDirection(locale: Locale): "ltr" | "rtl" {
+  return locale === "he-IL" ? "rtl" : "ltr";
+}
+
+/** The arrow that points onward in the reading direction of a language. */
+export function forwardArrow(locale: Locale): string {
+  return textDirection(locale) === "rtl" ? "←" : "→";
+}
+
+// Primary language subtags and the published locale each one selects. `iw` is
+// the former code for Hebrew, which some browsers still send.
+const localeByLanguage = new Map<string, Locale>([
+  ["en", "en-US"],
+  ["de", "de-DE"],
+  ["ru", "ru-RU"],
+  ["he", "he-IL"],
+  ["iw", "he-IL"],
+]);
+
+/**
+ * Chooses the published locale a browser prefers.
+ *
+ * The argument is an `Accept-Language` header: a list of language ranges,
+ * each with an optional quality. The range with the highest quality whose
+ * primary language is published wins, and the order of the header breaks
+ * ties. A missing header, a header without a published language and a range
+ * the visitor refuses with quality zero all give the fallback locale. The
+ * header comes from the browser and is not trusted, so only its beginning is
+ * read.
+ */
+export function negotiateLocale(acceptLanguage: string | null): Locale {
+  if (!acceptLanguage) {
+    return fallbackLocale;
+  }
+  let selected: Locale = fallbackLocale;
+  let selectedQuality = 0;
+  for (const range of acceptLanguage.slice(0, 1024).split(",")) {
+    const [tag = "", ...parameters] = range.trim().split(";");
+    const language = tag.trim().split("-", 1)[0] ?? "";
+    const locale = localeByLanguage.get(language.toLowerCase());
+    if (!locale) {
+      continue;
+    }
+    let quality = 1;
+    for (const parameter of parameters) {
+      const [name, value] = parameter.trim().split("=");
+      if (name === "q") {
+        quality = /^(?:0(?:\.\d{0,3})?|1(?:\.0{0,3})?)$/.test(value ?? "")
+          ? Number(value)
+          : 0;
+      }
+    }
+    if (quality > selectedQuality) {
+      selected = locale;
+      selectedQuality = quality;
+    }
+  }
+  return selected;
+}
 
 export const localeCookieName = "progmasoft_locale";
 
@@ -1053,6 +1123,310 @@ export const messages = {
       support: "Поддержка",
       source: "Исходный код",
       footerClosing: "Реестр пакетов ViGet от Progmasoft",
+    },
+  },
+  "he-IL": {
+    metadata: {
+      homeTitle: "Progmasoft",
+      homeDescription:
+        "Progmasoft בונה מערכות לשפות תכנות, לניהול חבילות ולכלי פיתוח.",
+      accountTitle: "חשבון",
+      accountDescription: "גישה לחשבון Progmasoft שלך וניהולו.",
+      loginTitle: "כניסה",
+      registerTitle: "יצירת חשבון",
+      recoveryTitle: "שחזור החשבון",
+      recoveryDescription: "קבלת עזרה בשחזור הגישה לחשבון Progmasoft.",
+      dashboardTitle: "לוח בקרה",
+      vigetTitle: "מאגר החבילות ViGet מבית Progmasoft",
+      vigetDescription:
+        "מאגר החבילות של Visual X#‎ פעיל, אך עדיין לא פורסמו בו חבילות.",
+      dslPluginsTitle: "תוספי DSL · מאגר החבילות ViGet מבית Progmasoft",
+      dslPluginsDescription:
+        "קטלוג תוספי Kotlin DSL של ViGet פעיל, אך עדיין לא פורסמו בו תוספים.",
+    },
+    navigation: {
+      primary: "ניווט ראשי",
+      organization: "הארגון",
+      products: "מוצרים",
+      principles: "עקרונות",
+      account: "חשבון",
+      dashboard: "לוח בקרה",
+      signIn: "כניסה",
+      createAccount: "יצירת חשבון",
+      theme: "ערכת נושא",
+      light: "בהיר",
+      dark: "כהה",
+      language: "שפה",
+    },
+    footer: {
+      summary: "תשתית לשפות תכנות ומערכות למפתחים, הבנויות על חוזים יציבים.",
+      products: "מוצרים",
+      openSource: "קוד פתוח",
+      organization: "הארגון",
+      support: "תמיכה",
+      websiteSource: "קוד המקור של האתר",
+      closing: "מתוכנן לבהירות, לאבטחה ולתחזוקה ארוכת טווח.",
+    },
+    home: {
+      heroEyebrow: "מערכות למפתחים מבית Progmasoft",
+      heroTitleStart: "כלים צריכים להפוך עבודה קשה",
+      heroTitleAccent: "למובנת.",
+      heroDescription:
+        "אנחנו בונים תשתית לשפות תכנות, מערכות חבילות וכלי פיתוח סביב חוזים מפורשים במקום מורכבות מקרית.",
+      exploreProducts: "למוצרים",
+      browseSource: "לעיון בקוד המקור",
+      facts: [
+        ["פתוח", "הנדסה גלויה לציבור"],
+        ["מבוסס טיפוסים", "חוזים לפני קיצורי דרך"],
+        ["קוד מכונה", "ביצועים בלי מסתורין"],
+      ],
+      visualLabel: "עקרונות המוצר של Progmasoft",
+      stack: [
+        ["מוצרים", "חוויות ממוקדות", "מטרה ברורה · שמות יציבים · זהות ציבורית"],
+        ["פלטפורמה", "בסיס חשבון משותף", "אימות · גישה לשירותים · שחזור"],
+        [
+          "תפעול",
+          "תשתית בבעלותנו",
+          "ניתנת לניטור · ניתנת לתחזוקה · בהפעלה ישירה",
+        ],
+      ],
+      productsEyebrow: "מוצרים ופרויקטים",
+      productsTitle: "אקוסיסטם אחד, גבולות ברורים.",
+      productsDescription: "לכל רכיב יש אחריות אחת וחוזה מתועד מול השכבה הבאה.",
+      products: [
+        [
+          "שפת תכנות",
+          "Visual X#",
+          "שפת תכנות מודרנית שמפתחת Progmasoft, עם אתר מוצר ותיעוד ייעודי משלה.",
+          "להכיר את Visual X#‎",
+        ],
+        [
+          "מאגר חבילות",
+          "ViGet",
+          "המאגר הרשמי של חבילות ותוספי DSL לאקוסיסטם של Visual X#‎, בהפעלה ישירה של Progmasoft.",
+          "לפתיחת ViGet",
+        ],
+        [
+          "כלי פיתוח",
+          "הנדסה פתוחה",
+          "מהדר, מעצב קוד, linter, מנתח, מערכת פרויקטים ועורך, המפותחים במאגרים ציבוריים.",
+          "לצפייה ב-GitHub",
+        ],
+      ],
+      principlesEyebrow: "עקרונות הנדסיים",
+      principlesTitle: "בנוי כדי להישאר קריא.",
+      principlesDescription:
+        "ארכיטקטורה מועילה רק כאשר תורם חדש יכול להבין לאן שייכת החלטה וכיצד לאמת אותה.",
+      principles: [
+        [
+          "חוזים מפורשים",
+          "גבולות מבוססי טיפוסים חושפים בעלות, תאימות והתנהגות בעת כשל.",
+        ],
+        [
+          "אימות אמיתי",
+          "הבדיקות מפעילות תוצרים מותקנים, נתיבים דמויי סביבת ייצור והתנהגות נצפית.",
+        ],
+        [
+          "שמות יציבים",
+          "אוצר המילים הציבורי נגזר ממודל המוצר ולא משאריות היסטוריות של המימוש.",
+        ],
+      ],
+      accountEyebrow: "חשבון Progmasoft",
+      accountTitle: "זהות אחת לשירותי Progmasoft.",
+      accountDescription:
+        "ניהול הפרופיל והגישה העתידית לשירותים מאזור החשבון הייעודי.",
+      openAccount: "לחשבון",
+    },
+    account: {
+      securityLabel: "מאפייני האבטחה של החשבון",
+      trust: [
+        "עוגיית הפעלה מאובטחת",
+        "גיבוב סיסמאות בצד השרת",
+        "אימות עם הגבלת קצב",
+      ],
+      landingEyebrow: "חשבון Progmasoft",
+      landingTitle: "זהות ברורה אחת לכל שירות נתמך.",
+      landingDescription:
+        "החשבון שומר את הפרופיל, האימות והגישה לשירותים בתוך גבול אבטחה ייעודי.",
+      identity: [
+        ["שם החשבון", "הזהות הציבורית היציבה שלך ושם המפרסם שלך ב-ViGet"],
+        ["דוא״ל", "שחזור והודעות אבטחה"],
+        ["הפעלה", "גישה מאובטחת מהדפדפן שניתן לבטל"],
+      ],
+      features: [
+        [
+          "אבטחה מכוונת",
+          "הסיסמאות מגובבות בצד השרת, ואסימוני ההפעלה נשמרים כתקצירים בלבד.",
+        ],
+        [
+          "שמות צפויים",
+          "שמות חשבון קנוניים מונעים כתובות דו־משמעיות והתחזות שמבוססת על הבדלי אותיות גדולות וקטנות בלבד. ViGet משתמש בשם הזה בדיוק כשם מפרסם החבילה ואינו יוצר זהות שנייה.",
+        ],
+        [
+          "גבולות בין שירותים",
+          "המוצרים מבקשים גישה מפורשת לחשבון במקום לשתף מצב יישום נסתר.",
+        ],
+      ],
+      loginEyebrow: "חשבון Progmasoft",
+      loginTitle: "כניסה מאובטחת.",
+      loginDescription: "המשך ללוח הבקרה של החשבון ולשירותים המקושרים.",
+      registerEyebrow: "יצירת זהות",
+      registerTitle: "מתחילים עם חשבון יציב.",
+      registerDescription: "בחירת השם שישמש בכתובת חשבון Progmasoft שלך.",
+      recoveryEyebrow: "תמיכה בחשבון",
+      recoveryTitle: "שחזור החשבון.",
+      recoveryDescription:
+        "כשאי אפשר עוד להיכנס, יש לפנות בערוץ התמיכה המאומת.",
+      recoveryPanelEyebrow: "שחזור חשבון",
+      recoveryPanelTitle: "שחזור גישה בבטחה",
+      recoveryPanelDescription:
+        "שחזור סיסמה אוטומטי אינו זמין בשלב ההשקה הראשוני של מערכת החשבונות. יש לפנות לתמיכה של Progmasoft מכתובת הדוא״ל הרשומה בחשבון, כדי שניתן יהיה לאמת את הבעלות.",
+      recoveryEmailSubject: "שחזור חשבון Progmasoft",
+      contactSupport: "פנייה לתמיכה",
+      rememberedPassword: "נזכרת בסיסמה?",
+      returnToSignIn: "חזרה לכניסה",
+    },
+    auth: {
+      createHeading: "יצירת החשבון שלך",
+      loginHeading: "ברוכים השבים",
+      createDescription: "זהות Progmasoft אחת לכל השירותים הנתמכים.",
+      loginDescription: "כניסה עם כתובת הדוא״ל המשויכת לחשבון Progmasoft שלך.",
+      accountName: "שם החשבון",
+      accountHint:
+        "8 עד 128 אותיות ASCII או ספרות, כשהתו הראשון הוא אות גדולה.",
+      email: "כתובת דוא״ל",
+      password: "סיסמה",
+      forgotPassword: "שכחת את הסיסמה?",
+      passwordHint: "לפחות 12 תווים. יש תמיכה במשפטי סיסמה ארוכים.",
+      confirmPassword: "אימות הסיסמה",
+      show: "הצגה",
+      hide: "הסתרה",
+      working: "בתהליך…",
+      create: "יצירת חשבון",
+      signIn: "כניסה",
+      or: "או",
+      google: "המשך עם Google",
+      already: "כבר יש לך חשבון?",
+      newUser: "פעם ראשונה ב-Progmasoft?",
+      createLink: "יצירת חשבון",
+      mismatch: "אימות הסיסמה אינו תואם.",
+      unreachable: "שירות החשבונות אינו זמין זמנית. יש לנסות שוב בקרוב.",
+      missingName: "השרת לא החזיר שם חשבון.",
+      unreadableName: "לא ניתן היה לקרוא את השדה ״שם החשבון״.",
+      requestFailed: "לא ניתן היה להשלים את הבקשה.",
+      googleSignInFailed:
+        "לא ניתן היה להשלים את הכניסה עם Google. יש לנסות שוב.",
+      googleAccountNameRequired: "יש לבחור שם חשבון לפני ההמשך עם Google.",
+      googleAccountNameUnavailable: "שם החשבון הזה אינו זמין. יש לבחור שם אחר.",
+      googleInvalidAccountName: "יש להזין שם חשבון תקין לפני ההמשך עם Google.",
+    },
+    dashboard: {
+      loading: "החשבון נטען…",
+      loadFailed: "לא ניתן היה לטעון את לוח הבקרה.",
+      unreachable: "שירות החשבונות אינו זמין זמנית.",
+      navigation: "ניווט בלוח הבקרה",
+      overview: "סקירה",
+      security: "אבטחה",
+      services: "שירותים",
+      signOut: "יציאה",
+      eyebrow: "סקירת החשבון",
+      welcome: "ברוכים הבאים",
+      description: "ניהול הזהות שמשמשת את שירותי Progmasoft.",
+      profile: "פרופיל",
+      identity: "זהות החשבון",
+      accountName: "שם החשבון",
+      publisherName: "שם המפרסם ב-ViGet",
+      email: "דוא״ל",
+      created: "נוצר",
+      passwordSessions: "סיסמה והפעלות",
+      securityDescription:
+        "הדפדפן שלך משתמש בעוגיית הפעלה מאובטחת מסוג HttpOnly. סודות ההפעלה לעולם אינם נשמרים כטקסט גלוי.",
+      changePassword: "שינוי סיסמה",
+      products: "מוצרי Progmasoft מקושרים",
+      publisherPrefix: "שם המפרסם",
+      sameAccount: "שם החשבון שלך",
+      profileDescription: "פרופיל באקוסיסטם המפתחים",
+      planned: "מתוכנן",
+    },
+    viget: {
+      navigationLabel: "ניווט במאגר",
+      packages: "חבילות",
+      dslPlugins: "תוספי DSL",
+      account: "חשבון",
+      login: "כניסה",
+      register: "הרשמה",
+      homeEyebrow: "מאגר החבילות ViGet",
+      homeTitle: "חבילות לאקוסיסטם של Visual X#‎.",
+      homeDescription:
+        "ViGet הוא המקור הרשמי לחבילות Visual X#‎ ולתוספי DSL לפרויקטים, בהפעלה ישירה של Progmasoft.",
+      createAccount: "יצירת חשבון",
+      exploreVisualXSharp: "להכיר את Visual X#‎",
+      available: "המאגר זמין",
+      emptyTitle: "הקטלוג הציבורי ריק.",
+      emptyDescription:
+        "עדיין לא פורסמו גרסאות של חבילות. ViGet יציג כאן חבילות אמיתיות כשיהיו זמינות.",
+      packageFormat: "תבנית החבילה",
+      publisherIdentity: "זהות המפרסם",
+      publishing: "פרסום",
+      publishingClosed: "עדיין לא נפתח",
+      catalogsEyebrow: "קטלוגים",
+      catalogsTitle: "שני סוגי תוצרים, מאגר אחד.",
+      catalogsDescription:
+        "לחבילות ולתוספי DSL לפרויקטים יש מרחבי קואורדינטות נפרדים וצפויים.",
+      visualPackages: "חבילות Visual X#‎",
+      vipkgCatalog: "קטלוג ViPkg",
+      vipkgDescription:
+        "ספריות ויישומים שנכתבו ב-Visual X#‎ ומופצים כתוצרי ‎.vipkg.",
+      projectExtensions: "הרחבות לפרויקטים",
+      kotlinPlugins: "תוספי Kotlin DSL",
+      kotlinDescription:
+        "תוספי Kotlin בתבנית JAR שמרחיבים את תצורת הפרויקט Visual.XSharp.kts.",
+      openCatalog: "לפתיחת הקטלוג",
+      contractEyebrow: "חוזה המאגר",
+      contractTitle: "בעלות ברורה מהזהות ועד לתוצר.",
+      principles: [
+        [
+          "שם חשבון אחד",
+          "שם חשבון Progmasoft שלך הוא גם שם המפרסם שלך ב-ViGet.",
+        ],
+        [
+          "קואורדינטות תלויות רישיות",
+          "שמות המפרסם והחבילה שומרים על האיות הציבורי המדויק שלהם.",
+        ],
+        ["בלי גרסאות דמה", "הקטלוג נשאר ריק ביושר עד שמתפרסם תוצר חתום אמיתי."],
+      ],
+      pluginEyebrow: "ViGet · תוספי Kotlin DSL",
+      pluginTitle: "להרחיב את מודל הפרויקט.",
+      pluginDescription:
+        "תוספי Kotlin DSL הם תוצרי JAR עבור Visual.XSharp.kts. הם נפרדים מחבילות ‎.vipkg של Visual X#‎.",
+      backToPackages: "חזרה לחבילות",
+      followDevelopment: "למעקב אחר הפיתוח",
+      pluginAvailable: "הקטלוג זמין",
+      pluginEmptyTitle: "עדיין אין תוספי DSL ציבוריים.",
+      pluginEmptyDescription: "הקטלוג מוכן, ובכוונה אינו מכיל תוצרי דמה.",
+      guidance: [
+        [
+          "תבנית",
+          "Kotlin JAR",
+          "תוספי DSL פועלים כהרחבות פרויקט של Kotlin/JVM.",
+        ],
+        [
+          "מיקום",
+          "קטלוג ייעודי",
+          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins.",
+        ],
+        [
+          "זמינות",
+          "הפרסום סגור",
+          "הפרסום ייפתח רק לאחר השלמת חוזה התוספים החתומים.",
+        ],
+      ],
+      footerDescription:
+        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של האקוסיסטם של Visual X#‎.",
+      registry: "מאגר",
+      support: "תמיכה",
+      source: "קוד מקור",
+      footerClosing: "מאגר החבילות ViGet מבית Progmasoft",
     },
   },
 } as const;

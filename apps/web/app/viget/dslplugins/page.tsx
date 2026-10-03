@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { getMessages } from "@/lib/localization";
+import { forwardArrow, getMessages } from "@/lib/localization";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = getMessages(await getLocale());
@@ -43,7 +43,7 @@ export default async function DslPluginsPage() {
                   className="viget-text-link"
                   href="https://github.com/Progmasoft/visual-xsharp"
                 >
-                  {viget.followDevelopment} →
+                  {viget.followDevelopment} {forwardArrow(locale)}
                 </a>
               </div>
             </div>
