@@ -5,6 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Gr
 
 # Progmasoft mail boundary
 
+> **Status.** This document describes the mail host and the contract the account service will use. The account API
+> does not send mail yet: there is no verification message and no automated password recovery in the code. See
+> [Known limitations](../../docs/LIMITATIONS.md).
+
 The Progmasoft Account API submits verification and password-recovery messages to Postfix over the loopback interface. Postfix
 requires TLS for remote SMTP delivery and signs `progmasoft.com` mail with OpenDKIM selector `registry`. The automated
 `noreply@progmasoft.com` sender remains non-login. `support@progmasoft.com` is the only interactive mailbox and is

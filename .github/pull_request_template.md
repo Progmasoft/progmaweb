@@ -12,7 +12,8 @@ is affected.
 
 - [ ] Next.js check, frontend tests, lint, and build were run where relevant.
 - [ ] ASP.NET Core build and API tests were run where relevant.
-- [ ] en-US/de-DE, light/dark, accessibility, and small-screen behavior were considered for UI changes.
+- [ ] All four languages (en-US, de-DE, ru-RU, he-IL with right-to-left text), light/dark, accessibility, and
+      small-screen behavior were considered for UI changes.
 - [ ] Auth, session, publisher identity, registry paths, and deployment compatibility were reviewed if affected.
 - [ ] No credentials, generated output, or unrelated files are included.
 

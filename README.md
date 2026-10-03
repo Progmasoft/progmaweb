@@ -23,6 +23,23 @@ duplicates. Email uniqueness is also evaluated case-insensitively by the API.
 ViGet does not maintain a separate publisher name. A package coordinate's `<Publisher>` segment is exactly the
 canonical Progmasoft `<Account>` name, with the same spelling and case.
 
+## Languages
+
+Every page is published in English, German, Russian and Hebrew. A visitor who has not chosen a language gets the
+language their browser prefers, and English when the browser prefers none of the four. A choice made in the language
+menu is remembered across the three hosts. Hebrew text runs right to left while the page layout stays as it is. See
+[Localization](docs/LOCALIZATION.md).
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md): processes, hosts, routing and trust boundaries.
+- [Account API](docs/ACCOUNT-API.md): endpoints, errors, cookies and limits.
+- [Localization](docs/LOCALIZATION.md): language selection, text direction and adding a language.
+- [Development](docs/DEVELOPMENT.md): local setup, checks and what CI enforces.
+- [Known limitations](docs/LIMITATIONS.md): what is missing or temporary. Read this before operating the service;
+  accounts are currently kept in memory and do not survive a restart of the API.
+- [Operations](ops/README.md) and the [mail boundary](ops/mail/README.md).
+
 ## Architecture
 
 - `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization, account, and ViGet
@@ -54,10 +71,10 @@ pnpm dev
 Start the account API in another terminal:
 
 ```text
-dotnet run --project apps/api/Progmaweb.Api.csproj
+dotnet run --project apps/api/Progmaweb.Api.csproj --urls http://127.0.0.1:5085
 ```
 
-The frontend defaults to `http://localhost:5085` for server-side API requests. Set `PROGMAWEB_API_ORIGIN` when the API
+The frontend defaults to `http://127.0.0.1:5085` for server-side API requests. Set `PROGMAWEB_API_ORIGIN` when the API
 uses another origin. Browser requests use the same-origin `/api` boundary so production can proxy them without exposing
 an internal address.
 
@@ -77,13 +94,16 @@ pnpm build
 dotnet build apps/api/Progmaweb.Api.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --coverlet --coverlet-output-format cobertura
+dotnet tool restore
+dotnet docfx docs/api/docfx.json --warningsAsErrors
 ```
 
 Frontend tests exercise the published locale contract and account/ViGet metadata without starting a production service.
 The frontend LCOV and API Cobertura reports are retained as one-day artifacts, then uploaded to Codecov by separate
 jobs. Only those upload jobs receive `id-token: write`; dependency installation, builds, and tests do not receive OIDC
 permissions, and fork-originated pull requests skip the upload jobs. CodeQL and Codacy provide static analysis;
-Dependabot proposes dependency updates without merging them automatically.
+Dependabot proposes dependency updates without merging them automatically. The DocFX command builds the API reference
+and fails on a broken link or an unresolved reference. [Development](docs/DEVELOPMENT.md) explains each check.
 
 ## License
 
