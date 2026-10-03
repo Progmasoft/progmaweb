@@ -1177,18 +1177,22 @@ export const messages = {
       browseSource: "לעיון בקוד המקור",
       facts: [
         ["פתוח", "הנדסה גלויה לציבור"],
-        ["מוגדר טיפוסים", "חוזים לפני קיצורי דרך"],
-        ["מקומי", "ביצועים בלי מסתורין"],
+        ["מבוסס טיפוסים", "חוזים לפני קיצורי דרך"],
+        ["קוד מכונה", "ביצועים בלי מסתורין"],
       ],
       visualLabel: "עקרונות המוצר של Progmasoft",
       stack: [
         ["מוצרים", "חוויות ממוקדות", "מטרה ברורה · שמות יציבים · זהות ציבורית"],
         ["פלטפורמה", "בסיס חשבון משותף", "אימות · גישה לשירותים · שחזור"],
-        ["תפעול", "תשתית עצמית", "ניתנת לניטור · ניתנת לתחזוקה · בהפעלה ישירה"],
+        [
+          "תפעול",
+          "תשתית בבעלותנו",
+          "ניתנת לניטור · ניתנת לתחזוקה · בהפעלה ישירה",
+        ],
       ],
       productsEyebrow: "מוצרים ופרויקטים",
-      productsTitle: "מערכת אחת, גבולות ברורים.",
-      productsDescription: "לכל משטח יש אחריות אחת וחוזה מתועד מול השכבה הבאה.",
+      productsTitle: "אקוסיסטם אחד, גבולות ברורים.",
+      productsDescription: "לכל רכיב יש אחריות אחת וחוזה מתועד מול השכבה הבאה.",
       products: [
         [
           "שפת תכנות",
@@ -1199,7 +1203,7 @@ export const messages = {
         [
           "מאגר חבילות",
           "ViGet",
-          "המאגר הרשמי של חבילות ותוספי DSL למערכת Visual X#‎, בהפעלה ישירה של Progmasoft.",
+          "המאגר הרשמי של חבילות ותוספי DSL לאקוסיסטם של Visual X#‎, בהפעלה ישירה של Progmasoft.",
           "לפתיחת ViGet",
         ],
         [
@@ -1216,7 +1220,7 @@ export const messages = {
       principles: [
         [
           "חוזים מפורשים",
-          "גבולות מוגדרי טיפוסים חושפים בעלות, תאימות והתנהגות בעת כשל.",
+          "גבולות מבוססי טיפוסים חושפים בעלות, תאימות והתנהגות בעת כשל.",
         ],
         [
           "אימות אמיתי",
@@ -1224,13 +1228,13 @@ export const messages = {
         ],
         [
           "שמות יציבים",
-          "אוצר המילים הציבורי נגזר ממודל המוצר ולא מתאונות מימוש היסטוריות.",
+          "אוצר המילים הציבורי נגזר ממודל המוצר ולא משאריות היסטוריות של המימוש.",
         ],
       ],
       accountEyebrow: "חשבון Progmasoft",
       accountTitle: "זהות אחת לשירותי Progmasoft.",
       accountDescription:
-        "ניהול הפרופיל והגישה העתידית לשירותים ממשטח החשבון הייעודי.",
+        "ניהול הפרופיל והגישה העתידית לשירותים מאזור החשבון הייעודי.",
       openAccount: "לחשבון",
     },
     account: {
@@ -1284,7 +1288,7 @@ export const messages = {
     },
     auth: {
       createHeading: "יצירת החשבון שלך",
-      loginHeading: "ברוך שובך",
+      loginHeading: "ברוכים השבים",
       createDescription: "זהות Progmasoft אחת לכל השירותים הנתמכים.",
       loginDescription: "כניסה עם כתובת הדוא״ל המשויכת לחשבון Progmasoft שלך.",
       accountName: "שם החשבון",
@@ -1303,7 +1307,7 @@ export const messages = {
       or: "או",
       google: "המשך עם Google",
       already: "כבר יש לך חשבון?",
-      newUser: "חדש ב-Progmasoft?",
+      newUser: "פעם ראשונה ב-Progmasoft?",
       createLink: "יצירת חשבון",
       mismatch: "אימות הסיסמה אינו תואם.",
       unreachable: "שירות החשבונות אינו זמין זמנית. יש לנסות שוב בקרוב.",
@@ -1326,7 +1330,7 @@ export const messages = {
       services: "שירותים",
       signOut: "יציאה",
       eyebrow: "סקירת החשבון",
-      welcome: "ברוך הבא",
+      welcome: "ברוכים הבאים",
       description: "ניהול הזהות שמשמשת את שירותי Progmasoft.",
       profile: "פרופיל",
       identity: "זהות החשבון",
@@ -1341,7 +1345,7 @@ export const messages = {
       products: "מוצרי Progmasoft מקושרים",
       publisherPrefix: "שם המפרסם",
       sameAccount: "שם החשבון שלך",
-      profileDescription: "פרופיל במערכת המפתחים",
+      profileDescription: "פרופיל באקוסיסטם המפתחים",
       planned: "מתוכנן",
     },
     viget: {
@@ -1352,7 +1356,7 @@ export const messages = {
       login: "כניסה",
       register: "הרשמה",
       homeEyebrow: "מאגר החבילות ViGet",
-      homeTitle: "חבילות למערכת Visual X#‎.",
+      homeTitle: "חבילות לאקוסיסטם של Visual X#‎.",
       homeDescription:
         "ViGet הוא המקור הרשמי לחבילות Visual X#‎ ולתוספי DSL לפרויקטים, בהפעלה ישירה של Progmasoft.",
       createAccount: "יצירת חשבון",
@@ -1418,7 +1422,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של מערכת Visual X#‎.",
+        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של האקוסיסטם של Visual X#‎.",
       registry: "מאגר",
       support: "תמיכה",
       source: "קוד מקור",
