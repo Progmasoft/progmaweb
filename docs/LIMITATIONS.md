@@ -68,12 +68,6 @@ that route moves here, the legacy process has to keep running.
 The authentication rate limit is counted in the memory of one API process, by client address. It is reset by a
 restart and would not be shared between several instances.
 
-## Documentation comments are not required
-
-The DocFX gate fails on a broken link or an unresolved reference. It does not report a declaration without a
-documentation comment, and most C# declarations have none, so the generated reference lists members without
-descriptions.
-
 ## The Hebrew text has not been reviewed by a native speaker
 
 The Hebrew translation was written and revised without a native reader. It may contain wording a native speaker would
