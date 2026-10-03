@@ -18,3 +18,7 @@ obj/
 .env
 .env.*
 !.env.example
+
+# DocFX output
+docs/api/_site/
+docs/api/reference/
