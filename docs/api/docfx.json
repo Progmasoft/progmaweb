@@ -1,0 +1,26 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../../apps/api",
+          "files": ["Progmaweb.Api.csproj"]
+        }
+      ],
+      "dest": "reference",
+      "includePrivateMembers": true
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["index.md", "toc.yml", "reference/**/*.yml"]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadata": {
+      "_appTitle": "Progmaweb API",
+      "_enableSearch": false
+    }
+  }
+}
