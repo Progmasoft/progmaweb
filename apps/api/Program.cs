@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -15,7 +16,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IAccountStore, InMemoryAccountStore>();
 builder.Services.AddSingleton<AccountService>();
 builder.Services.AddSingleton<SessionService>();
-builder.Services
+AuthenticationBuilder authentication = builder.Services
     .AddAuthentication()
     .AddCookie(AccountEndpoints.ExternalCookieScheme, options =>
     {
@@ -25,15 +26,24 @@ builder.Services
         options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-    })
-    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    });
+
+// The Google scheme exists only when its client is configured. Registered with empty credentials, its option
+// validation fails inside the authentication middleware and every request, not only Google sign-in, ends in 500.
+// Without the scheme the service runs normally and the Google start endpoint answers that sign-in is unavailable.
+string? googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+string? googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(googleClientSecret))
+{
+    authentication.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+        options.ClientId = googleClientId;
+        options.ClientSecret = googleClientSecret;
         options.CallbackPath = "/api/v1/accounts/oauth/google/callback";
         options.SignInScheme = AccountEndpoints.ExternalCookieScheme;
         options.SaveTokens = false;
     });
+}
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 builder.Services.AddRateLimiter(options =>

@@ -102,7 +102,9 @@ The flow is a server-side authorization-code flow. The browser is redirected; it
 A Google identity is never linked to an existing account by email address. Password registrations do not verify the
 address, so linking by address could give one person's account to another.
 
-The service needs a Google client identifier and secret to run at all; see [Known limitations](LIMITATIONS.md).
+Google sign-in exists only when both the client identifier and the client secret are configured when the service
+starts. Without them the rest of the service works, `start` answers **503 Service Unavailable**, `complete` redirects
+to `/login?google=failed`, and the callback path is not a route.
 
 ## Status and health
 
@@ -137,8 +139,8 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 | --- | --- | --- |
 | `AccountSessions:LifetimeHours` | hours a session stays valid, clamped to 1–168 | `12` |
 | `AccountSessions:CookieName` | name of the session cookie | `__Host-ProgmasoftSession` |
-| `Authentication:Google:ClientId` | Google OAuth client identifier | none; required |
-| `Authentication:Google:ClientSecret` | Google OAuth client secret | none; required |
+| `Authentication:Google:ClientId` | Google OAuth client identifier | empty; Google sign-in is off |
+| `Authentication:Google:ClientSecret` | Google OAuth client secret | empty; Google sign-in is off |
 | `AllowedHosts` | host names the service answers | see `appsettings.json` |
 | `ASPNETCORE_URLS` | listener address | `http://127.0.0.1:5085` in production |
 

@@ -32,17 +32,11 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Start the account API in a second terminal on the port the frontend expects. The two Google settings must not be
-empty, or the API answers every request with 500; placeholder values are enough for everything except sign-in with
-Google itself.
+Start the account API in a second terminal on the port the frontend expects:
 
 ```text
-Authentication__Google__ClientId=local-dev.apps.googleusercontent.com
-Authentication__Google__ClientSecret=local-dev-placeholder
 dotnet run --project apps/api/Progmaweb.Api.csproj --urls http://127.0.0.1:5085
 ```
-
-Set the two variables in the way your shell sets environment variables before running the last line.
 
 The frontend forwards `/api/*` to `PROGMAWEB_API_ORIGIN`, which defaults to `http://127.0.0.1:5085`. Set it when the
 API listens elsewhere; `.env.example` shows the variable.
@@ -57,8 +51,10 @@ Open the three surfaces through their development host names:
 
 Accounts created locally live in the memory of the API process and are gone when it stops.
 
-Real sign-in with Google needs the identifier and secret of a Google OAuth client in those two variables. Never commit
-the downloaded Google client file.
+Sign-in with Google is optional locally. It needs the identifier and secret of a Google OAuth client in
+`Authentication__Google__ClientId` and `Authentication__Google__ClientSecret`, set in the environment before the API
+starts. Without them everything else works and the Google button leads to a 503 from the API. Never commit the
+downloaded Google client file.
 
 ## Checks
 
