@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { getMessages } from "@/lib/localization";
+import { forwardArrow, getMessages } from "@/lib/localization";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = getMessages(await getLocale());
@@ -103,7 +103,9 @@ export default async function ViGetPage() {
                   viget.progmasoft.com/dslplugins/&lt;Publisher&gt;/&lt;Name&gt;/
                 </code>
                 <small>{viget.kotlinDescription}</small>
-                <strong>{viget.openCatalog} →</strong>
+                <strong>
+                  {viget.openCatalog} {forwardArrow(locale)}
+                </strong>
               </a>
             </div>
           </div>

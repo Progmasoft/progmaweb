@@ -15,11 +15,21 @@ import {
 } from "../lib/localization.ts";
 
 test("only the published locales are accepted", () => {
-  assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU"]);
+  assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU", "he-IL"]);
   assert.equal(isLocale("en-US"), true);
   assert.equal(isLocale("de-DE"), true);
   assert.equal(isLocale("ru-RU"), true);
-  for (const value of ["en", "de", "ru", "en-us", "tr-TR", "", undefined]) {
+  for (const value of [
+    "en",
+    "de",
+    "ru",
+    "he",
+    "iw",
+    "en-us",
+    "tr-TR",
+    "",
+    undefined,
+  ]) {
     assert.equal(isLocale(value), false, `unexpected locale: ${value}`);
   }
 });
@@ -161,4 +171,51 @@ test("the Russian messages are written in Cyrillic", () => {
     assert.match(text, /[А-Яа-яЁё]/);
   }
   assert.notEqual(russian.auth.signIn, messages["en-US"].auth.signIn);
+});
+
+test("Hebrew is published and is the only right-to-left language", async () => {
+  const { forwardArrow, textDirection } =
+    await import("../lib/localization.ts");
+  assert.equal(isLocale("he-IL"), true);
+  assert.equal(localeNames["he-IL"], "עברית");
+  for (const locale of supportedLocales) {
+    const expected = locale === "he-IL" ? "rtl" : "ltr";
+    assert.equal(textDirection(locale), expected, locale);
+    assert.equal(forwardArrow(locale), expected === "rtl" ? "←" : "→", locale);
+  }
+  assert.match(messages["he-IL"].auth.signIn, /[֐-׿]/);
+});
+
+test("the browser preference selects the language when nothing was chosen", async () => {
+  const { fallbackLocale, negotiateLocale } =
+    await import("../lib/localization.ts");
+  assert.equal(fallbackLocale, "en-US");
+  const cases = [
+    [null, "en-US"],
+    ["", "en-US"],
+    ["de", "de-DE"],
+    ["de-AT,de;q=0.9,en;q=0.8", "de-DE"],
+    ["ru-RU,ru;q=0.9", "ru-RU"],
+    ["he-IL,he;q=0.9,en-US;q=0.8", "he-IL"],
+    ["iw", "he-IL"],
+    ["HE", "he-IL"],
+    // Quality decides, not position.
+    ["en;q=0.3,ru;q=0.9", "ru-RU"],
+    // The first of equally preferred languages wins.
+    ["de,ru", "de-DE"],
+    // An unpublished first choice falls through to a published one.
+    ["tr-TR,tr;q=0.9,de;q=0.5", "de-DE"],
+    ["tr-TR,fr;q=0.9", "en-US"],
+    ["*", "en-US"],
+    // A refused or malformed quality never selects a language.
+    ["de;q=0", "en-US"],
+    ["de;q=abc,ru;q=0.1", "ru-RU"],
+    ["de;q=5", "en-US"],
+    ["constructor,__proto__", "en-US"],
+  ];
+  for (const [header, expected] of cases) {
+    assert.equal(negotiateLocale(header), expected, String(header));
+  }
+  // Only the beginning of an oversized header is read.
+  assert.equal(negotiateLocale(`${"x,".repeat(2000)}de`), "en-US");
 });

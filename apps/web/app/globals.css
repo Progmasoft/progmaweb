@@ -1393,3 +1393,25 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Right-to-left text. Only the text follows the direction of the language:
+ * the page layout, the navigation and code keep their left-to-right
+ * arrangement. Blocks of prose run right to left, and short pieces such as
+ * links, buttons and list items take the direction of their own first
+ * letter, so a product name on its own still reads left to right.
+ */
+[data-text-direction="rtl"]
+  :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd, legend) {
+  direction: rtl;
+}
+
+[data-text-direction="rtl"]
+  :is(a, button, label, li, small, strong, span, option, summary) {
+  unicode-bidi: plaintext;
+}
+
+[data-text-direction="rtl"] :is(code, pre, kbd, samp, input) {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
