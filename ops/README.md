@@ -39,6 +39,31 @@ avoids depending on an apphost inode copied from a build machine retaining an ex
    sitemaps, `/api/v1/status`, registration validation, and the existing Visual X# host.
 6. On failure, restore the previous `current` target and restart only the Progmaweb services.
 
+## Restarting the API deletes every account
+
+The account store is in memory; see [Known limitations](../docs/LIMITATIONS.md). Restarting `progmaweb-api` deletes
+all accounts and sessions. Until a durable store exists:
+
+- When a release changes only `apps/web`, copy the `api` directory of the running release into the new release,
+  confirm that the two directories are identical, switch `current`, and restart **only** `progmaweb-web`. The running
+  API process keeps serving from the files it already opened.
+- When a release changes `apps/api`, restarting the API is unavoidable. Say so before deploying, because every user
+  has to register again.
+
+Step 4 of the activation contract restarts both services; apply it to the API only in the second case.
+
+## Lessons from past releases
+
+- **Build the frontend on the server.** A standalone build made on another operating system carries native modules
+  for that system. Send the source of the commit and run `pnpm install --frozen-lockfile` and the build on the host.
+- **Test on a side port first.** Start the new `server.js` as the service user on a free loopback port, request the
+  pages of each host with the matching `Host` header, then stop it. Only then switch `current`.
+- **Check SELinux labels after copying.** Files copied from an administrator's home directory keep that directory's
+  label. Run `restorecon -R` on the new release directory so it carries the default label of its location. Never
+  switch SELinux to permissive to make a release work.
+- **Keep the previous release.** A rollback is the `current` symlink pointing at the previous directory and a restart
+  of the frontend service.
+
 The Progmasoft and ViGet Nginx hosts must never reuse `/srv/xsharp/website/current`. Visual X# compiler and language
 content belongs to `xsharp-lang.xyz`; sharing an origin server does not imply sharing a document root or application
 process. The temporary ViGet status API remains on its dedicated loopback service while catalog pages are served by
