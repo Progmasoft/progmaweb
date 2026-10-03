@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getLocale } from "@/lib/locale.server";
+import { textDirection } from "@/lib/localization";
 import "./globals.css";
 import "./viget.css";
 
@@ -42,7 +43,12 @@ export default async function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   const locale = await getLocale();
   return (
-    <html lang={locale} data-theme="light" suppressHydrationWarning>
+    <html
+      lang={locale}
+      data-text-direction={textDirection(locale)}
+      data-theme="light"
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>

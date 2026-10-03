@@ -6,7 +6,7 @@ import { Fragment } from "react";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getLocale } from "@/lib/locale.server";
-import { getMessages } from "@/lib/localization";
+import { forwardArrow, getMessages } from "@/lib/localization";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = getMessages(await getLocale());
@@ -118,7 +118,9 @@ export default async function Homepage() {
                     <p className="eyebrow">{eyebrow}</p>
                     <h3>{name}</h3>
                     <p>{description}</p>
-                    <a href={productLinks[index]?.href}>{action} →</a>
+                    <a href={productLinks[index]?.href}>
+                      {action} {forwardArrow(locale)}
+                    </a>
                   </article>
                 ),
               )}
