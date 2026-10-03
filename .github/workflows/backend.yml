@@ -47,10 +47,13 @@ jobs:
       - run: dotnet build Progmaweb.slnx --configuration Release --no-restore
       - run: dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --no-build --coverlet --coverlet-output-format cobertura
 
-      # Documentation gate: DocFX reads the API project and builds the
-      # reference; an unresolved reference or a broken link is an error.
+      # Documentation gate. DocFX reads the API project and builds the
+      # reference; an unresolved reference or a broken link is an error. The
+      # coverage check then fails when a namespace, type or member of the
+      # reference has no description, which DocFX itself does not report.
       - run: dotnet tool restore
       - run: dotnet docfx docs/api/docfx.json --warningsAsErrors
+      - run: dotnet run docs/api/CheckDocumentation.cs -- docs/api
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

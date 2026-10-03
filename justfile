@@ -23,3 +23,4 @@ verify: web-check web-build api-build api-test
 api-docs:
     dotnet tool restore
     dotnet docfx docs/api/docfx.json --warningsAsErrors
+    dotnet run docs/api/CheckDocumentation.cs -- docs/api

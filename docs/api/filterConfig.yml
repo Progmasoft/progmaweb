@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+# Code that a source generator writes at build time is not part of the
+# reference: nobody maintains it, and it cannot carry documentation.
+apiRules:
+  - exclude:
+      uidRegex: ^System\.Text\.RegularExpressions\.Generated
+  # The regular-expression generator also writes the body of this partial
+  # method, and its generated comment replaces the one on the declaration, so
+  # the summary in the source never reaches the reference.
+  - exclude:
+      uidRegex: ^Progmasoft\.Progmaweb\.Api\.Accounts\.AccountNamePolicy\.CanonicalPattern$
+      type: Method

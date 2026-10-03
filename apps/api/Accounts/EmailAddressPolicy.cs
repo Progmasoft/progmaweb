@@ -5,10 +5,22 @@ using System.Net.Mail;
 
 namespace Progmasoft.Progmaweb.Api.Accounts;
 
+/// <summary>Rules for email addresses.</summary>
+/// <remarks>
+/// An address is accepted when it parses as a single mailbox without a display name and is at most 254 characters
+/// long. Ownership of the address is not verified.
+/// </remarks>
 internal static class EmailAddressPolicy
 {
+    /// <summary>Most characters an email address may have.</summary>
     public const int MaximumLength = 254;
 
+    /// <summary>Validates an email address and returns its stored and lookup forms.</summary>
+    /// <param name="value">The address as entered; surrounding white space is ignored.</param>
+    /// <param name="canonical">The trimmed address, kept as the owner wrote it.</param>
+    /// <param name="normalized">The address in upper case; the uniqueness key. Empty when the address is refused.</param>
+    /// <param name="error">Message for the user when the address is refused; empty otherwise.</param>
+    /// <returns><see langword="true"/> when the address is a single valid mailbox.</returns>
     public static bool TryNormalize(string? value, out string canonical, out string normalized, out string error)
     {
         canonical = value?.Trim() ?? string.Empty;
