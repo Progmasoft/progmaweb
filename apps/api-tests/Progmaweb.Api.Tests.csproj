@@ -12,7 +12,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.11" />
-    <PackageReference Include="coverlet.MTP" Version="8.0.0" />
+    <PackageReference Include="coverlet.MTP" Version="10.1.0" />
     <!-- xUnit's MTP-v2 package is the native .NET 10 test host. Keeping the
          VSTest adapter here would make the solution mix incompatible runners. -->
     <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />
