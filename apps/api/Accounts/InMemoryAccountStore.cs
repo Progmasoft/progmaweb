@@ -5,15 +5,27 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 
 // This development store models the uniqueness and session semantics required by the future PostgreSQL implementation.
 // It deliberately exposes no enumeration or bulk-delete surface to public endpoints.
+/// <summary>An <see cref="IAccountStore"/> that keeps everything in the memory of the process.</summary>
+/// <remarks>
+/// It implements the uniqueness and session rules a durable store must keep, under one lock. Nothing survives a
+/// restart of the service: every account and every session is lost when the process stops.
+/// </remarks>
 internal sealed class InMemoryAccountStore : IAccountStore
 {
+    /// <summary>Guards every dictionary below; each operation holds it for its whole duration.</summary>
     private readonly Lock gate = new();
+    /// <summary>Every account, by identifier.</summary>
     private readonly Dictionary<Guid, AccountRecord> accountsById = [];
+    /// <summary>Account identifiers by normalized email address; the uniqueness index of addresses.</summary>
     private readonly Dictionary<string, Guid> accountIdsByEmail = new(StringComparer.Ordinal);
+    /// <summary>Account identifiers by Google subject; the uniqueness index of linked identities.</summary>
     private readonly Dictionary<string, Guid> accountIdsByGoogleSubject = new(StringComparer.Ordinal);
+    /// <summary>Account identifiers by normalized account name; the uniqueness index of names.</summary>
     private readonly Dictionary<string, Guid> accountIdsByName = new(StringComparer.Ordinal);
+    /// <summary>Sessions by the hexadecimal form of their token digest.</summary>
     private readonly Dictionary<string, SessionRecord> sessionsByDigest = new(StringComparer.Ordinal);
 
+    /// <inheritdoc/>
     public ValueTask<CreateAccountResult> CreateAsync(AccountRecord account, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -46,6 +58,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask<AccountRecord?> FindByGoogleSubjectAsync(
         string googleSubject,
         CancellationToken cancellationToken)
@@ -58,6 +71,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask<AccountRecord?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -68,6 +82,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -78,6 +93,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask StoreSessionAsync(SessionRecord session, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -88,6 +104,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask<SessionRecord?> FindSessionAsync(byte[] tokenDigest, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -98,6 +115,7 @@ internal sealed class InMemoryAccountStore : IAccountStore
         }
     }
 
+    /// <inheritdoc/>
     public ValueTask RevokeSessionAsync(byte[] tokenDigest, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

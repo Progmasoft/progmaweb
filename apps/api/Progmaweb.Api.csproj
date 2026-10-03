@@ -7,6 +7,9 @@
     <RootNamespace>Progmasoft.Progmaweb.Api</RootNamespace>
     <AssemblyName>Progmaweb.Api</AssemblyName>
     <Version>1.0.0</Version>
+    <!-- The XML documentation is compiled so that a broken reference or an undocumented public
+         declaration fails the build; DocFX publishes the same comments. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.11" />

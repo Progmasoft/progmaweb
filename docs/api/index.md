@@ -12,8 +12,27 @@ The service is an application, not a library, so most of its types are
 internal. The reference includes them: it documents the code for the people
 who maintain it.
 
-Build it from the repository root:
+Build and check it from the repository root:
 
 ```sh
-docfx docs/api/docfx.json --warningsAsErrors
+dotnet tool restore
+dotnet docfx docs/api/docfx.json --warningsAsErrors
+dotnet run docs/api/CheckDocumentation.cs -- docs/api
 ```
+
+## What the gate requires
+
+Three things fail the check, locally and in CI:
+
+- **A broken link or an unresolved reference.** DocFX runs with every warning treated as an error.
+- **An undocumented public declaration or a wrong `cref`.** The API project compiles its XML documentation, and the
+  build treats the compiler's documentation warnings as errors.
+- **Any undocumented item of the reference.** `CheckDocumentation.cs` reads the metadata DocFX generated and fails
+  when a namespace, type or member has no summary. This covers internal and private members too, which the compiler
+  does not check.
+
+A namespace has no declaration that could hold a comment. Its description is a file in `namespaces/`, named after
+the namespace.
+
+`filterConfig.yml` lists what is left out of the reference: code written by a source generator, which nobody
+maintains and which cannot carry documentation. Do not add an entry there to get past the gate; write the summary.

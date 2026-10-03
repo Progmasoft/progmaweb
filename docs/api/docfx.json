@@ -4,23 +4,37 @@
       "src": [
         {
           "src": "../../apps/api",
-          "files": ["Progmaweb.Api.csproj"]
+          "files": [
+            "Progmaweb.Api.csproj"
+          ]
         }
       ],
       "dest": "reference",
-      "includePrivateMembers": true
+      "includePrivateMembers": true,
+      "filter": "filterConfig.yml"
     }
   ],
   "build": {
     "content": [
       {
-        "files": ["index.md", "toc.yml", "reference/**/*.yml"]
+        "files": [
+          "index.md",
+          "toc.yml",
+          "reference/**/*.yml"
+        ]
       }
     ],
     "dest": "_site",
     "globalMetadata": {
       "_appTitle": "Progmaweb API",
       "_enableSearch": false
-    }
+    },
+    "overwrite": [
+      {
+        "files": [
+          "namespaces/*.md"
+        ]
+      }
+    ]
   }
 }
