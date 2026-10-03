@@ -1,11 +1,60 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-export const supportedLocales = ["en-US", "de-DE"] as const;
+export const supportedLocales = ["en-US", "de-DE", "ru-RU"] as const;
 export type Locale = (typeof supportedLocales)[number];
 
 export function isLocale(value: string | undefined): value is Locale {
   return supportedLocales.includes(value as Locale);
+}
+
+/** Each language named in that language, as a language menu shows it. */
+export const localeNames: Record<Locale, string> = {
+  "en-US": "English",
+  "de-DE": "Deutsch",
+  "ru-RU": "Русский",
+};
+
+export const localeCookieName = "progmasoft_locale";
+
+export interface LocaleCookieOptions {
+  domain: string | undefined;
+  httpOnly: true;
+  maxAge: number;
+  sameSite: "lax";
+  secure: boolean;
+}
+
+/**
+ * Attributes of the language-preference cookie.
+ *
+ * The preference is shared by every Progmasoft host, so on a production host
+ * the cookie belongs to the registrable domain. Any other host, such as a
+ * local development name, keeps a host-only cookie. The proxy redirect and
+ * the in-page language switch must write the same cookie, or one would leave
+ * a second cookie behind that shadows the other.
+ */
+export function localeCookieOptions(
+  host: string,
+  secure: boolean,
+): LocaleCookieOptions {
+  const isProductionHost =
+    host === "progmasoft.com" || host.endsWith(".progmasoft.com");
+  return {
+    domain: isProductionHost ? ".progmasoft.com" : undefined,
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    secure,
+  };
+}
+
+/** The host a request was addressed to, without its port and in lower case. */
+export function requestHost(
+  forwardedHost: string | null,
+  host: string | null,
+): string {
+  return (forwardedHost ?? host)?.split(":", 1)[0]?.toLowerCase() ?? "";
 }
 
 export const messages = {
@@ -670,6 +719,340 @@ export const messages = {
       support: "Support",
       source: "Quellcode",
       footerClosing: "ViGet-Paketregistrierung von Progmasoft",
+    },
+  },
+  "ru-RU": {
+    metadata: {
+      homeTitle: "Progmasoft",
+      homeDescription:
+        "Progmasoft разрабатывает системы для языков программирования, управления пакетами и инструментов разработчика.",
+      accountTitle: "Аккаунт",
+      accountDescription: "Откройте свой аккаунт Progmasoft и управляйте им.",
+      loginTitle: "Вход",
+      registerTitle: "Создание аккаунта",
+      recoveryTitle: "Восстановление аккаунта",
+      recoveryDescription:
+        "Получите помощь в восстановлении доступа к аккаунту Progmasoft.",
+      dashboardTitle: "Панель управления",
+      vigetTitle: "Реестр пакетов ViGet от Progmasoft",
+      vigetDescription:
+        "Реестр пакетов Visual X# работает, но опубликованных пакетов пока нет.",
+      dslPluginsTitle: "DSL-плагины · Реестр пакетов ViGet от Progmasoft",
+      dslPluginsDescription:
+        "Каталог Kotlin DSL-плагинов ViGet работает, но опубликованных плагинов пока нет.",
+    },
+    navigation: {
+      primary: "Основная навигация",
+      organization: "Организация",
+      products: "Продукты",
+      principles: "Принципы",
+      account: "Аккаунт",
+      dashboard: "Панель управления",
+      signIn: "Войти",
+      createAccount: "Создать аккаунт",
+      theme: "Тема",
+      light: "Светлая",
+      dark: "Тёмная",
+      language: "Язык",
+    },
+    footer: {
+      summary:
+        "Инфраструктура языков программирования и системы для разработчиков, построенные на надёжных контрактах.",
+      products: "Продукты",
+      openSource: "Открытый исходный код",
+      organization: "Организация",
+      support: "Поддержка",
+      websiteSource: "Исходный код сайта",
+      closing:
+        "Создано ради ясности, безопасности и долгосрочного сопровождения.",
+    },
+    home: {
+      heroEyebrow: "Системы для разработчиков от Progmasoft",
+      heroTitleStart: "Инструменты должны делать сложную работу",
+      heroTitleAccent: "понятной.",
+      heroDescription:
+        "Мы создаём инфраструктуру языков программирования, системы пакетов и инструменты разработчика на основе явных контрактов, а не случайной сложности.",
+      exploreProducts: "Обзор продуктов",
+      browseSource: "Исходный код",
+      facts: [
+        ["Открыто", "Публичная разработка"],
+        ["Типизировано", "Контракты важнее обходных путей"],
+        ["Нативно", "Производительность без загадок"],
+      ],
+      visualLabel: "Принципы продуктов Progmasoft",
+      stack: [
+        [
+          "Продукты",
+          "Сфокусированные решения",
+          "Ясное назначение · устойчивые имена · публичная идентичность",
+        ],
+        [
+          "Платформа",
+          "Общая основа аккаунтов",
+          "Аутентификация · доступ к сервисам · восстановление",
+        ],
+        [
+          "Эксплуатация",
+          "Собственная инфраструктура",
+          "Наблюдаемая · сопровождаемая · под нашим прямым управлением",
+        ],
+      ],
+      productsEyebrow: "Продукты и проекты",
+      productsTitle: "Одна экосистема, чёткие границы.",
+      productsDescription:
+        "У каждой части одна зона ответственности и документированный контракт со следующим уровнем.",
+      products: [
+        [
+          "Язык программирования",
+          "Visual X#",
+          "Современный язык программирования, разрабатываемый Progmasoft, с собственным сайтом продукта и документации.",
+          "Подробнее о Visual X#",
+        ],
+        [
+          "Реестр пакетов",
+          "ViGet",
+          "Канонический реестр пакетов и DSL-плагинов экосистемы Visual X#, которым напрямую управляет Progmasoft.",
+          "Открыть ViGet",
+        ],
+        [
+          "Инструменты разработчика",
+          "Открытая разработка",
+          "Компилятор, форматтер, линтер, анализатор, система проектов и редактор разрабатываются в публичных репозиториях.",
+          "Смотреть на GitHub",
+        ],
+      ],
+      principlesEyebrow: "Инженерные принципы",
+      principlesTitle: "Создано, чтобы оставаться понятным.",
+      principlesDescription:
+        "Архитектура полезна только тогда, когда новый участник может понять, к чему относится решение и как его проверить.",
+      principles: [
+        [
+          "Явные контракты",
+          "Типизированные границы делают видимыми ответственность, совместимость и поведение при сбоях.",
+        ],
+        [
+          "Настоящая проверка",
+          "Тесты проверяют установленные артефакты, пути, близкие к рабочим, и наблюдаемое поведение.",
+        ],
+        [
+          "Устойчивые имена",
+          "Публичная терминология следует модели продукта, а не историческим случайностям реализации.",
+        ],
+      ],
+      accountEyebrow: "Аккаунт Progmasoft",
+      accountTitle: "Единая учётная запись для сервисов Progmasoft.",
+      accountDescription:
+        "Управляйте профилем и будущим доступом к сервисам на отдельном сайте аккаунта.",
+      openAccount: "Открыть аккаунт",
+    },
+    account: {
+      securityLabel: "Свойства безопасности аккаунта",
+      trust: [
+        "Защищённый сеансовый cookie",
+        "Хеширование паролей на сервере",
+        "Ограничение частоты попыток входа",
+      ],
+      landingEyebrow: "Аккаунт Progmasoft",
+      landingTitle:
+        "Одна понятная учётная запись для всех поддерживаемых сервисов.",
+      landingDescription:
+        "Аккаунт хранит профиль, аутентификацию и доступ к сервисам в отдельном контуре безопасности.",
+      identity: [
+        [
+          "Имя аккаунта",
+          "Ваше постоянное публичное имя и имя издателя в ViGet",
+        ],
+        ["Эл. почта", "Восстановление и уведомления безопасности"],
+        ["Сеанс", "Защищённый отзываемый доступ из браузера"],
+      ],
+      features: [
+        [
+          "Продуманная безопасность",
+          "Пароли хешируются на сервере, а токены сеансов хранятся только в виде дайджестов.",
+        ],
+        [
+          "Предсказуемые имена",
+          "Канонические имена аккаунтов исключают неоднозначные URL и подмену имени, отличающегося только регистром. ViGet использует именно это имя как издателя пакетов и не создаёт вторую учётную запись.",
+        ],
+        [
+          "Границы сервисов",
+          "Продукты запрашивают явный доступ к аккаунту, а не разделяют скрытое состояние приложения.",
+        ],
+      ],
+      loginEyebrow: "Аккаунт Progmasoft",
+      loginTitle: "Безопасный вход.",
+      loginDescription:
+        "Перейдите к панели управления аккаунтом и подключённым сервисам.",
+      registerEyebrow: "Создание учётной записи",
+      registerTitle: "Начните с постоянного аккаунта.",
+      registerDescription:
+        "Выберите имя, которое будет использоваться в URL вашего аккаунта Progmasoft.",
+      recoveryEyebrow: "Поддержка аккаунта",
+      recoveryTitle: "Восстановите свой аккаунт.",
+      recoveryDescription:
+        "Если вы больше не можете войти, используйте проверенный канал поддержки.",
+      recoveryPanelEyebrow: "Восстановление аккаунта",
+      recoveryPanelTitle: "Безопасное восстановление доступа",
+      recoveryPanelDescription:
+        "Автоматическое восстановление пароля недоступно на этапе первоначального запуска системы аккаунтов. Напишите в поддержку Progmasoft с адреса электронной почты, указанного в вашем аккаунте, чтобы мы могли подтвердить право владения.",
+      recoveryEmailSubject: "Восстановление аккаунта Progmasoft",
+      contactSupport: "Написать в поддержку",
+      rememberedPassword: "Вспомнили пароль?",
+      returnToSignIn: "Вернуться ко входу",
+    },
+    auth: {
+      createHeading: "Создайте аккаунт",
+      loginHeading: "С возвращением",
+      createDescription:
+        "Используйте одну учётную запись Progmasoft во всех поддерживаемых сервисах.",
+      loginDescription:
+        "Войдите, указав адрес электронной почты, привязанный к вашему аккаунту Progmasoft.",
+      accountName: "Имя аккаунта",
+      accountHint:
+        "От 8 до 128 букв ASCII или цифр; первая буква должна быть заглавной.",
+      email: "Адрес электронной почты",
+      password: "Пароль",
+      forgotPassword: "Забыли пароль?",
+      passwordHint:
+        "Не менее 12 символов. Длинные парольные фразы поддерживаются.",
+      confirmPassword: "Подтверждение пароля",
+      show: "Показать",
+      hide: "Скрыть",
+      working: "Выполняется…",
+      create: "Создать аккаунт",
+      signIn: "Войти",
+      or: "или",
+      google: "Продолжить с Google",
+      already: "Уже есть аккаунт?",
+      newUser: "Впервые в Progmasoft?",
+      createLink: "Создайте аккаунт",
+      mismatch: "Подтверждение пароля не совпадает.",
+      unreachable:
+        "Сервис аккаунтов временно недоступен. Повторите попытку чуть позже.",
+      missingName: "Сервер не вернул имя аккаунта.",
+      unreadableName: "Не удалось прочитать поле «Имя аккаунта».",
+      requestFailed: "Не удалось выполнить запрос.",
+      googleSignInFailed:
+        "Не удалось выполнить вход через Google. Повторите попытку.",
+      googleAccountNameRequired:
+        "Выберите имя аккаунта, прежде чем продолжить с Google.",
+      googleAccountNameUnavailable:
+        "Это имя аккаунта недоступно. Выберите другое.",
+      googleInvalidAccountName:
+        "Укажите допустимое имя аккаунта, прежде чем продолжить с Google.",
+    },
+    dashboard: {
+      loading: "Загрузка аккаунта…",
+      loadFailed: "Не удалось загрузить панель управления.",
+      unreachable: "Сервис аккаунтов временно недоступен.",
+      navigation: "Навигация панели управления",
+      overview: "Обзор",
+      security: "Безопасность",
+      services: "Сервисы",
+      signOut: "Выйти",
+      eyebrow: "Обзор аккаунта",
+      welcome: "Добро пожаловать",
+      description:
+        "Управляйте учётной записью, которую используют сервисы Progmasoft.",
+      profile: "Профиль",
+      identity: "Учётная запись",
+      accountName: "Имя аккаунта",
+      publisherName: "Имя издателя в ViGet",
+      email: "Эл. почта",
+      created: "Создан",
+      passwordSessions: "Пароль и сеансы",
+      securityDescription:
+        "Ваш браузер использует защищённый сеансовый cookie с флагом HttpOnly. Секреты сеансов никогда не хранятся в открытом виде.",
+      changePassword: "Сменить пароль",
+      products: "Подключённые продукты Progmasoft",
+      publisherPrefix: "Имя издателя",
+      sameAccount: "ваше имя аккаунта",
+      profileDescription: "Профиль в экосистеме разработчика",
+      planned: "Запланировано",
+    },
+    viget: {
+      navigationLabel: "Навигация реестра",
+      packages: "Пакеты",
+      dslPlugins: "DSL-плагины",
+      account: "Аккаунт",
+      login: "Войти",
+      register: "Регистрация",
+      homeEyebrow: "Реестр пакетов ViGet",
+      homeTitle: "Пакеты для экосистемы Visual X#.",
+      homeDescription:
+        "ViGet — канонический источник пакетов Visual X# и DSL-плагинов проектов, которым напрямую управляет Progmasoft.",
+      createAccount: "Создать аккаунт",
+      exploreVisualXSharp: "Подробнее о Visual X#",
+      available: "Реестр доступен",
+      emptyTitle: "Публичный каталог пуст.",
+      emptyDescription:
+        "Ни один выпуск пакета пока не опубликован. ViGet покажет здесь настоящие пакеты, когда они появятся.",
+      packageFormat: "Формат пакета",
+      publisherIdentity: "Имя издателя",
+      publishing: "Публикация",
+      publishingClosed: "Пока не открыта",
+      catalogsEyebrow: "Каталоги",
+      catalogsTitle: "Два вида артефактов, один реестр.",
+      catalogsDescription:
+        "У пакетов и DSL-плагинов проектов отдельные предсказуемые пространства координат.",
+      visualPackages: "Пакеты Visual X#",
+      vipkgCatalog: "Каталог ViPkg",
+      vipkgDescription:
+        "Библиотеки и приложения, написанные на Visual X#, распространяются как артефакты .vipkg.",
+      projectExtensions: "Расширения проектов",
+      kotlinPlugins: "Kotlin DSL-плагины",
+      kotlinDescription:
+        "Плагины в виде Kotlin JAR, расширяющие конфигурацию проекта Visual.XSharp.kts.",
+      openCatalog: "Открыть каталог",
+      contractEyebrow: "Контракт реестра",
+      contractTitle: "Ясная ответственность от учётной записи до артефакта.",
+      principles: [
+        [
+          "Одно имя аккаунта",
+          "Имя вашего аккаунта Progmasoft — это и ваше имя издателя в ViGet.",
+        ],
+        [
+          "Координаты с учётом регистра",
+          "Имена издателей и пакетов сохраняют точное публичное написание.",
+        ],
+        [
+          "Никаких выпусков-заглушек",
+          "Каталог честно остаётся пустым, пока не опубликован настоящий подписанный артефакт.",
+        ],
+      ],
+      pluginEyebrow: "ViGet · Kotlin DSL-плагины",
+      pluginTitle: "Расширяйте модель проекта.",
+      pluginDescription:
+        "Kotlin DSL-плагины — это JAR-артефакты для Visual.XSharp.kts. Они отделены от пакетов Visual X# в формате .vipkg.",
+      backToPackages: "Назад к пакетам",
+      followDevelopment: "Следить за разработкой",
+      pluginAvailable: "Каталог доступен",
+      pluginEmptyTitle: "Публичных DSL-плагинов пока нет.",
+      pluginEmptyDescription:
+        "Каталог готов и намеренно не содержит артефактов-заглушек.",
+      guidance: [
+        [
+          "Формат",
+          "Kotlin JAR",
+          "DSL-плагины работают как расширения проектов на Kotlin/JVM.",
+        ],
+        [
+          "Расположение",
+          "Отдельный каталог",
+          "Координаты плагинов всегда начинаются с /dslplugins.",
+        ],
+        [
+          "Доступность",
+          "Публикация закрыта",
+          "Публикация откроется только после завершения контракта подписанных плагинов.",
+        ],
+      ],
+      footerDescription:
+        "ViGet — реестр пакетов и Kotlin DSL-плагинов экосистемы Visual X#.",
+      registry: "Реестр",
+      support: "Поддержка",
+      source: "Исходный код",
+      footerClosing: "Реестр пакетов ViGet от Progmasoft",
     },
   },
 } as const;

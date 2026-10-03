@@ -7,3 +7,8 @@ allowBuilds:
   # The ESLint resolver ships a small native lookup helper used during linting.
   # Its package-local install script is the only dependency build approved here.
   unrs-resolver: true
+overrides:
+  # Development tooling resolves an exact 5.0.9 through minimatch, which has
+  # published denial-of-service advisories fixed by 5.0.12. Remove this once
+  # minimatch depends on a fixed release itself.
+  "brace-expansion@>=5.0.0 <5.0.12": 5.0.12

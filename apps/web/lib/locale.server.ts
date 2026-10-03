@@ -3,9 +3,9 @@
 
 import "server-only";
 import { cookies } from "next/headers";
-import { isLocale, type Locale } from "./localization";
+import { isLocale, localeCookieName, type Locale } from "./localization";
 
-export const localeCookieName = "progmasoft_locale";
+export { localeCookieName };
 
 export async function getLocale(): Promise<Locale> {
   const value = (await cookies()).get(localeCookieName)?.value;

@@ -3,8 +3,14 @@
 
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
-import type { Locale } from "@/lib/localization";
+import { useEffect, useSyncExternalStore, useTransition } from "react";
+import { selectLocale } from "@/lib/locale.actions";
+import {
+  isLocale,
+  localeNames,
+  supportedLocales,
+  type Locale,
+} from "@/lib/localization";
 
 interface PreferenceControlsProps {
   locale: Locale;
@@ -40,6 +46,7 @@ export function PreferenceControls({
   labels,
 }: PreferenceControlsProps) {
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => "light");
+  const [switchingLocale, startLocaleSwitch] = useTransition();
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -52,10 +59,24 @@ export function PreferenceControls({
     window.dispatchEvent(new Event(themeEvent));
   }
 
-  function toggleLocale() {
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", locale === "en-US" ? "de-DE" : "en-US");
-    window.location.assign(url);
+  // The server stores the preference and re-renders the current route in the
+  // selected language, so the page changes in place: nothing is reloaded and
+  // scroll position, theme and client state stay as they are.
+  function chooseLocale(selected: string) {
+    if (!isLocale(selected) || selected === locale) {
+      return;
+    }
+    startLocaleSwitch(async () => {
+      try {
+        await selectLocale(selected);
+      } catch {
+        // The request did not reach the server. The query parameter asks the
+        // proxy for the same preference with an ordinary navigation.
+        const url = new URL(window.location.href);
+        url.searchParams.set("lang", selected);
+        window.location.assign(url);
+      }
+    });
   }
 
   return (
@@ -69,14 +90,20 @@ export function PreferenceControls({
         <span aria-hidden="true">{theme === "light" ? "◐" : "◑"}</span>
         <span>{theme === "light" ? labels.dark : labels.light}</span>
       </button>
-      <button
-        type="button"
-        onClick={toggleLocale}
+      <select
+        value={locale}
+        onChange={(event) => chooseLocale(event.target.value)}
+        aria-busy={switchingLocale}
+        disabled={switchingLocale}
         aria-label={labels.language}
         title={labels.language}
       >
-        {locale === "en-US" ? "DE" : "EN"}
-      </button>
+        {supportedLocales.map((supported) => (
+          <option key={supported} value={supported} lang={supported}>
+            {localeNames[supported]}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
