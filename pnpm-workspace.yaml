@@ -12,3 +12,13 @@ overrides:
   # published denial-of-service advisories fixed by 5.0.12. Remove this once
   # minimatch depends on a fixed release itself.
   "brace-expansion@>=5.0.0 <5.0.12": 5.0.12
+auditConfig:
+  ignoreGhsas:
+    # braces <= 3.0.3: stack exhaustion on deeply nested brace patterns. No
+    # fixed release exists (3.0.3 is the latest). The package is reached only
+    # through the lint toolchain (eslint-config-next > @next/eslint-plugin-next
+    # > fast-glob > micromatch), is not part of the built or deployed
+    # application, and only ever receives the glob patterns of this
+    # repository. Remove this entry as soon as braces or the Next.js lint
+    # plugin publishes a release without the advisory.
+    - GHSA-vfj7-8cjw-p6xm
