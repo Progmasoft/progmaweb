@@ -15,7 +15,7 @@
     <PackageReference Include="coverlet.MTP" Version="8.0.0" />
     <!-- xUnit's MTP-v2 package is the native .NET 10 test host. Keeping the
          VSTest adapter here would make the solution mix incompatible runners. -->
-    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />
+    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\api\Progmaweb.Api.csproj" />
