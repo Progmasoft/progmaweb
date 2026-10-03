@@ -16,13 +16,13 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   return {
     rules: [
       { userAgent: "Googlebot", allow: "/" },
-      { userAgent: "Google-Extended", disallow: "/" },
+      { userAgent: "Google-Extended", allow: "/" },
       { userAgent: "OAI-SearchBot", allow: "/" },
       { userAgent: "ChatGPT-User", allow: "/" },
-      { userAgent: "GPTBot", allow: "/" },
+      { userAgent: "GPTBot", disallow: "/" },
       { userAgent: "Claude-SearchBot", allow: "/" },
       { userAgent: "Claude-User", allow: "/" },
-      { userAgent: "ClaudeBot", disallow: "/" },
+      { userAgent: "ClaudeBot", allow: "/" },
       { userAgent: "CCBot", disallow: "/" },
       { userAgent: "Bytespider", disallow: "/" },
       { userAgent: "*", allow: "/" },
