@@ -118,11 +118,15 @@ version, so a local run and CI use the same tool.
 ```text
 dotnet tool restore
 dotnet docfx docs/api/docfx.json --warningsAsErrors
+dotnet run docs/api/CheckDocumentation.cs -- docs/api
 ```
 
-or `just api-docs`. The output goes to `docs/api/_site`, which is ignored by Git. A broken link or an unresolved
-reference fails the build. The gate does not yet require documentation comments on the C# declarations; see
-[Known limitations](LIMITATIONS.md).
+or `just api-docs`. The output goes to `docs/api/_site`, which is ignored by Git.
+
+The gate fails on a broken link or an unresolved reference, on a public declaration without a documentation comment,
+and on any namespace, type or member of the reference that has no summary, internal and private ones included. A new
+declaration therefore needs its `<summary>` in the same change. [The API reference page](api/index.md) describes the
+three parts of the gate and how a namespace is described.
 
 ## Conventions
 

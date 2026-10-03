@@ -3,11 +3,22 @@
 
 namespace Progmasoft.Progmaweb.Api.Accounts;
 
+/// <summary>Rules for passwords.</summary>
+/// <remarks>
+/// Only length is constrained, so long passphrases are welcome. The upper bound keeps hashing cost bounded for a
+/// request that an anonymous caller can send.
+/// </remarks>
 internal static class PasswordPolicy
 {
+    /// <summary>Fewest characters a password may have.</summary>
     public const int MinimumLength = 12;
+    /// <summary>Most characters a password may have.</summary>
     public const int MaximumLength = 256;
 
+    /// <summary>Validates a new password.</summary>
+    /// <param name="password">The password in plain text.</param>
+    /// <param name="error">Message for the user when the password is refused; empty otherwise.</param>
+    /// <returns><see langword="true"/> when the password may be used.</returns>
     public static bool TryValidate(string? password, out string error)
     {
         if (password is null || password.Length < MinimumLength)

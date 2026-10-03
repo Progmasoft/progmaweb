@@ -92,4 +92,9 @@ app.MapAccountEndpoints();
 
 app.Run();
 
+/// <summary>Entry point of the Progmaweb account API.</summary>
+/// <remarks>
+/// The top-level statements configure the services, the request pipeline and the routes. The class is declared so
+/// that the integration tests can start the application in memory.
+/// </remarks>
 public partial class Program;
