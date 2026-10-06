@@ -11,11 +11,25 @@ namespace Progmasoft.Progmaweb.Api.Tests;
 /// <param name="configureGoogle">
 /// Whether the Google client is configured. Without it the service has to run and refuse only Google sign-in.
 /// </param>
-internal sealed class AccountApiFactory(bool configureGoogle = true) : WebApplicationFactory<Program>
+/// <param name="accountDatabase">
+/// Connection string of the PostgreSQL database that keeps the accounts; <see langword="null"/> keeps them in memory.
+/// </param>
+/// <param name="environment">Name of the hosting environment.</param>
+/// <param name="accountStore">Value of <c>Accounts:Store</c>; <see langword="null"/> leaves it unset.</param>
+internal sealed class AccountApiFactory(
+    bool configureGoogle = true,
+    string? accountDatabase = null,
+    string environment = "Testing",
+    string? accountStore = null) : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Testing");
+        builder.UseEnvironment(environment);
+
+        // The program chooses the store while it registers services, so these are host settings as well. An empty
+        // value overrides a database the environment of the test run names.
+        builder.UseSetting("ConnectionStrings:Accounts", accountDatabase ?? string.Empty);
+        builder.UseSetting("Accounts:Store", accountStore ?? string.Empty);
 
         // The program decides while it registers services whether the Google scheme exists, so these two values
         // have to be host settings: configuration sources added below are applied only when the host is built,

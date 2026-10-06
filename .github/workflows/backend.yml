@@ -36,6 +36,23 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # The PostgreSQL account store is tested against a real server of the major version production runs. The
+    # container lives for this job only and accepts local connections without a password, so the workflow holds
+    # no credential. Without the variable below the database tests would be skipped; a test fails the run then.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready --username postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PROGMAWEB_TEST_POSTGRES: Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5

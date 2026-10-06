@@ -13,7 +13,9 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<AccountSessionOptions>(builder.Configuration.GetSection(AccountSessionOptions.SectionName));
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddSingleton<IAccountStore, InMemoryAccountStore>();
+AccountStoreKind accountStore = builder.Services.AddAccountStore(
+    builder.Configuration,
+    builder.Environment.IsProduction());
 builder.Services.AddSingleton<AccountService>();
 builder.Services.AddSingleton<SessionService>();
 AuthenticationBuilder authentication = builder.Services
@@ -68,6 +70,11 @@ builder.Services.Configure<ForwardedHeadersOptions>(ForwardedHeadersPolicy.Confi
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024);
 
 WebApplication app = builder.Build();
+
+if (accountStore is AccountStoreKind.Memory)
+{
+    AccountStoreRegistration.WarnThatAccountsAreInMemory(app.Logger);
+}
 
 app.UseForwardedHeaders();
 if (!app.Environment.IsDevelopment())

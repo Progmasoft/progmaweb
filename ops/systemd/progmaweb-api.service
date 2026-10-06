@@ -3,8 +3,8 @@
 
 [Unit]
 Description=Progmaweb account API
-After=network-online.target
-Wants=network-online.target
+After=network-online.target postgresql.service
+Wants=network-online.target postgresql.service
 
 [Service]
 Type=exec
@@ -22,7 +22,8 @@ Restart=on-failure
 RestartSec=5s
 TimeoutStopSec=30s
 
-# The API currently has no writable application files. Runtime state belongs in external services, not in the release.
+# The API has no writable application files. Its state is in PostgreSQL, reached through the local Unix socket; the
+# connection string is in the environment file above.
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
