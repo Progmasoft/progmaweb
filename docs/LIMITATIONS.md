@@ -6,17 +6,22 @@
 This page lists what Progmaweb does not do yet, so that nobody has to discover it in production. Each entry says what
 is missing, what follows from it, and what would close it.
 
-## Accounts are kept in memory
+## The account database has no backup yet
 
-The account API registers `InMemoryAccountStore` as its only store. Accounts and sessions live in the memory of the
-API process.
+Accounts and sessions are kept in PostgreSQL; see [Operations](../ops/README.md). Restarting or redeploying the API no
+longer loses them. Nothing copies the database anywhere else yet.
 
-- **Consequence.** Every restart of the API service deletes all accounts and signs everyone out. A deployment that
-  restarts the API has this effect.
-- **In operations.** Do not restart the API unless its code or configuration changed. A release that changes only the
-  frontend should restart only the frontend service; see [Operations](../ops/README.md).
-- **What closes it.** A durable implementation of `IAccountStore`. The interface already states the uniqueness and
-  session rules such a store must keep.
+- **Consequence.** Losing the disk of the host, or dropping the database by mistake, loses every account.
+- **What closes it.** A scheduled `pg_dump` of the account database to storage outside the host, and a restore that
+  has been tried once.
+
+## Accounts cannot be deleted
+
+The store has no operation that removes an account, and the API has no endpoint for it.
+
+- **Consequence.** A request to erase an account has to be carried out by hand in the database, by its operator.
+- **What closes it.** A deletion operation in the store with an endpoint or an operator command, and a decision about
+  what happens to the account name afterwards.
 
 ## Email addresses are not verified
 

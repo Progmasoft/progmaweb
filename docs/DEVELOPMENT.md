@@ -18,7 +18,7 @@
 ```text
 apps/web          Next.js application: pages, components, localization, host routing
 apps/api          ASP.NET Core account API
-apps/api-tests    xUnit tests of the API, run against the application in memory
+apps/api-tests    xUnit tests of the API, run against the application in memory and against PostgreSQL
 docs              this documentation and the DocFX project in docs/api
 ops               Nginx, systemd and mail configuration with their runbooks
 ```
@@ -49,7 +49,14 @@ Open the three surfaces through their development host names:
 | `http://account.localhost:3000/` | account pages |
 | `http://viget.localhost:3000/` | ViGet catalogs |
 
-Accounts created locally live in the memory of the API process and are gone when it stops.
+Accounts created locally live in the memory of the API process and are gone when it stops. To keep them, point the
+API at a PostgreSQL database before it starts; it creates its tables itself:
+
+```text
+ConnectionStrings__Accounts=Host=localhost;Database=progmaweb_accounts;Username=<role>
+```
+
+Production always uses PostgreSQL; see [Operations](../ops/README.md).
 
 Sign-in with Google is optional locally. It needs the identifier and secret of a Google OAuth client in
 `Authentication__Google__ClientId` and `Authentication__Google__ClientSecret`, set in the environment before the API
@@ -84,6 +91,11 @@ themes, a narrow window, and keyboard focus.
 - **Frontend** (`apps/web/tests`): the list of published locales, the shape of every message tree, language
   negotiation, cookie attributes, text direction and page metadata. The tests import the TypeScript sources directly
   and do not start a server.
+- **Account store** (`apps/api-tests`): one set of rules, `AccountStoreContractTests`, run against the in-memory
+  store and against PostgreSQL, so the two cannot drift apart; the schema steps; and an account with its session
+  surviving a restart of the service. The PostgreSQL tests need the connection string of a database whose user may
+  create schemas in `PROGMAWEB_TEST_POSTGRES`; each test works in a schema of its own and removes it. Without the
+  variable they are skipped locally. CI starts PostgreSQL for them and fails when the variable is missing.
 - **API** (`apps/api-tests`): the endpoints through an in-memory application, including validation, duplicate names
   and addresses, session cookies, the Google flow and security headers; and the account service on its own. The rate
   limit has no automated test.

@@ -76,7 +76,8 @@ internal sealed class AccountService(
             return (null, new Dictionary<string, string[]> { ["email"] = ["That email address is already registered."] });
         }
 
-        AuthenticatedAccount authentication = await sessions.CreateAsync(account, cancellationToken);
+        // The store returns the account as it keeps it, which is what every later read returns.
+        AuthenticatedAccount authentication = await sessions.CreateAsync(result.Account ?? account, cancellationToken);
         return (authentication, errors);
     }
 
@@ -200,7 +201,7 @@ internal sealed class AccountService(
                 : (await sessions.CreateAsync(concurrent, cancellationToken), GoogleAccountFailure.None);
         }
 
-        return (await sessions.CreateAsync(account, cancellationToken), GoogleAccountFailure.None);
+        return (await sessions.CreateAsync(result.Account ?? account, cancellationToken), GoogleAccountFailure.None);
     }
 
     /// <summary>Validates every field of a registration and collects the messages of the refused ones.</summary>

@@ -39,18 +39,51 @@ avoids depending on an apphost inode copied from a build machine retaining an ex
    sitemaps, `/api/v1/status`, registration validation, and the existing Visual X# host.
 6. On failure, restore the previous `current` target and restart only the Progmaweb services.
 
-## Restarting the API deletes every account
+## Account database
 
-The account store is in memory; see [Known limitations](../docs/LIMITATIONS.md). Restarting `progmaweb-api` deletes
-all accounts and sessions. Until a durable store exists:
+The API keeps accounts and sessions in PostgreSQL. It reads the connection string from `ConnectionStrings__Accounts`
+in `/etc/progmaweb/account.env`, the file the service unit already loads.
 
-- When a release changes only `apps/web`, copy the `api` directory of the running release into the new release,
-  confirm that the two directories are identical, switch `current`, and restart **only** `progmaweb-web`. The running
-  API process keeps serving from the files it already opened.
-- When a release changes `apps/api`, restarting the API is unavoidable. Say so before deploying, because every user
-  has to register again.
+The connection uses the Unix socket of the local server and peer authentication: PostgreSQL accepts the operating
+system user `progmaweb` as the database role `progmaweb`. No password exists, so none can leak:
 
-Step 4 of the activation contract restarts both services; apply it to the API only in the second case.
+```text
+ConnectionStrings__Accounts=Host=/var/run/postgresql;Database=progmaweb_accounts;Username=progmaweb
+```
+
+Prepare the database once, before the first release that needs it:
+
+1. Create the role and its database as the `postgres` user: a role `progmaweb` that may log in and nothing else, and
+   a database `progmaweb_accounts` owned by it. The role must not be a superuser and needs no rights in any other
+   database.
+2. Confirm that `pg_hba.conf` has a `local ... peer` line that covers the database. Do not add a TCP rule or a
+   password for this role.
+3. Add the line above to `/etc/progmaweb/account.env`. Keep the file `root:progmaweb` with mode `0640`.
+4. Check the connection as the service user before starting the service:
+   `runuser -u progmaweb -- psql -d progmaweb_accounts -c 'select current_user'`.
+
+The API creates and upgrades its own tables when it starts, in one transaction, and records the steps in
+`account_schema_versions`. It does not start when the database cannot be reached or when the database is newer than
+the release. `/health` on the loopback port answers 503 while the database does not answer.
+
+A production API without a connection string does not start. Keeping accounts in memory there has to be asked for
+with `Accounts__Store=Memory`, which loses every account at each restart; use it only for a host that must run
+without a database for a short time.
+
+The account database belongs to Progmaweb alone. Other services on the host have their own databases and roles; do
+not share a role or a database with them.
+
+### Releases and rollback
+
+- Restarting the API keeps every account and session. Step 4 of the activation contract applies to both services.
+- A release that adds a schema step upgrades the database at its first start. The previous release then refuses to
+  start, because the database is newer than it. Before activating such a release, take a dump with
+  `pg_dump --format=custom progmaweb_accounts`; rolling back means restoring that dump and then pointing `current`
+  at the previous release.
+- A release without a schema step rolls back as before: `current` points at the previous directory and the services
+  restart.
+
+There is no scheduled backup yet; see [Known limitations](../docs/LIMITATIONS.md).
 
 ## Lessons from past releases
 

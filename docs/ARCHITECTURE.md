@@ -90,7 +90,9 @@ step.
   parameter and the `Accept-Language` header. Each is validated against the list of published locales.
 - **Nginx and Next.js to the API.** The API trusts forwarded headers only from loopback and reads one proxy hop. A
   caller that reached the API directly could otherwise forge the client address that the rate limiter uses.
-- **API to its store.** The store keeps password hashes and session digests, never passwords or session tokens.
+- **API to its store.** The store is a PostgreSQL database on the same host, reached through its Unix socket as the
+  operating system user of the service, without a password. It keeps password hashes and session digests, never
+  passwords or session tokens.
 - **What the browser never receives.** Password hashes, session digests, deployment secrets and internal addresses.
 
 The API has no bulk-delete, reset-all or seed-password endpoint. Maintenance of production accounts is an operations

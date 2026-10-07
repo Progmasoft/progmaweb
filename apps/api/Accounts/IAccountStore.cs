@@ -6,7 +6,8 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 /// <summary>Persistence of accounts and sessions.</summary>
 /// <remarks>
 /// The store owns the uniqueness rules: account name, email address and Google identity are each unique, and a
-/// creation that would break one of them is refused atomically. It offers no enumeration and no bulk deletion.
+/// creation that would break one of them is refused atomically. It offers no enumeration of accounts and no way to
+/// delete one; the only removal in bulk is that of sessions that have already expired.
 /// </remarks>
 internal interface IAccountStore
 {
@@ -45,5 +46,11 @@ internal interface IAccountStore
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>A task that completes when the session is gone.</returns>
     ValueTask RevokeSessionAsync(byte[] tokenDigest, CancellationToken cancellationToken);
+    /// <summary>Removes every session that has expired.</summary>
+    /// <remarks>A session has expired when its expiry is not later than <paramref name="now"/>.</remarks>
+    /// <param name="now">The current moment, in UTC.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The number of sessions that were removed.</returns>
+    ValueTask<int> RemoveExpiredSessionsAsync(DateTimeOffset now, CancellationToken cancellationToken);
 }
 

@@ -169,5 +169,8 @@ public sealed class AccountServiceTests
 
         public ValueTask RevokeSessionAsync(byte[] tokenDigest, CancellationToken cancellationToken) =>
             ValueTask.CompletedTask;
+
+        public ValueTask<int> RemoveExpiredSessionsAsync(DateTimeOffset now, CancellationToken cancellationToken) =>
+            ValueTask.FromResult(0);
     }
 }

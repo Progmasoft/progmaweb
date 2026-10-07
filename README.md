@@ -37,7 +37,7 @@ menu is remembered across the three hosts. Hebrew text runs right to left while 
 - [Localization](docs/LOCALIZATION.md): language selection, text direction and adding a language.
 - [Development](docs/DEVELOPMENT.md): local setup, checks and what CI enforces.
 - [Known limitations](docs/LIMITATIONS.md): what is missing or temporary. Read this before operating the service;
-  accounts are currently kept in memory and do not survive a restart of the API.
+  accounts and sessions are kept in PostgreSQL and survive a restart of the API.
 - [Operations](ops/README.md) and the [mail boundary](ops/mail/README.md).
 
 ## Architecture

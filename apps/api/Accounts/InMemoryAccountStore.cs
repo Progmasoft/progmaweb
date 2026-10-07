@@ -3,12 +3,11 @@
 
 namespace Progmasoft.Progmaweb.Api.Accounts;
 
-// This development store models the uniqueness and session semantics required by the future PostgreSQL implementation.
-// It deliberately exposes no enumeration or bulk-delete surface to public endpoints.
 /// <summary>An <see cref="IAccountStore"/> that keeps everything in the memory of the process.</summary>
 /// <remarks>
-/// It implements the uniqueness and session rules a durable store must keep, under one lock. Nothing survives a
-/// restart of the service: every account and every session is lost when the process stops.
+/// It keeps the uniqueness and session rules of <see cref="PostgresAccountStore"/> under one lock, for development
+/// and for tests that need no database. Nothing survives a restart of the service: every account and every session
+/// is lost when the process stops.
 /// </remarks>
 internal sealed class InMemoryAccountStore : IAccountStore
 {
@@ -99,6 +98,12 @@ internal sealed class InMemoryAccountStore : IAccountStore
         cancellationToken.ThrowIfCancellationRequested();
         lock (gate)
         {
+            // The durable store refuses a session of an account that does not exist; so does this one.
+            if (!accountsById.ContainsKey(session.AccountId))
+            {
+                throw new InvalidOperationException("A session refers to an account that is not stored.");
+            }
+
             sessionsByDigest[Convert.ToHexString(session.TokenDigest)] = session;
             return ValueTask.CompletedTask;
         }
@@ -123,6 +128,21 @@ internal sealed class InMemoryAccountStore : IAccountStore
         {
             sessionsByDigest.Remove(Convert.ToHexString(tokenDigest));
             return ValueTask.CompletedTask;
+        }
+    }
+
+    /// <inheritdoc/>
+    public ValueTask<int> RemoveExpiredSessionsAsync(DateTimeOffset now, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (gate)
+        {
+            string[] expired = [.. sessionsByDigest.Where(entry => entry.Value.ExpiresAt <= now).Select(entry => entry.Key)];
+            foreach (string digest in expired)
+            {
+                sessionsByDigest.Remove(digest);
+            }
+            return ValueTask.FromResult(expired.Length);
         }
     }
 }
