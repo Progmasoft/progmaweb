@@ -110,7 +110,7 @@ themes, a narrow window, and keyboard focus.
 | CodeQL | pushes, pull requests, and weekly | static analysis of the workflows, TypeScript and C# |
 
 Coverage is uploaded to Codecov by separate jobs. Only those jobs receive an OIDC token; installation, build and test
-jobs do not, and pull requests from forks skip the upload. Dependabot proposes weekly updates for GitHub Actions, npm
+jobs do not, and pull requests from forks skip the upload. Renovate proposes weekly updates for GitHub Actions, npm
 and NuGet and never merges them itself.
 
 `main` is protected: changes arrive through pull requests with green checks.
