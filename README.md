@@ -103,7 +103,7 @@ Frontend tests exercise the published locale contract and account/ViGet metadata
 The frontend LCOV and API Cobertura reports are retained as one-day artifacts, then uploaded to Codecov by separate
 jobs. Only those upload jobs receive `id-token: write`; dependency installation, builds, and tests do not receive OIDC
 permissions, and fork-originated pull requests skip the upload jobs. CodeQL and Codacy provide static analysis;
-Dependabot proposes dependency updates without merging them automatically. The DocFX command builds the API reference
+Renovate proposes dependency updates without merging them automatically; Dependabot reports vulnerabilities and proposes their fixes. The DocFX command builds the API reference
 and fails on a broken link or an unresolved reference; the check after it fails when any item of the reference has no
 description. [Development](docs/DEVELOPMENT.md) explains each check.
 
