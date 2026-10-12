@@ -19,7 +19,7 @@ export function ViGetFooter({ locale }: { locale: Locale }) {
           <a href="https://viget.progmasoft.com/dslplugins/">
             {viget.dslPlugins}
           </a>
-          <a href="https://xsharp-lang.xyz/">Visual X#</a>
+          <a href="https://xsharp-lang.xyz/">Tala</a>
         </div>
         <div>
           <strong>Progmasoft</strong>

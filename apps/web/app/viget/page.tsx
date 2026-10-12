@@ -41,7 +41,7 @@ export default async function ViGetPage() {
                   className="button button-secondary"
                   href="https://xsharp-lang.xyz/"
                 >
-                  {viget.exploreVisualXSharp}
+                  {viget.exploreTala}
                 </a>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default async function ViGetPage() {
             <div className="viget-catalog-grid">
               <article className="viget-catalog-card viget-catalog-primary">
                 <span>01</span>
-                <p>{viget.visualPackages}</p>
+                <p>{viget.talaPackages}</p>
                 <h3>{viget.vipkgCatalog}</h3>
                 <code>
                   viget.progmasoft.com/&lt;Publisher&gt;/&lt;Name&gt;/

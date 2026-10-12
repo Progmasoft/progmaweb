@@ -41,7 +41,7 @@ export default async function DslPluginsPage() {
                 </a>
                 <a
                   className="viget-text-link"
-                  href="https://github.com/Progmasoft/visual-xsharp"
+                  href="https://github.com/Progmasoft/tala"
                 >
                   {viget.followDevelopment} {forwardArrow(locale)}
                 </a>

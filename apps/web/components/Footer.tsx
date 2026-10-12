@@ -15,7 +15,7 @@ export function Footer({ locale }: { locale: Locale }) {
         </div>
         <div>
           <strong>{footer.products}</strong>
-          <a href="https://xsharp-lang.xyz/">Visual X#</a>
+          <a href="https://xsharp-lang.xyz/">Tala</a>
           <a href="https://viget.progmasoft.com/">ViGet</a>
           <a href="https://github.com/Progmasoft">{footer.openSource}</a>
         </div>

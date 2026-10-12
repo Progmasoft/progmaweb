@@ -74,7 +74,7 @@ follows the language.
   on its own still reads left to right.
 - Code and form inputs stay left to right.
 - The onward arrow comes from `forwardArrow(locale)` and points left in Hebrew.
-- A left-to-right mark (`‎`) follows `Visual X#` in Hebrew strings. Without it the `#` would jump to the other
+- A left-to-right mark (`‎`) follows a name that ends in a symbol, such as `C#`, in Hebrew strings. Without it the `#` would jump to the other
   side of the name inside right-to-left text.
 
 The rules are at the end of `apps/web/app/globals.css`.
@@ -97,7 +97,7 @@ The tests in `apps/web/tests/localization.test.mjs` enforce that
    `localeByLanguage`.
 2. If the language is written right to left, extend `textDirection`.
 3. Add a complete message tree. Copy the `en-US` tree and translate every string; keep product names and technical
-   identifiers such as `Visual.XSharp.kts` unchanged.
+   identifiers such as `BUILD.kts` unchanged.
 4. Extend the tests: the list of published locales and a negotiation case for the new language.
 5. Run `pnpm check`, `pnpm test`, `pnpm lint` and `pnpm build`, then read every page in the new language in a
    browser, in both themes and at a narrow width.
