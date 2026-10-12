@@ -142,7 +142,7 @@ export const messages = {
       dashboardTitle: "Dashboard",
       vigetTitle: "ViGet Package Registry by Progmasoft",
       vigetDescription:
-        "The Visual X# package registry is online, but no packages have been published yet.",
+        "The Tala package registry is online, but no packages have been published yet.",
       dslPluginsTitle: "DSL Plugins · ViGet Package Registry by Progmasoft",
       dslPluginsDescription:
         "The ViGet Kotlin DSL plugin catalog is online, but no plugins have been published yet.",
@@ -209,14 +209,14 @@ export const messages = {
       products: [
         [
           "Programming language",
-          "Visual X#",
+          "Tala",
           "A modern programming language developed by Progmasoft, with its own dedicated product and documentation site.",
-          "Explore Visual X#",
+          "Explore Tala",
         ],
         [
           "Package registry",
           "ViGet",
-          "The canonical package and DSL-plugin registry for the Visual X# ecosystem, operated directly by Progmasoft.",
+          "The canonical package and DSL-plugin registry for the Tala ecosystem, operated directly by Progmasoft.",
           "Open ViGet",
         ],
         [
@@ -380,11 +380,11 @@ export const messages = {
       login: "Log in",
       register: "Register",
       homeEyebrow: "ViGet package registry",
-      homeTitle: "Packages for the Visual X# ecosystem.",
+      homeTitle: "Packages for the Tala ecosystem.",
       homeDescription:
-        "ViGet is the canonical source for Visual X# packages and project DSL plugins, operated directly by Progmasoft.",
+        "ViGet is the canonical source for Tala packages and project DSL plugins, operated directly by Progmasoft.",
       createAccount: "Create account",
-      exploreVisualXSharp: "Explore Visual X#",
+      exploreTala: "Explore Tala",
       available: "Registry available",
       emptyTitle: "The public catalog is empty.",
       emptyDescription:
@@ -397,14 +397,14 @@ export const messages = {
       catalogsTitle: "Two artifact types, one registry.",
       catalogsDescription:
         "Packages and project DSL plugins have separate, predictable coordinate spaces.",
-      visualPackages: "Visual X# packages",
+      talaPackages: "Tala packages",
       vipkgCatalog: "ViPkg catalog",
       vipkgDescription:
-        "Libraries and applications authored in Visual X#, distributed as .vipkg artifacts.",
+        "Libraries and applications authored in Tala, distributed as .vipkg artifacts.",
       projectExtensions: "Project extensions",
       kotlinPlugins: "Kotlin DSL plugins",
       kotlinDescription:
-        "Kotlin JAR plugins that extend Visual.XSharp.kts project configuration.",
+        "Kotlin JAR plugins that extend BUILD.kts project configuration.",
       openCatalog: "Open catalog",
       contractEyebrow: "Registry contract",
       contractTitle: "Clear ownership from identity to artifact.",
@@ -425,7 +425,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL plugins",
       pluginTitle: "Extend the project model.",
       pluginDescription:
-        "Kotlin DSL plugins are JAR artifacts for Visual.XSharp.kts. They are separate from Visual X# .vipkg packages.",
+        "Kotlin DSL plugins are JAR artifacts for BUILD.kts. They are separate from Tala .vipkg packages.",
       backToPackages: "Back to packages",
       followDevelopment: "Follow development",
       pluginAvailable: "Catalog available",
@@ -450,7 +450,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet is the package and Kotlin DSL plugin registry for the Visual X# ecosystem.",
+        "ViGet is the package and Kotlin DSL plugin registry for the Tala ecosystem.",
       registry: "Registry",
       support: "Support",
       source: "Source",
@@ -472,7 +472,7 @@ export const messages = {
       dashboardTitle: "Kontoübersicht",
       vigetTitle: "ViGet-Paketregistrierung von Progmasoft",
       vigetDescription:
-        "Die Visual-X#-Paketregistrierung ist online, enthält aber noch keine veröffentlichten Pakete.",
+        "Die Tala-Paketregistrierung ist online, enthält aber noch keine veröffentlichten Pakete.",
       dslPluginsTitle: "DSL-Plugins · ViGet-Paketregistrierung von Progmasoft",
       dslPluginsDescription:
         "Der ViGet-Katalog für Kotlin-DSL-Plugins ist online, enthält aber noch keine veröffentlichten Plugins.",
@@ -540,14 +540,14 @@ export const messages = {
       products: [
         [
           "Programmiersprache",
-          "Visual X#",
+          "Tala",
           "Eine moderne, von Progmasoft entwickelte Programmiersprache mit eigener Produkt- und Dokumentationsseite.",
-          "Visual X# entdecken",
+          "Tala entdecken",
         ],
         [
           "Paketregistrierung",
           "ViGet",
-          "Die offizielle Paket- und DSL-Plugin-Registrierung für das Visual-X#-Ökosystem, direkt von Progmasoft betrieben.",
+          "Die offizielle Paket- und DSL-Plugin-Registrierung für das Tala-Ökosystem, direkt von Progmasoft betrieben.",
           "ViGet öffnen",
         ],
         [
@@ -714,11 +714,11 @@ export const messages = {
       login: "Anmelden",
       register: "Registrieren",
       homeEyebrow: "ViGet-Paketregistrierung",
-      homeTitle: "Pakete für das Visual-X#-Ökosystem.",
+      homeTitle: "Pakete für das Tala-Ökosystem.",
       homeDescription:
-        "ViGet ist die kanonische Quelle für Visual-X#-Pakete und Projekt-DSL-Plugins und wird direkt von Progmasoft betrieben.",
+        "ViGet ist die kanonische Quelle für Tala-Pakete und Projekt-DSL-Plugins und wird direkt von Progmasoft betrieben.",
       createAccount: "Konto erstellen",
-      exploreVisualXSharp: "Visual X# entdecken",
+      exploreTala: "Tala entdecken",
       available: "Paketregistrierung verfügbar",
       emptyTitle: "Der öffentliche Katalog ist leer.",
       emptyDescription:
@@ -731,14 +731,14 @@ export const messages = {
       catalogsTitle: "Zwei Artefakttypen, eine Paketregistrierung.",
       catalogsDescription:
         "Pakete und Projekt-DSL-Plugins besitzen getrennte, vorhersehbare Koordinatenräume.",
-      visualPackages: "Visual-X#-Pakete",
+      talaPackages: "Tala-Pakete",
       vipkgCatalog: "ViPkg-Katalog",
       vipkgDescription:
-        "In Visual X# entwickelte Bibliotheken und Anwendungen, verteilt als .vipkg-Artefakte.",
+        "In Tala entwickelte Bibliotheken und Anwendungen, verteilt als .vipkg-Artefakte.",
       projectExtensions: "Projekterweiterungen",
       kotlinPlugins: "Kotlin-DSL-Plugins",
       kotlinDescription:
-        "Kotlin-JAR-Plugins, die die Projektkonfiguration Visual.XSharp.kts erweitern.",
+        "Kotlin-JAR-Plugins, die die Projektkonfiguration BUILD.kts erweitern.",
       openCatalog: "Katalog öffnen",
       contractEyebrow: "Vertrag der Paketregistrierung",
       contractTitle: "Klare Zuständigkeit von der Identität bis zum Artefakt.",
@@ -759,7 +759,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin-DSL-Plugins",
       pluginTitle: "Das Projektmodell erweitern.",
       pluginDescription:
-        "Kotlin-DSL-Plugins sind JAR-Artefakte für Visual.XSharp.kts. Sie sind von Visual-X#-.vipkg-Paketen getrennt.",
+        "Kotlin-DSL-Plugins sind JAR-Artefakte für BUILD.kts. Sie sind von Tala-.vipkg-Paketen getrennt.",
       backToPackages: "Zurück zu den Paketen",
       followDevelopment: "Entwicklung verfolgen",
       pluginAvailable: "Katalog verfügbar",
@@ -784,7 +784,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet ist die Paket- und Kotlin-DSL-Plugin-Registrierung für das Visual-X#-Ökosystem.",
+        "ViGet ist die Paket- und Kotlin-DSL-Plugin-Registrierung für das Tala-Ökosystem.",
       registry: "Paketregistrierung",
       support: "Support",
       source: "Quellcode",
@@ -806,7 +806,7 @@ export const messages = {
       dashboardTitle: "Панель управления",
       vigetTitle: "Реестр пакетов ViGet от Progmasoft",
       vigetDescription:
-        "Реестр пакетов Visual X# работает, но опубликованных пакетов пока нет.",
+        "Реестр пакетов Tala работает, но опубликованных пакетов пока нет.",
       dslPluginsTitle: "DSL-плагины · Реестр пакетов ViGet от Progmasoft",
       dslPluginsDescription:
         "Каталог Kotlin DSL-плагинов ViGet работает, но опубликованных плагинов пока нет.",
@@ -874,14 +874,14 @@ export const messages = {
       products: [
         [
           "Язык программирования",
-          "Visual X#",
+          "Tala",
           "Современный язык программирования, разрабатываемый Progmasoft, с собственным сайтом продукта и документации.",
-          "Подробнее о Visual X#",
+          "Подробнее о Tala",
         ],
         [
           "Реестр пакетов",
           "ViGet",
-          "Канонический реестр пакетов и DSL-плагинов экосистемы Visual X#, которым напрямую управляет Progmasoft.",
+          "Канонический реестр пакетов и DSL-плагинов экосистемы Tala, которым напрямую управляет Progmasoft.",
           "Открыть ViGet",
         ],
         [
@@ -1048,11 +1048,11 @@ export const messages = {
       login: "Войти",
       register: "Регистрация",
       homeEyebrow: "Реестр пакетов ViGet",
-      homeTitle: "Пакеты для экосистемы Visual X#.",
+      homeTitle: "Пакеты для экосистемы Tala.",
       homeDescription:
-        "ViGet — канонический источник пакетов Visual X# и DSL-плагинов проектов, которым напрямую управляет Progmasoft.",
+        "ViGet — канонический источник пакетов Tala и DSL-плагинов проектов, которым напрямую управляет Progmasoft.",
       createAccount: "Создать аккаунт",
-      exploreVisualXSharp: "Подробнее о Visual X#",
+      exploreTala: "Подробнее о Tala",
       available: "Реестр доступен",
       emptyTitle: "Публичный каталог пуст.",
       emptyDescription:
@@ -1065,14 +1065,14 @@ export const messages = {
       catalogsTitle: "Два вида артефактов, один реестр.",
       catalogsDescription:
         "У пакетов и DSL-плагинов проектов отдельные предсказуемые пространства координат.",
-      visualPackages: "Пакеты Visual X#",
+      talaPackages: "Пакеты Tala",
       vipkgCatalog: "Каталог ViPkg",
       vipkgDescription:
-        "Библиотеки и приложения, написанные на Visual X#, распространяются как артефакты .vipkg.",
+        "Библиотеки и приложения, написанные на Tala, распространяются как артефакты .vipkg.",
       projectExtensions: "Расширения проектов",
       kotlinPlugins: "Kotlin DSL-плагины",
       kotlinDescription:
-        "Плагины в виде Kotlin JAR, расширяющие конфигурацию проекта Visual.XSharp.kts.",
+        "Плагины в виде Kotlin JAR, расширяющие конфигурацию проекта BUILD.kts.",
       openCatalog: "Открыть каталог",
       contractEyebrow: "Контракт реестра",
       contractTitle: "Ясная ответственность от учётной записи до артефакта.",
@@ -1093,7 +1093,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL-плагины",
       pluginTitle: "Расширяйте модель проекта.",
       pluginDescription:
-        "Kotlin DSL-плагины — это JAR-артефакты для Visual.XSharp.kts. Они отделены от пакетов Visual X# в формате .vipkg.",
+        "Kotlin DSL-плагины — это JAR-артефакты для BUILD.kts. Они отделены от пакетов Tala в формате .vipkg.",
       backToPackages: "Назад к пакетам",
       followDevelopment: "Следить за разработкой",
       pluginAvailable: "Каталог доступен",
@@ -1118,7 +1118,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet — реестр пакетов и Kotlin DSL-плагинов экосистемы Visual X#.",
+        "ViGet — реестр пакетов и Kotlin DSL-плагинов экосистемы Tala.",
       registry: "Реестр",
       support: "Поддержка",
       source: "Исходный код",
@@ -1139,7 +1139,7 @@ export const messages = {
       dashboardTitle: "לוח בקרה",
       vigetTitle: "מאגר החבילות ViGet מבית Progmasoft",
       vigetDescription:
-        "מאגר החבילות של Visual X#‎ פעיל, אך עדיין לא פורסמו בו חבילות.",
+        "מאגר החבילות של Tala פעיל, אך עדיין לא פורסמו בו חבילות.",
       dslPluginsTitle: "תוספי DSL · מאגר החבילות ViGet מבית Progmasoft",
       dslPluginsDescription:
         "קטלוג תוספי Kotlin DSL של ViGet פעיל, אך עדיין לא פורסמו בו תוספים.",
@@ -1196,14 +1196,14 @@ export const messages = {
       products: [
         [
           "שפת תכנות",
-          "Visual X#",
+          "Tala",
           "שפת תכנות מודרנית שמפתחת Progmasoft, עם אתר מוצר ותיעוד ייעודי משלה.",
-          "להכיר את Visual X#‎",
+          "להכיר את Tala",
         ],
         [
           "מאגר חבילות",
           "ViGet",
-          "המאגר הרשמי של חבילות ותוספי DSL לאקוסיסטם של Visual X#‎, בהפעלה ישירה של Progmasoft.",
+          "המאגר הרשמי של חבילות ותוספי DSL לאקוסיסטם של Tala, בהפעלה ישירה של Progmasoft.",
           "לפתיחת ViGet",
         ],
         [
@@ -1356,11 +1356,11 @@ export const messages = {
       login: "כניסה",
       register: "הרשמה",
       homeEyebrow: "מאגר החבילות ViGet",
-      homeTitle: "חבילות לאקוסיסטם של Visual X#‎.",
+      homeTitle: "חבילות לאקוסיסטם של Tala.",
       homeDescription:
-        "ViGet הוא המקור הרשמי לחבילות Visual X#‎ ולתוספי DSL לפרויקטים, בהפעלה ישירה של Progmasoft.",
+        "ViGet הוא המקור הרשמי לחבילות Tala ולתוספי DSL לפרויקטים, בהפעלה ישירה של Progmasoft.",
       createAccount: "יצירת חשבון",
-      exploreVisualXSharp: "להכיר את Visual X#‎",
+      exploreTala: "להכיר את Tala",
       available: "המאגר זמין",
       emptyTitle: "הקטלוג הציבורי ריק.",
       emptyDescription:
@@ -1373,14 +1373,13 @@ export const messages = {
       catalogsTitle: "שני סוגי תוצרים, מאגר אחד.",
       catalogsDescription:
         "לחבילות ולתוספי DSL לפרויקטים יש מרחבי קואורדינטות נפרדים וצפויים.",
-      visualPackages: "חבילות Visual X#‎",
+      talaPackages: "חבילות Tala",
       vipkgCatalog: "קטלוג ViPkg",
-      vipkgDescription:
-        "ספריות ויישומים שנכתבו ב-Visual X#‎ ומופצים כתוצרי ‎.vipkg.",
+      vipkgDescription: "ספריות ויישומים שנכתבו ב-Tala ומופצים כתוצרי ‎.vipkg.",
       projectExtensions: "הרחבות לפרויקטים",
       kotlinPlugins: "תוספי Kotlin DSL",
       kotlinDescription:
-        "תוספי Kotlin בתבנית JAR שמרחיבים את תצורת הפרויקט Visual.XSharp.kts.",
+        "תוספי Kotlin בתבנית JAR שמרחיבים את תצורת הפרויקט BUILD.kts.",
       openCatalog: "לפתיחת הקטלוג",
       contractEyebrow: "חוזה המאגר",
       contractTitle: "בעלות ברורה מהזהות ועד לתוצר.",
@@ -1398,7 +1397,7 @@ export const messages = {
       pluginEyebrow: "ViGet · תוספי Kotlin DSL",
       pluginTitle: "להרחיב את מודל הפרויקט.",
       pluginDescription:
-        "תוספי Kotlin DSL הם תוצרי JAR עבור Visual.XSharp.kts. הם נפרדים מחבילות ‎.vipkg של Visual X#‎.",
+        "תוספי Kotlin DSL הם תוצרי JAR עבור BUILD.kts. הם נפרדים מחבילות ‎.vipkg של Tala.",
       backToPackages: "חזרה לחבילות",
       followDevelopment: "למעקב אחר הפיתוח",
       pluginAvailable: "הקטלוג זמין",
@@ -1422,7 +1421,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של האקוסיסטם של Visual X#‎.",
+        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של האקוסיסטם של Tala.",
       registry: "מאגר",
       support: "תמיכה",
       source: "קוד מקור",

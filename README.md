@@ -14,7 +14,7 @@ the ASP.NET Core API.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
 - `account.progmasoft.com/<Account>/dashboard` serves the authenticated account dashboard.
-- `viget.progmasoft.com` serves the public Visual X# package catalog.
+- `viget.progmasoft.com` serves the public Tala package catalog.
 - `viget.progmasoft.com/dslplugins/` serves the separate Kotlin DSL plugin catalog.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
@@ -56,7 +56,7 @@ menu is remembered across the three hosts. Hebrew text runs right to left while 
 - pnpm 11 or newer
 - .NET SDK 10
 
-The initial Progmaweb release, Git tag, and GitHub Release use version `1.0.0`. Visual X# compiler versions belong to
+The initial Progmaweb release, Git tag, and GitHub Release use version `1.0.0`. Tala compiler versions belong to
 the language repositories and do not determine this website's version.
 
 ## Development
@@ -109,7 +109,7 @@ description. [Development](docs/DEVELOPMENT.md) explains each check.
 
 ## License
 
-Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Visual X# website, with the
+Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Tala website, with the
 additional Progmasoft Patent Grant, Version 1.1. See `LICENSE.txt`, `PATENTS`,
 `LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.1.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
 respective licenses.

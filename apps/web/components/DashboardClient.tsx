@@ -189,7 +189,7 @@ export function DashboardClient({
             </div>
             <div className="service-row">
               <div>
-                <strong>Visual X#</strong>
+                <strong>Tala</strong>
                 <span>{dashboard.profileDescription}</span>
               </div>
               <span className="status-badge status-planned">

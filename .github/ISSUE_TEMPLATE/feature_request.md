@@ -7,7 +7,7 @@ title: "[Proposal] "
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
 
-This repository owns the Next.js public surfaces and ASP.NET Core account API. Requests about the Visual X# language website or compiler belong in their respective repositories.
+This repository owns the Next.js public surfaces and ASP.NET Core account API. Requests about the Tala language website or compiler belong in their respective repositories.
 
 ### User need and host
 

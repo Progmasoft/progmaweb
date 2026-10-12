@@ -36,7 +36,7 @@ avoids depending on an apphost inode copied from a build machine retaining an ex
 3. Point a temporary symlink at the verified release and rename it over `current` atomically.
 4. Run `systemd-analyze verify`, `nginx -t`, then restart the two Progmaweb services and reload Nginx.
 5. Verify apex HTTPS, the canonical `www` redirect, account routes, ViGet catalog routes, host-specific robots and
-   sitemaps, `/api/v1/status`, registration validation, and the existing Visual X# host.
+   sitemaps, `/api/v1/status`, registration validation, and the existing Tala host.
 6. On failure, restore the previous `current` target and restart only the Progmaweb services.
 
 ## Account database
@@ -97,7 +97,7 @@ There is no scheduled backup yet; see [Known limitations](../docs/LIMITATIONS.md
 - **Keep the previous release.** A rollback is the `current` symlink pointing at the previous directory and a restart
   of the frontend service.
 
-The Progmasoft and ViGet Nginx hosts must never reuse `/srv/xsharp/website/current`. Visual X# compiler and language
+The Progmasoft and ViGet Nginx hosts must never reuse `/srv/xsharp/website/current`. Tala compiler and language
 content belongs to `xsharp-lang.xyz`; sharing an origin server does not imply sharing a document root or application
 process. The temporary ViGet status API remains on its dedicated loopback service while catalog pages are served by
 Progmaweb.
@@ -106,7 +106,7 @@ Progmaweb.
 
 The `mail/` directory is the operational baseline for `mail.progmasoft.com`, transactional messages from Progmasoft
 Account, and the interactive `support@progmasoft.com` mailbox. It lives here because account verification and recovery
-are Progmaweb responsibilities; the Visual X# and ViGet website repository does not own identity or mail services.
+are Progmaweb responsibilities; the Tala and ViGet website repository does not own identity or mail services.
 
 Apply those fragments deliberately rather than copying the directory over `/etc`. The accompanying mail README records
 the DNS, TLS, OpenDKIM, Postfix, Dovecot, sender-login, filesystem-permission, and secret-handling contract.
