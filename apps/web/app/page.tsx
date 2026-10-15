@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const productLinks = [
   {
-    href: "https://xsharp-lang.xyz/",
+    href: "https://tala.run/",
     accent: "violet",
   },
   {

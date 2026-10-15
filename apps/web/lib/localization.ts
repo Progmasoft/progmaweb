@@ -441,7 +441,7 @@ export const messages = {
         [
           "Location",
           "Dedicated catalog",
-          "Plugin coordinates always begin with /dslplugins.",
+          "Plugin coordinates always begin with /dslplugins/tazel.",
         ],
         [
           "Availability",
@@ -775,7 +775,7 @@ export const messages = {
         [
           "Ort",
           "Eigener Katalog",
-          "Plugin-Koordinaten beginnen immer mit /dslplugins.",
+          "Plugin-Koordinaten beginnen immer mit /dslplugins/tazel.",
         ],
         [
           "Verfügbarkeit",
@@ -1109,7 +1109,7 @@ export const messages = {
         [
           "Расположение",
           "Отдельный каталог",
-          "Координаты плагинов всегда начинаются с /dslplugins.",
+          "Координаты плагинов всегда начинаются с /dslplugins/tazel.",
         ],
         [
           "Доступность",
@@ -1412,7 +1412,7 @@ export const messages = {
         [
           "מיקום",
           "קטלוג ייעודי",
-          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins.",
+          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins/tazel.",
         ],
         [
           "זמינות",
