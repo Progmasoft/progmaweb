@@ -55,7 +55,7 @@ const text: Record<Locale, CatalogText> = {
       "Plugins that extend the project file of a build system.",
     holds: {
       Tala: "Libraries and applications written in Tala.",
-      Tazel: "Kotlin JAR plugins for the BUILD.kts of Tazel.",
+      Tazel: "Kotlin JAR plugins for the project file of Tazel.",
     },
     notAvailable: "Not available yet",
     open: "Open catalog",
@@ -78,7 +78,7 @@ const text: Record<Locale, CatalogText> = {
       "Plugins, die die Projektdatei eines Build-Systems erweitern.",
     holds: {
       Tala: "Bibliotheken und Anwendungen, geschrieben in Tala.",
-      Tazel: "Kotlin-JAR-Plugins für die BUILD.kts von Tazel.",
+      Tazel: "Kotlin-JAR-Plugins für die Projektdatei von Tazel.",
     },
     notAvailable: "Noch nicht verfügbar",
     open: "Katalog öffnen",
@@ -101,7 +101,7 @@ const text: Record<Locale, CatalogText> = {
       "Плагины, расширяющие файл проекта системы сборки.",
     holds: {
       Tala: "Библиотеки и приложения, написанные на Tala.",
-      Tazel: "Плагины Kotlin JAR для BUILD.kts системы Tazel.",
+      Tazel: "Плагины Kotlin JAR для файла проекта Tazel.",
     },
     notAvailable: "Пока недоступно",
     open: "Открыть каталог",
@@ -122,7 +122,7 @@ const text: Record<Locale, CatalogText> = {
     buildSystemsDescription: "תוספים שמרחיבים את קובץ הפרויקט של מערכת בנייה.",
     holds: {
       Tala: "ספריות ויישומים שנכתבו ב-Tala.",
-      Tazel: "תוספי Kotlin JAR עבור BUILD.kts של Tazel.",
+      Tazel: "תוספי Kotlin JAR עבור קובץ הפרויקט של Tazel.",
     },
     notAvailable: "עוד לא זמין",
     open: "פתיחת הקטלוג",
