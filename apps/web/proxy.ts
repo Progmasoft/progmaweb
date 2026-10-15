@@ -65,8 +65,28 @@ export function proxy(request: NextRequest) {
     if (pathname === "/") {
       return NextResponse.rewrite(internalRoute(request, "/viget"));
     }
+    // Packages are grouped by the language they are written in and DSL
+    // plugins by the build system they extend. A group without a catalog of
+    // its own leads to the one catalog there is.
+    if (pathname === "/langs/tala" || pathname === "/langs/tala/") {
+      return NextResponse.rewrite(internalRoute(request, "/viget/langs/tala"));
+    }
+    if (pathname === "/dslplugins/tazel" || pathname === "/dslplugins/tazel/") {
+      return NextResponse.rewrite(
+        internalRoute(request, "/viget/dslplugins/tazel"),
+      );
+    }
+    if (pathname === "/langs" || pathname === "/langs/") {
+      return NextResponse.redirect(
+        new URL("https://viget.progmasoft.com/langs/tala"),
+        308,
+      );
+    }
     if (pathname === "/dslplugins" || pathname === "/dslplugins/") {
-      return NextResponse.rewrite(internalRoute(request, "/viget/dslplugins"));
+      return NextResponse.redirect(
+        new URL("https://viget.progmasoft.com/dslplugins/tazel"),
+        308,
+      );
     }
     if (pathname === "/login" || pathname === "/login/") {
       return NextResponse.redirect(

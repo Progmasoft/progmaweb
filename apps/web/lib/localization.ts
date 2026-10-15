@@ -404,7 +404,7 @@ export const messages = {
       projectExtensions: "Project extensions",
       kotlinPlugins: "Kotlin DSL plugins",
       kotlinDescription:
-        "Kotlin JAR plugins that extend BUILD.kts project configuration.",
+        "Kotlin JAR plugins that extend the project file of Tazel.",
       openCatalog: "Open catalog",
       contractEyebrow: "Registry contract",
       contractTitle: "Clear ownership from identity to artifact.",
@@ -425,7 +425,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL plugins",
       pluginTitle: "Extend the project model.",
       pluginDescription:
-        "Kotlin DSL plugins are JAR artifacts for BUILD.kts. They are separate from Tala .vipkg packages.",
+        "Kotlin DSL plugins are JAR artifacts for the project file of Tazel. They are separate from Tala .vipkg packages.",
       backToPackages: "Back to packages",
       followDevelopment: "Follow development",
       pluginAvailable: "Catalog available",
@@ -441,7 +441,7 @@ export const messages = {
         [
           "Location",
           "Dedicated catalog",
-          "Plugin coordinates always begin with /dslplugins.",
+          "Plugin coordinates always begin with /dslplugins/tazel.",
         ],
         [
           "Availability",
@@ -738,7 +738,7 @@ export const messages = {
       projectExtensions: "Projekterweiterungen",
       kotlinPlugins: "Kotlin-DSL-Plugins",
       kotlinDescription:
-        "Kotlin-JAR-Plugins, die die Projektkonfiguration BUILD.kts erweitern.",
+        "Kotlin-JAR-Plugins, die die Projektdatei von Tazel erweitern.",
       openCatalog: "Katalog öffnen",
       contractEyebrow: "Vertrag der Paketregistrierung",
       contractTitle: "Klare Zuständigkeit von der Identität bis zum Artefakt.",
@@ -759,7 +759,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin-DSL-Plugins",
       pluginTitle: "Das Projektmodell erweitern.",
       pluginDescription:
-        "Kotlin-DSL-Plugins sind JAR-Artefakte für BUILD.kts. Sie sind von Tala-.vipkg-Paketen getrennt.",
+        "Kotlin-DSL-Plugins sind JAR-Artefakte für die Projektdatei von Tazel. Sie sind von Tala-.vipkg-Paketen getrennt.",
       backToPackages: "Zurück zu den Paketen",
       followDevelopment: "Entwicklung verfolgen",
       pluginAvailable: "Katalog verfügbar",
@@ -775,7 +775,7 @@ export const messages = {
         [
           "Ort",
           "Eigener Katalog",
-          "Plugin-Koordinaten beginnen immer mit /dslplugins.",
+          "Plugin-Koordinaten beginnen immer mit /dslplugins/tazel.",
         ],
         [
           "Verfügbarkeit",
@@ -1072,7 +1072,7 @@ export const messages = {
       projectExtensions: "Расширения проектов",
       kotlinPlugins: "Kotlin DSL-плагины",
       kotlinDescription:
-        "Плагины в виде Kotlin JAR, расширяющие конфигурацию проекта BUILD.kts.",
+        "Плагины в виде Kotlin JAR, расширяющие файл проекта Tazel.",
       openCatalog: "Открыть каталог",
       contractEyebrow: "Контракт реестра",
       contractTitle: "Ясная ответственность от учётной записи до артефакта.",
@@ -1093,7 +1093,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL-плагины",
       pluginTitle: "Расширяйте модель проекта.",
       pluginDescription:
-        "Kotlin DSL-плагины — это JAR-артефакты для BUILD.kts. Они отделены от пакетов Tala в формате .vipkg.",
+        "Kotlin DSL-плагины — это JAR-артефакты для файла проекта Tazel. Они отделены от пакетов Tala в формате .vipkg.",
       backToPackages: "Назад к пакетам",
       followDevelopment: "Следить за разработкой",
       pluginAvailable: "Каталог доступен",
@@ -1109,7 +1109,7 @@ export const messages = {
         [
           "Расположение",
           "Отдельный каталог",
-          "Координаты плагинов всегда начинаются с /dslplugins.",
+          "Координаты плагинов всегда начинаются с /dslplugins/tazel.",
         ],
         [
           "Доступность",
@@ -1379,7 +1379,7 @@ export const messages = {
       projectExtensions: "הרחבות לפרויקטים",
       kotlinPlugins: "תוספי Kotlin DSL",
       kotlinDescription:
-        "תוספי Kotlin בתבנית JAR שמרחיבים את תצורת הפרויקט BUILD.kts.",
+        "תוספי Kotlin בתבנית JAR שמרחיבים את קובץ הפרויקט של Tazel.",
       openCatalog: "לפתיחת הקטלוג",
       contractEyebrow: "חוזה המאגר",
       contractTitle: "בעלות ברורה מהזהות ועד לתוצר.",
@@ -1397,7 +1397,7 @@ export const messages = {
       pluginEyebrow: "ViGet · תוספי Kotlin DSL",
       pluginTitle: "להרחיב את מודל הפרויקט.",
       pluginDescription:
-        "תוספי Kotlin DSL הם תוצרי JAR עבור BUILD.kts. הם נפרדים מחבילות ‎.vipkg של Tala.",
+        "תוספי Kotlin DSL הם תוצרי JAR עבור קובץ הפרויקט של Tazel. הם נפרדים מחבילות ‎.vipkg של Tala.",
       backToPackages: "חזרה לחבילות",
       followDevelopment: "למעקב אחר הפיתוח",
       pluginAvailable: "הקטלוג זמין",
@@ -1412,7 +1412,7 @@ export const messages = {
         [
           "מיקום",
           "קטלוג ייעודי",
-          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins.",
+          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins/tazel.",
         ],
         [
           "זמינות",

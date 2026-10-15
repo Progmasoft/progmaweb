@@ -6,22 +6,25 @@ import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
 import { forwardArrow, getMessages } from "@/lib/localization";
+import { catalogText } from "@/lib/viget-catalogs";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { metadata } = getMessages(await getLocale());
+  const locale = await getLocale();
+  const { metadata } = getMessages(locale);
   return {
-    title: metadata.dslPluginsTitle,
+    title: `${catalogText(locale).tazelTitle} · ViGet`,
     description: metadata.dslPluginsDescription,
     alternates: {
-      canonical: "https://viget.progmasoft.com/dslplugins/",
+      canonical: "https://viget.progmasoft.com/dslplugins/tazel",
     },
     robots: { index: true, follow: true },
   };
 }
 
-export default async function DslPluginsPage() {
+export default async function TazelPluginsPage() {
   const locale = await getLocale();
   const { viget } = getMessages(locale);
+  const catalogs = catalogText(locale);
   return (
     <div className="viget-surface">
       <ViGetHeader locale={locale} />
@@ -29,21 +32,18 @@ export default async function DslPluginsPage() {
         <section className="viget-plugin-hero">
           <div className="shell viget-plugin-grid">
             <div className="viget-hero-copy">
-              <p className="eyebrow">{viget.pluginEyebrow}</p>
-              <h1>{viget.pluginTitle}</h1>
-              <p>{viget.pluginDescription}</p>
+              <p className="eyebrow">ViGet · BUILD SYSTEM DSL PLUGINS</p>
+              <h1>{catalogs.tazelTitle}</h1>
+              <p>{catalogs.tazelDescription}</p>
               <div className="hero-actions">
                 <a
                   className="button button-secondary"
                   href="https://viget.progmasoft.com/"
                 >
-                  {viget.backToPackages}
+                  {catalogs.backToRegistry}
                 </a>
-                <a
-                  className="viget-text-link"
-                  href="https://github.com/Progmasoft/tala"
-                >
-                  {viget.followDevelopment} {forwardArrow(locale)}
+                <a className="viget-text-link" href="https://tazel.tala.run/">
+                  Tazel {forwardArrow(locale)}
                 </a>
               </div>
             </div>
@@ -57,7 +57,7 @@ export default async function DslPluginsPage() {
               </div>
               <h2 id="plugin-availability-title">{viget.pluginEmptyTitle}</h2>
               <p>{viget.pluginEmptyDescription}</p>
-              <code>/dslplugins/&lt;Publisher&gt;/&lt;Name&gt;/</code>
+              <code>/dslplugins/tazel/&lt;Publisher&gt;/&lt;Name&gt;/</code>
             </aside>
           </div>
         </section>

@@ -21,7 +21,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 1,
       },
       {
-        url: "https://viget.progmasoft.com/dslplugins/",
+        url: "https://viget.progmasoft.com/langs/tala",
+        changeFrequency: "weekly",
+        priority: 0.8,
+      },
+      {
+        url: "https://viget.progmasoft.com/dslplugins/tazel",
         changeFrequency: "weekly",
         priority: 0.8,
       },

@@ -16,8 +16,10 @@ export function ViGetHeader({ locale }: { locale: Locale }) {
           <span>ViGet</span>
         </div>
         <nav className="primary-nav" aria-label={viget.navigationLabel}>
-          <Link href="https://viget.progmasoft.com/">{viget.packages}</Link>
-          <Link href="https://viget.progmasoft.com/dslplugins/">
+          <Link href="https://viget.progmasoft.com/langs/tala">
+            {viget.packages}
+          </Link>
+          <Link href="https://viget.progmasoft.com/dslplugins/tazel">
             {viget.dslPlugins}
           </Link>
           <Link href="https://account.progmasoft.com/login">{viget.login}</Link>
