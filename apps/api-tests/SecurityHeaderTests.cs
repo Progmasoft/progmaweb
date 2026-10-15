@@ -4,6 +4,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Progmasoft.Progmaweb.Api.Security;
 
 namespace Progmasoft.Progmaweb.Api.Tests;
@@ -40,5 +41,22 @@ public sealed class SecurityHeaderTests
         Assert.Equal("DENY", Assert.Single(response.Headers.GetValues("X-Frame-Options")));
         Assert.Contains("frame-ancestors 'none'",
             Assert.Single(response.Headers.GetValues("Content-Security-Policy")), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task HttpsResponsesCarryThePreloadPolicyNginxSends()
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://account.progmasoft.com"),
+        });
+
+        HttpResponseMessage response =
+            await client.GetAsync("/api/v1/status", TestContext.Current.CancellationToken);
+
+        Assert.Equal("max-age=63072000; includeSubDomains; preload",
+            Assert.Single(response.Headers.GetValues("Strict-Transport-Security")));
     }
 }

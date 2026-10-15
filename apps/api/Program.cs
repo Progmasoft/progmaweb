@@ -47,6 +47,14 @@ if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(goo
     });
 }
 builder.Services.AddProblemDetails();
+// progmasoft.com is served as if .com required HSTS: the API answers with the same preload header as Nginx, so a
+// proxied response never carries two different policies.
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(730);
+    options.IncludeSubDomains = true;
+    options.Preload = true;
+});
 builder.Services.AddHealthChecks();
 builder.Services.AddRateLimiter(options =>
 {
