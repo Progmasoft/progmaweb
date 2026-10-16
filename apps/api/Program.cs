@@ -44,6 +44,14 @@ if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(goo
         options.CallbackPath = "/api/v1/accounts/oauth/google/callback";
         options.SignInScheme = AccountEndpoints.ExternalCookieScheme;
         options.SaveTokens = false;
+        // A callback that cannot finish (the visitor declined on Google, or the state cookie is missing or
+        // expired) would otherwise end in an unhandled 500. The sign-in page explains a failed Google sign-in.
+        options.Events.OnRemoteFailure = context =>
+        {
+            context.Response.Redirect("/login?google=failed");
+            context.HandleResponse();
+            return Task.CompletedTask;
+        };
     });
 }
 builder.Services.AddProblemDetails();

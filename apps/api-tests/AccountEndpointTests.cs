@@ -33,6 +33,21 @@ public sealed class AccountEndpointTests
         Assert.Contains("state=", location.Query, StringComparison.Ordinal);
     }
 
+    [Theory]
+    [InlineData("/api/v1/accounts/oauth/google/callback")]
+    [InlineData("/api/v1/accounts/oauth/google/callback?error=access_denied&state=declined")]
+    [InlineData("/api/v1/accounts/oauth/google/callback?code=forged&state=forged")]
+    public async Task GoogleCallbackThatCannotFinishReturnsToTheSignInPage(string callback)
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient(handleCookies: false);
+
+        HttpResponseMessage response = await client.GetAsync(callback, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/login?google=failed", response.Headers.Location?.OriginalString);
+    }
+
     [Fact]
     public async Task GoogleStartRejectsInvalidAccountNameBeforeLeavingTheSite()
     {
