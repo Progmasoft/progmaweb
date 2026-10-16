@@ -98,8 +98,8 @@ There is no scheduled backup yet; see [Known limitations](../docs/LIMITATIONS.md
   of the frontend service.
 
 The Progmasoft and ViGet Nginx hosts must never reuse `/srv/xsharp/website/current`. Tala compiler and language
-content belongs to `xsharp-lang.xyz`; sharing an origin server does not imply sharing a document root or application
-process. The temporary ViGet status API remains on its dedicated loopback service while catalog pages are served by
+content belongs to `tala.run` and its subdomains; sharing an origin server does not imply sharing a document root or
+application process. The temporary ViGet status API remains on its dedicated loopback service while catalog pages are served by
 Progmaweb.
 
 ## Mail boundary

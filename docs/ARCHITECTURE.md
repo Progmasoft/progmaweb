@@ -45,8 +45,9 @@ One build serves three hosts. The host of a request, not a separate deployment, 
    same URL without the parameter. See [Localization](LOCALIZATION.md).
 2. **Account root.** `/` on the account host is rewritten to the internal `/account` page, so the account landing page
    has the short URL.
-3. **ViGet.** On the ViGet host `/` is rewritten to `/viget` and `/dslplugins` to `/viget/dslplugins`. `/login`,
-   `/register` and `/recover` redirect to the account host.
+3. **ViGet.** On the ViGet host `/` is rewritten to `/viget`, `/langs/tala` to `/viget/langs/tala` and
+   `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs` and `/dslplugins` redirect permanently to those two
+   catalogs. `/login`, `/register` and `/recover` redirect to the account host.
 4. **Internal trees stay internal.** `/viget/...` on any other host redirects to the ViGet host, and `/account` on any
    other host redirects to the account host.
 
@@ -63,11 +64,12 @@ The host is read from `X-Forwarded-Host` first and `Host` second, without the po
 | `/account` (shown as `/` on the account host) | account landing page | no |
 | `/login`, `/register`, `/recover` | authentication and recovery | no |
 | `/<Account>/dashboard` | dashboard of the signed-in account | no |
-| `/viget` (shown as `/` on the ViGet host) | package catalog | yes |
-| `/viget/dslplugins` (shown as `/dslplugins`) | DSL plugin catalog | yes |
+| `/viget` (shown as `/` on the ViGet host) | registry status and the list of catalogs | yes |
+| `/viget/langs/tala` (shown as `/langs/tala`) | catalog of Tala packages | yes |
+| `/viget/dslplugins/tazel` (shown as `/dslplugins/tazel`) | catalog of Tazel DSL plugins | yes |
 
-`robots.txt` and `sitemap.xml` are generated per host: the ViGet host lists its two catalog pages, every other host
-lists the apex homepage only. Nginx additionally sends `X-Robots-Tag: noindex` for the whole account host.
+`robots.txt` and `sitemap.xml` are generated per host: the ViGet host lists its home page and its two catalog pages,
+every other host lists the apex homepage only. Nginx additionally sends `X-Robots-Tag: noindex` for the whole account host.
 
 Pages are rendered on the server for every request, because the language depends on the request. Two components run
 in the browser: the authentication form and the dashboard.
