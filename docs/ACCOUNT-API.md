@@ -99,6 +99,11 @@ The flow is a server-side authorization-code flow. The browser is redirected; it
 | the email address of the identity belongs to another account | redirect to `/login?google=failed` |
 | Google reported no usable identity, or the callback failed | redirect to `/login?google=failed` |
 
+The visitor sees one message for every cause. When the callback itself fails, the service logs the cause as a
+warning with the event `GoogleSignInFailed` (event id 5): the error Google reported, such as `access_denied`, or the
+reason the callback was refused, such as a missing or invalid state. The entry never contains the authorization code,
+the state or a token.
+
 A Google identity is never linked to an existing account by email address. Password registrations do not verify the
 address, so linking by address could give one person's account to another.
 
