@@ -119,8 +119,8 @@ to `/login?google=failed`, and the callback path is not a route.
 | `__Host-ProgmasoftExternal` | carries the Google identity between callback and completion | `HttpOnly`, `Secure`, `SameSite=Lax`, ten minutes |
 
 A session token is 256 random bits. The service stores only its SHA-256 digest, so a copy of the store does not
-contain a usable token. A session lasts 12 hours by default; `AccountSessions:LifetimeHours` changes that, within 1 to
-168 hours.
+contain a usable token. A session lasts 30 days (720 hours) from the sign-in, whether the account signed in with a
+password or with Google; `AccountSessions:LifetimeHours` changes that, within 1 to 720 hours.
 
 Passwords are hashed with the ASP.NET Core Identity password hasher and are never stored or logged in plain text.
 
@@ -137,7 +137,7 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 
 | Setting | Meaning | Default |
 | --- | --- | --- |
-| `AccountSessions:LifetimeHours` | hours a session stays valid, clamped to 1–168 | `12` |
+| `AccountSessions:LifetimeHours` | hours a session stays valid, clamped to 1–720 | `720` |
 | `AccountSessions:CookieName` | name of the session cookie | `__Host-ProgmasoftSession` |
 | `Authentication:Google:ClientId` | Google OAuth client identifier | empty; Google sign-in is off |
 | `Authentication:Google:ClientSecret` | Google OAuth client secret | empty; Google sign-in is off |

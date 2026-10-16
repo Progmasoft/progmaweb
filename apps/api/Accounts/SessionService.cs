@@ -11,8 +11,13 @@ internal sealed class AccountSessionOptions
 {
     /// <summary>Name of the configuration section.</summary>
     public const string SectionName = "AccountSessions";
-    /// <summary>Hours a session stays valid. Values outside 1 to 168 are clamped to that range.</summary>
-    public int LifetimeHours { get; init; } = 12;
+    /// <summary>The longest a session may stay valid: 30 days.</summary>
+    public const int MaximumLifetimeHours = 30 * 24;
+    /// <summary>
+    /// Hours a session stays valid, 30 days unless configured. Values outside 1 to
+    /// <see cref="MaximumLifetimeHours"/> are clamped to that range.
+    /// </summary>
+    public int LifetimeHours { get; init; } = MaximumLifetimeHours;
     /// <summary>Name of the session cookie. The <c>__Host-</c> prefix binds it to this host over HTTPS.</summary>
     public string CookieName { get; init; } = "__Host-ProgmasoftSession";
 }
@@ -46,7 +51,7 @@ internal sealed class SessionService(
             .TrimEnd('=');
         byte[] digest = SHA256.HashData(System.Text.Encoding.ASCII.GetBytes(token));
         DateTimeOffset createdAt = timeProvider.GetUtcNow();
-        DateTimeOffset expiresAt = createdAt.AddHours(Math.Clamp(settings.LifetimeHours, 1, 168));
+        DateTimeOffset expiresAt = createdAt.AddHours(Math.Clamp(settings.LifetimeHours, 1, AccountSessionOptions.MaximumLifetimeHours));
 
         await store.StoreSessionAsync(new SessionRecord(digest, account.Id, createdAt, expiresAt), cancellationToken);
         return new AuthenticatedAccount(account, token, expiresAt);
