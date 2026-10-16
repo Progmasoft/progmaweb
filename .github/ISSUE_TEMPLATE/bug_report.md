@@ -17,7 +17,7 @@ This repository owns `progmasoft.com`, `account.progmasoft.com`, and `viget.prog
 
 ### Observed and expected behavior
 
-Describe what happened, what you expected, and any visible status code or safe error message. If the issue involves a package path, distinguish `/<Publisher>/<Name>/` ViPkgs from `/dslplugins/<Publisher>/<Name>/` JAR plugins; do not attach private packages.
+Describe what happened, what you expected, and any visible status code or safe error message. If the issue involves a package path, distinguish `/langs/tala/<Publisher>/<Name>/` ViPkgs from `/dslplugins/tazel/<Publisher>/<Name>/` JAR plugins; do not attach private packages.
 
 ### Reproduction
 
