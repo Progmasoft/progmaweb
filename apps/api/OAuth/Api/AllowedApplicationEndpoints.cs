@@ -84,16 +84,21 @@ internal static class AllowedApplicationEndpoints
             return OAuthAccount.ForeignOrigin();
         }
 
-        object? authorization = await authorizations.FindByIdAsync(authorizationId, context.RequestAborted);
-        // Another account's authorization is treated as absent.
-        if (authorization is null
-            || await authorizations.GetSubjectAsync(authorization, context.RequestAborted) != account.Id.ToString())
+        // Only the account's own authorizations are searched, so another account's identifier is simply absent.
+        await foreach (object authorization in authorizations.FindBySubjectAsync(account.Id.ToString(),
+                           context.RequestAborted))
         {
-            return Results.NotFound();
+            string? id = await authorizations.GetIdAsync(authorization, context.RequestAborted);
+            if (id is null || !string.Equals(id, authorizationId, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            await authorizations.TryRevokeAsync(authorization, context.RequestAborted);
+            await tokens.RevokeByAuthorizationIdAsync(id, context.RequestAborted);
+            return Results.NoContent();
         }
 
-        await authorizations.TryRevokeAsync(authorization, context.RequestAborted);
-        await tokens.RevokeByAuthorizationIdAsync(authorizationId, context.RequestAborted);
-        return Results.NoContent();
+        return Results.NotFound();
     }
 }

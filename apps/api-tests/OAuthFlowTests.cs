@@ -160,6 +160,10 @@ public sealed class OAuthFlowTests
         HttpResponseMessage foreign = await browser.SendAsync(HttpMethod.Delete,
             $"/api/v1/oauth/allowed/{authorizationId}", origin: "https://attacker.example");
         Assert.Equal(HttpStatusCode.Forbidden, foreign.StatusCode);
+        OAuthTestClient stranger = new(factory);
+        await stranger.RegisterAndSignInAsync("OAuthStranger4", "stranger4@example.com");
+        Assert.Equal(HttpStatusCode.NotFound, (await stranger.SendAsync(HttpMethod.Delete,
+            $"/api/v1/oauth/allowed/{authorizationId}")).StatusCode);
         HttpResponseMessage withdrawn = await browser.SendAsync(HttpMethod.Delete,
             $"/api/v1/oauth/allowed/{authorizationId}");
         Assert.Equal(HttpStatusCode.NoContent, withdrawn.StatusCode);
