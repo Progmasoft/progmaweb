@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Progmasoft.Progmaweb.Api.Accounts;
+using Progmasoft.OAuth;
 using Progmasoft.Progmaweb.Api.Security;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,9 @@ AccountStoreKind accountStore = builder.Services.AddAccountStore(
     builder.Environment.IsProduction());
 builder.Services.AddSingleton<AccountService>();
 builder.Services.AddSingleton<SessionService>();
+// Progmasoft OAuth, the OAuth 2.1 and OpenID Connect provider on its own host; see OAuth/OAuthRegistration.cs.
+builder.Services.AddProgmasoftOAuth(builder.Configuration, accountStore, builder.Environment.IsProduction());
+builder.Services.AddAuthorization();
 AuthenticationBuilder authentication = builder.Services
     .AddAuthentication()
     .AddCookie(AccountEndpoints.ExternalCookieScheme, options =>
@@ -66,6 +70,19 @@ builder.Services.AddHealthChecks();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // The OAuth endpoints and the developer portal: generous for real clients, a ceiling for scripted abuse.
+    options.AddPolicy("oauth", context =>
+    {
+        string partition = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetSlidingWindowLimiter(partition, _ => new SlidingWindowRateLimiterOptions
+        {
+            AutoReplenishment = true,
+            PermitLimit = 60,
+            QueueLimit = 0,
+            SegmentsPerWindow = 6,
+            Window = TimeSpan.FromMinutes(1)
+        });
+    });
     options.AddPolicy("account-auth", context =>
     {
         string partition = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
@@ -99,7 +116,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<SecurityHeadersMiddleware>();
+// Before authentication, where OpenIddict answers its own endpoints: OAuth only on its host, and nothing else there.
+app.UseMiddleware<OAuthHostFilter>();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseRateLimiter();
 app.UseExceptionHandler();
 
@@ -111,6 +131,7 @@ app.MapGet("/api/v1/status", () => Results.Ok(new
     version = "1.0.0"
 }));
 app.MapAccountEndpoints();
+app.MapProgmasoftOAuth();
 
 app.Run();
 

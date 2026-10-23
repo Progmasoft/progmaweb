@@ -110,3 +110,34 @@ are Progmaweb responsibilities; the Tala and ViGet website repository does not o
 
 Apply those fragments deliberately rather than copying the directory over `/etc`. The accompanying mail README records
 the DNS, TLS, OpenDKIM, Postfix, Dovecot, sender-login, filesystem-permission, and secret-handling contract.
+
+## Progmasoft OAuth
+
+The account API also serves Progmasoft OAuth, the OAuth 2.1 and OpenID Connect provider, on
+`credentials.progmasoft.com` (see [OAuth](../docs/OAUTH.md)). Nginx sends every path of that host to the API; the API
+answers OAuth paths only there and nothing else there. The OAuth tables (`oauth_*`) live in the account database and
+are created by the API at start, like the account tables.
+
+Production needs two keys, kept outside the releases so that tokens survive a release and a restart:
+
+```sh
+install -d -m 0750 -o root -g progmaweb /etc/progmaweb/oauth
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out /etc/progmaweb/oauth/signing.pem
+openssl rand -base64 32 > /etc/progmaweb/oauth/encryption.key
+chown root:progmaweb /etc/progmaweb/oauth/*; chmod 0640 /etc/progmaweb/oauth/*
+restorecon -R /etc/progmaweb/oauth
+```
+
+`/etc/progmaweb/account.env` names them:
+
+```text
+OAuth__SigningKeyPath=/etc/progmaweb/oauth/signing.pem
+OAuth__EncryptionKeyPath=/etc/progmaweb/oauth/encryption.key
+```
+
+The service refuses to start in production without them. Replacing the signing key invalidates identity tokens that
+clients still hold; replacing the encryption key invalidates every access token, authorization code and refresh
+token, so every application has to ask again. Back up both files with the database.
+
+The certificate of `progmasoft.com` must name `credentials.progmasoft.com` as well; expand it with certbot's webroot
+plugin before the vhost is enabled, then check `/.well-known/openid-configuration` and the sign-in page from outside.

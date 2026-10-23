@@ -16,12 +16,19 @@ namespace Progmasoft.Progmaweb.Api.Tests;
 /// </param>
 /// <param name="environment">Name of the hosting environment.</param>
 /// <param name="accountStore">Value of <c>Accounts:Store</c>; <see langword="null"/> leaves it unset.</param>
+/// <param name="oauthKeys">
+/// Whether to give Progmasoft OAuth key files. Production refuses to start without them; other environments make
+/// their own keys.
+/// </param>
 internal sealed class AccountApiFactory(
     bool configureGoogle = true,
     string? accountDatabase = null,
     string environment = "Testing",
-    string? accountStore = null) : WebApplicationFactory<Program>
+    string? accountStore = null,
+    bool oauthKeys = true) : WebApplicationFactory<Program>
 {
+    private readonly string keyDirectory = Path.Combine(Path.GetTempPath(), "progmaweb-oauth-keys-" + Guid.NewGuid().ToString("N"));
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(environment);
@@ -39,6 +46,29 @@ internal sealed class AccountApiFactory(
             configureGoogle ? "test-client.apps.googleusercontent.com" : string.Empty);
         builder.UseSetting("Authentication:Google:ClientSecret", configureGoogle ? "test-secret" : string.Empty);
 
+        // Progmasoft OAuth reads its host while services are registered, like the Google client above. Its own host
+        // keeps the host filter honest: the account API answers on localhost, OAuth on oauth.localhost.
+        builder.UseSetting("OAuth:Host", OAuthHost);
+        builder.UseSetting("AllowedHosts",
+            $"localhost;127.0.0.1;progmasoft.com;account.progmasoft.com;www.progmasoft.com;{OAuthHost}");
+        if (oauthKeys && environment == "Production")
+        {
+            Directory.CreateDirectory(keyDirectory);
+            using System.Security.Cryptography.RSA signing = System.Security.Cryptography.RSA.Create(2048);
+            string signingPath = Path.Combine(keyDirectory, "signing.pem");
+            string encryptionPath = Path.Combine(keyDirectory, "encryption.key");
+            File.WriteAllText(signingPath, signing.ExportPkcs8PrivateKeyPem());
+            File.WriteAllText(encryptionPath,
+                Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)));
+            builder.UseSetting("OAuth:SigningKeyPath", signingPath);
+            builder.UseSetting("OAuth:EncryptionKeyPath", encryptionPath);
+        }
+        else
+        {
+            builder.UseSetting("OAuth:SigningKeyPath", string.Empty);
+            builder.UseSetting("OAuth:EncryptionKeyPath", string.Empty);
+        }
+
         builder.ConfigureAppConfiguration((_, configuration) =>
         {
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
@@ -47,6 +77,27 @@ internal sealed class AccountApiFactory(
                 ["AccountSessions:CookieName"] = "__Host-ProgmasoftSession"
             });
         });
+    }
+
+    /// <summary>The host Progmasoft OAuth answers on in the tests.</summary>
+    public const string OAuthHost = "oauth.localhost";
+
+    /// <summary>A client of the OAuth host that keeps its cookies and does not follow redirections.</summary>
+    public HttpClient CreateOAuthClient() => CreateClient(
+        new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri($"https://{OAuthHost}"),
+            HandleCookies = true
+        });
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (Directory.Exists(keyDirectory))
+        {
+            Directory.Delete(keyDirectory, recursive: true);
+        }
     }
 
     public HttpClient CreateAccountClient(bool handleCookies = true) => CreateClient(
