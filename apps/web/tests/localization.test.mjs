@@ -13,6 +13,7 @@ import {
   requestHost,
   supportedLocales,
 } from "../lib/localization.ts";
+import { homeMessages } from "../lib/home-messages.ts";
 
 test("only the published locales are accepted", () => {
   assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU", "he-IL"]);
@@ -164,7 +165,7 @@ test("the Russian messages are written in Cyrillic", () => {
   const russian = messages["ru-RU"];
   for (const text of [
     russian.navigation.language,
-    russian.home.heroTitleStart,
+    homeMessages["ru-RU"].hero.titleStart,
     russian.auth.signIn,
     russian.viget.emptyTitle,
   ]) {

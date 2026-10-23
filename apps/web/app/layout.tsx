@@ -46,7 +46,9 @@ export default async function RootLayout({
     <html
       lang={locale}
       data-text-direction={textDirection(locale)}
-      data-theme="light"
+      // data-theme belongs to the bootstrap script and the theme control only.
+      // Rendered here, React would set it back to light whenever the server
+      // re-renders the layout (a language switch), and the page would flash.
       suppressHydrationWarning
     >
       <head>

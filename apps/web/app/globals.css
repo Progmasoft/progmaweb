@@ -1415,3 +1415,11 @@ a {
   direction: ltr;
   unicode-bidi: isolate;
 }
+
+/* The theme changes in one frame; nothing animates its colours meanwhile. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}

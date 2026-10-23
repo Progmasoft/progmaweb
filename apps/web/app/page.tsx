@@ -2,11 +2,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { Metadata } from "next";
-import { Fragment } from "react";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
+import { AreaIcon, areaKinds } from "@/components/site/AreaIcon";
+import { getHomeMessages } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
 import { forwardArrow, getMessages } from "@/lib/localization";
+import "./site.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { metadata } = getMessages(await getLocale());
@@ -18,154 +20,135 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const productLinks = [
-  {
-    href: "https://tala.run/",
-    accent: "violet",
-  },
-  {
-    href: "https://viget.progmasoft.com/",
-    accent: "blue",
-  },
-  {
-    href: "https://github.com/Progmasoft",
-    accent: "green",
-  },
-] as const;
-
+/**
+ * progmasoft.com. Progmasoft is presented as a pool of technology areas; the
+ * products have their own catalog on product.progmasoft.com.
+ */
 export default async function Homepage() {
   const locale = await getLocale();
-  const { home } = getMessages(locale);
+  const { hero, pool, principles, developers } = getHomeMessages(locale);
+  const arrow = forwardArrow(locale);
   return (
-    <>
+    <div className="pm-page">
       <SiteHeader locale={locale} />
       <main>
-        <section className="hero organization-hero">
-          <div className="shell hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow">{home.heroEyebrow}</p>
+        <section className="pm-hero">
+          <div className="pm-shell pm-hero-inner">
+            <div>
+              <p className="eyebrow">{hero.eyebrow}</p>
               <h1>
-                {home.heroTitleStart} <span>{home.heroTitleAccent}</span>
+                {hero.titleStart} <span>{hero.titleAccent}</span>
               </h1>
-              <p className="hero-lede">{home.heroDescription}</p>
-              <div className="hero-actions">
-                <a className="button" href="#products">
-                  {home.exploreProducts}
+              <p className="pm-lede">{hero.description}</p>
+              <div className="pm-actions">
+                <a className="button" href="#technology">
+                  {hero.explore}
                 </a>
                 <a
                   className="button button-secondary"
-                  href="https://github.com/Progmasoft"
+                  href="https://product.progmasoft.com/"
                 >
-                  {home.browseSource}
+                  {hero.products} {arrow}
                 </a>
               </div>
-              <dl className="hero-facts">
-                {home.facts.map(([term, description]) => (
-                  <div key={term}>
-                    <dt>{term}</dt>
-                    <dd>{description}</dd>
-                  </div>
-                ))}
-              </dl>
             </div>
-            <div className="hero-visual" aria-label={home.visualLabel}>
-              <div className="system-window">
-                <div className="window-bar">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <code>progmasoft/organization</code>
+            <div className="pm-pool-visual" aria-label={hero.poolLabel}>
+              {pool.areas.map(([title], index) => (
+                <div className="pm-pool-tile" key={title}>
+                  <span className={`pm-icon pm-icon-${areaKinds[index]}`}>
+                    <AreaIcon kind={areaKinds[index] ?? "languages"} />
+                  </span>
+                  <strong>{title}</strong>
                 </div>
-                <div className="system-stack">
-                  {home.stack.map(([label, title, description], index) => (
-                    <Fragment key={label}>
-                      {index > 0 && (
-                        <div className="stack-arrow" aria-hidden="true">
-                          ↓
-                        </div>
-                      )}
-                      <div
-                        className={`stack-row ${["stack-language", "stack-project", "stack-native"][index]}`}
-                      >
-                        <span>{label}</span>
-                        <strong>{title}</strong>
-                        <small>{description}</small>
-                      </div>
-                    </Fragment>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="section" id="products">
-          <div className="shell">
-            <div className="section-heading">
-              <div>
-                <p className="eyebrow">{home.productsEyebrow}</p>
-                <h2>{home.productsTitle}</h2>
-              </div>
-              <p>{home.productsDescription}</p>
+        <section className="pm-section" id="technology">
+          <div className="pm-shell">
+            <div className="pm-heading">
+              <p className="eyebrow">{pool.eyebrow}</p>
+              <h2>{pool.title}</h2>
+              <p>{pool.description}</p>
             </div>
-            <div className="product-grid">
-              {home.products.map(
-                ([eyebrow, name, description, action], index) => (
-                  <article
-                    className={`product-card accent-${productLinks[index]?.accent}`}
-                    key={name}
-                  >
-                    <p className="eyebrow">{eyebrow}</p>
-                    <h3>{name}</h3>
-                    <p>{description}</p>
-                    <a href={productLinks[index]?.href}>
-                      {action} {forwardArrow(locale)}
-                    </a>
-                  </article>
-                ),
-              )}
+            <div className="pm-bento">
+              {pool.areas.map(([title, description], index) => (
+                <article
+                  className={`pm-card${[0, 3, 4].includes(index) ? " pm-card-wide" : ""}`}
+                  key={title}
+                >
+                  <span className={`pm-icon pm-icon-${areaKinds[index]}`}>
+                    <AreaIcon kind={areaKinds[index] ?? "languages"} />
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+            <div className="pm-catalog">
+              <p>{pool.catalog}</p>
+              <a className="pm-link" href="https://product.progmasoft.com/">
+                {pool.catalogLink} {arrow}
+              </a>
             </div>
           </div>
         </section>
 
-        <section className="section section-muted" id="principles">
-          <div className="shell principles-grid">
-            <div className="section-heading vertical">
-              <p className="eyebrow">{home.principlesEyebrow}</p>
-              <h2>{home.principlesTitle}</h2>
-              <p>{home.principlesDescription}</p>
+        <section className="pm-section pm-section-muted" id="principles">
+          <div className="pm-shell">
+            <div className="pm-heading">
+              <p className="eyebrow">{principles.eyebrow}</p>
+              <h2>{principles.title}</h2>
             </div>
-            <div className="principle-list">
-              {home.principles.map(([title, description], index) => (
+            <div className="pm-principles">
+              {principles.items.map(([title, description], index) => (
                 <article key={title}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
-                  </div>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="section callout-section">
-          <div className="shell callout">
+        <section className="pm-section" id="developers">
+          <div className="pm-shell pm-band">
             <div>
-              <p className="eyebrow">{home.accountEyebrow}</p>
-              <h2>{home.accountTitle}</h2>
-              <p>{home.accountDescription}</p>
+              <p className="eyebrow">{developers.eyebrow}</p>
+              <h2>{developers.title}</h2>
+              <p>{developers.description}</p>
+              <div className="pm-actions">
+                <a
+                  className="button button-light"
+                  href="https://console.progmasoft.com/"
+                >
+                  {developers.console}
+                </a>
+                <a
+                  className="button button-secondary"
+                  href="https://account.progmasoft.com/"
+                >
+                  {developers.account}
+                </a>
+              </div>
             </div>
-            <a
-              className="button button-light"
-              href="https://account.progmasoft.com/"
-            >
-              {home.openAccount}
-            </a>
+            <pre className="pm-code" dir="ltr">
+              <code>
+                <b>GET</b> https://credentials.progmasoft.com
+                {"\n"}
+                {"    "}/.well-known/openid-configuration
+                {"\n\n"}
+                <b>scope</b> openid profile email
+                {"\n"}
+                {"      "}viget.packages.read
+              </code>
+            </pre>
           </div>
         </section>
       </main>
       <Footer locale={locale} />
-    </>
+    </div>
   );
 }

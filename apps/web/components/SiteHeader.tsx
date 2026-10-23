@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import Link from "next/link";
+import { getHomeMessages } from "@/lib/home-messages";
 import { getMessages, type Locale } from "@/lib/localization";
 import { Brand } from "./Brand";
 import { PreferenceControls } from "./PreferenceControls";
@@ -18,6 +19,7 @@ export function SiteHeader({
   signedInName,
 }: SiteHeaderProps) {
   const { navigation } = getMessages(locale);
+  const site = getHomeMessages(locale).navigation;
   return (
     <header className="site-header">
       <div className="shell header-inner">
@@ -46,8 +48,9 @@ export function SiteHeader({
             </>
           ) : (
             <>
-              <a href="#products">{navigation.products}</a>
-              <a href="#principles">{navigation.principles}</a>
+              <a href="https://progmasoft.com/#technology">{site.technology}</a>
+              <a href="https://product.progmasoft.com/">{site.products}</a>
+              <a href="https://console.progmasoft.com/">{site.developers}</a>
               <a href="https://github.com/Progmasoft">GitHub</a>
               <Link
                 className="button button-small"

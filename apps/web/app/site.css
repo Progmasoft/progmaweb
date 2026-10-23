@@ -1,0 +1,532 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 */
+
+/* progmasoft.com, product.progmasoft.com and the product sites. Static
+   gradients and borders only: no blur filters and no running animations, so
+   a theme change repaints in one frame. */
+
+.pm-page {
+  --pm-violet: #6d4fe0;
+  --pm-teal: #0f9e94;
+  --pm-orange: #e46c2f;
+  --pm-glow: rgb(0 120 212 / 14%);
+  background: var(--surface);
+}
+
+:root[data-theme="dark"] .pm-page {
+  --pm-violet: #a98bff;
+  --pm-teal: #4fd1c5;
+  --pm-orange: #ff9a62;
+  --pm-glow: rgb(54 159 232 / 18%);
+}
+
+.pm-shell {
+  width: min(calc(100% - 40px), 1180px);
+  margin-inline: auto;
+}
+
+/* Hero */
+
+.pm-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(60% 80% at 85% 10%, rgb(109 79 224 / 14%), transparent 70%),
+    radial-gradient(50% 70% at 10% 90%, rgb(15 158 148 / 12%), transparent 70%),
+    radial-gradient(40% 60% at 60% 60%, var(--pm-glow), transparent 70%),
+    var(--surface);
+}
+
+.pm-hero::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  content: "";
+  mask-image: radial-gradient(70% 70% at 50% 40%, black, transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.pm-hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 64px;
+  padding-block: 96px 104px;
+}
+
+.pm-hero h1 {
+  margin: 0;
+  font-size: clamp(40px, 5.4vw, 72px);
+  font-weight: 760;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.pm-hero h1 span {
+  display: block;
+  background: linear-gradient(
+    100deg,
+    var(--blue-600),
+    var(--pm-violet) 55%,
+    var(--pm-teal)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pm-lede {
+  max-width: 620px;
+  margin: 28px 0 0;
+  color: var(--ink-650);
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.6;
+}
+
+.pm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.pm-actions .button {
+  padding: 13px 24px;
+  border-radius: 999px;
+}
+
+/* The pool: six tiles that light up the areas. */
+
+.pm-pool-visual {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pm-pool-tile {
+  display: grid;
+  gap: 10px;
+  min-height: 108px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.pm-pool-tile:nth-child(even) {
+  transform: translateY(22px);
+}
+
+.pm-pool-tile strong {
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.pm-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: white;
+}
+
+.pm-icon-languages {
+  background: linear-gradient(135deg, var(--pm-violet), var(--blue-600));
+}
+
+.pm-icon-build {
+  background: linear-gradient(135deg, var(--pm-orange), #d9468b);
+}
+
+.pm-icon-tools {
+  background: linear-gradient(135deg, var(--blue-500), var(--pm-teal));
+}
+
+.pm-icon-quality {
+  background: linear-gradient(135deg, var(--green-600), var(--pm-teal));
+}
+
+.pm-icon-identity {
+  background: linear-gradient(135deg, #3a4a63, var(--blue-600));
+}
+
+.pm-icon-infrastructure {
+  background: linear-gradient(135deg, #59606b, #2a2f35);
+}
+
+/* Sections */
+
+.pm-section {
+  padding-block: 112px;
+}
+
+.pm-section-muted {
+  border-block: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+
+.pm-heading {
+  max-width: 760px;
+  margin-bottom: 56px;
+}
+
+.pm-heading h2 {
+  margin: 0;
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 740;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.pm-heading p:not(.eyebrow) {
+  margin: 18px 0 0;
+  color: var(--ink-650);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.pm-bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.pm-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 28px;
+  background: var(--surface);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.pm-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.pm-card h3 {
+  margin: 6px 0 0;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+}
+
+.pm-card p {
+  margin: 0;
+  color: var(--ink-650);
+  line-height: 1.6;
+}
+
+.pm-card-wide {
+  grid-column: span 2;
+}
+
+.pm-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 22px;
+  padding: 22px 28px;
+}
+
+.pm-catalog p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.pm-link {
+  font-weight: 650;
+}
+
+/* Principles */
+
+.pm-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+}
+
+.pm-principles article {
+  border-top: 2px solid var(--ink-950);
+  padding-top: 22px;
+}
+
+.pm-principles span {
+  display: block;
+  color: var(--ink-500);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 14px;
+}
+
+.pm-principles h3 {
+  margin: 14px 0 10px;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.pm-principles p {
+  margin: 0;
+  color: var(--ink-650);
+  line-height: 1.6;
+}
+
+/* The developers band */
+
+.pm-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: 48px;
+  border-radius: 28px;
+  padding: 56px;
+  background:
+    radial-gradient(60% 90% at 100% 0%, rgb(109 79 224 / 45%), transparent 70%),
+    radial-gradient(60% 90% at 0% 100%, rgb(0 120 212 / 40%), transparent 70%),
+    #111722;
+  color: #f4f6f8;
+}
+
+.pm-band h2 {
+  margin: 0;
+  font-size: clamp(30px, 3.6vw, 46px);
+  letter-spacing: -0.035em;
+}
+
+.pm-band p:not(.eyebrow) {
+  margin: 16px 0 0;
+  color: #c8d0da;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.pm-band .eyebrow {
+  color: #8fc8ff;
+}
+
+.pm-band .button-secondary {
+  border-color: rgb(255 255 255 / 30%);
+  background: transparent;
+  color: #f4f6f8;
+}
+
+.pm-code {
+  overflow-x: auto;
+  margin: 0;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 16px;
+  padding: 22px;
+  background: rgb(0 0 0 / 35%);
+  color: #dfe7f1;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pm-code b {
+  color: #8fc8ff;
+  font-weight: 600;
+}
+
+/* Product pages */
+
+.pm-product-hero {
+  padding-block: 80px 72px;
+}
+
+.pm-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.pm-product-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.pm-product-card:hover {
+  text-decoration: none;
+}
+
+.pm-product-card .pm-more {
+  margin-top: 6px;
+  color: var(--blue-600);
+  font-weight: 650;
+}
+
+.pm-tag {
+  justify-self: start;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: var(--surface-muted);
+  color: var(--ink-650);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pm-accent {
+  height: 4px;
+  border-radius: 999px;
+}
+
+.pm-accent-violet {
+  background: linear-gradient(90deg, var(--pm-violet), var(--blue-500));
+}
+
+.pm-accent-blue {
+  background: linear-gradient(90deg, var(--blue-600), var(--pm-teal));
+}
+
+.pm-accent-teal {
+  background: linear-gradient(90deg, var(--pm-teal), var(--green-600));
+}
+
+.pm-accent-green {
+  background: linear-gradient(90deg, var(--green-600), var(--pm-teal));
+}
+
+.pm-accent-orange {
+  background: linear-gradient(90deg, var(--pm-orange), #d9468b);
+}
+
+.pm-accent-slate {
+  background: linear-gradient(90deg, #59606b, var(--blue-600));
+}
+
+.pm-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.pm-features {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-features li {
+  display: flex;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+}
+
+.pm-features li::before {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--blue-100);
+  color: var(--blue-600);
+  content: "✓";
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pm-aside {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 26px;
+  background: var(--surface-muted);
+}
+
+.pm-aside .button {
+  text-align: center;
+}
+
+.pm-note {
+  color: var(--ink-650);
+  font-size: 14px;
+}
+
+.pm-code-light {
+  border-color: var(--line);
+  background: #111722;
+  font-size: 13px;
+}
+
+.pm-roadmap {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.pm-roadmap li::before {
+  background: var(--surface-muted);
+  color: var(--ink-500);
+  content: "→";
+}
+
+@media (max-width: 960px) {
+  .pm-hero-inner,
+  .pm-band,
+  .pm-detail {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-bento,
+  .pm-principles {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-card-wide {
+    grid-column: auto;
+  }
+
+  .pm-band {
+    padding: 36px 26px;
+  }
+
+  .pm-section {
+    padding-block: 80px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pm-pool-visual {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-pool-tile:nth-child(even) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-card {
+    transition: none;
+  }
+
+  .pm-card:hover {
+    transform: none;
+  }
+}
