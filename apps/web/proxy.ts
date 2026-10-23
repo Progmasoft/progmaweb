@@ -10,18 +10,51 @@ import {
   requestHost,
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
+import { catch3Route, idesRoute, productRoute } from "@/lib/sites";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
 const vigetHosts = new Set(["viget.progmasoft.com", "viget.localhost"]);
-const issuerHosts = new Set([
-  "credentials.progmasoft.com",
-  "credentials.localhost",
-]);
-const authorizeHosts = new Set([
-  "authorize.progmasoft.com",
-  "authorize.localhost",
-]);
-const consoleHosts = new Set(["console.progmasoft.com", "console.localhost"]);
+interface OwnSite {
+  hosts: Set<string>;
+  /** The internal tree of the site's pages. */
+  root: string;
+  route: (pathname: string) => string | null;
+  /** Whether /api reaches the account API on this host. */
+  api: boolean;
+}
+
+function hostsOf(name: string): Set<string> {
+  return new Set([`${name}.progmasoft.com`, `${name}.localhost`]);
+}
+
+const ownSites: OwnSite[] = [
+  {
+    hosts: hostsOf("authorize"),
+    root: "/authorize",
+    route: authorizeRoute,
+    api: true,
+  },
+  {
+    hosts: hostsOf("credentials"),
+    root: "/issuer",
+    route: issuerRoute,
+    api: true,
+  },
+  {
+    hosts: hostsOf("console"),
+    root: "/console",
+    route: consoleRoute,
+    api: true,
+  },
+  {
+    hosts: hostsOf("product"),
+    root: "/products",
+    route: productRoute,
+    api: false,
+  },
+  { hosts: hostsOf("ides"), root: "/ides", route: idesRoute, api: false },
+  { hosts: hostsOf("catch3"), root: "/catch3", route: catch3Route, api: false },
+];
 
 export function proxy(request: NextRequest) {
   const host = requestHost(
@@ -57,32 +90,26 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
-  // Progmasoft OAuth serves its own pages and nothing else of the site: the
-  // account pages keep their own host and cookies.
-  // Progmasoft OAuth and the Progmasoft Console serve their own pages and
-  // nothing else of the site: the account pages keep their own host and cookies.
-  const oauthSite = authorizeHosts.has(host)
-    ? { route: authorizeRoute, root: "/authorize" }
-    : issuerHosts.has(host)
-      ? { route: issuerRoute, root: "/issuer" }
-      : consoleHosts.has(host)
-        ? { route: consoleRoute, root: "/console" }
-        : null;
-  if (oauthSite) {
-    if (pathname.startsWith("/api/")) {
+  // Hosts with pages of their own: Progmasoft OAuth, the Progmasoft Console,
+  // the product catalog and the product sites. Each serves its own tree and
+  // nothing else of the site, so the account pages keep their own host and
+  // cookies.
+  const site = ownSites.find((candidate) => candidate.hosts.has(host));
+  if (site) {
+    if (site.api && pathname.startsWith("/api/")) {
       return NextResponse.next();
     }
     const destination = internalRoute(
       request,
-      oauthSite.route(pathname) ?? `${oauthSite.root}/not-found`,
+      site.route(pathname) ?? `${site.root}/not-found`,
     );
     // The sign-in page reads ReturnUrl and the consent page every parameter
     // of the authorization request.
     destination.search = request.nextUrl.search;
     return NextResponse.rewrite(destination);
   }
-  for (const internal of ["/authorize", "/issuer", "/console"]) {
-    if (pathname === internal || pathname.startsWith(`${internal}/`)) {
+  for (const { root } of ownSites) {
+    if (pathname === root || pathname.startsWith(`${root}/`)) {
       return NextResponse.rewrite(internalRoute(request, "/not-found"));
     }
   }

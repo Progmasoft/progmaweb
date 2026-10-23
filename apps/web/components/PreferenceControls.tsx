@@ -32,6 +32,25 @@ function readTheme(): Theme {
     : "light";
 }
 
+/**
+ * Applies a theme to the document at once, in the click that chose it.
+ *
+ * Transitions are switched off for the two frames of the change: otherwise
+ * every button and link would animate its colours while the page around it
+ * has already changed, which looks like flicker.
+ */
+function applyTheme(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.add("theme-switching");
+  root.dataset.theme = theme;
+  root.style.colorScheme = theme;
+  window.requestAnimationFrame(() =>
+    window.requestAnimationFrame(() =>
+      root.classList.remove("theme-switching"),
+    ),
+  );
+}
+
 function subscribeTheme(onStoreChange: () => void) {
   window.addEventListener("storage", onStoreChange);
   window.addEventListener(themeEvent, onStoreChange);
@@ -45,16 +64,23 @@ export function PreferenceControls({
   locale,
   labels,
 }: PreferenceControlsProps) {
-  const theme = useSyncExternalStore(subscribeTheme, readTheme, () => "light");
+  const theme = useSyncExternalStore<Theme>(
+    subscribeTheme,
+    readTheme,
+    () => "light",
+  );
   const [switchingLocale, startLocaleSwitch] = useTransition();
 
+  // Another tab, or another control on this page, changed the theme.
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
+    if (document.documentElement.dataset.theme !== theme) {
+      applyTheme(theme);
+    }
   }, [theme]);
 
   function toggleTheme() {
     const selected: Theme = theme === "light" ? "dark" : "light";
+    applyTheme(selected);
     window.localStorage.setItem("progmasoft_theme", selected);
     window.dispatchEvent(new Event(themeEvent));
   }

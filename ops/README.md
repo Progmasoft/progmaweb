@@ -148,6 +148,7 @@ The service refuses to start in production without them. Replacing the signing k
 clients still hold; replacing the encryption key invalidates every access token, authorization code and refresh
 token, so every application has to ask again. Back up both files with the database.
 
-The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `authorize.progmasoft.com` and
-`console.progmasoft.com` as well; expand it with certbot's webroot plugin before the vhosts are enabled, then check
+The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `authorize.progmasoft.com`,
+`console.progmasoft.com`, `product.progmasoft.com`, `ides.progmasoft.com` and `catch3.progmasoft.com` as well; expand
+it with certbot's webroot plugin before the vhosts are enabled, then check
 `/.well-known/openid-configuration`, the sign-in page and the console from outside.
