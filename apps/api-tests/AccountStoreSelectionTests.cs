@@ -73,6 +73,16 @@ public sealed class AccountStoreSelectionTests
     }
 
     [Fact]
+    public void AProductionServiceWithoutOAuthKeysDoesNotStart()
+    {
+        using AccountApiFactory factory = new(environment: "Production", accountStore: "Memory", oauthKeys: false);
+
+        InvalidOperationException refused = Assert.Throws<InvalidOperationException>(() => factory.CreateAccountClient());
+
+        Assert.Contains("must name the token key files in production", refused.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task AProductionServiceThatAsksForMemoryStartsAndKeepsAccountsInMemory()
     {
         await using AccountApiFactory factory = new(environment: "Production", accountStore: "Memory");

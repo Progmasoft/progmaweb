@@ -95,8 +95,26 @@ internal sealed class AccountService(
         SessionService sessions,
         CancellationToken cancellationToken)
     {
-        if (!EmailAddressPolicy.TryNormalize(request.Email, out _, out string normalizedEmail, out _) ||
-            request.Password is null || request.Password.Length > PasswordPolicy.MaximumLength)
+        AccountRecord? account = await VerifyPasswordAsync(request.Email, request.Password, cancellationToken);
+        return account is null ? null : await sessions.CreateAsync(account, cancellationToken);
+    }
+
+    /// <summary>Checks an email address and password without opening a session.</summary>
+    /// <remarks>
+    /// Progmasoft Credentials signs the account in with its own cookie and must not open a session of the account
+    /// site. The verification is the one <see cref="LoginAsync"/> uses, with the same cost for an unknown address.
+    /// </remarks>
+    /// <param name="email">Email address as entered.</param>
+    /// <param name="password">Password as entered.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The account, or <see langword="null"/> when the credentials are refused.</returns>
+    public async ValueTask<AccountRecord?> VerifyPasswordAsync(
+        string? email,
+        string? password,
+        CancellationToken cancellationToken)
+    {
+        if (!EmailAddressPolicy.TryNormalize(email, out _, out string normalizedEmail, out _) ||
+            password is null || password.Length > PasswordPolicy.MaximumLength)
         {
             return null;
         }
@@ -105,19 +123,21 @@ internal sealed class AccountService(
         if (account is null || account.PasswordHash is null)
         {
             // Reuse one private hash so an unknown email follows one expensive verification, like a bad password.
-            _ = passwordHasher.VerifyHashedPassword(DummyAccount, DummyPasswordHash, request.Password);
+            _ = passwordHasher.VerifyHashedPassword(DummyAccount, DummyPasswordHash, password);
             return null;
         }
 
         PasswordVerificationResult verification =
-            passwordHasher.VerifyHashedPassword(account, account.PasswordHash, request.Password);
-        if (verification is PasswordVerificationResult.Failed)
-        {
-            return null;
-        }
-
-        return await sessions.CreateAsync(account, cancellationToken);
+            passwordHasher.VerifyHashedPassword(account, account.PasswordHash, password);
+        return verification is PasswordVerificationResult.Failed ? null : account;
     }
+
+    /// <summary>Finds an account by its identifier, for a Credentials session that names it.</summary>
+    /// <param name="id">Identifier of the account.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The account, or <see langword="null"/> when it no longer exists.</returns>
+    public ValueTask<AccountRecord?> FindAsync(Guid id, CancellationToken cancellationToken) =>
+        store.FindByIdAsync(id, cancellationToken);
 
     /// <summary>Signs in with a Google identity, creating the account on first use.</summary>
     /// <remarks>

@@ -10,6 +10,7 @@ so; [Known limitations](LIMITATIONS.md) collects those places.
 | --- | --- |
 | [Architecture](ARCHITECTURE.md) | which process serves which host, how a request travels, and where the trust boundaries are |
 | [Account API](ACCOUNT-API.md) | every endpoint of the account service: requests, responses, errors, cookies and limits |
+| [OAuth](OAUTH.md) | Progmasoft OAuth for developers: registering applications, flows, scopes, consent, tokens and limits |
 | [Localization](LOCALIZATION.md) | which languages are published, how a page picks one, how Hebrew is laid out, and how to add a language |
 | [Development](DEVELOPMENT.md) | how to run, test and document the project locally, and what each CI check enforces |
 | [Known limitations](LIMITATIONS.md) | what is deliberately missing or temporary, and what that means for operations |
