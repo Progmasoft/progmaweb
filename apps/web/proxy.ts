@@ -99,6 +99,11 @@ export function proxy(request: NextRequest) {
     if (site.api && pathname.startsWith("/api/")) {
       return NextResponse.next();
     }
+    // The standalone server runs this proxy a second time for the rewritten
+    // path, with the same host: a path already in the site's tree is final.
+    if (pathname === site.root || pathname.startsWith(`${site.root}/`)) {
+      return NextResponse.next();
+    }
     const destination = internalRoute(
       request,
       site.route(pathname) ?? `${site.root}/not-found`,
@@ -108,6 +113,7 @@ export function proxy(request: NextRequest) {
     destination.search = request.nextUrl.search;
     return NextResponse.rewrite(destination);
   }
+  // The internal trees belong to their hosts only.
   for (const { root } of ownSites) {
     if (pathname === root || pathname.startsWith(`${root}/`)) {
       return NextResponse.rewrite(internalRoute(request, "/not-found"));
