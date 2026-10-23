@@ -8,29 +8,25 @@ namespace Progmasoft.OAuth.Developers;
 /// <summary>What a developer submits to register or change an application.</summary>
 /// <param name="DisplayName">The name the consent page shows.</param>
 /// <param name="Homepage">The address of the application's site, or empty.</param>
-/// <param name="IsPublic">
-/// Whether the application cannot keep a secret: a browser or native application. Such a client has no secret and
-/// may not use the client credentials grant.
-/// </param>
+/// <param name="Kind">The type of the application; it decides the secret, the grants and the address rules.</param>
 /// <param name="RedirectUris">The addresses the authorization endpoint may send the account holder back to.</param>
 /// <param name="PostLogoutRedirectUris">The addresses the end-session endpoint may send the account holder back to.</param>
 /// <param name="Scopes">The scopes the application may request.</param>
-/// <param name="AllowClientCredentials">Whether the application may act as itself with the client credentials grant.</param>
 internal sealed record ApplicationInput(
     string DisplayName,
     string Homepage,
-    bool IsPublic,
+    ApplicationKind Kind,
     IReadOnlyList<string> RedirectUris,
     IReadOnlyList<string> PostLogoutRedirectUris,
-    IReadOnlyList<string> Scopes,
-    bool AllowClientCredentials);
+    IReadOnlyList<string> Scopes);
 
 /// <summary>The rules an application registration must follow.</summary>
 /// <remarks>
 /// Redirection addresses are compared exactly by the authorization server, so the rules here only decide which
-/// addresses may be registered: HTTPS, an <c>http</c> loopback address for software on the developer's own
-/// machine, or, for public clients, a private-use scheme of a native application as RFC 8252 describes. A
-/// fragment, user information or a wildcard is never accepted.
+/// addresses each type may register: web and single-page applications use HTTPS, or an <c>http</c> loopback address
+/// during development; desktop applications a loopback address or a private-use scheme, mobile applications a
+/// private-use scheme or a claimed HTTPS address, as RFC 8252 describes. A service signs nobody in and registers
+/// none. A fragment, user information or a wildcard is never accepted.
 /// </remarks>
 internal static class ApplicationPolicy
 {
@@ -61,34 +57,44 @@ internal static class ApplicationPolicy
             errors["homepage"] = "The homepage must be an https:// address.";
         }
 
+        if (!input.Kind.SignsPeopleIn())
+        {
+            // A service acts as itself: nobody is sent to it after signing in, and no account consents to it.
+            if (input.RedirectUris.Count != 0 || input.PostLogoutRedirectUris.Count != 0)
+            {
+                errors["redirectUris"] = "A service signs nobody in and registers no redirection address.";
+            }
+
+            if (input.Scopes.Count != 0)
+            {
+                errors["scopes"] = "A service acts as itself and requests no account scope.";
+            }
+
+            return errors;
+        }
+
         if (input.RedirectUris.Count is 0 or > MaximumRedirectUris)
         {
             errors["redirectUris"] = $"Register 1 to {MaximumRedirectUris} redirection addresses, one per line.";
         }
-        else if (input.RedirectUris.FirstOrDefault(uri => !IsRedirectionAddress(uri, input.IsPublic)) is { } wrong)
+        else if (input.RedirectUris.FirstOrDefault(uri => !IsRedirectionAddress(uri, input.Kind)) is { } wrong)
         {
-            errors["redirectUris"] = $"{wrong} cannot be registered. {AddressRule(input.IsPublic)}";
+            errors["redirectUris"] = $"{wrong} cannot be registered. {AddressRule(input.Kind)}";
         }
 
         if (input.PostLogoutRedirectUris.Count > MaximumRedirectUris)
         {
             errors["postLogoutRedirectUris"] = $"Register at most {MaximumRedirectUris} addresses.";
         }
-        else if (input.PostLogoutRedirectUris.FirstOrDefault(uri => !IsRedirectionAddress(uri, input.IsPublic)) is
+        else if (input.PostLogoutRedirectUris.FirstOrDefault(uri => !IsRedirectionAddress(uri, input.Kind)) is
                  { } wrongLogout)
         {
-            errors["postLogoutRedirectUris"] = $"{wrongLogout} cannot be registered. {AddressRule(input.IsPublic)}";
+            errors["postLogoutRedirectUris"] = $"{wrongLogout} cannot be registered. {AddressRule(input.Kind)}";
         }
 
         if (input.Scopes.Any(scope => OAuthScopes.Find(scope) is null))
         {
             errors["scopes"] = "Choose scopes from the list.";
-        }
-
-        if (input.IsPublic && input.AllowClientCredentials)
-        {
-            errors["allowClientCredentials"] =
-                "A public client has no secret and cannot use the client credentials grant.";
         }
 
         return errors;
@@ -105,9 +111,14 @@ internal static class ApplicationPolicy
         .ToList();
 
     /// <summary>The rule for redirection addresses, as the refusal message states it.</summary>
-    private static string AddressRule(bool isPublic) => isPublic
-        ? "Use https://, http:// with a loopback address, or a private-use scheme such as com.example.app:/callback."
-        : "Use https://, or http:// with a loopback address for development.";
+    private static string AddressRule(ApplicationKind kind) => kind switch
+    {
+        ApplicationKind.Desktop =>
+            "Use http:// with a loopback address, or a private-use scheme such as com.example.app:/callback.",
+        ApplicationKind.Mobile =>
+            "Use a private-use scheme such as com.example.app:/callback, or an https:// address the app claims.",
+        _ => "Use https://, or http:// with a loopback address for development."
+    };
 
     /// <summary>Whether text is an absolute <c>https://</c> address without fragment or user information.</summary>
     private static bool IsHttpsAddress(string text) =>
@@ -116,11 +127,11 @@ internal static class ApplicationPolicy
         && uri.Scheme == Uri.UriSchemeHttps
         && IsClean(uri);
 
-    /// <summary>Whether an address may be registered for redirection.</summary>
+    /// <summary>Whether an address may be registered for redirection by an application of a type.</summary>
     /// <param name="text">The address.</param>
-    /// <param name="isPublic">Whether the application is a public client.</param>
+    /// <param name="kind">The type of the application.</param>
     /// <returns><see langword="true"/> when the address follows the rules above.</returns>
-    internal static bool IsRedirectionAddress(string text, bool isPublic)
+    internal static bool IsRedirectionAddress(string text, ApplicationKind kind)
     {
         if (text.Length > MaximumUriLength || text.Contains('*', StringComparison.Ordinal)
             || !Uri.TryCreate(text, UriKind.Absolute, out Uri? uri) || !IsClean(uri))
@@ -128,23 +139,26 @@ internal static class ApplicationPolicy
             return false;
         }
 
-        if (uri.Scheme == Uri.UriSchemeHttps)
-        {
-            return true;
-        }
-
-        if (uri.Scheme == Uri.UriSchemeHttp)
-        {
-            // RFC 8252 section 7.3: loopback, never a host name that DNS could point elsewhere, except localhost
-            // during development.
-            return uri.Host == "localhost" || (IPAddress.TryParse(uri.Host.Trim('[', ']'), out IPAddress? address)
-                                               && IPAddress.IsLoopback(address));
-        }
-
+        bool https = uri.Scheme == Uri.UriSchemeHttps;
+        // RFC 8252 section 7.3: loopback, never a host name that DNS could point elsewhere, except localhost
+        // during development.
+        bool loopback = uri.Scheme == Uri.UriSchemeHttp
+                        && (uri.Host == "localhost"
+                            || (IPAddress.TryParse(uri.Host.Trim('[', ']'), out IPAddress? address)
+                                && IPAddress.IsLoopback(address)));
         // RFC 8252 section 7.1: a private-use scheme names the application in reverse DNS order, so it contains a
         // dot; javascript:, data: and the like are refused by that rule as well as by the explicit list.
         string[] refused = ["javascript", "data", "file", "vbscript", "about", "blob"];
-        return isPublic && uri.Scheme.Contains('.', StringComparison.Ordinal) && !refused.Contains(uri.Scheme);
+        bool privateUse = !https && uri.Scheme != Uri.UriSchemeHttp
+                          && uri.Scheme.Contains('.', StringComparison.Ordinal) && !refused.Contains(uri.Scheme);
+        return kind switch
+        {
+            ApplicationKind.Web or ApplicationKind.SinglePage => https || loopback,
+            ApplicationKind.Desktop => loopback || privateUse,
+            // RFC 8252 section 7.2: a claimed https:// address (Universal Links, App Links) or a private-use scheme.
+            ApplicationKind.Mobile => https || privateUse,
+            _ => false
+        };
     }
 
     /// <summary>Whether an address has neither a fragment nor user information.</summary>

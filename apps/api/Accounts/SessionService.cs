@@ -18,8 +18,18 @@ internal sealed class AccountSessionOptions
     /// <see cref="MaximumLifetimeHours"/> are clamped to that range.
     /// </summary>
     public int LifetimeHours { get; init; } = MaximumLifetimeHours;
-    /// <summary>Name of the session cookie. The <c>__Host-</c> prefix binds it to this host over HTTPS.</summary>
+    /// <summary>
+    /// Name of the session cookie. The <c>__Host-</c> prefix binds it to this host over HTTPS; a cookie shared with
+    /// <see cref="CookieDomain"/> takes the <c>__Secure-</c> prefix instead, which browsers allow with a domain.
+    /// </summary>
     public string CookieName { get; init; } = "__Host-ProgmasoftSession";
+
+    /// <summary>
+    /// The domain the session cookie is shared with, such as <c>progmasoft.com</c>, or <see langword="null"/> for a
+    /// cookie of the account host alone. Production shares it so that the Progmasoft Console on
+    /// <c>console.progmasoft.com</c> knows the signed-in account without a sign-in of its own.
+    /// </summary>
+    public string? CookieDomain { get; init; }
 }
 
 /// <summary>Opens, checks and revokes account sessions.</summary>
@@ -99,10 +109,14 @@ internal sealed class SessionService(
     }
 
     /// <summary>Creates the attributes of the session cookie.</summary>
-    /// <param name="expiresAt">Moment the session expires; the cookie expires with it.</param>
-    /// <returns>Options for a secure, HTTP-only, same-site cookie on the root path.</returns>
-    public static CookieOptions CreateCookieOptions(DateTimeOffset expiresAt) => new()
+    /// <param name="expiresAt">
+    /// Moment the session expires; the cookie expires with it. <see langword="null"/> describes the cookie for its
+    /// deletion.
+    /// </param>
+    /// <returns>Options for a secure, HTTP-only, same-site cookie on the root path of the configured domain.</returns>
+    public CookieOptions CreateCookieOptions(DateTimeOffset? expiresAt) => new()
     {
+        Domain = string.IsNullOrEmpty(settings.CookieDomain) ? null : settings.CookieDomain,
         Expires = expiresAt,
         HttpOnly = true,
         IsEssential = true,
@@ -110,6 +124,15 @@ internal sealed class SessionService(
         SameSite = SameSiteMode.Lax,
         Secure = true
     };
+
+    /// <summary>Finds the account of the session cookie of a request.</summary>
+    /// <param name="context">The request.</param>
+    /// <returns>The account, or <see langword="null"/> without a valid session.</returns>
+    public ValueTask<AccountRecord?> AuthenticateAsync(HttpContext context)
+    {
+        context.Request.Cookies.TryGetValue(CookieName, out string? token);
+        return AuthenticateAsync(token, context.RequestAborted);
+    }
 
     /// <summary>Name of the session cookie.</summary>
     public string CookieName => settings.CookieName;

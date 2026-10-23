@@ -49,8 +49,10 @@ internal sealed class AccountApiFactory(
         // Progmasoft OAuth reads its host while services are registered, like the Google client above. Its own host
         // keeps the host filter honest: the account API answers on localhost, OAuth on oauth.localhost.
         builder.UseSetting("OAuth:Host", OAuthHost);
+        builder.UseSetting("OAuth:AuthorizeHost", AuthorizeHost);
+        builder.UseSetting("OAuth:ConsoleHost", ConsoleHost);
         builder.UseSetting("AllowedHosts",
-            $"localhost;127.0.0.1;progmasoft.com;account.progmasoft.com;www.progmasoft.com;{OAuthHost}");
+            $"localhost;127.0.0.1;progmasoft.com;account.progmasoft.com;www.progmasoft.com;{OAuthHost};{AuthorizeHost};{ConsoleHost}");
         if (oauthKeys && environment == "Production")
         {
             Directory.CreateDirectory(keyDirectory);
@@ -74,13 +76,19 @@ internal sealed class AccountApiFactory(
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["AccountSessions:LifetimeHours"] = "2",
-                ["AccountSessions:CookieName"] = "__Host-ProgmasoftSession"
+                ["AccountSessions:CookieName"] = "__Host-ProgmasoftSession",
+                // A host-only cookie: the console tests send the account session themselves.
+                ["AccountSessions:CookieDomain"] = string.Empty
             });
         });
     }
 
     /// <summary>The host Progmasoft OAuth answers on in the tests.</summary>
     public const string OAuthHost = "oauth.localhost";
+
+    public const string AuthorizeHost = "authorize.localhost";
+
+    public const string ConsoleHost = "console.localhost";
 
     /// <summary>A client of the OAuth host that keeps its cookies and does not follow redirections.</summary>
     public HttpClient CreateOAuthClient() => CreateClient(
@@ -90,6 +98,35 @@ internal sealed class AccountApiFactory(
             BaseAddress = new Uri($"https://{OAuthHost}"),
             HandleCookies = true
         });
+
+    /// <summary>A browser on the authorize host: sign-in, consent and the allowed applications.</summary>
+    public HttpClient CreateAuthorizeClient() => CreateClient(
+        new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri($"https://{AuthorizeHost}"),
+            HandleCookies = true
+        });
+
+    /// <summary>
+    /// A browser on the Progmasoft Console. Production shares the account session cookie with progmasoft.com; the
+    /// test hosts are not under one domain, so a test sends the session cookie of an account itself.
+    /// </summary>
+    public HttpClient CreateConsoleClient(string? sessionCookie = null)
+    {
+        HttpClient client = CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri($"https://{ConsoleHost}"),
+            HandleCookies = false
+        });
+        if (sessionCookie is not null)
+        {
+            client.DefaultRequestHeaders.Add("Cookie", sessionCookie);
+        }
+
+        return client;
+    }
 
     protected override void Dispose(bool disposing)
     {

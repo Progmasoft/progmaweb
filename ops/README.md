@@ -113,10 +113,19 @@ the DNS, TLS, OpenDKIM, Postfix, Dovecot, sender-login, filesystem-permission, a
 
 ## Progmasoft OAuth
 
-The account API also serves Progmasoft OAuth, the OAuth 2.1 and OpenID Connect provider, on
-`credentials.progmasoft.com` (see [OAuth](../docs/OAUTH.md)). Nginx sends every path of that host to the API; the API
-answers OAuth paths only there and nothing else there. The OAuth tables (`oauth_*`) live in the account database and
-are created by the API at start, like the account tables.
+The account API also serves Progmasoft OAuth, the OAuth 2.1 and OpenID Connect provider (see
+[OAuth](../docs/OAUTH.md)), on three hosts. Nginx sends their API paths to the account API and every other path to the
+Next.js site:
+
+| Host | To the account API | Next.js pages |
+| --- | --- | --- |
+| `credentials.progmasoft.com` (issuer) | `/connect`, `/.well-known`, `/api` | the home page |
+| `authorize.progmasoft.com` | `/connect`, `/api` | sign-in, consent, allowed applications |
+| `console.progmasoft.com` | `/api` | the Progmasoft Console |
+
+The API answers only the paths of each host there. The console uses the account session, whose cookie production
+shares with `progmasoft.com` (`AccountSessions__CookieDomain`, set in `appsettings.json`). The OAuth tables
+(`oauth_*`) live in the account database and are created by the API at start, like the account tables.
 
 Production needs two keys, kept outside the releases so that tokens survive a release and a restart:
 
@@ -139,5 +148,6 @@ The service refuses to start in production without them. Replacing the signing k
 clients still hold; replacing the encryption key invalidates every access token, authorization code and refresh
 token, so every application has to ask again. Back up both files with the database.
 
-The certificate of `progmasoft.com` must name `credentials.progmasoft.com` as well; expand it with certbot's webroot
-plugin before the vhost is enabled, then check `/.well-known/openid-configuration` and the sign-in page from outside.
+The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `authorize.progmasoft.com` and
+`console.progmasoft.com` as well; expand it with certbot's webroot plugin before the vhosts are enabled, then check
+`/.well-known/openid-configuration`, the sign-in page and the console from outside.

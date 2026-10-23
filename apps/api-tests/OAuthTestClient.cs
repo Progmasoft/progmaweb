@@ -6,18 +6,29 @@ using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Progmasoft.Progmaweb.Api.Tests;
 
 /// <summary>An account holder in a browser on the OAuth host, and a developer's client application.</summary>
-/// <remarks>The pages are plain HTML forms; this fills them the way a browser would.</remarks>
-internal sealed partial class OAuthTestClient(AccountApiFactory factory)
+/// <remarks>
+/// The pages of the OAuth host are Next.js pages that call the JSON endpoints under <c>/api/v1/oauth</c> and post
+/// the consent decision to <c>/connect/authorize</c>; this makes the same requests, with the <c>Origin</c> header a
+/// browser sends.
+/// </remarks>
+internal sealed class OAuthTestClient(AccountApiFactory factory)
 {
     public const string RedirectUri = "https://client.example/callback";
 
-    public HttpClient Browser { get; } = factory.CreateOAuthClient();
+    public const string Origin = $"https://{AccountApiFactory.AuthorizeHost}";
+
+    public const string ConsoleOrigin = $"https://{AccountApiFactory.ConsoleHost}";
+
+    /// <summary>The browser on the authorize host, where people sign in and decide.</summary>
+    public HttpClient Browser { get; } = factory.CreateAuthorizeClient();
+
+    /// <summary>The same browser on the Progmasoft Console, signed in with the Progmasoft account session.</summary>
+    public HttpClient Console { get; private set; } = factory.CreateConsoleClient();
 
     private static CancellationToken Cancel => TestContext.Current.CancellationToken;
 
@@ -28,68 +39,67 @@ internal sealed partial class OAuthTestClient(AccountApiFactory factory)
         HttpResponseMessage registered = await accounts.PostAsJsonAsync("/api/v1/accounts/register",
             new { accountName, email, password = "correct horse battery staple" }, Cancel);
         Assert.Equal(HttpStatusCode.Created, registered.StatusCode);
+        // The console knows the account of the Progmasoft account session; it has no sign-in of its own.
+        string session = registered.Headers.GetValues("Set-Cookie")
+            .Single(cookie => cookie.StartsWith("__Host-ProgmasoftSession=", StringComparison.Ordinal))
+            .Split(';')[0];
+        Console = factory.CreateConsoleClient(session);
 
-        HttpResponseMessage signedIn = await SubmitAsync("/signin", "/signin", new Dictionary<string, string>
-        {
-            ["email"] = email,
-            ["password"] = "correct horse battery staple",
-            ["returnUrl"] = "/"
-        });
-        Assert.Equal(HttpStatusCode.Redirect, signedIn.StatusCode);
+        HttpResponseMessage signedIn = await SendAsync(HttpMethod.Post, "/api/v1/oauth/signin",
+            new { email, password = "correct horse battery staple" });
+        Assert.Equal(HttpStatusCode.OK, signedIn.StatusCode);
         return accountName;
     }
 
-    /// <summary>Registers an application in the developer portal and returns its identifier and secret.</summary>
+    /// <summary>Makes a token in the developer portal and returns its identifier and secret.</summary>
     public async Task<(string ClientId, string? Secret)> RegisterApplicationAsync(
         string scopes = "profile email offline_access viget.packages.read",
-        bool isPublic = false,
-        bool clientCredentials = false,
+        string kind = "web",
         string redirectUris = RedirectUri)
     {
-        List<KeyValuePair<string, string>> fields =
-        [
-            new("displayName", "Example Client"),
-            new("homepage", "https://client.example"),
-            new("clientType", isPublic ? "public" : "confidential"),
-            new("redirectUris", redirectUris),
-            new("postLogoutRedirectUris", "https://client.example/signed-out")
-        ];
-        fields.AddRange(scopes.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-            .Select(scope => new KeyValuePair<string, string>("scope", scope)));
-        if (clientCredentials)
+        HttpResponseMessage response = await SendAsync(HttpMethod.Post, "/api/v1/oauth/applications", new
         {
-            fields.Add(new("allowClientCredentials", "on"));
+            kind,
+            displayName = "Example Client",
+            homepage = "https://client.example",
+            redirectUris = redirectUris.Split('\n', StringSplitOptions.RemoveEmptyEntries),
+            postLogoutRedirectUris = kind is "web" or "spa" ? new List<string> { "https://client.example/signed-out" } : [],
+            scopes = scopes.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        });
+        JsonElement body = await response.Content.ReadFromJsonAsync<JsonElement>(Cancel);
+        Assert.True(response.StatusCode == HttpStatusCode.Created, body.ToString());
+        string clientId = body.GetProperty("application").GetProperty("clientId").GetString()!;
+        Assert.StartsWith("pmo_", clientId, StringComparison.Ordinal);
+        JsonElement secret = body.GetProperty("clientSecret");
+        return (clientId, secret.ValueKind == JsonValueKind.Null ? null : secret.GetString());
+    }
+
+    /// <summary>Makes a service token, which acts as itself with the client credentials grant.</summary>
+    public Task<(string ClientId, string? Secret)> RegisterServiceAsync() =>
+        RegisterApplicationAsync(scopes: string.Empty, kind: "service", redirectUris: string.Empty);
+
+    /// <summary>
+    /// Sends a request of a page, with a JSON body when one is given. Applications are managed in the console; every
+    /// other path belongs to the OAuth host. The origin is the page's own unless another one is given.
+    /// </summary>
+    public Task<HttpResponseMessage> SendAsync(HttpMethod method, string path, object? body = null,
+        string? origin = "", HttpClient? host = null)
+    {
+        host ??= path.StartsWith("/api/v1/oauth/applications", StringComparison.Ordinal) ? Console : Browser;
+        HttpRequestMessage request = new(method, path);
+        origin = origin == "" ? (host == Console ? ConsoleOrigin : Origin) : origin;
+        if (origin is not null)
+        {
+            request.Headers.Add("Origin", origin);
         }
 
-        HttpResponseMessage response = await SubmitAsync("/developers/new", "/developers/new", fields);
-        string html = await response.Content.ReadAsStringAsync(Cancel);
-        Assert.True(response.StatusCode == HttpStatusCode.OK, html);
-        MatchCollection codes = CodePattern().Matches(html);
-        string clientId = codes[0].Groups[1].Value;
-        Assert.StartsWith("pmo_", clientId, StringComparison.Ordinal);
-        return (clientId, isPublic ? null : HttpUtility.HtmlDecode(codes[1].Groups[1].Value));
+        if (body is not null)
+        {
+            request.Content = JsonContent.Create(body);
+        }
+
+        return host.SendAsync(request, Cancel);
     }
-
-    /// <summary>Loads a page with a form, then posts the form with the given fields and its token.</summary>
-    public async Task<HttpResponseMessage> SubmitAsync(
-        string page,
-        string action,
-        IEnumerable<KeyValuePair<string, string>> fields)
-    {
-        string html = await (await Browser.GetAsync(page, Cancel)).Content.ReadAsStringAsync(Cancel);
-        return await Browser.PostAsync(action, new FormUrlEncodedContent(
-            fields.Append(new("form-token", FormToken(html)))), Cancel);
-    }
-
-    /// <summary>The token of the first form of a page.</summary>
-    public static string FormToken(string html) =>
-        HttpUtility.HtmlDecode(TokenPattern().Match(html).Groups[1].Value);
-
-    /// <summary>Every hidden field of the first form of a page, the token included.</summary>
-    public static List<KeyValuePair<string, string>> HiddenFields(string html) => HiddenPattern().Matches(html)
-        .Select(match => new KeyValuePair<string, string>(
-            HttpUtility.HtmlDecode(match.Groups[1].Value), HttpUtility.HtmlDecode(match.Groups[2].Value)))
-        .ToList();
 
     /// <summary>A PKCE verifier and its S256 challenge.</summary>
     public static (string Verifier, string Challenge) Pkce()
@@ -118,22 +128,50 @@ internal sealed partial class OAuthTestClient(AccountApiFactory factory)
             .Select(pair => $"{pair.Key}={Uri.EscapeDataString(pair.Value!)}"));
     }
 
-    /// <summary>Asks for an authorization and allows it on the consent page; returns the redirection.</summary>
-    public async Task<Uri> AuthorizeAsync(string clientId, string scope, string challenge, string decision = "allow")
+    /// <summary>
+    /// Asks for an authorization and decides on the consent page; returns where the browser is sent at the end.
+    /// </summary>
+    public async Task<Uri> AuthorizeAsync(string clientId, string scope, string challenge, string decision = "allow",
+        string redirectUri = RedirectUri)
     {
-        HttpResponseMessage consent = await Browser.GetAsync(AuthorizePath(clientId, scope, challenge), Cancel);
-        if (consent.StatusCode == HttpStatusCode.Redirect)
+        HttpResponseMessage response = await Browser.GetAsync(
+            AuthorizePath(clientId, scope, challenge, redirectUri), Cancel);
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Uri location = response.Headers.Location!;
+        if (!IsConsentPage(location))
         {
-            return consent.Headers.Location!;
+            return location;
         }
 
-        string html = await consent.Content.ReadAsStringAsync(Cancel);
-        Assert.True(consent.StatusCode == HttpStatusCode.OK, html);
-        List<KeyValuePair<string, string>> fields = HiddenFields(html);
-        fields.Add(new("decision", decision));
-        HttpResponseMessage decided = await Browser.PostAsync("/connect/authorize", new FormUrlEncodedContent(fields), Cancel);
+        HttpResponseMessage described = await Browser.GetAsync("/api/v1/oauth/consent" + location.OriginalString[
+            "/consent".Length..], Cancel);
+        Assert.True(described.StatusCode == HttpStatusCode.OK, await described.Content.ReadAsStringAsync(Cancel));
+        HttpResponseMessage decided = await DecideAsync(location, decision);
         Assert.Equal(HttpStatusCode.Redirect, decided.StatusCode);
         return decided.Headers.Location!;
+    }
+
+    /// <summary>Whether an address is the consent page of the OAuth host.</summary>
+    public static bool IsConsentPage(Uri location) =>
+        !location.IsAbsoluteUri && location.OriginalString.StartsWith("/consent?", StringComparison.Ordinal);
+
+    /// <summary>Posts the decision of the consent page back to the authorization endpoint, as its form does.</summary>
+    public Task<HttpResponseMessage> DecideAsync(Uri consentPage, string decision, string? origin = Origin)
+    {
+        var query = HttpUtility.ParseQueryString(consentPage.OriginalString["/consent".Length..]);
+        List<KeyValuePair<string, string>> fields =
+            query.AllKeys.Select(key => new KeyValuePair<string, string>(key!, query[key]!)).ToList();
+        fields.Add(new("decision", decision));
+        HttpRequestMessage request = new(HttpMethod.Post, "/connect/authorize")
+        {
+            Content = new FormUrlEncodedContent(fields)
+        };
+        if (origin is not null)
+        {
+            request.Headers.Add("Origin", origin);
+        }
+
+        return Browser.SendAsync(request, Cancel);
     }
 
     /// <summary>Posts to the token endpoint as a client would, from outside the browser.</summary>
@@ -157,13 +195,4 @@ internal sealed partial class OAuthTestClient(AccountApiFactory factory)
 
     private static string Base64Url(byte[] bytes) =>
         Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
-
-    [GeneratedRegex("name=\"form-token\" value=\"([^\"]*)\"")]
-    private static partial Regex TokenPattern();
-
-    [GeneratedRegex("<input type=\"hidden\" name=\"([^\"]*)\" value=\"([^\"]*)\">")]
-    private static partial Regex HiddenPattern();
-
-    [GeneratedRegex("<code>([^<]*)</code>")]
-    private static partial Regex CodePattern();
 }

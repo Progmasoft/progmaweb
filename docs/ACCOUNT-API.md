@@ -120,8 +120,13 @@ to `/login?google=failed`, and the callback path is not a route.
 
 | Cookie | Purpose | Attributes |
 | --- | --- | --- |
-| `__Host-ProgmasoftSession` | the account session | `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, expires with the session |
+| `__Secure-ProgmasoftSession` | the account session | `HttpOnly`, `Secure`, `SameSite=Lax`, `Path=/`, `Domain=progmasoft.com`, expires with the session |
 | `__Host-ProgmasoftExternal` | carries the Google identity between callback and completion | `HttpOnly`, `Secure`, `SameSite=Lax`, ten minutes |
+
+In production the session cookie is shared with `progmasoft.com`, so that the Progmasoft Console on
+`console.progmasoft.com` knows the signed-in account without a sign-in of its own; a cookie with a domain takes the
+`__Secure-` prefix instead of `__Host-`. Without `AccountSessions:CookieDomain` the cookie belongs to the account host
+alone and keeps the `__Host-` name.
 
 A session token is 256 random bits. The service stores only its SHA-256 digest, so a copy of the store does not
 contain a usable token. A session lasts 30 days (720 hours) from the sign-in, whether the account signed in with a
@@ -143,7 +148,8 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 | Setting | Meaning | Default |
 | --- | --- | --- |
 | `AccountSessions:LifetimeHours` | hours a session stays valid, clamped to 1–720 | `720` |
-| `AccountSessions:CookieName` | name of the session cookie | `__Host-ProgmasoftSession` |
+| `AccountSessions:CookieName` | name of the session cookie | `__Host-ProgmasoftSession`; production `__Secure-ProgmasoftSession` |
+| `AccountSessions:CookieDomain` | domain the session cookie is shared with | none; production `progmasoft.com` |
 | `Authentication:Google:ClientId` | Google OAuth client identifier | empty; Google sign-in is off |
 | `Authentication:Google:ClientSecret` | Google OAuth client secret | empty; Google sign-in is off |
 | `AllowedHosts` | host names the service answers | see `appsettings.json` |

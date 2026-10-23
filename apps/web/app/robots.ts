@@ -9,6 +9,15 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   const host =
     requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "";
   const canonicalHost = host.split(":", 1)[0]?.toLowerCase();
+  // Progmasoft OAuth and the Progmasoft Console have sign-in, consent and
+  // developer pages only; none of them is a search document.
+  if (
+    canonicalHost === "credentials.progmasoft.com" ||
+    canonicalHost === "authorize.progmasoft.com" ||
+    canonicalHost === "console.progmasoft.com"
+  ) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
   const sitemap =
     canonicalHost === "viget.progmasoft.com"
       ? "https://viget.progmasoft.com/sitemap.xml"

@@ -9,8 +9,23 @@ internal sealed class OAuthOptions
     /// <summary>The configuration section of these settings.</summary>
     public const string SectionName = "OAuth";
 
-    /// <summary>The host name Progmasoft OAuth answers on; the issuer is <c>https://{Host}/</c>.</summary>
+    /// <summary>
+    /// The host name of the issuer, <c>https://{Host}/</c>: the discovery documents, the key set and the endpoints
+    /// clients call directly (token, user information, revocation, introspection).
+    /// </summary>
     public string Host { get; set; } = "credentials.progmasoft.com";
+
+    /// <summary>
+    /// The host name of the pages people see: the authorization endpoint with its sign-in and consent screen, the end
+    /// session endpoint, and the applications an account has allowed.
+    /// </summary>
+    public string AuthorizeHost { get; set; } = "authorize.progmasoft.com";
+
+    /// <summary>
+    /// The host name of the Progmasoft Cloud Console, where developers make and manage the tokens of their
+    /// applications. It has its own sign-in; the protocol endpoints stay on <see cref="Host"/>.
+    /// </summary>
+    public string ConsoleHost { get; set; } = "console.progmasoft.com";
 
     /// <summary>
     /// PEM file with the RSA private key that signs identity and access tokens. Required in production; other
