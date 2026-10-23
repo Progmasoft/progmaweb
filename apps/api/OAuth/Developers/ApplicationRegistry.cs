@@ -15,22 +15,24 @@ namespace Progmasoft.OAuth.Developers;
 /// <param name="ClientId">The public identifier of the client.</param>
 /// <param name="DisplayName">The name the consent page shows.</param>
 /// <param name="Homepage">The address of the application's site, or empty.</param>
-/// <param name="IsPublic">Whether the client has no secret.</param>
+/// <param name="Kind">The type chosen when the token was made.</param>
 /// <param name="RedirectUris">The registered redirection addresses.</param>
 /// <param name="PostLogoutRedirectUris">The registered end-session addresses.</param>
 /// <param name="Scopes">The scopes the application may request.</param>
-/// <param name="AllowClientCredentials">Whether the client credentials grant is allowed.</param>
 /// <param name="CreatedAt">When the application was registered.</param>
 internal sealed record RegisteredApplication(
     string ClientId,
     string DisplayName,
     string Homepage,
-    bool IsPublic,
+    ApplicationKind Kind,
     IReadOnlyList<string> RedirectUris,
     IReadOnlyList<string> PostLogoutRedirectUris,
     IReadOnlyList<string> Scopes,
-    bool AllowClientCredentials,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt)
+{
+    /// <summary>Whether the client has no secret.</summary>
+    public bool IsPublic => Kind.IsPublic();
+}
 
 /// <summary>What registering an application produced.</summary>
 /// <param name="Application">The application, or <see langword="null"/> when it was refused.</param>
@@ -59,6 +61,9 @@ internal sealed class ApplicationRegistry(
     /// <summary>The property of the application that keeps its homepage.</summary>
     private const string HomepageProperty = "homepage";
 
+    /// <summary>The property of the application that keeps its <see cref="ApplicationKind"/>.</summary>
+    internal const string KindProperty = "kind";
+
     /// <summary>Lists the applications of an account, newest first.</summary>
     /// <param name="accountId">The owner.</param>
     /// <param name="cancellationToken">Cancels the operation.</param>
@@ -67,10 +72,10 @@ internal sealed class ApplicationRegistry(
     {
         List<ApplicationOwner> owned = await database.ApplicationOwners
             .Where(owner => owner.AccountId == accountId)
-            .OrderByDescending(owner => owner.CreatedAt)
             .ToListAsync(cancellationToken);
         List<RegisteredApplication> result = [];
-        foreach (ApplicationOwner owner in owned)
+        // At most MaximumApplicationsPerAccount rows: ordered here, as SQLite cannot order by DateTimeOffset.
+        foreach (ApplicationOwner owner in owned.OrderByDescending(owner => owner.CreatedAt))
         {
             if (await applications.FindByIdAsync(owner.ApplicationId, cancellationToken) is { } application)
             {
@@ -127,7 +132,7 @@ internal sealed class ApplicationRegistry(
         }
 
         string clientId = "pmo_" + RandomText(15);
-        string? secret = input.IsPublic ? null : RandomText(32);
+        string? secret = input.Kind.IsPublic() ? null : RandomText(32);
         OpenIddictApplicationDescriptor descriptor = new()
         {
             ClientId = clientId,
@@ -151,7 +156,7 @@ internal sealed class ApplicationRegistry(
     /// <summary>Changes an application of an account. The client identifier, type and secret stay.</summary>
     /// <param name="accountId">The account that asks.</param>
     /// <param name="clientId">The client identifier.</param>
-    /// <param name="input">The new settings; <see cref="ApplicationInput.IsPublic"/> is ignored.</param>
+    /// <param name="input">The new settings; <see cref="ApplicationInput.Kind"/> is ignored.</param>
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>The refused fields, empty on success, or <see langword="null"/> when the application is absent.</returns>
     public async Task<IReadOnlyDictionary<string, string>?> UpdateAsync(
@@ -165,8 +170,8 @@ internal sealed class ApplicationRegistry(
             return null;
         }
 
-        bool isPublic = await applications.HasClientTypeAsync(found.application, ClientTypes.Public, cancellationToken);
-        ApplicationInput effective = input with { IsPublic = isPublic };
+        ApplicationKind kind = await KindOfAsync(found.application, cancellationToken);
+        ApplicationInput effective = input with { Kind = kind };
         Dictionary<string, string> errors = ApplicationPolicy.Validate(effective);
         if (errors.Count != 0)
         {
@@ -241,12 +246,16 @@ internal sealed class ApplicationRegistry(
     /// <param name="input">The validated submission.</param>
     private static void Describe(OpenIddictApplicationDescriptor descriptor, ApplicationInput input)
     {
+        ApplicationKind kind = input.Kind;
         descriptor.DisplayName = input.DisplayName.Trim();
-        descriptor.ApplicationType = input.IsPublic ? ApplicationTypes.Native : ApplicationTypes.Web;
-        descriptor.ClientType = input.IsPublic ? ClientTypes.Public : ClientTypes.Confidential;
+        descriptor.ApplicationType = kind is ApplicationKind.Desktop or ApplicationKind.Mobile
+            ? ApplicationTypes.Native
+            : ApplicationTypes.Web;
+        descriptor.ClientType = kind.IsPublic() ? ClientTypes.Public : ClientTypes.Confidential;
         // Every client of Progmasoft OAuth shows the consent page: none is trusted by default.
         descriptor.ConsentType = ConsentTypes.Explicit;
         descriptor.Properties[HomepageProperty] = JsonSerializer.SerializeToElement(input.Homepage.Trim());
+        descriptor.Properties[KindProperty] = JsonSerializer.SerializeToElement(kind.Slug());
 
         descriptor.RedirectUris.Clear();
         foreach (string uri in input.RedirectUris)
@@ -261,6 +270,20 @@ internal sealed class ApplicationRegistry(
         }
 
         descriptor.Permissions.Clear();
+        descriptor.Requirements.Clear();
+        if (!kind.SignsPeopleIn())
+        {
+            // A service only asks the token endpoint for tokens that name itself; it never reaches the sign-in page.
+            descriptor.Permissions.UnionWith(
+            [
+                Permissions.Endpoints.Token,
+                Permissions.Endpoints.Revocation,
+                Permissions.Endpoints.Introspection,
+                Permissions.GrantTypes.ClientCredentials
+            ]);
+            return;
+        }
+
         descriptor.Permissions.UnionWith(
         [
             Permissions.Endpoints.Authorization,
@@ -270,7 +293,7 @@ internal sealed class ApplicationRegistry(
             Permissions.GrantTypes.AuthorizationCode,
             Permissions.ResponseTypes.Code
         ]);
-        if (!input.IsPublic)
+        if (!kind.IsPublic())
         {
             descriptor.Permissions.Add(Permissions.Endpoints.Introspection);
         }
@@ -280,18 +303,32 @@ internal sealed class ApplicationRegistry(
             descriptor.Permissions.Add(Permissions.GrantTypes.RefreshToken);
         }
 
-        if (input.AllowClientCredentials)
-        {
-            descriptor.Permissions.Add(Permissions.GrantTypes.ClientCredentials);
-        }
-
         foreach (string scope in input.Scopes)
         {
             descriptor.Permissions.Add(Permissions.Prefixes.Scope + scope);
         }
 
-        descriptor.Requirements.Clear();
         descriptor.Requirements.Add(Requirements.Features.ProofKeyForCodeExchange);
+    }
+
+    /// <summary>Reads the type of a stored application.</summary>
+    /// <param name="application">The application.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The type it was registered with.</returns>
+    internal async Task<ApplicationKind> KindOfAsync(object application, CancellationToken cancellationToken)
+    {
+        var properties = await applications.GetPropertiesAsync(application, cancellationToken);
+        if (properties.TryGetValue(KindProperty, out JsonElement value) && value.ValueKind is JsonValueKind.String
+            && ApplicationKinds.Parse(value.GetString()) is { } kind)
+        {
+            return kind;
+        }
+
+        // An application stored before types existed: a public client was a native application, a confidential one
+        // a web application.
+        return await applications.HasClientTypeAsync(application, ClientTypes.Public, cancellationToken)
+            ? ApplicationKind.Desktop
+            : ApplicationKind.Web;
     }
 
     /// <summary>Reads an application into the view of the developer portal.</summary>
@@ -310,7 +347,7 @@ internal sealed class ApplicationRegistry(
             (await applications.GetClientIdAsync(application, cancellationToken))!,
             await applications.GetDisplayNameAsync(application, cancellationToken) ?? string.Empty,
             homepage,
-            await applications.HasClientTypeAsync(application, ClientTypes.Public, cancellationToken),
+            await KindOfAsync(application, cancellationToken),
             (await applications.GetRedirectUrisAsync(application, cancellationToken)).Order(StringComparer.Ordinal).ToList(),
             (await applications.GetPostLogoutRedirectUrisAsync(application, cancellationToken))
                 .Order(StringComparer.Ordinal).ToList(),
@@ -318,7 +355,6 @@ internal sealed class ApplicationRegistry(
                 .Where(scope => permissions.Contains(Permissions.Prefixes.Scope + scope.Name))
                 .Select(scope => scope.Name)
                 .ToList(),
-            permissions.Contains(Permissions.GrantTypes.ClientCredentials),
             createdAt);
     }
 

@@ -118,6 +118,8 @@ app.UseHttpsRedirection();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 // Before authentication, where OpenIddict answers its own endpoints: OAuth only on its host, and nothing else there.
 app.UseMiddleware<OAuthHostFilter>();
+// Single-page applications call the token endpoints from the browser; see OAuth/Api/OAuthCors.cs.
+app.UseMiddleware<Progmasoft.OAuth.Api.OAuthCors>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();

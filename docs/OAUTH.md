@@ -4,50 +4,71 @@
 # Progmasoft OAuth
 
 Progmasoft OAuth lets any application sign people in with their Progmasoft account and, with their consent, act on
-their behalf. It is an OAuth 2.1 authorization server and an OpenID Connect provider at
-`https://credentials.progmasoft.com/`. Any developer with a Progmasoft account can register applications.
+their behalf. It is an OAuth 2.1 authorization server and an OpenID Connect provider on three hosts:
 
-## Register an application
-
-Sign in at `https://credentials.progmasoft.com/developers` and register the application:
-
-| Field | Meaning |
+| Host | Serves |
 | --- | --- |
-| Type | **Confidential** for a server that keeps a client secret; **public** for a browser or native application, which has no secret. The type cannot change later. |
-| Name | What the consent page shows, 3 to 64 characters. |
-| Homepage | Optional, `https://` only. |
-| Redirection addresses | Up to 10, compared exactly. `https://` addresses; `http://` only for a loopback address (`127.0.0.1`, `[::1]`, `localhost`); for public clients also a private-use scheme in reverse DNS order, such as `com.example.app:/callback` (RFC 8252). No fragments, user information or wildcards. |
-| Addresses after sign-out | Optional, the same rules; where `/connect/logout` may send the account holder. |
-| Scopes | The scopes the application may request; see below. |
-| Service access | Allows the client credentials grant; confidential clients only. |
+| `credentials.progmasoft.com` | The issuer (`https://credentials.progmasoft.com/`): discovery documents, key set, and the endpoints clients call directly |
+| `authorize.progmasoft.com` | The pages people see: the authorization endpoint with sign-in and the consent screen, the end session endpoint, and the applications an account has allowed |
+| `console.progmasoft.com` | The Progmasoft Console, where developers make tokens for their applications |
 
-The portal shows the client identifier (`pmo_…`) and, for a confidential client, the client secret. The secret is
-shown once and stored only as a hash; make a new one in the portal if it is lost. An account can register 10
-applications. Deleting an application ends every authorization and token it holds.
+The console has no sign-in of its own: it uses the Progmasoft account session of `account.progmasoft.com`, so any
+developer signed in to their Progmasoft account can make tokens there.
+
+## Make a token
+
+Open **OAuth 2.1 tokens** in the console (`/credentials`), choose **New token**, then the type of the application. The type decides how the application
+proves itself, which grants it may use and where people may return; it cannot change later.
+
+| Type | For | Secret | Grants | Redirection addresses |
+| --- | --- | --- | --- | --- |
+| Web application | A site with a server | Yes | Authorization code + PKCE, refresh | `https://`; `http://` loopback during development |
+| Single-page application | A browser application without a server | No | Authorization code + PKCE, refresh | `https://`; `http://` loopback during development |
+| Desktop application | A desktop or command-line program | No | Authorization code + PKCE, refresh | `http://` loopback (`127.0.0.1`, `[::1]`, `localhost`) or a private-use scheme |
+| Mobile application | An iOS or Android application | No | Authorization code + PKCE, refresh | A private-use scheme or a claimed `https://` address |
+| Service | A server that acts as itself | Yes | Client credentials | None |
+
+A private-use scheme names the application in reverse DNS order, such as `com.example.app:/callback` (RFC 8252).
+Addresses are compared exactly; fragments, user information and wildcards are refused. Up to 10 redirection addresses
+and 10 addresses after sign-out (where `/connect/logout` may send the account holder) are registered per application.
+
+Every type but a service also lists the scopes the application may request (see below); each person still decides on
+the consent page. The name (3 to 64 characters) is what the consent page shows; the homepage is optional and
+`https://` only.
+
+The console shows the client identifier (`pmo_…`) and, for a type with a secret, the client secret. The secret is
+shown once and stored only as a hash; make a new one in the console if it is lost. An account can have 10 tokens.
+Deleting an application ends every authorization and token it holds.
+
+### Single-page applications
+
+The token, revocation and user information endpoints answer CORS requests from the origins of the redirection
+addresses that single-page applications registered, without credentials. The discovery documents and the key set
+answer every origin.
 
 ## Endpoints
 
 The discovery documents list everything: `/.well-known/openid-configuration` and
 `/.well-known/oauth-authorization-server`.
 
-| Endpoint | Path |
+| Endpoint | Address |
 | --- | --- |
-| Authorization | `/connect/authorize` |
-| Token | `/connect/token` |
-| User information | `/connect/userinfo` |
-| End session | `/connect/logout` |
-| Revocation | `/connect/revoke` |
-| Introspection | `/connect/introspect` (confidential clients) |
-| Key set | `/.well-known/jwks` |
+| Authorization | `https://authorize.progmasoft.com/connect/authorize` |
+| End session | `https://authorize.progmasoft.com/connect/logout` |
+| Token | `https://credentials.progmasoft.com/connect/token` |
+| User information | `https://credentials.progmasoft.com/connect/userinfo` |
+| Revocation | `https://credentials.progmasoft.com/connect/revoke` |
+| Introspection | `https://credentials.progmasoft.com/connect/introspect` (web applications and services) |
+| Key set | `https://credentials.progmasoft.com/.well-known/jwks` |
 
 ## Flows
 
-- **Authorization code with PKCE**, for every client. `code_challenge_method` must be `S256`; requests without a
-  challenge, and `plain` challenges, are refused. Confidential clients also authenticate at the token endpoint with
-  their secret (`client_secret_post` or `client_secret_basic`).
+- **Authorization code with PKCE**, for every type but a service. `code_challenge_method` must be `S256`; requests
+  without a challenge, and `plain` challenges, are refused. Web applications also authenticate at the token endpoint
+  with their secret (`client_secret_post` or `client_secret_basic`).
 - **Refresh tokens**, with `offline_access`. Each refresh returns a new refresh token and retires the old one. A
   retired refresh token that is presented again is treated as stolen: the whole chain of tokens is revoked.
-- **Client credentials**, when allowed. The token names the application itself (`sub` is the client identifier) and
+- **Client credentials**, for services. The token names the application itself (`sub` is the client identifier) and
   carries no account scope.
 
 The implicit grant, the resource owner password grant and the device flow are not offered.
@@ -77,7 +98,7 @@ the application's name, the account that registered it, and the host the account
 that already holds consent for the requested scopes gets its code without the page, unless it sends
 `prompt=consent`. `prompt=none` returns `login_required` or `consent_required` instead of showing a page.
 
-Account holders review and withdraw consent at `https://credentials.progmasoft.com/account/applications`.
+Account holders review and withdraw consent at `https://authorize.progmasoft.com/account/applications`.
 Withdrawing ends the application's tokens at once.
 
 ## Tokens
@@ -95,5 +116,5 @@ their content.
 
 ## Limits
 
-The token endpoint, the authorization endpoint and the portal accept 60 requests a minute from one address; the
-sign-in form accepts 12 in three minutes. More are answered with 429.
+The token endpoint, the authorization endpoint and the console accept 60 requests a minute from one address; the
+sign-in forms accept 12 in three minutes. More are answered with 429.

@@ -152,12 +152,21 @@ public sealed class OAuthFlowTests
         Assert.Equal(HttpStatusCode.Redirect, again.StatusCode);
         Assert.NotNull(OAuthTestClient.Query(again.Headers.Location!, "code"));
 
-        string allowed = await browser.Browser.GetStringAsync("/account/applications", Cancel);
-        Assert.Contains("Example Client", allowed, StringComparison.Ordinal);
-        string action = System.Text.RegularExpressions.Regex.Match(allowed,
-            "action=\"(/account/applications/[^\"]+/revoke)\"").Groups[1].Value;
-        HttpResponseMessage withdrawn = await browser.SubmitAsync("/account/applications", action, []);
-        Assert.Equal(HttpStatusCode.Redirect, withdrawn.StatusCode);
+        JsonElement allowed = await (await browser.SendAsync(HttpMethod.Get, "/api/v1/oauth/allowed"))
+            .Content.ReadFromJsonAsync<JsonElement>(Cancel);
+        JsonElement entry = Assert.Single(allowed.EnumerateArray());
+        Assert.Equal("Example Client", entry.GetProperty("displayName").GetString());
+        string authorizationId = entry.GetProperty("authorizationId").GetString()!;
+        HttpResponseMessage foreign = await browser.SendAsync(HttpMethod.Delete,
+            $"/api/v1/oauth/allowed/{authorizationId}", origin: "https://attacker.example");
+        Assert.Equal(HttpStatusCode.Forbidden, foreign.StatusCode);
+        OAuthTestClient stranger = new(factory);
+        await stranger.RegisterAndSignInAsync("OAuthStranger4", "stranger4@example.com");
+        Assert.Equal(HttpStatusCode.NotFound, (await stranger.SendAsync(HttpMethod.Delete,
+            $"/api/v1/oauth/allowed/{authorizationId}")).StatusCode);
+        HttpResponseMessage withdrawn = await browser.SendAsync(HttpMethod.Delete,
+            $"/api/v1/oauth/allowed/{authorizationId}");
+        Assert.Equal(HttpStatusCode.NoContent, withdrawn.StatusCode);
 
         (HttpStatusCode refreshed, _) = await browser.TokenAsync(new Dictionary<string, string>
         {
@@ -191,16 +200,60 @@ public sealed class OAuthFlowTests
         (string clientId, _) = await browser.RegisterApplicationAsync(
             "profile email viget.packages.read viget.packages.publish viget.packages.yank");
 
-        HttpResponseMessage page = await browser.Browser.GetAsync(OAuthTestClient.AuthorizePath(clientId,
+        HttpResponseMessage authorize = await browser.Browser.GetAsync(OAuthTestClient.AuthorizePath(clientId,
             "openid profile email viget.packages.read viget.packages.publish viget.packages.yank",
             OAuthTestClient.Pkce().Challenge), Cancel);
-        string html = await page.Content.ReadAsStringAsync(Cancel);
-        Assert.Contains("Read your Progmasoft account name.", html, StringComparison.Ordinal);
-        Assert.Contains("Read the email address you sign in and registered with.", html, StringComparison.Ordinal);
-        Assert.Contains("Read the packages you have published on ViGet.", html, StringComparison.Ordinal);
-        Assert.Contains("Publish packages to ViGet under your account.", html, StringComparison.Ordinal);
-        Assert.Contains("Yank packages you have published on ViGet.", html, StringComparison.Ordinal);
-        Assert.Contains("registered by <strong>OAuthHolder6</strong>", html, StringComparison.Ordinal);
+        Uri consentPage = authorize.Headers.Location!;
+        Assert.True(OAuthTestClient.IsConsentPage(consentPage), consentPage.OriginalString);
+
+        JsonElement consent = await browser.Browser.GetFromJsonAsync<JsonElement>(
+            "/api/v1/oauth/consent" + consentPage.OriginalString["/consent".Length..], Cancel);
+        Assert.Equal(["profile", "email", "viget.packages.read", "viget.packages.publish", "viget.packages.yank"],
+            consent.GetProperty("scopes").EnumerateArray().Select(scope => scope.GetString()));
+        Assert.Equal("Example Client", consent.GetProperty("displayName").GetString());
+        Assert.Equal("OAuthHolder6", consent.GetProperty("owner").GetString());
+        Assert.Equal("OAuthHolder6", consent.GetProperty("accountName").GetString());
+        Assert.Equal("https://client.example", consent.GetProperty("returnTo").GetString());
+        Assert.Equal("https://client.example", consent.GetProperty("homepage").GetString());
+    }
+
+    [Fact]
+    public async Task TheConsentPageDescribesOnlyRequestsTheApplicationCouldMake()
+    {
+        await using AccountApiFactory factory = new();
+        OAuthTestClient browser = new(factory);
+        await browser.RegisterAndSignInAsync("OAuthHolder10", "holder10@example.com");
+        (string clientId, _) = await browser.RegisterApplicationAsync("profile");
+
+        string Query(string redirectUri, string scope) =>
+            $"/api/v1/oauth/consent?client_id={clientId}&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
+            $"&scope={Uri.EscapeDataString(scope)}";
+        Assert.Equal(HttpStatusCode.OK,
+            (await browser.Browser.GetAsync(Query(OAuthTestClient.RedirectUri, "openid profile"), Cancel)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest,
+            (await browser.Browser.GetAsync(Query("https://attacker.example/callback", "openid"), Cancel)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest,
+            (await browser.Browser.GetAsync(Query(OAuthTestClient.RedirectUri, "openid email"), Cancel)).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await browser.Browser.GetAsync(
+            "/api/v1/oauth/consent?client_id=pmo_missing&redirect_uri=https%3A%2F%2Fclient.example%2Fcallback",
+            Cancel)).StatusCode);
+    }
+
+    [Fact]
+    public async Task AConsentDecisionFromAnotherSiteIsRefused()
+    {
+        await using AccountApiFactory factory = new();
+        OAuthTestClient browser = new(factory);
+        await browser.RegisterAndSignInAsync("OAuthHolder11", "holder11@example.com");
+        (string clientId, _) = await browser.RegisterApplicationAsync("profile");
+
+        HttpResponseMessage authorize = await browser.Browser.GetAsync(
+            OAuthTestClient.AuthorizePath(clientId, "openid profile", OAuthTestClient.Pkce().Challenge), Cancel);
+        Uri consentPage = authorize.Headers.Location!;
+        HttpResponseMessage forged = await browser.DecideAsync(consentPage, "allow", "https://attacker.example");
+        Assert.Equal(HttpStatusCode.Forbidden, forged.StatusCode);
+        HttpResponseMessage blind = await browser.DecideAsync(consentPage, "allow", origin: null);
+        Assert.Equal(HttpStatusCode.Forbidden, blind.StatusCode);
     }
 
     [Fact]
@@ -244,19 +297,13 @@ public sealed class OAuthFlowTests
         await using AccountApiFactory factory = new();
         OAuthTestClient browser = new(factory);
         await browser.RegisterAndSignInAsync("OAuthHolder8", "holder8@example.com");
-        (string clientId, string? secret) = await browser.RegisterApplicationAsync("profile", isPublic: true,
+        (string clientId, string? secret) = await browser.RegisterApplicationAsync("profile", kind: "desktop",
             redirectUris: "com.example.app:/callback");
         Assert.Null(secret);
         (string verifier, string challenge) = OAuthTestClient.Pkce();
 
-        HttpResponseMessage page = await browser.Browser.GetAsync(OAuthTestClient.AuthorizePath(clientId,
-            "openid profile", challenge, "com.example.app:/callback"), Cancel);
-        string html = await page.Content.ReadAsStringAsync(Cancel);
-        List<KeyValuePair<string, string>> fields = OAuthTestClient.HiddenFields(html);
-        fields.Add(new("decision", "allow"));
-        HttpResponseMessage decided = await browser.Browser.PostAsync("/connect/authorize",
-            new FormUrlEncodedContent(fields), Cancel);
-        Uri redirect = decided.Headers.Location!;
+        Uri redirect = await browser.AuthorizeAsync(clientId, "openid profile", challenge,
+            redirectUri: "com.example.app:/callback");
         Assert.Equal("com.example.app", redirect.Scheme);
 
         (HttpStatusCode status, _) = await browser.TokenAsync(new Dictionary<string, string>
@@ -320,7 +367,7 @@ public sealed class OAuthFlowTests
         await using AccountApiFactory factory = new();
         OAuthTestClient browser = new(factory);
         await browser.RegisterAndSignInAsync("OAuthHolder9", "holder9@example.com");
-        (string clientId, string? secret) = await browser.RegisterApplicationAsync("profile", clientCredentials: true);
+        (string clientId, string? secret) = await browser.RegisterServiceAsync();
 
         (HttpStatusCode status, JsonElement token) = await browser.TokenAsync(new Dictionary<string, string>
         {
@@ -337,8 +384,10 @@ public sealed class OAuthFlowTests
             ["client_secret"] = secret!,
             ["scope"] = "profile"
         });
+        // A service has no scope permission at all, so OpenIddict refuses the scope before the handler sees it.
         Assert.Equal(HttpStatusCode.BadRequest, scoped);
-        Assert.Equal("invalid_scope", error.GetProperty("error").GetString());
+        Assert.Equal("invalid_request", error.GetProperty("error").GetString());
+        Assert.Contains("scope", error.GetProperty("error_description").GetString(), StringComparison.Ordinal);
 
         (HttpStatusCode wrongSecret, _) = await browser.TokenAsync(new Dictionary<string, string>
         {

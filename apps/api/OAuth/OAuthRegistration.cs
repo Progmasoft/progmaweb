@@ -78,10 +78,12 @@ internal static class OAuthRegistration
             .AddServer(server =>
             {
                 server.SetIssuer(settings.Issuer);
-                server.SetAuthorizationEndpointUris("connect/authorize")
+                // The endpoints a browser visits live on the authorize host, with the sign-in and consent pages;
+                // the discovery document names them with that host. The others stay under the issuer.
+                server.SetAuthorizationEndpointUris($"https://{settings.AuthorizeHost}/connect/authorize")
                     .SetTokenEndpointUris("connect/token")
                     .SetUserInfoEndpointUris("connect/userinfo")
-                    .SetEndSessionEndpointUris("connect/logout")
+                    .SetEndSessionEndpointUris($"https://{settings.AuthorizeHost}/connect/logout")
                     .SetRevocationEndpointUris("connect/revoke")
                     .SetIntrospectionEndpointUris("connect/introspect");
 
@@ -133,17 +135,10 @@ internal static class OAuthRegistration
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = SignInLifetime;
                 options.SlidingExpiration = false;
+                // The sign-in page is a page of the Progmasoft site (Next.js) on the same host.
                 options.LoginPath = "/signin";
-                options.LogoutPath = "/signout";
                 options.AccessDeniedPath = "/signin";
             });
-        services.AddAntiforgery(options =>
-        {
-            options.Cookie.Name = "__Host-ProgmasoftOAuthForm";
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.SameSite = SameSiteMode.Strict;
-            options.FormFieldName = "form-token";
-        });
         services.AddScoped<ApplicationRegistry>();
         return settings;
     }

@@ -11,7 +11,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using Progmasoft.OAuth.Developers;
-using Progmasoft.OAuth.Pages;
+using Progmasoft.OAuth.Api;
 using Progmasoft.Progmaweb.Api.Accounts;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -42,9 +42,7 @@ internal static class AuthorizationEndpoints
     private static async Task<IResult> AuthorizeAsync(
         HttpContext context,
         IOpenIddictApplicationManager applications,
-        IOpenIddictAuthorizationManager authorizations,
-        ApplicationRegistry registry,
-        AccountService accounts)
+        IOpenIddictAuthorizationManager authorizations)
     {
         OpenIddictRequest request = context.GetOpenIddictServerRequest()
                                     ?? throw new InvalidOperationException("OpenIddict did not pass a request.");
@@ -91,9 +89,10 @@ internal static class AuthorizationEndpoints
             : null;
         if (!string.IsNullOrEmpty(decision))
         {
-            if (!await OAuthAccount.IsGenuineFormAsync(context))
+            // The decision comes from the consent page of this host; a form on another site cannot decide.
+            if (!OAuthAccount.IsSameOrigin(context))
             {
-                return Results.BadRequest();
+                return OAuthAccount.ForeignOrigin();
             }
 
             if (decision != "allow")
@@ -119,47 +118,11 @@ internal static class AuthorizationEndpoints
             return Forbid(Errors.ConsentRequired, "The account holder has not allowed these scopes yet.");
         }
 
-        return await ConsentPageAsync(context, request, application, applicationId, account, applications, registry,
-            accounts);
-    }
-
-    /// <summary>Shows the consent page for an authorization request.</summary>
-    private static async Task<IResult> ConsentPageAsync(
-        HttpContext context,
-        OpenIddictRequest request,
-        object application,
-        string applicationId,
-        AccountRecord account,
-        IOpenIddictApplicationManager applications,
-        ApplicationRegistry registry,
-        AccountService accounts)
-    {
-        string name = await applications.GetDisplayNameAsync(application, context.RequestAborted) ?? request.ClientId!;
-        Guid? ownerId = await registry.FindOwnerAsync(applicationId, context.RequestAborted);
-        AccountRecord? owner = ownerId is { } id ? await accounts.FindAsync(id, context.RequestAborted) : null;
-        Uri redirect = new(request.RedirectUri!);
-
-        string grants = "<li>Know which Progmasoft account you use.</li>" + string.Concat(request.GetScopes()
-            .Select(OAuthScopes.Find)
-            .Where(scope => scope is not null)
-            .Select(scope => $"<li>{HtmlPage.Encode(scope!.Consent)}</li>"));
-        string hidden = string.Concat(request.GetParameters()
+        // The consent page is a page of the Progmasoft site on this host. It reads what to show from
+        // /api/v1/oauth/consent and posts the parameters back here with the decision.
+        return Results.Redirect("/consent" + QueryString.Create(request.GetParameters()
             .Where(parameter => parameter.Key != Parameters.Prompt)
-            .Select(parameter => HtmlPage.Hidden(parameter.Key, parameter.Value.ToString())));
-        string buttons =
-            "<div class=\"row\"><button type=\"submit\" name=\"decision\" value=\"allow\">Allow</button>" +
-            "<button class=\"secondary\" type=\"submit\" name=\"decision\" value=\"deny\">Deny</button></div>";
-        string body =
-            $"<h1>Allow {HtmlPage.Encode(name)}?</h1>" +
-            $"<p><strong>{HtmlPage.Encode(name)}</strong>" +
-            (owner is null ? string.Empty : $", registered by <strong>{HtmlPage.Encode(owner.AccountName)}</strong>,") +
-            " wants to:</p>" +
-            $"<ul>{grants}</ul>" +
-            $"<p class=\"note\">You will be sent back to <code>{HtmlPage.Encode(redirect.GetLeftPart(UriPartial.Authority))}</code>. " +
-            $"Signed in as {HtmlPage.Encode(account.AccountName)}. You can withdraw this at any time under " +
-            "<a href=\"/account/applications\">Applications you have allowed</a>.</p>" +
-            HtmlPage.Form(context, "/connect/authorize", hidden + buttons);
-        return HtmlPage.Render(context, "Allow access", body);
+            .Select(parameter => new KeyValuePair<string, string?>(parameter.Key, parameter.Value.ToString()))));
     }
 
     /// <summary>Answers the token endpoint for the authorization code, refresh token and client credentials grants.</summary>

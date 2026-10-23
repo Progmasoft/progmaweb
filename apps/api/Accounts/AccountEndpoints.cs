@@ -192,13 +192,7 @@ internal static class AccountEndpoints
     {
         context.Request.Cookies.TryGetValue(sessions.CookieName, out string? token);
         await sessions.RevokeAsync(token, cancellationToken);
-        context.Response.Cookies.Delete(sessions.CookieName, new CookieOptions
-        {
-            HttpOnly = true,
-            Path = "/",
-            SameSite = SameSiteMode.Lax,
-            Secure = true
-        });
+        context.Response.Cookies.Delete(sessions.CookieName, sessions.CreateCookieOptions(null));
         return Results.NoContent();
     }
 
@@ -228,7 +222,7 @@ internal static class AccountEndpoints
         context.Response.Cookies.Append(
             sessions.CookieName,
             authentication.SessionToken,
-            SessionService.CreateCookieOptions(authentication.ExpiresAt));
+            sessions.CreateCookieOptions(authentication.ExpiresAt));
 
     /// <summary>Projects a stored account to its public view.</summary>
     /// <param name="account">The stored account.</param>
