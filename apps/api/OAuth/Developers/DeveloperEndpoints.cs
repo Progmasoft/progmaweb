@@ -24,6 +24,7 @@ internal static class DeveloperEndpoints
         app.MapPost("/developers/{clientId}/delete", DeleteAsync).RequireRateLimiting("oauth");
     }
 
+    /// <summary>Lists the applications of the signed-in account.</summary>
     private static async Task<IResult> ListAsync(
         HttpContext context,
         ApplicationRegistry registry,
@@ -55,6 +56,7 @@ internal static class DeveloperEndpoints
         return HtmlPage.Render(context, "Your applications", body);
     }
 
+    /// <summary>Shows the empty registration form.</summary>
     private static async Task<IResult> NewAsync(HttpContext context)
     {
         if (await OAuthAccount.CurrentAsync(context) is null)
@@ -67,6 +69,7 @@ internal static class DeveloperEndpoints
             isNew: true, new Dictionary<string, string>());
     }
 
+    /// <summary>Registers an application from the submitted form.</summary>
     private static async Task<IResult> CreateAsync(HttpContext context, ApplicationRegistry registry)
     {
         if (await OAuthAccount.CurrentAsync(context) is not { } account)
@@ -90,6 +93,7 @@ internal static class DeveloperEndpoints
         return RenderCredentials(context, "Application registered", result.Application, result.ClientSecret);
     }
 
+    /// <summary>Shows an application of the signed-in account with its settings.</summary>
     private static async Task<IResult> ShowAsync(HttpContext context, ApplicationRegistry registry, string clientId)
     {
         if (await OAuthAccount.CurrentAsync(context) is not { } account)
@@ -103,6 +107,7 @@ internal static class DeveloperEndpoints
             : RenderDetails(context, application, new Dictionary<string, string>(), null);
     }
 
+    /// <summary>Saves the submitted settings of an application.</summary>
     private static async Task<IResult> UpdateAsync(HttpContext context, ApplicationRegistry registry, string clientId)
     {
         if (await OAuthAccount.CurrentAsync(context) is not { } account)
@@ -131,6 +136,7 @@ internal static class DeveloperEndpoints
                 StatusCodes.Status400BadRequest);
     }
 
+    /// <summary>Replaces the secret of an application and shows the new one once.</summary>
     private static async Task<IResult> RotateAsync(HttpContext context, ApplicationRegistry registry, string clientId)
     {
         if (await OAuthAccount.CurrentAsync(context) is not { } account)
@@ -150,6 +156,7 @@ internal static class DeveloperEndpoints
             : RenderCredentials(context, "New client secret", application, secret);
     }
 
+    /// <summary>Deletes an application of the signed-in account.</summary>
     private static async Task<IResult> DeleteAsync(HttpContext context, ApplicationRegistry registry, string clientId)
     {
         if (await OAuthAccount.CurrentAsync(context) is not { } account)
@@ -167,6 +174,7 @@ internal static class DeveloperEndpoints
             : NotFound(context);
     }
 
+    /// <summary>Reads the registration form into a submission.</summary>
     private static async Task<ApplicationInput> ReadAsync(HttpContext context)
     {
         IFormCollection form = await context.Request.ReadFormAsync(context.RequestAborted);
@@ -180,6 +188,7 @@ internal static class DeveloperEndpoints
             form["allowClientCredentials"] == "on");
     }
 
+    /// <summary>Shows the client identifier and, once, the client secret.</summary>
     private static IResult RenderCredentials(
         HttpContext context,
         string title,
@@ -199,6 +208,7 @@ internal static class DeveloperEndpoints
         return HtmlPage.Render(context, title, body);
     }
 
+    /// <summary>Shows an application: its settings form, its secret and its deletion.</summary>
     private static IResult RenderDetails(
         HttpContext context,
         RegisteredApplication application,
@@ -227,6 +237,7 @@ internal static class DeveloperEndpoints
         return HtmlPage.Render(context, application.DisplayName, body);
     }
 
+    /// <summary>Shows the settings form as a page.</summary>
     private static IResult RenderForm(
         HttpContext context,
         string title,
@@ -239,6 +250,7 @@ internal static class DeveloperEndpoints
             FormContent(context, title, action, input, isNew, errors, null) + "<p><a href=\"/developers\">Back</a></p>",
             statusCode);
 
+    /// <summary>Builds the settings form with the messages of refused fields.</summary>
     private static string FormContent(
         HttpContext context,
         string title,
@@ -281,6 +293,7 @@ internal static class DeveloperEndpoints
         return $"<h1>{HtmlPage.Encode(title)}</h1>" + HtmlPage.Form(context, action, fields);
     }
 
+    /// <summary>Answers for an application that is absent or belongs to another account.</summary>
     private static IResult NotFound(HttpContext context) => HtmlPage.Render(context, "Not found",
         "<h1>Not found</h1><p>No application of yours has this client identifier.</p>" +
         "<p><a href=\"/developers\">Back</a></p>", StatusCodes.Status404NotFound);

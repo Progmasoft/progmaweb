@@ -219,6 +219,7 @@ internal sealed class ApplicationRegistry(
         return true;
     }
 
+    /// <summary>Finds an application and its ownership row, when the account owns it.</summary>
     private async Task<(object application, ApplicationOwner owner)?> FindOwnedEntryAsync(
         Guid accountId,
         string clientId,
@@ -293,6 +294,7 @@ internal sealed class ApplicationRegistry(
         descriptor.Requirements.Add(Requirements.Features.ProofKeyForCodeExchange);
     }
 
+    /// <summary>Reads an application into the view of the developer portal.</summary>
     private async Task<RegisteredApplication> DescribeAsync(
         object application,
         DateTimeOffset createdAt,

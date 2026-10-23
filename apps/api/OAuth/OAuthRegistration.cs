@@ -220,6 +220,7 @@ internal sealed class OAuthSchemaInitializer(
 /// <remarks>A shared in-memory SQLite database exists as long as one connection to it is open.</remarks>
 internal sealed class MemoryOAuthDatabase : IDisposable
 {
+    /// <summary>The connection whose lifetime is the lifetime of the database.</summary>
     private readonly SqliteConnection keeper;
 
     /// <summary>Opens the connection that holds the database.</summary>

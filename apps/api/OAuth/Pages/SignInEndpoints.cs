@@ -71,6 +71,7 @@ internal static class SignInEndpoints
         app.MapPost("/signout", (Delegate)SignOutAsync);
     }
 
+    /// <summary>Shows the home page of the OAuth host.</summary>
     private static async Task<IResult> HomeAsync(HttpContext context)
     {
         AccountRecord? account = await OAuthAccount.CurrentAsync(context);
@@ -95,9 +96,11 @@ internal static class SignInEndpoints
         return HtmlPage.Render(context, "Progmasoft OAuth", body);
     }
 
+    /// <summary>Shows the sign-in form.</summary>
     private static IResult SignInPage(HttpContext context, IOptions<OAuthOptions> options, string? returnUrl) =>
         RenderSignIn(context, options.Value, OAuthAccount.LocalReturnUrl(returnUrl), null, null);
 
+    /// <summary>Checks the submitted email address and password and signs the account in.</summary>
     private static async Task<IResult> SignInAsync(
         HttpContext context,
         AccountService accounts,
@@ -127,6 +130,7 @@ internal static class SignInEndpoints
         return Results.Redirect(returnUrl);
     }
 
+    /// <summary>Ends the sign-in.</summary>
     private static async Task<IResult> SignOutAsync(HttpContext context)
     {
         if (!await OAuthAccount.IsGenuineFormAsync(context))
@@ -138,6 +142,7 @@ internal static class SignInEndpoints
         return Results.Redirect("/");
     }
 
+    /// <summary>Shows the sign-in form with an optional message.</summary>
     private static IResult RenderSignIn(
         HttpContext context,
         OAuthOptions options,

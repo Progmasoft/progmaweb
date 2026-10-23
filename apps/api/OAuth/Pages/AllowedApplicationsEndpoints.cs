@@ -18,6 +18,7 @@ internal static class AllowedApplicationsEndpoints
         app.MapPost("/account/applications/{authorizationId}/revoke", RevokeAsync);
     }
 
+    /// <summary>Lists the applications the signed-in account has allowed.</summary>
     private static async Task<IResult> ListAsync(
         HttpContext context,
         IOpenIddictAuthorizationManager authorizations,
@@ -63,6 +64,7 @@ internal static class AllowedApplicationsEndpoints
         return HtmlPage.Render(context, "Allowed applications", body);
     }
 
+    /// <summary>Withdraws an allowance and revokes the tokens issued under it.</summary>
     private static async Task<IResult> RevokeAsync(
         HttpContext context,
         IOpenIddictAuthorizationManager authorizations,

@@ -104,10 +104,12 @@ internal static class ApplicationPolicy
         .Distinct(StringComparer.Ordinal)
         .ToList();
 
+    /// <summary>The rule for redirection addresses, as the refusal message states it.</summary>
     private static string AddressRule(bool isPublic) => isPublic
         ? "Use https://, http:// with a loopback address, or a private-use scheme such as com.example.app:/callback."
         : "Use https://, or http:// with a loopback address for development.";
 
+    /// <summary>Whether text is an absolute <c>https://</c> address without fragment or user information.</summary>
     private static bool IsHttpsAddress(string text) =>
         text.Length <= MaximumUriLength
         && Uri.TryCreate(text, UriKind.Absolute, out Uri? uri)
@@ -145,5 +147,6 @@ internal static class ApplicationPolicy
         return isPublic && uri.Scheme.Contains('.', StringComparison.Ordinal) && !refused.Contains(uri.Scheme);
     }
 
+    /// <summary>Whether an address has neither a fragment nor user information.</summary>
     private static bool IsClean(Uri uri) => uri.Fragment.Length == 0 && uri.UserInfo.Length == 0;
 }

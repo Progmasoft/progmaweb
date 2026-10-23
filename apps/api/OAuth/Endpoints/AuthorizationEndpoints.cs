@@ -38,6 +38,7 @@ internal static class AuthorizationEndpoints
         app.MapMethods("/connect/logout", ["GET", "POST"], (Delegate)LogoutAsync);
     }
 
+    /// <summary>Answers the authorization endpoint: sign-in, consent, and the authorization code.</summary>
     private static async Task<IResult> AuthorizeAsync(
         HttpContext context,
         IOpenIddictApplicationManager applications,
@@ -122,6 +123,7 @@ internal static class AuthorizationEndpoints
             accounts);
     }
 
+    /// <summary>Shows the consent page for an authorization request.</summary>
     private static async Task<IResult> ConsentPageAsync(
         HttpContext context,
         OpenIddictRequest request,
@@ -160,6 +162,7 @@ internal static class AuthorizationEndpoints
         return HtmlPage.Render(context, "Allow access", body);
     }
 
+    /// <summary>Answers the token endpoint for the authorization code, refresh token and client credentials grants.</summary>
     private static async Task<IResult> TokenAsync(
         HttpContext context,
         IOpenIddictApplicationManager applications,
@@ -210,6 +213,7 @@ internal static class AuthorizationEndpoints
         return Forbid(Errors.UnsupportedGrantType, "This grant type is not supported.");
     }
 
+    /// <summary>Answers the user information endpoint with the claims the access token's scopes allow.</summary>
     private static IResult UserInfo(HttpContext context)
     {
         ClaimsPrincipal principal = context.User;
@@ -232,6 +236,7 @@ internal static class AuthorizationEndpoints
         return Results.Ok(claims);
     }
 
+    /// <summary>Ends the sign-in and returns to the address the client registered, if any.</summary>
     private static async Task<IResult> LogoutAsync(HttpContext context)
     {
         await context.SignOutAsync(OAuthRegistration.CookieScheme);
@@ -273,6 +278,7 @@ internal static class AuthorizationEndpoints
         return identity;
     }
 
+    /// <summary>Issues the tokens of an identity under an authorization.</summary>
     private static IResult Issue(ClaimsIdentity identity, string? authorizationId)
     {
         identity.SetAuthorizationId(authorizationId);
@@ -280,6 +286,7 @@ internal static class AuthorizationEndpoints
             OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
+    /// <summary>Answers a protocol request with an OAuth error.</summary>
     private static IResult Forbid(string error, string description) => Results.Forbid(
         new AuthenticationProperties(new Dictionary<string, string?>
         {
