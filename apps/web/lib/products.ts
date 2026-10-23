@@ -152,11 +152,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
         category: "Linter",
         tagline: "Finds what a compiler lets through.",
         description:
-          "talalint reports suspicious Tala code and can fix what it knows how to fix.",
+          "talalint reports what is wrong with Tala sources: the diagnostics of the Tala compiler frontend, and checks of its own on the physical source.",
         features: [
-          "Reports findings with their location",
-          "--fix applies the safe fixes",
-          "Settings in talalint.kts",
+          "The diagnostics of the Tala compiler, under the compiler check",
+          "Trailing whitespace, mixed line endings and a missing final newline",
+          "--fix applies only safe fixes to the physical source",
           "Runs from Tazel with tazel lint",
         ],
       },
@@ -252,11 +252,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
         category: "Linter",
         tagline: "Findet, was ein Compiler durchlässt.",
         description:
-          "talalint meldet verdächtigen Tala-Code und behebt, was es sicher beheben kann.",
+          "talalint meldet, was an Tala-Quellen nicht stimmt: die Diagnosen des Tala-Compiler-Frontends und eigene Prüfungen der physischen Quelle.",
         features: [
-          "Meldet Befunde mit ihrer Position",
-          "--fix wendet sichere Korrekturen an",
-          "Einstellungen in talalint.kts",
+          "Die Diagnosen des Tala-Compilers unter der Prüfung compiler",
+          "Leerzeichen am Zeilenende, gemischte Zeilenenden und ein fehlender Zeilenumbruch am Dateiende",
+          "--fix wendet nur sichere Korrekturen an der physischen Quelle an",
           "Läuft aus Tazel mit tazel lint",
         ],
       },
@@ -352,11 +352,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
         category: "Линтер",
         tagline: "Находит то, что пропускает компилятор.",
         description:
-          "talalint сообщает о подозрительном коде Tala и исправляет то, что умеет исправлять.",
+          "talalint сообщает, что не так в исходных текстах Tala: диагностику фронтенда компилятора Tala и собственные проверки физического текста.",
         features: [
-          "Сообщает о находках с их местоположением",
-          "--fix применяет безопасные исправления",
-          "Настройки в talalint.kts",
+          "Диагностика компилятора Tala в проверке compiler",
+          "Пробелы в конце строк, смешанные концы строк и отсутствие перевода строки в конце файла",
+          "--fix применяет только безопасные исправления физического текста",
           "Запускается из Tazel командой tazel lint",
         ],
       },
@@ -452,11 +452,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
         category: "לינטר",
         tagline: "מוצא את מה שהמהדר מעביר.",
         description:
-          "talalint מדווח על קוד Tala חשוד ומתקן את מה שהוא יודע לתקן.",
+          "talalint מדווח מה לא תקין בקוד Tala: האבחונים של החלק הקדמי של מהדר Tala, ובדיקות משלו על הטקסט הפיזי.",
         features: [
-          "מדווח על ממצאים עם המיקום שלהם",
-          "‏--fix מחיל את התיקונים הבטוחים",
-          "הגדרות ב־talalint.kts",
+          "האבחונים של מהדר Tala, תחת הבדיקה compiler",
+          "רווחים בסוף שורה, סופי שורה מעורבים ושורה חדשה חסרה בסוף הקובץ",
+          "‏--fix מחיל רק תיקונים בטוחים על הטקסט הפיזי",
           "רץ מתוך Tazel עם tazel lint",
         ],
       },
