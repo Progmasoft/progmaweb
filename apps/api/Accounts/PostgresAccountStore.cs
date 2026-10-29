@@ -98,6 +98,12 @@ internal sealed class PostgresAccountStore(NpgsqlDataSource dataSource) : IAccou
         FindAccountAsync("google_subject", googleSubject, cancellationToken);
 
     /// <inheritdoc/>
+    public ValueTask<AccountRecord?> FindByAccountNameAsync(
+        string normalizedAccountName,
+        CancellationToken cancellationToken) =>
+        FindAccountAsync("normalized_account_name", normalizedAccountName, cancellationToken);
+
+    /// <inheritdoc/>
     public ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken) =>
         FindAccountAsync("id", id, cancellationToken);
 

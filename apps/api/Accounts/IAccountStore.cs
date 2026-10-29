@@ -31,6 +31,13 @@ internal interface IAccountStore
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>The account, or <see langword="null"/> when it does not exist.</returns>
     ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken);
+    /// <summary>Finds an account by its normalized name.</summary>
+    /// <param name="normalizedAccountName">
+    /// Upper-case account name, as <see cref="AccountNamePolicy.NormalizeForLookup"/> produces it.
+    /// </param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The account, or <see langword="null"/> when no account has this name.</returns>
+    ValueTask<AccountRecord?> FindByAccountNameAsync(string normalizedAccountName, CancellationToken cancellationToken);
     /// <summary>Stores a session, replacing one with the same token digest.</summary>
     /// <param name="session">The session to store.</param>
     /// <param name="cancellationToken">Cancels the operation.</param>

@@ -151,6 +151,12 @@ public sealed class AccountServiceTests
         public ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken) =>
             ValueTask.FromResult<AccountRecord?>(passwordAccount.Id == id ? passwordAccount : null);
 
+        public ValueTask<AccountRecord?> FindByAccountNameAsync(
+            string normalizedAccountName,
+            CancellationToken cancellationToken) =>
+            ValueTask.FromResult<AccountRecord?>(
+                passwordAccount.NormalizedAccountName == normalizedAccountName ? passwordAccount : null);
+
         public ValueTask<AccountRecord?> FindByGoogleSubjectAsync(
             string googleSubject,
             CancellationToken cancellationToken) =>
