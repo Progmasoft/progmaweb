@@ -153,6 +153,24 @@ The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `aut
 it with certbot's webroot plugin before the vhosts are enabled, then check
 `/.well-known/openid-configuration`, the sign-in page and the console from outside.
 
+## Reserved accounts
+
+Public registration refuses the reserved names, `Progmasoft` and `Leitwolf`, which identify Progmasoft itself and its
+administrator. They are created on the server by the person who will use them, in an interactive terminal; the
+command asks for the password twice without showing it, so it never reaches a command line or a log:
+
+```sh
+systemd-run --quiet --wait --pty --uid=progmaweb --gid=progmaweb \
+  -p EnvironmentFile=/etc/progmaweb/account.env -p Environment=ASPNETCORE_ENVIRONMENT=Production \
+  -p WorkingDirectory=/srv/progmaweb/current/api \
+  /usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll \
+  accounts provision-reserved Progmasoft support@progmasoft.com
+```
+
+The name, the email address and the password follow the rules of registration; only the reserved names are accepted,
+and an existing account is never replaced. The account then signs in on `account.progmasoft.com` like any other, and
+is the ViGet publisher of the same name.
+
 ## ViGet: Tazel plugins
 
 ViGet opens in stages. Now only the accounts that `ViGet__TazelPublishers` names (Progmasoft by default) publish Tazel

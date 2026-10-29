@@ -13,8 +13,10 @@ using Progmasoft.Progmaweb.Api.ViGet;
 
 // `viget ...` runs a command of ViGet with the configuration of the service instead of the service itself; its
 // arguments are not configuration.
+// `accounts ...` provisions a reserved account the same way.
 bool vigetCommand = ViGetCommand.IsCommand(args);
-WebApplicationBuilder builder = WebApplication.CreateBuilder(vigetCommand ? [] : args);
+bool accountCommand = args is ["accounts", ..];
+WebApplicationBuilder builder = WebApplication.CreateBuilder(vigetCommand || accountCommand ? [] : args);
 
 builder.Services.Configure<AccountSessionOptions>(builder.Configuration.GetSection(AccountSessionOptions.SectionName));
 builder.Services.AddSingleton(TimeProvider.System);
@@ -108,6 +110,13 @@ builder.Services.Configure<ForwardedHeadersOptions>(ForwardedHeadersPolicy.Confi
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024);
 
 WebApplication app = builder.Build();
+
+if (accountCommand)
+{
+    Environment.ExitCode = await AccountCommand.RunAsync(
+        app.Services, args[1..], new ConsolePasswordInput(), Console.Out, Console.Error, CancellationToken.None);
+    return;
+}
 
 if (vigetCommand)
 {

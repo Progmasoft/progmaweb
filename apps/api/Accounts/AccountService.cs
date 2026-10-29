@@ -224,6 +224,55 @@ internal sealed class AccountService(
         return (await sessions.CreateAsync(result.Account ?? account, cancellationToken), GoogleAccountFailure.None);
     }
 
+    /// <summary>
+    /// Creates the account of a reserved name, which public registration refuses. Only trusted operations tooling
+    /// calls this; see <see cref="AccountCommand"/>.
+    /// </summary>
+    /// <param name="accountName">The reserved name, as it is to be spelled.</param>
+    /// <param name="email">The email address of the account.</param>
+    /// <param name="password">The password, which the operator typed.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The created account, or the message that says why it was refused.</returns>
+    public async ValueTask<(AccountRecord? Account, string? Error)> ProvisionReservedAsync(
+        string? accountName,
+        string? email,
+        string? password,
+        CancellationToken cancellationToken)
+    {
+        if (!AccountNamePolicy.TryNormalizeReserved(accountName, out string name, out string nameError))
+        {
+            return (null, nameError);
+        }
+
+        if (!EmailAddressPolicy.TryNormalize(email, out string address, out string normalizedEmail, out string emailError))
+        {
+            return (null, emailError);
+        }
+
+        if (!PasswordPolicy.TryValidate(password, out string passwordError))
+        {
+            return (null, passwordError);
+        }
+
+        AccountRecord provisional = new(
+            Guid.NewGuid(),
+            name,
+            AccountNamePolicy.NormalizeForLookup(name),
+            address,
+            normalizedEmail,
+            null,
+            string.Empty,
+            timeProvider.GetUtcNow());
+        AccountRecord account = provisional with { PasswordHash = passwordHasher.HashPassword(provisional, password!) };
+        CreateAccountResult result = await store.CreateAsync(account, cancellationToken);
+        return result.Status switch
+        {
+            CreateAccountStatus.AccountNameUnavailable => (null, $"The account '{name}' exists already."),
+            CreateAccountStatus.EmailUnavailable => (null, "That email address is already registered."),
+            _ => (result.Account ?? account, null)
+        };
+    }
+
     /// <summary>Validates every field of a registration and collects the messages of the refused ones.</summary>
     /// <param name="request">The registration body.</param>
     /// <param name="accountName">The canonical account name.</param>
