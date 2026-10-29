@@ -96,6 +96,12 @@ internal static class ViGetEndpoints
         });
     }
 
+    /// <summary>A plugin of the catalog, or <see langword="null"/> when a route value is not an identifier.</summary>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="publisher">The publisher from the route.</param>
+    /// <param name="name">The name from the route.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The plugin, if there is one.</returns>
     private static ValueTask<TazelPlugin?> FindAsync(
         ITazelPluginCatalog catalog,
         string publisher,

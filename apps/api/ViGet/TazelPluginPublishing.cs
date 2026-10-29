@@ -144,5 +144,8 @@ internal sealed class TazelPluginPublishing(
         return true;
     }
 
+    /// <summary>The result of a refused publication.</summary>
+    /// <param name="error">Why it was refused.</param>
+    /// <returns>The result.</returns>
     private static PublishResult Refused(string error) => new(null, error);
 }

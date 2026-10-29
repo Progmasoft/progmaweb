@@ -15,6 +15,7 @@ internal static class ViGetSchema
     /// <summary>Key of the advisory lock that lets one process at a time change these tables.</summary>
     private const long MigrationLockKey = 0x5669476574;
 
+    /// <summary>The steps, in order. The version of a step is its position, counted from one.</summary>
     private static readonly string[] Steps =
     [
         // 1: Tazel plugins and their versions.
@@ -101,6 +102,12 @@ internal static class ViGetSchema
         return taken;
     }
 
+    /// <summary>Runs statements that return nothing.</summary>
+    /// <param name="connection">The connection to run them on.</param>
+    /// <param name="transaction">The transaction they belong to.</param>
+    /// <param name="sql">The statements.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>A task that completes when the statements have run.</returns>
     private static async Task ExecuteAsync(
         NpgsqlConnection connection,
         NpgsqlTransaction transaction,
@@ -116,6 +123,7 @@ internal static class ViGetSchema
 /// <param name="dataSource">Connections to the database of the accounts.</param>
 internal sealed class PostgresTazelPluginCatalog(NpgsqlDataSource dataSource) : ITazelPluginCatalog
 {
+    /// <summary>The columns of a plugin row, in the order <see cref="ReadPlugin"/> reads them.</summary>
     private const string PluginColumns = "publisher, name, description, authors, license, homepage, repository";
 
     /// <inheritdoc/>
@@ -265,6 +273,10 @@ internal sealed class PostgresTazelPluginCatalog(NpgsqlDataSource dataSource) : 
         return await command.ExecuteNonQueryAsync(cancellationToken) == 1;
     }
 
+    /// <summary>A plugin from a row of <see cref="PluginColumns"/>.</summary>
+    /// <param name="reader">A reader on the row.</param>
+    /// <param name="versions">The versions of the plugin.</param>
+    /// <returns>The plugin.</returns>
     private static TazelPlugin ReadPlugin(NpgsqlDataReader reader, IReadOnlyList<TazelPluginVersion> versions) => new(
         reader.GetString(0),
         reader.GetString(1),
@@ -275,6 +287,13 @@ internal sealed class PostgresTazelPluginCatalog(NpgsqlDataSource dataSource) : 
         reader.IsDBNull(6) ? null : reader.GetString(6),
         versions);
 
+    /// <summary>The versions of a plugin, newest publication first.</summary>
+    /// <param name="connection">The connection to read on.</param>
+    /// <param name="transaction">The transaction to read in, if any.</param>
+    /// <param name="publisher">The publisher of the plugin.</param>
+    /// <param name="name">The name of the plugin.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The versions.</returns>
     private static async Task<IReadOnlyList<TazelPluginVersion>> VersionsAsync(
         NpgsqlConnection connection,
         NpgsqlTransaction? transaction,

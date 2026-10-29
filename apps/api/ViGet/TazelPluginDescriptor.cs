@@ -126,9 +126,13 @@ internal sealed partial record TazelPluginDescriptor(
         return null;
     }
 
+    /// <summary>One identifier: a letter or <c>_</c>, then letters, digits or <c>_</c>.</summary>
+    /// <returns>The compiled expression.</returns>
     [GeneratedRegex("^[A-Za-z_][A-Za-z0-9_]*$")]
     private static partial Regex IdentifierPattern();
 
+    /// <summary>An exact semantic version without leading zeros or build metadata, as Tazel accepts it.</summary>
+    /// <returns>The compiled expression.</returns>
     [GeneratedRegex(@"^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?$")]
     private static partial Regex VersionPattern();
 }

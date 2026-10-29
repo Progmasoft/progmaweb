@@ -85,7 +85,9 @@ internal interface ITazelPluginCatalog
 /// <summary>A catalog that lives as long as the process, for development and tests.</summary>
 internal sealed class InMemoryTazelPluginCatalog : ITazelPluginCatalog
 {
+    /// <summary>Guards <see cref="plugins"/>.</summary>
     private readonly Lock gate = new();
+    /// <summary>The plugins by their exact publisher and name.</summary>
     private readonly Dictionary<(string Publisher, string Name), TazelPlugin> plugins = [];
 
     /// <inheritdoc/>

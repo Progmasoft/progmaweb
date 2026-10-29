@@ -40,6 +40,7 @@ internal sealed class ViGetSchemaInitializer(
     NpgsqlDataSource dataSource,
     ILogger<ViGetSchemaInitializer> logger) : IHostedService
 {
+    /// <summary>Writes the schema version and the number of steps taken at this start.</summary>
     private static readonly Action<ILogger, int, int, Exception?> SchemaReport = LoggerMessage.Define<int, int>(
         LogLevel.Information,
         new EventId(1, "ViGetSchema"),

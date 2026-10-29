@@ -93,10 +93,16 @@ internal static class JavaProperties
         }
     }
 
+    /// <summary>Whether a character is white space of the format: space, tab or form feed.</summary>
     private static bool IsBlank(char character) => character is ' ' or '\t' or '\f';
 
+    /// <summary>Whether an unescaped character ends a key.</summary>
     private static bool IsKeyEnd(char character) => character is '=' or ':' || IsBlank(character);
 
+    /// <summary>Resolves the escapes of a key or a value.</summary>
+    /// <param name="text">The text as the file writes it.</param>
+    /// <returns>The text it stands for.</returns>
+    /// <exception cref="FormatException">A <c>\u</c> escape is not followed by four hexadecimal digits.</exception>
     private static string Unescape(string text)
     {
         StringBuilder result = new(text.Length);
