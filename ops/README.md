@@ -174,14 +174,22 @@ semanage fcontext -a -t httpd_sys_content_t '/srv/viget/files(/.*)?'
 restorecon -R /srv/viget/files
 ```
 
-A plugin JAR is published with the configuration of the service, as its user:
+A plugin JAR is published with the configuration of the service, as its user. `systemd-run` reads the environment
+file itself, so no value of it appears on a command line:
 
 ```sh
-cd /srv/progmaweb/current/api
-runuser -u progmaweb -- env $(grep -v '^#' /etc/progmaweb/account.env | xargs) \
-  ./Progmaweb.Api viget publish-tazel-plugin /tmp/CMake-0.1.0.jar
+install -d -m 0750 -o progmaweb -g progmaweb /srv/viget/incoming
+install -m 0640 -o progmaweb -g progmaweb CMake-0.1.0.jar /srv/viget/incoming/
+systemd-run --quiet --wait --pipe --uid=progmaweb --gid=progmaweb \
+  -p EnvironmentFile=/etc/progmaweb/account.env -p Environment=ASPNETCORE_ENVIRONMENT=Production \
+  -p WorkingDirectory=/srv/progmaweb/current/api \
+  /usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll \
+  viget publish-tazel-plugin /srv/viget/incoming/CMake-0.1.0.jar
+rm /srv/viget/incoming/CMake-0.1.0.jar
 restorecon -R /srv/viget/files
 ```
+
+The publisher of the descriptor must be the name of an existing Progmasoft Account, spelled the same way.
 
 The command checks the descriptor of the JAR, the publisher, its account and the version, which is never replaced.
 `viget yank-tazel-plugin <Publisher> <Name> <Version>` yanks a version, and `--undo` takes the yank back.
