@@ -152,3 +152,59 @@ The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `aut
 `console.progmasoft.com`, `product.progmasoft.com`, `ides.progmasoft.com` and `catch3.progmasoft.com` as well; expand
 it with certbot's webroot plugin before the vhosts are enabled, then check
 `/.well-known/openid-configuration`, the sign-in page and the console from outside.
+
+## ViGet: Tazel plugins
+
+ViGet opens in stages. Now only the accounts that `ViGet__TazelPublishers` names (Progmasoft by default) publish Tazel
+plugins, and they publish on the server; later every account will publish through the API. The catalog lives in the
+account database (`viget_*` tables, created by the API at start) and the JARs in `/srv/viget/files`, which Nginx
+serves:
+
+| Address on `viget.progmasoft.com` | Served by |
+| --- | --- |
+| `/dslplugins/tazel`, `/dslplugins/tazel/<Publisher>/<Name>`, `/dslplugins/gradle` | the Next.js site |
+| `/dslplugins/tazel/<Publisher>/<Name>/index.json` | the account API, `/api/v1/viget/dslplugins/tazel/...` |
+| `/dslplugins/tazel/<Publisher>/<Name>/<Version>/<Name>-<Version>.jar` | the files below `/srv/viget/files` |
+
+The directory belongs to the service user, and Nginx reads it:
+
+```sh
+install -d -m 0755 -o progmaweb -g progmaweb /srv/viget /srv/viget/files
+semanage fcontext -a -t httpd_sys_content_t '/srv/viget/files(/.*)?'
+restorecon -R /srv/viget/files
+```
+
+A plugin JAR is published with the configuration of the service, as its user:
+
+```sh
+cd /srv/progmaweb/current/api
+runuser -u progmaweb -- env $(grep -v '^#' /etc/progmaweb/account.env | xargs) \
+  ./Progmaweb.Api viget publish-tazel-plugin /tmp/CMake-0.1.0.jar
+restorecon -R /srv/viget/files
+```
+
+The command checks the descriptor of the JAR, the publisher, its account and the version, which is never replaced.
+`viget yank-tazel-plugin <Publisher> <Name> <Version>` yanks a version, and `--undo` takes the yank back.
+
+## Maven repository
+
+`maven.progmasoft.com/tazel` is a static Maven repository: it holds `com.progmasoft.tazel:tazel-api`, which plugins of
+Tazel compile against. It lives in `/srv/maven/tazel`, labelled like the files of ViGet:
+
+```sh
+install -d -m 0755 /srv/maven /srv/maven/tazel
+semanage fcontext -a -t httpd_sys_content_t '/srv/maven(/.*)?'
+restorecon -R /srv/maven
+```
+
+A release of Tazel publishes the API into a local copy of the repository and copies it back, so that
+`maven-metadata.xml` keeps the versions published before:
+
+```sh
+scp -r root@91.151.88.130:/srv/maven/tazel/. build/maven/        # in the Tazel checkout
+./gradlew :tazel-api:publishAllPublicationsToStagingRepository
+scp -r build/maven/. root@91.151.88.130:/srv/maven/tazel/
+ssh root@91.151.88.130 'chown -R root:root /srv/maven && restorecon -R /srv/maven'
+```
+
+Published versions are never changed. The certificate of `progmasoft.com` must name `maven.progmasoft.com`.

@@ -21,7 +21,7 @@ export const languageCatalogs: readonly Catalog[] = [
 /** The build systems whose DSL plugins ViGet hosts, in the order the page lists them. */
 export const buildSystemCatalogs: readonly Catalog[] = [
   { name: "Tazel", path: "/dslplugins/tazel" },
-  { name: "Gradle" },
+  { name: "Gradle", path: "/dslplugins/gradle" },
 ];
 
 // The two section names are the ones the registry uses everywhere; they are
@@ -56,6 +56,7 @@ const text: Record<Locale, CatalogText> = {
     holds: {
       Tala: "Libraries and applications written in Tala.",
       Tazel: "Kotlin JAR plugins for the project file of Tazel.",
+      Gradle: "Gradle plugins of Progmasoft, from the Gradle Plugin Portal.",
     },
     notAvailable: "Not available yet",
     open: "Open catalog",
@@ -79,6 +80,7 @@ const text: Record<Locale, CatalogText> = {
     holds: {
       Tala: "Bibliotheken und Anwendungen, geschrieben in Tala.",
       Tazel: "Kotlin-JAR-Plugins für die Projektdatei von Tazel.",
+      Gradle: "Gradle-Plugins von Progmasoft, vom Gradle Plugin Portal.",
     },
     notAvailable: "Noch nicht verfügbar",
     open: "Katalog öffnen",
@@ -102,6 +104,7 @@ const text: Record<Locale, CatalogText> = {
     holds: {
       Tala: "Библиотеки и приложения, написанные на Tala.",
       Tazel: "Плагины Kotlin JAR для файла проекта Tazel.",
+      Gradle: "Плагины Gradle от Progmasoft, с Gradle Plugin Portal.",
     },
     notAvailable: "Пока недоступно",
     open: "Открыть каталог",
@@ -123,6 +126,7 @@ const text: Record<Locale, CatalogText> = {
     holds: {
       Tala: "ספריות ויישומים שנכתבו ב-Tala.",
       Tazel: "תוספי Kotlin JAR עבור קובץ הפרויקט של Tazel.",
+      Gradle: "תוספי Gradle של Progmasoft, מ-Gradle Plugin Portal.",
     },
     notAvailable: "עוד לא זמין",
     open: "פתיחת הקטלוג",
