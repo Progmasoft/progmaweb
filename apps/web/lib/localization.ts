@@ -366,8 +366,8 @@ export const messages = {
         ],
         [
           "Availability",
-          "Publishing closed",
-          "Publishing opens only after the signed plugin contract is complete.",
+          "Progmasoft first",
+          "Progmasoft publishes the first plugins; publishing opens to every account later.",
         ],
       ],
       footerDescription:
@@ -621,8 +621,8 @@ export const messages = {
         ],
         [
           "Verfügbarkeit",
-          "Veröffentlichung geschlossen",
-          "Die Veröffentlichung wird erst nach Fertigstellung des signierten Plugin-Vertrags geöffnet.",
+          "Zuerst Progmasoft",
+          "Progmasoft veröffentlicht die ersten Plugins; später öffnet die Veröffentlichung für jedes Konto.",
         ],
       ],
       footerDescription:
@@ -876,8 +876,8 @@ export const messages = {
         ],
         [
           "Доступность",
-          "Публикация закрыта",
-          "Публикация откроется только после завершения контракта подписанных плагинов.",
+          "Сначала Progmasoft",
+          "Первые плагины публикует Progmasoft; позже публикация откроется для всех учётных записей.",
         ],
       ],
       footerDescription:
@@ -1109,8 +1109,8 @@ export const messages = {
         ],
         [
           "זמינות",
-          "הפרסום סגור",
-          "הפרסום ייפתח רק לאחר השלמת חוזה התוספים החתומים.",
+          "תחילה Progmasoft",
+          "‏Progmasoft מפרסמת את התוספים הראשונים; בהמשך הפרסום ייפתח לכל חשבון.",
         ],
       ],
       footerDescription:

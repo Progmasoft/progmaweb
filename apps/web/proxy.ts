@@ -149,6 +149,28 @@ export function proxy(request: NextRequest) {
         internalRoute(request, "/viget/dslplugins/tazel"),
       );
     }
+    // The page of one plugin. Its index.json and JARs below it are served by
+    // Nginx, from the API and from the files of ViGet.
+    const plugin =
+      /^\/dslplugins\/tazel\/([A-Za-z_][A-Za-z0-9_]*)\/([A-Za-z_][A-Za-z0-9_]*)\/?$/.exec(
+        pathname,
+      );
+    if (plugin) {
+      return NextResponse.rewrite(
+        internalRoute(
+          request,
+          `/viget/dslplugins/tazel/${plugin[1]}/${plugin[2]}`,
+        ),
+      );
+    }
+    if (
+      pathname === "/dslplugins/gradle" ||
+      pathname === "/dslplugins/gradle/"
+    ) {
+      return NextResponse.rewrite(
+        internalRoute(request, "/viget/dslplugins/gradle"),
+      );
+    }
     if (pathname === "/langs" || pathname === "/langs/") {
       return NextResponse.redirect(
         new URL("https://viget.progmasoft.com/langs/tala"),

@@ -134,6 +134,11 @@ public sealed class ExpiredSessionCleanupTests
         public ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken) =>
             throw new NotSupportedException();
 
+        public ValueTask<AccountRecord?> FindByAccountNameAsync(
+            string normalizedAccountName,
+            CancellationToken cancellationToken) =>
+            throw new NotSupportedException();
+
         public ValueTask StoreSessionAsync(SessionRecord session, CancellationToken cancellationToken) =>
             throw new NotSupportedException();
 

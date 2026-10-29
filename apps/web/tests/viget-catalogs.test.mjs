@@ -23,7 +23,7 @@ test("the registry lists Tala and C++, then Tazel and Gradle, under their own he
   ]);
   assert.deepEqual(buildSystemCatalogs, [
     { name: "Tazel", path: "/dslplugins/tazel" },
-    { name: "Gradle" },
+    { name: "Gradle", path: "/dslplugins/gradle" },
   ]);
 });
 

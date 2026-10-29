@@ -82,6 +82,19 @@ internal sealed class InMemoryAccountStore : IAccountStore
     }
 
     /// <inheritdoc/>
+    public ValueTask<AccountRecord?> FindByAccountNameAsync(
+        string normalizedAccountName,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (gate)
+        {
+            return ValueTask.FromResult(
+                accountIdsByName.TryGetValue(normalizedAccountName, out Guid id) ? accountsById[id] : null);
+        }
+    }
+
+    /// <inheritdoc/>
     public ValueTask<AccountRecord?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

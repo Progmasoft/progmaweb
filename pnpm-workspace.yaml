@@ -12,6 +12,10 @@ overrides:
   # published denial-of-service advisories fixed by 5.0.12. Remove this once
   # minimatch depends on a fixed release itself.
   "brace-expansion@>=5.0.0 <5.0.12": 5.0.12
+  # eslint-plugin-react-hooks resolves zod 4.4.3, which can exhaust memory while
+  # validating oversized constrained collections (fixed in 4.6.6). The plugin
+  # accepts any zod 4; remove this once it resolves a fixed release itself.
+  "zod@<4.6.6": 4.6.7
 auditConfig:
   ignoreGhsas:
     # braces <= 3.0.3: stack exhaustion on deeply nested brace patterns. No

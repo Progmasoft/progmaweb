@@ -359,3 +359,68 @@ a.viget-catalog-card:hover {
 .viget-catalog-disabled small {
   color: var(--ink-500);
 }
+
+/* The pages of the Tazel plugins: the usage snippet and the table of versions. */
+.viget-plugin-empty {
+  margin: 0;
+  color: var(--ink-650);
+}
+
+.viget-snippet {
+  overflow-x: auto;
+  margin: 0;
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  background: var(--surface-blue);
+  color: var(--blue-700);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.viget-catalog-card .viget-snippet {
+  margin-top: 20px;
+}
+
+.viget-table-scroll {
+  overflow-x: auto;
+}
+
+.viget-versions {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.viget-versions th,
+.viget-versions td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 14px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.viget-versions th {
+  color: var(--ink-500);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.viget-versions code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 13px;
+}
+
+.viget-yanked td {
+  color: var(--ink-500);
+}
+
+.viget-badge {
+  margin-inline-start: 10px;
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: var(--line);
+  color: var(--ink-650);
+  font-size: 12px;
+  font-weight: 700;
+}
