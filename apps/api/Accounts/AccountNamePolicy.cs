@@ -61,6 +61,33 @@ internal static partial class AccountNamePolicy
         return true;
     }
 
+    /// <summary>
+    /// Validates a reserved name for the operations command that provisions it: the same rules as
+    /// <see cref="TryNormalize"/>, except that the name must be one of the reserved names.
+    /// </summary>
+    /// <param name="value">The name as entered; surrounding white space is ignored.</param>
+    /// <param name="canonical">The trimmed name. It is meaningful only when the method returns <see langword="true"/>.</param>
+    /// <param name="error">Message for the operator when the name is refused; empty otherwise.</param>
+    /// <returns><see langword="true"/> when the name is a well-formed reserved name.</returns>
+    public static bool TryNormalizeReserved(string? value, out string canonical, out string error)
+    {
+        canonical = value?.Trim() ?? string.Empty;
+        if (!CanonicalPattern().IsMatch(canonical))
+        {
+            error = "Account names must begin with an uppercase ASCII letter and contain only ASCII letters or digits.";
+            return false;
+        }
+
+        if (!ReservedNames.Contains(NormalizeForLookup(canonical)))
+        {
+            error = $"'{canonical}' is not a reserved name; it is registered through the account site.";
+            return false;
+        }
+
+        error = string.Empty;
+        return true;
+    }
+
     /// <summary>Returns the key under which a name is compared for uniqueness.</summary>
     /// <param name="canonical">A name that <see cref="TryNormalize"/> accepted.</param>
     /// <returns>The name in upper case.</returns>

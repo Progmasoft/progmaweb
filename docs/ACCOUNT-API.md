@@ -26,7 +26,7 @@ Every response carries `Cache-Control: no-store`.
 
 | Field | Rule |
 | --- | --- |
-| `accountName` | 8 to 128 ASCII letters or digits, beginning with an upper-case letter. Unique without regard to case; the spelling the owner chose is kept. `Progmasoft` and `Leitwolf` are reserved in every case. |
+| `accountName` | 8 to 128 ASCII letters or digits, beginning with an upper-case letter. Unique without regard to case; the spelling the owner chose is kept. `Progmasoft` and `Leitwolf` are reserved in every case; operations tooling creates them on the server (`accounts provision-reserved`, see ops/README.md). |
 | `email` | a single mailbox without a display name, at most 254 characters. Unique without regard to case. Ownership is not verified. |
 | `password` | 12 to 256 characters, without a null character. No composition rule; long passphrases are welcome. |
 
