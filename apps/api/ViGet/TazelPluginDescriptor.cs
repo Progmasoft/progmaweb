@@ -13,7 +13,7 @@ namespace Progmasoft.Progmaweb.Api.ViGet;
 /// </summary>
 /// <param name="Publisher">The Progmasoft Account the plugin is published under.</param>
 /// <param name="Name">The name of the plugin; one identifier.</param>
-/// <param name="Version">An exact version of three or four numbers.</param>
+/// <param name="Version">An exact version of three to five numbers.</param>
 /// <param name="ApiVersion">The plugin API of Tazel it was built for.</param>
 /// <param name="Description">What the plugin does.</param>
 /// <param name="Authors">The authors, in the order of the descriptor.</param>
@@ -40,7 +40,7 @@ internal sealed partial record TazelPluginDescriptor(
     /// <summary>Whether a text is one identifier, as Tazel requires of a publisher and a plugin name.</summary>
     public static bool IsIdentifier(string value) => IdentifierPattern().IsMatch(value);
 
-    /// <summary>Whether a text is an exact version of three or four numbers, as Tazel requires of a plugin version.</summary>
+    /// <summary>Whether a text is an exact version of three to five numbers, as Tazel requires of a plugin version.</summary>
     public static bool IsVersion(string value) => VersionPattern().IsMatch(value);
 
     /// <summary>Reads and checks the descriptor of a plugin JAR.</summary>
@@ -96,7 +96,7 @@ internal sealed partial record TazelPluginDescriptor(
 
         if (version is null || !IsVersion(version))
         {
-            return "The descriptor needs an exact version of three or four numbers.";
+            return "The descriptor needs an exact version of three to five numbers.";
         }
 
         if (!int.TryParse(Text("apiVersion"), out int apiVersion) || apiVersion < 1)
@@ -131,8 +131,8 @@ internal sealed partial record TazelPluginDescriptor(
     [GeneratedRegex("^[A-Za-z_][A-Za-z0-9_]*$")]
     private static partial Regex IdentifierPattern();
 
-    /// <summary>An exact version of three or four numbers without leading zeros or build metadata, as Tazel accepts it.</summary>
+    /// <summary>An exact version of three to five numbers without leading zeros, as Tazel accepts it.</summary>
     /// <returns>The compiled expression.</returns>
-    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,3}(?:-[0-9A-Za-z.-]+)?$")]
+    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,4}(?:-[0-9A-Za-z.-]+)?$")]
     private static partial Regex VersionPattern();
 }
