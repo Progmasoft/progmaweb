@@ -59,8 +59,11 @@ public sealed class ViGetTests : IDisposable
 
         Assert.Equal("The JAR has no META-INF/services/com.progmasoft.api.tazel.dsl.plugin.ProjectPlugin.",
             TazelPluginDescriptor.TryRead(Jar(service: false), out _));
-        Assert.Equal("The descriptor needs an exact semantic version.",
+        Assert.Equal("The descriptor needs an exact version of three or four numbers.",
             TazelPluginDescriptor.TryRead(Jar(version: "1.0"), out _));
+        Assert.Equal("The descriptor needs an exact version of three or four numbers.",
+            TazelPluginDescriptor.TryRead(Jar(version: "1.2.3.4.5"), out _));
+        Assert.True(TazelPluginDescriptor.IsVersion("0.1.1.1"));
         Assert.Equal("The descriptor needs a name that is one identifier.",
             TazelPluginDescriptor.TryRead(Jar(name: "c-make"), out _));
         Assert.Equal("The homepage of the descriptor is not an https address.",
