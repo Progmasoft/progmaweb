@@ -49,28 +49,43 @@ public sealed class ViGetTests : IDisposable
     [Fact]
     public void TheDescriptorOfAPluginJarIsReadAndChecked()
     {
-        Assert.Null(TazelPluginDescriptor.TryRead(Jar(), out TazelPluginDescriptor? descriptor));
+        Assert.Null(Read(Jar(), out TazelPluginDescriptor? descriptor));
         Assert.Equal(
             new TazelPluginDescriptor(
-                "Progmasoft", "CMake", "0.1.0", 2, "Builds CMake projects.", ["First Author", "Second Author"],
+                "Progmasoft", "CMake", "0.1.0", 3, "Builds CMake projects.", ["First Author", "Second Author"],
                 "MPL-2.0", "https://example.com/cmake", null),
             descriptor!,
             new DescriptorComparer());
 
         Assert.Equal("The JAR has no META-INF/services/com.progmasoft.api.tazel.dsl.plugin.ProjectPlugin.",
-            TazelPluginDescriptor.TryRead(Jar(service: false), out _));
-        Assert.Equal("The descriptor needs an exact version of three to five numbers.",
-            TazelPluginDescriptor.TryRead(Jar(version: "1.0"), out _));
-        Assert.Equal("The descriptor needs an exact version of three to five numbers.",
-            TazelPluginDescriptor.TryRead(Jar(version: "1.2.3.4.5.6"), out _));
+            Read(Jar(service: false), out _));
+        Assert.Equal("The version must be exact, of three to five numbers.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "CMake", "1.0", out _));
+        Assert.Equal("The version must be exact, of three to five numbers.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "CMake", "1.2.3.4.5.6", out _));
         Assert.True(TazelPluginDescriptor.IsVersion("0.1.1.1"));
         Assert.True(TazelPluginDescriptor.IsVersion("0.1.1.1.1"));
         Assert.True(TazelPluginDescriptor.IsVersion("0.1.1.1.1-build.2"));
-        Assert.Equal("The descriptor needs a name that is one identifier.",
-            TazelPluginDescriptor.TryRead(Jar(name: "c-make"), out _));
+        Assert.Equal("The name of the plugin must be one identifier.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "c-make", "0.1.0", out _));
+        Assert.Equal("The publisher must be one identifier.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progma soft", "CMake", "0.1.0", out _));
         Assert.Equal("The homepage of the descriptor is not an https address.",
-            TazelPluginDescriptor.TryRead(Jar(homepage: "http\\://example.com"), out _));
-        Assert.Equal("The file is not a JAR.", TazelPluginDescriptor.TryRead("not a zip"u8.ToArray(), out _));
+            Read(Jar(homepage: "http\\://example.com"), out _));
+        Assert.Equal("The file is not a JAR.", Read("not a zip"u8.ToArray(), out _));
+    }
+
+    [Fact]
+    public void ADescriptorThatNamesThePluginIsRefused()
+    {
+        Assert.Equal(
+            "The descriptor names publisher, name, version; " +
+            "ViGet takes who a plugin is from the command that publishes it, so its JAR names none.",
+            Read(Jar(identity: ["publisher=Progmasoft", "name=CMake", "version=0.1.0"]), out _));
+        Assert.Equal(
+            "The descriptor names version; " +
+            "ViGet takes who a plugin is from the command that publishes it, so its JAR names none.",
+            Read(Jar(identity: ["version="]), out _));
     }
 
     [Fact]
@@ -79,18 +94,18 @@ public sealed class ViGetTests : IDisposable
         (TazelPluginPublishing publishing, InMemoryAccountStore accounts, ITazelPluginCatalog catalog) = Publishing();
         CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
-        PublishResult noAccount = await publishing.PublishAsync(Jar(), cancellationToken);
+        PublishResult noAccount = await publishing.PublishAsync(Jar(), "Progmasoft", "CMake", "0.1.0", cancellationToken);
         Assert.Equal("No Progmasoft Account is named 'Progmasoft'.", noAccount.Error);
 
         await AddAccountAsync(accounts, "Progmasoft");
         await AddAccountAsync(accounts, "Someone");
-        PublishResult notAllowed = await publishing.PublishAsync(Jar(publisher: "Someone"), cancellationToken);
+        PublishResult notAllowed = await publishing.PublishAsync(Jar(), "Someone", "CMake", "0.1.0", cancellationToken);
         Assert.Equal(
             "Publishing Tazel plugins is open to Progmasoft for now; 'Someone' cannot publish yet.",
             notAllowed.Error);
 
         byte[] jar = Jar();
-        PublishResult published = await publishing.PublishAsync(jar, cancellationToken);
+        PublishResult published = await publishing.PublishAsync(jar, "Progmasoft", "CMake", "0.1.0", cancellationToken);
         Assert.True(published.Published, published.Error);
         string file = Path.Combine(artifactRoot, "dslplugins", "tazel", "Progmasoft", "CMake", "0.1.0", "CMake-0.1.0.jar");
         Assert.Equal(jar, await File.ReadAllBytesAsync(file, cancellationToken));
@@ -98,11 +113,12 @@ public sealed class ViGetTests : IDisposable
         Assert.Equal(Convert.ToHexStringLower(SHA256.HashData(jar)), plugin.Versions.Single().Sha256);
         Assert.Equal("MPL-2.0", plugin.License);
 
-        PublishResult again = await publishing.PublishAsync(Jar(description: "Another build."), cancellationToken);
+        PublishResult again = await publishing.PublishAsync(
+            Jar(description: "Another build."), "Progmasoft", "CMake", "0.1.0", cancellationToken);
         Assert.Equal("Progmasoft.CMake 0.1.0 is published already.", again.Error);
         Assert.Equal(jar, await File.ReadAllBytesAsync(file, cancellationToken));
 
-        PublishResult folded = await publishing.PublishAsync(Jar(name: "CMAKE", version: "0.2.0"), cancellationToken);
+        PublishResult folded = await publishing.PublishAsync(Jar(), "Progmasoft", "CMAKE", "0.2.0", cancellationToken);
         Assert.Equal(
             "Progmasoft has a plugin whose name differs from 'CMAKE' only in letter case.", folded.Error);
         Assert.False(File.Exists(Path.Combine(
@@ -114,7 +130,8 @@ public sealed class ViGetTests : IDisposable
     {
         (TazelPluginPublishing publishing, InMemoryAccountStore accounts, _) = Publishing();
         await AddAccountAsync(accounts, "Progmasoft");
-        PublishResult result = await publishing.PublishAsync(Jar(license: null), TestContext.Current.CancellationToken);
+        PublishResult result = await publishing.PublishAsync(
+            Jar(license: null), "Progmasoft", "CMake", "0.1.0", TestContext.Current.CancellationToken);
         Assert.Equal(
             "ViGet needs a description, at least one author and a license in the descriptor.", result.Error);
     }
@@ -125,7 +142,7 @@ public sealed class ViGetTests : IDisposable
         await using AccountApiFactory factory = new();
         ITazelPluginCatalog catalog = factory.Services.GetRequiredService<ITazelPluginCatalog>();
         CancellationToken cancellationToken = TestContext.Current.CancellationToken;
-        Assert.Null(TazelPluginDescriptor.TryRead(Jar(), out TazelPluginDescriptor? descriptor));
+        Assert.Null(Read(Jar(), out TazelPluginDescriptor? descriptor));
         await catalog.AddVersionAsync(descriptor!, new string('a', 64), 10, DateTimeOffset.UnixEpoch, cancellationToken);
         await catalog.AddVersionAsync(
             descriptor! with { Version = "0.2.0" }, new string('b', 64), 10, DateTimeOffset.UnixEpoch.AddDays(1),
@@ -140,7 +157,7 @@ public sealed class ViGetTests : IDisposable
         JsonElement[] versions = [.. index.RootElement.GetProperty("versions").EnumerateArray()];
         Assert.Equal(["0.2.0", "0.1.0"], versions.Select(version => version.GetProperty("version").GetString()));
         Assert.True(versions[0].GetProperty("yanked").GetBoolean());
-        Assert.Equal(2, versions[1].GetProperty("apiVersion").GetInt32());
+        Assert.Equal(3, versions[1].GetProperty("apiVersion").GetInt32());
         Assert.Equal(new string('a', 64), versions[1].GetProperty("sha256").GetString());
 
         using JsonDocument detail = JsonDocument.Parse(await client.GetStringAsync(
@@ -175,8 +192,9 @@ public sealed class ViGetTests : IDisposable
         StringWriter output = new();
         StringWriter errors = new();
 
+        string[] publish = ["publish-tazel-plugin", "Progmasoft", "CMake", "0.1.0", jar];
         Assert.Equal(0, await ViGetCommand.RunAsync(
-            services, ["publish-tazel-plugin", jar], output, errors, TestContext.Current.CancellationToken));
+            services, publish, output, errors, TestContext.Current.CancellationToken));
         Assert.Contains("Published Progmasoft.CMake 0.1.0", output.ToString(), StringComparison.Ordinal);
         Assert.Equal(0, await ViGetCommand.RunAsync(
             services, ["yank-tazel-plugin", "Progmasoft", "CMake", "0.1.0"], output, errors,
@@ -184,6 +202,8 @@ public sealed class ViGetTests : IDisposable
         Assert.True((await catalog.FindAsync("Progmasoft", "CMake", TestContext.Current.CancellationToken))!
             .Versions.Single().Yanked);
         Assert.Equal(1, await ViGetCommand.RunAsync(
+            services, publish, output, errors, TestContext.Current.CancellationToken));
+        Assert.Equal(2, await ViGetCommand.RunAsync(
             services, ["publish-tazel-plugin", jar], output, errors, TestContext.Current.CancellationToken));
         Assert.Equal(2, await ViGetCommand.RunAsync(
             services, ["publish"], output, errors, TestContext.Current.CancellationToken));
@@ -214,24 +234,23 @@ public sealed class ViGetTests : IDisposable
                 DateTimeOffset.UnixEpoch),
             TestContext.Current.CancellationToken);
 
+    private static string? Read(byte[] jar, out TazelPluginDescriptor? descriptor) =>
+        TazelPluginDescriptor.TryRead(jar, "Progmasoft", "CMake", "0.1.0", out descriptor);
+
     private static byte[] Jar(
-        string publisher = "Progmasoft",
-        string name = "CMake",
-        string version = "0.1.0",
         string? description = "Builds CMake projects.",
         string? license = "MPL-2.0",
         string homepage = "https\\://example.com/cmake",
-        bool service = true)
+        bool service = true,
+        string[]? identity = null)
     {
         using MemoryStream bytes = new();
         using (ZipArchive archive = new(bytes, ZipArchiveMode.Create, leaveOpen: true))
         {
             List<string> lines =
             [
-                "publisher=" + publisher,
-                "name=" + name,
-                "version=" + version,
-                "apiVersion=2",
+                .. identity ?? [],
+                "apiVersion=3",
                 "author.0=First Author",
                 "author.1=Second Author",
                 "homepage=" + homepage
