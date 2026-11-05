@@ -70,6 +70,12 @@ public sealed class ViGetTests : IDisposable
             TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "c-make", "0.1.0", out _));
         Assert.Equal("The publisher must be one identifier.",
             TazelPluginDescriptor.TryRead(Jar(), "Progma soft", "CMake", "0.1.0", out _));
+        // A line break after the name or the version is not part of either.
+        Assert.Equal("The name of the plugin must be one identifier.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "CMake\n", "0.1.0", out _));
+        Assert.Equal("The version must be exact, of three to five numbers.",
+            TazelPluginDescriptor.TryRead(Jar(), "Progmasoft", "CMake", "0.1.0\n", out _));
+        Assert.False(TazelPluginDescriptor.IsVersion("0.1.0\n"));
         Assert.Equal("The homepage of the descriptor is not an https address.",
             Read(Jar(homepage: "http\\://example.com"), out _));
         Assert.Equal("The file is not a JAR.", Read("not a zip"u8.ToArray(), out _));

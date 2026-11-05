@@ -140,11 +140,11 @@ internal sealed partial record TazelPluginDescriptor(
 
     /// <summary>One identifier: a letter or <c>_</c>, then letters, digits or <c>_</c>.</summary>
     /// <returns>The compiled expression.</returns>
-    [GeneratedRegex("^[A-Za-z_][A-Za-z0-9_]*$")]
+    [GeneratedRegex(@"^[A-Za-z_][A-Za-z0-9_]*\z")]
     private static partial Regex IdentifierPattern();
 
     /// <summary>An exact version of three to five numbers without leading zeros, as Tazel accepts it.</summary>
     /// <returns>The compiled expression.</returns>
-    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,4}(?:-[0-9A-Za-z.-]+)?$")]
+    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,4}(?:-[0-9A-Za-z.-]+)?\z")]
     private static partial Regex VersionPattern();
 }
