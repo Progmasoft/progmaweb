@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import { nonceHeader } from "@/lib/content-security-policy";
 import { getLocale } from "@/lib/locale.server";
 import { textDirection } from "@/lib/localization";
 import "./globals.css";
@@ -42,6 +44,8 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const locale = await getLocale();
+  // The proxy gives each page a nonce; its policy admits no other inline script.
+  const nonce = (await headers()).get(nonceHeader) ?? undefined;
   return (
     <html
       lang={locale}
@@ -52,7 +56,10 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{ __html: themeBootstrap }}
+        />
       </head>
       <body>{children}</body>
     </html>

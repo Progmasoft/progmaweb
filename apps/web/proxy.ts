@@ -11,6 +11,11 @@ import {
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
 import { catch3Route, idesRoute, productRoute } from "@/lib/sites";
+import {
+  contentSecurityPolicy,
+  createNonce,
+  nonceHeader,
+} from "@/lib/content-security-policy";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
 const vigetHosts = new Set(["viget.progmasoft.com", "viget.localhost"]);
@@ -57,6 +62,29 @@ const ownSites: OwnSite[] = [
 ];
 
 export function proxy(request: NextRequest) {
+  // Every page gets its own nonce. Next reads the policy from the request to
+  // mark its scripts, and the layout reads the nonce for the theme bootstrap.
+  const nonce = createNonce();
+  const policy = contentSecurityPolicy(
+    nonce,
+    process.env.NODE_ENV === "development",
+  );
+  const headers = new Headers(request.headers);
+  headers.set(nonceHeader, nonce);
+  headers.set("Content-Security-Policy", policy);
+  const response = route(request, headers);
+  response.headers.set("Content-Security-Policy", policy);
+  return response;
+}
+
+/**
+ * Where a request goes on its host.
+ *
+ * @param request The request.
+ * @param headers The request headers the page renders with.
+ * @returns The response.
+ */
+function route(request: NextRequest, headers: Headers): NextResponse {
   const host = requestHost(
     request.headers.get("x-forwarded-host"),
     request.headers.get("host"),
@@ -97,12 +125,12 @@ export function proxy(request: NextRequest) {
   const site = ownSites.find((candidate) => candidate.hosts.has(host));
   if (site) {
     if (site.api && pathname.startsWith("/api/")) {
-      return NextResponse.next();
+      return NextResponse.next({ request: { headers } });
     }
     // The standalone server runs this proxy a second time for the rewritten
     // path, with the same host: a path already in the site's tree is final.
     if (pathname === site.root || pathname.startsWith(`${site.root}/`)) {
-      return NextResponse.next();
+      return NextResponse.next({ request: { headers } });
     }
     const destination = internalRoute(
       request,
@@ -111,12 +139,12 @@ export function proxy(request: NextRequest) {
     // The sign-in page reads ReturnUrl and the consent page every parameter
     // of the authorization request.
     destination.search = request.nextUrl.search;
-    return NextResponse.rewrite(destination);
+    return rewrite(headers, destination);
   }
   // The internal trees belong to their hosts only.
   for (const { root } of ownSites) {
     if (pathname === root || pathname.startsWith(`${root}/`)) {
-      return NextResponse.rewrite(internalRoute(request, "/not-found"));
+      return rewrite(headers, internalRoute(request, "/not-found"));
     }
   }
 
@@ -128,7 +156,7 @@ export function proxy(request: NextRequest) {
     // so an unmodified absolute rewrite would attempt TLS against its HTTP-only
     // loopback listener and fail before the account page can render.
     destination.protocol = "http:";
-    return NextResponse.rewrite(destination);
+    return rewrite(headers, destination);
   }
 
   // ViGet is deployed by Progmaweb but keeps short public catalog URLs. The
@@ -136,16 +164,17 @@ export function proxy(request: NextRequest) {
   // organization page and the account surface.
   if (vigetHosts.has(host)) {
     if (pathname === "/") {
-      return NextResponse.rewrite(internalRoute(request, "/viget"));
+      return rewrite(headers, internalRoute(request, "/viget"));
     }
     // Packages are grouped by the language they are written in and DSL
     // plugins by the build system they extend. A group without a catalog of
     // its own leads to the one catalog there is.
     if (pathname === "/langs/tala" || pathname === "/langs/tala/") {
-      return NextResponse.rewrite(internalRoute(request, "/viget/langs/tala"));
+      return rewrite(headers, internalRoute(request, "/viget/langs/tala"));
     }
     if (pathname === "/dslplugins/tazel" || pathname === "/dslplugins/tazel/") {
-      return NextResponse.rewrite(
+      return rewrite(
+        headers,
         internalRoute(request, "/viget/dslplugins/tazel"),
       );
     }
@@ -156,7 +185,8 @@ export function proxy(request: NextRequest) {
         pathname,
       );
     if (plugin) {
-      return NextResponse.rewrite(
+      return rewrite(
+        headers,
         internalRoute(
           request,
           `/viget/dslplugins/tazel/${plugin[1]}/${plugin[2]}`,
@@ -167,7 +197,8 @@ export function proxy(request: NextRequest) {
       pathname === "/dslplugins/gradle" ||
       pathname === "/dslplugins/gradle/"
     ) {
-      return NextResponse.rewrite(
+      return rewrite(
+        headers,
         internalRoute(request, "/viget/dslplugins/gradle"),
       );
     }
@@ -215,7 +246,11 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("https://account.progmasoft.com/"));
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers } });
+}
+
+function rewrite(headers: Headers, destination: URL): NextResponse {
+  return NextResponse.rewrite(destination, { request: { headers } });
 }
 
 function internalRoute(request: NextRequest, pathname: string): URL {
