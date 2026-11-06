@@ -42,7 +42,8 @@ ssh root@13.140.205.74 bash /root/aisupport-setup/deploy.sh "$(git rev-parse HEA
 ```
 
 The first index embeds every passage; later ones embed only what changed. To
-roll back, point `/srv/aisupport/current` at the previous release and restart `aisupport`.
+roll back, point `/srv/aisupport/current` at the previous release and restart `aisupport`: each release links its own
+index, so its documents come back with it. A failed deployment leaves nothing behind and can run again.
 
 ## Speed
 

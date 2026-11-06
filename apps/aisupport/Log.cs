@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-using System.Net;
-
 namespace Progmasoft.Progmaweb.AiSupport;
 
 /// <summary>What AI Support writes to its log. No entry contains a question, an answer or an address.</summary>
@@ -13,7 +11,7 @@ internal static partial class Log
         Message = "No index at {Path}; questions are answered without documentation.")]
     public static partial void MissingIndex(ILogger logger, string path);
 
-    /// <summary>A model server refused or failed a request.</summary>
-    [LoggerMessage(EventId = 2, Level = LogLevel.Warning, Message = "A model server failed: {Status}")]
-    public static partial void ModelFailed(ILogger logger, HttpStatusCode? status);
+    /// <summary>A model server refused or failed a request, or its answer could not be read.</summary>
+    [LoggerMessage(EventId = 2, Level = LogLevel.Warning, Message = "A question could not be answered.")]
+    public static partial void ModelFailed(ILogger logger, Exception exception);
 }

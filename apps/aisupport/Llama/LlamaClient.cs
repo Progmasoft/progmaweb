@@ -121,6 +121,9 @@ internal sealed class LlamaClient(HttpClient http, IOptions<LanguageModelOptions
                 yield return piece;
             }
         }
+
+        // The stream ended without its [DONE] marker: the answer is cut short, and must not pass for a whole one.
+        throw new IOException("The chat server closed the answer before its end.");
     }
 
     /// <summary>The text one streamed chunk adds to the answer.</summary>
@@ -145,7 +148,8 @@ internal sealed class LlamaClient(HttpClient http, IOptions<LanguageModelOptions
     internal static float[] Normalize(float[] vector)
     {
         double length = Math.Sqrt(vector.Sum(value => (double)value * value));
-        if (length == 0)
+        // A vector without length (all zeros, which no model returns for text) has no direction to keep.
+        if (length < double.Epsilon)
         {
             return vector;
         }

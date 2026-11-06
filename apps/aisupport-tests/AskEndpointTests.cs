@@ -70,10 +70,14 @@ public sealed class AskEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    [Fact]
-    public async Task AFailedModelEndsTheStreamWithAnError()
+    [Theory]
+    [InlineData(Failure.Unreachable)]
+    [InlineData(Failure.CutShort)]
+    [InlineData(Failure.Unreadable)]
+    [InlineData(Failure.TimedOut)]
+    public async Task AFailedModelEndsTheStreamWithAnErrorAndNoEnd(Failure failure)
     {
-        await using WebApplicationFactory<Program> factory = Factory(new FakeModels { Fails = true });
+        await using WebApplicationFactory<Program> factory = Factory(new FakeModels("Run ") { Fails = failure });
         using HttpClient client = factory.CreateClient();
 
         HttpResponseMessage response = await client.PostAsJsonAsync("/api/ask", new { question = "How?" },
@@ -81,6 +85,7 @@ public sealed class AskEndpointTests
         string body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.EndsWith("event: error\ndata: {\"message\":\"unavailable\"}\n\n", body, StringComparison.Ordinal);
+        Assert.DoesNotContain("event: done", body, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -110,14 +115,27 @@ public sealed class AskEndpointTests
         Assert.Equal("{\"passages\":1}", health);
     }
 
+    /// <summary>How a fake model fails.</summary>
+    public enum Failure
+    {
+        None,
+        Unreachable,
+        CutShort,
+        Unreadable,
+        TimedOut
+    }
+
     private sealed class FakeModels(params string[] pieces) : ILanguageModels
     {
-        public bool Fails { get; init; }
+        public Failure Fails { get; init; }
 
         public Task<float[][]> EmbedAsync(IReadOnlyList<string> texts, CancellationToken cancellationToken) =>
-            Fails
-                ? throw new HttpRequestException("down", null, HttpStatusCode.BadGateway)
-                : Task.FromResult(texts.Select(_ => new float[] { 1, 0 }).ToArray());
+            Fails switch
+            {
+                Failure.Unreachable => throw new HttpRequestException("down", null, HttpStatusCode.BadGateway),
+                Failure.Unreadable => throw new InvalidDataException("wrong number of vectors"),
+                _ => Task.FromResult(texts.Select(_ => new float[] { 1, 0 }).ToArray())
+            };
 
         public async IAsyncEnumerable<string> ChatAsync(
             IReadOnlyList<ChatMessage> messages,
@@ -127,6 +145,16 @@ public sealed class AskEndpointTests
             {
                 await Task.Yield();
                 yield return piece;
+            }
+
+            if (Fails is Failure.CutShort)
+            {
+                throw new IOException("cut short");
+            }
+
+            if (Fails is Failure.TimedOut)
+            {
+                throw new TaskCanceledException("timed out");
             }
         }
     }

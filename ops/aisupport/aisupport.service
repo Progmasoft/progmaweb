@@ -14,7 +14,7 @@ WorkingDirectory=/srv/aisupport/current
 ExecStart=/usr/bin/dotnet /srv/aisupport/current/Progmaweb.AiSupport.dll
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=http://127.0.0.1:5300
-Environment=AiSupport__IndexPath=/srv/aisupport/index/index.json
+Environment=AiSupport__IndexPath=/srv/aisupport/current/index.json
 Restart=on-failure
 RestartSec=5s
 TimeoutStopSec=30s

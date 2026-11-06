@@ -29,7 +29,7 @@ builder.Services.Configure<LanguageModelOptions>(builder.Configuration.GetSectio
 builder.Services.AddHttpClient<ILanguageModels, LlamaClient>(client => client.Timeout = TimeSpan.FromMinutes(3));
 builder.Services.AddSingleton(services =>
 {
-    string path = builder.Configuration["AiSupport:IndexPath"] ?? "/srv/aisupport/index/index.json";
+    string path = builder.Configuration["AiSupport:IndexPath"] ?? "/srv/aisupport/current/index.json";
     if (File.Exists(path))
     {
         return KnowledgeIndex.Load(path);

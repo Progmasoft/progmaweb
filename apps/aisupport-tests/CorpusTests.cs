@@ -86,6 +86,8 @@ public sealed class CorpusTests
     [Theory]
     [InlineData("tazel-docs", "tazel.net", "main", "content/en-US/docs/2.reference/1.commands.md",
         "https://tazel.net/docs/reference/commands")]
+    [InlineData("tazel-docs", "tazel.net", "main", "content/en-US/docs/2.reference/0.index.md",
+        "https://tazel.net/docs/reference")]
     [InlineData("github", "catch3", "devel", "docs/assertions.md",
         "https://github.com/Progmasoft/catch3/blob/devel/docs/assertions.md")]
     public void AFileHasThePublicAddressOfItsSource(

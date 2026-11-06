@@ -126,6 +126,50 @@ public sealed class RetrievalTests
         Assert.Equal(expected, LlamaClient.ChunkText(data));
     }
 
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task AChatStreamWithoutItsEndMarkerIsAFailure(bool complete)
+    {
+        string stream = "data: {\"choices\":[{\"delta\":{\"content\":\"Hel\"}}]}\n\n" +
+                        "data: {\"choices\":[{\"delta\":{\"content\":\"lo\"}}]}\n\n" +
+                        (complete ? "data: [DONE]\n\n" : string.Empty);
+        using HttpClient http = new(new StreamHandler(stream));
+        LlamaClient client = new(http, Microsoft.Extensions.Options.Options.Create(new LanguageModelOptions()));
+        List<string> pieces = [];
+
+        async Task ReadAsync()
+        {
+            await foreach (string piece in client.ChatAsync([new ChatMessage("user", "Hi")],
+                               TestContext.Current.CancellationToken))
+            {
+                pieces.Add(piece);
+            }
+        }
+
+        if (complete)
+        {
+            await ReadAsync();
+        }
+        else
+        {
+            await Assert.ThrowsAsync<IOException>(ReadAsync);
+        }
+
+        Assert.Equal(["Hel", "lo"], pieces);
+    }
+
+    private sealed class StreamHandler(string body) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken) =>
+            Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new StringContent(body)
+            });
+    }
+
     private sealed class CountingModels : ILanguageModels
     {
         public List<string> Embedded { get; } = [];

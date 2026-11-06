@@ -29,7 +29,13 @@ internal static partial class SourceLinks
         const string Prefix = "content/en-US/docs/";
         string page = path.StartsWith(Prefix, StringComparison.Ordinal) ? path[Prefix.Length..] : path;
         page = page.EndsWith(".md", StringComparison.Ordinal) ? page[..^3] : page;
-        IEnumerable<string> segments = page.Split('/').Select(segment => Order().Replace(segment, string.Empty));
+        List<string> segments = [.. page.Split('/').Select(segment => Order().Replace(segment, string.Empty))];
+        // Nuxt Content serves an index page at the address of its folder.
+        if (segments is [.., "index"])
+        {
+            segments.RemoveAt(segments.Count - 1);
+        }
+
         return "https://tazel.net/docs/" + string.Join('/', segments);
     }
 

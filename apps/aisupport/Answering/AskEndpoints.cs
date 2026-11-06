@@ -77,10 +77,12 @@ internal static class AskEndpoints
         {
             // The person left; the model has stopped with the request.
         }
-        catch (HttpRequestException exception)
+        catch (Exception exception) when (exception is HttpRequestException or IOException or JsonException
+                                              or InvalidDataException or OperationCanceledException)
         {
-            // Only the kind of failure is written, never the question.
-            Log.ModelFailed(loggers.CreateLogger(typeof(AskEndpoints)), exception.StatusCode);
+            // A model server failed, answered what cannot be read, or took longer than the client allows. The log
+            // gets the exception, whose message names the server and the failure, never the question.
+            Log.ModelFailed(loggers.CreateLogger(typeof(AskEndpoints)), exception);
             await WriteAsync(response, "error", new { message = "unavailable" }, CancellationToken.None);
         }
     }

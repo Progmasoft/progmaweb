@@ -34,7 +34,8 @@ done
 
 install -d -m 0755 /opt/llama /srv/models /srv/aisupport /srv/aisupport/releases
 install -d -m 0750 -o aisupport -g aisupport /srv/aisupport/index
-install -d -m 0750 /srv/aisupport/corpus /var/lib/letsencrypt
+# nginx workers read the challenges of Let's Encrypt from this webroot.
+install -d -m 0755 /var/lib/letsencrypt
 
 if [[ ! -x /opt/llama/$LLAMA_BUILD/llama-server ]]; then
     fetch "https://github.com/ggml-org/llama.cpp/releases/download/$LLAMA_BUILD/llama-$LLAMA_BUILD-bin-ubuntu-x64.tar.gz" \

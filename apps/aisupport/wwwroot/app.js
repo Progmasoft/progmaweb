@@ -132,14 +132,17 @@ const texts = {
   },
 };
 
+// The languages and their words, read through maps: the keys come from the page, never from a visitor.
+const languages = new Map(Object.entries(texts));
+
 function chosenLocale() {
   const cookie = document.cookie
     .split("; ")
     .find((part) => part.startsWith("progmasoft_locale="));
   const chosen = cookie?.slice("progmasoft_locale=".length);
-  if (chosen && chosen in texts) return chosen;
+  if (chosen && languages.has(chosen)) return chosen;
   for (const language of navigator.languages ?? []) {
-    const match = Object.keys(texts).find(
+    const match = [...languages.keys()].find(
       (locale) => locale === language || locale.startsWith(`${language.split("-")[0]}-`),
     );
     if (match) return match;
@@ -148,7 +151,8 @@ function chosenLocale() {
 }
 
 const locale = chosenLocale();
-const text = texts[locale];
+const text = languages.get(locale);
+const words = new Map(Object.entries(text));
 
 const form = document.getElementById("ask");
 const question = document.getElementById("question");
@@ -165,10 +169,10 @@ function translate() {
   document.documentElement.lang = locale;
   document.documentElement.dir = locale === "he-IL" ? "rtl" : "ltr";
   for (const element of document.querySelectorAll("[data-text]")) {
-    element.textContent = text[element.dataset.text];
+    element.textContent = words.get(element.dataset.text) ?? element.textContent;
   }
   for (const element of document.querySelectorAll("[data-placeholder]")) {
-    element.placeholder = text[element.dataset.placeholder];
+    element.placeholder = words.get(element.dataset.placeholder) ?? element.placeholder;
   }
   examples.replaceChildren(
     ...text.examples.map((example) => {
@@ -282,23 +286,39 @@ function fail(words) {
   message.hidden = false;
 }
 
-// Reads the server-sent events of /api/ask from the body of the response.
+// Reads the server-sent events of /api/ask from the body of the response. A
+// failure to read reaches the caller, which shows it; the reader is released
+// either way.
 async function* events(response) {
   const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
   let buffer = "";
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) return;
-    buffer += value;
-    let end;
-    while ((end = buffer.indexOf("\n\n")) >= 0) {
-      const block = buffer.slice(0, end);
-      buffer = buffer.slice(end + 2);
-      const name = /^event: (.*)$/m.exec(block)?.[1];
-      const data = /^data: (.*)$/m.exec(block)?.[1];
-      if (name && data) yield { name, data: JSON.parse(data) };
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) return;
+      buffer += value;
+      let end = buffer.indexOf("\n\n");
+      while (end >= 0) {
+        const block = buffer.slice(0, end);
+        buffer = buffer.slice(end + 2);
+        const name = /^event: (.*)$/m.exec(block)?.[1];
+        const data = /^data: (.*)$/m.exec(block)?.[1];
+        if (name && data) yield { name, data: JSON.parse(data) };
+        end = buffer.indexOf("\n\n");
+      }
     }
+  } finally {
+    reader.releaseLock();
   }
+}
+
+// An answer that did not reach its end is taken away, so a part of one never
+// stands as if it were whole.
+function abandon() {
+  answer.hidden = true;
+  showSources([]);
+  answerText.replaceChildren();
+  fail(text.unavailable);
 }
 
 async function ask(event) {
@@ -330,13 +350,17 @@ async function ask(event) {
       fail(response.status === 503 ? text.busy : response.status === 400 ? text.invalid : text.unavailable);
       return;
     }
+    let finished = false;
     for await (const { name, data } of events(response)) {
       if (name === "sources") showSources(data);
-      else if (name === "text") render((markdown += data.text));
-      else if (name === "error") fail(text.unavailable);
+      else if (name === "text") {
+        markdown += data.text;
+        render(markdown);
+      } else if (name === "done") finished = true;
     }
+    if (!finished) abandon();
   } catch {
-    fail(text.unavailable);
+    abandon();
   } finally {
     answerText.classList.remove("thinking");
     submit.disabled = false;
