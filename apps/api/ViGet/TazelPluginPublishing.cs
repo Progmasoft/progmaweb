@@ -53,18 +53,23 @@ internal sealed class TazelPluginPublishing(
     public static string RelativePath(string publisher, string name, string version) =>
         Path.Combine("dslplugins", "tazel", publisher, name, version, $"{name}-{version}.jar");
 
-    /// <summary>Publishes the plugin in a JAR.</summary>
+    /// <summary>Publishes the plugin in a JAR as the version of a plugin of a publisher.</summary>
     /// <param name="jar">The bytes of the JAR.</param>
+    /// <param name="publisher">The Progmasoft Account it is published under.</param>
+    /// <param name="name">The name of the plugin.</param>
+    /// <param name="version">The version it is published as.</param>
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>The published descriptor, or why the JAR was refused.</returns>
-    public async Task<PublishResult> PublishAsync(byte[] jar, CancellationToken cancellationToken)
+    public async Task<PublishResult> PublishAsync(
+        byte[] jar, string publisher, string name, string version, CancellationToken cancellationToken)
     {
         if (jar.LongLength > MaximumSize)
         {
             return Refused($"The JAR is larger than {MaximumSize / 1024 / 1024} MiB.");
         }
 
-        if (TazelPluginDescriptor.TryRead(jar, out TazelPluginDescriptor? descriptor) is { } invalid)
+        if (TazelPluginDescriptor.TryRead(jar, publisher, name, version, out TazelPluginDescriptor? descriptor) is
+            { } invalid)
         {
             return Refused(invalid);
         }

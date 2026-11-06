@@ -202,12 +202,13 @@ systemd-run --quiet --wait --pipe --uid=progmaweb --gid=progmaweb \
   -p EnvironmentFile=/etc/progmaweb/account.env -p Environment=ASPNETCORE_ENVIRONMENT=Production \
   -p WorkingDirectory=/srv/progmaweb/current/api \
   /usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll \
-  viget publish-tazel-plugin /srv/viget/incoming/CMake-0.1.0.jar
+  viget publish-tazel-plugin Progmasoft CMake 0.1.0 /srv/viget/incoming/CMake-0.1.0.jar
 rm /srv/viget/incoming/CMake-0.1.0.jar
 restorecon -R /srv/viget/files
 ```
 
-The publisher of the descriptor must be the name of an existing Progmasoft Account, spelled the same way.
+The command names who the plugin is: its publisher, which must be the name of an existing Progmasoft Account spelled
+the same way, its name and its version. The descriptor of the JAR names none of them, and ViGet refuses one that does.
 
 The command checks the descriptor of the JAR, the publisher, its account and the version, which is never replaced.
 `viget yank-tazel-plugin <Publisher> <Name> <Version>` yanks a version, and `--undo` takes the yank back.

@@ -8,8 +8,9 @@ using System.Text.RegularExpressions;
 namespace Progmasoft.Progmaweb.Api.ViGet;
 
 /// <summary>
-/// The descriptor of a Tazel plugin, <c>META-INF/tazel-plugin.properties</c> of its JAR, as Tazel reads it, with the
-/// fields ViGet shows on the page of the plugin.
+/// A Tazel plugin as ViGet publishes it: who it is, which the command that publishes it names, and the descriptor of
+/// its JAR, <c>META-INF/tazel-plugin.properties</c>, as Tazel reads it, with the fields ViGet shows on the page of the
+/// plugin. The descriptor names neither the publisher, the name nor the version.
 /// </summary>
 /// <param name="Publisher">The Progmasoft Account the plugin is published under.</param>
 /// <param name="Name">The name of the plugin; one identifier.</param>
@@ -37,19 +38,41 @@ internal sealed partial record TazelPluginDescriptor(
     /// <summary>The service entry that names the class Tazel loads.</summary>
     public const string ServiceEntry = "META-INF/services/com.progmasoft.api.tazel.dsl.plugin.ProjectPlugin";
 
+    /// <summary>The keys of who a plugin is, which its descriptor may not hold.</summary>
+    private static readonly string[] IdentityKeys = ["publisher", "name", "version"];
+
     /// <summary>Whether a text is one identifier, as Tazel requires of a publisher and a plugin name.</summary>
     public static bool IsIdentifier(string value) => IdentifierPattern().IsMatch(value);
 
     /// <summary>Whether a text is an exact version of three to five numbers, as Tazel requires of a plugin version.</summary>
     public static bool IsVersion(string value) => VersionPattern().IsMatch(value);
 
-    /// <summary>Reads and checks the descriptor of a plugin JAR.</summary>
+    /// <summary>Reads and checks the descriptor of a plugin JAR, published as the plugin the command names.</summary>
     /// <param name="jar">The bytes of the JAR.</param>
+    /// <param name="publisher">The publisher the command names.</param>
+    /// <param name="name">The name of the plugin the command names.</param>
+    /// <param name="version">The version the command names.</param>
     /// <param name="descriptor">The descriptor, when the JAR is a valid plugin.</param>
     /// <returns>Why the JAR is refused, or <see langword="null"/> when it is valid.</returns>
-    public static string? TryRead(byte[] jar, out TazelPluginDescriptor? descriptor)
+    public static string? TryRead(
+        byte[] jar, string publisher, string name, string version, out TazelPluginDescriptor? descriptor)
     {
         descriptor = null;
+        if (!IsIdentifier(publisher))
+        {
+            return "The publisher must be one identifier.";
+        }
+
+        if (!IsIdentifier(name))
+        {
+            return "The name of the plugin must be one identifier.";
+        }
+
+        if (!IsVersion(version))
+        {
+            return "The version must be exact, of three to five numbers.";
+        }
+
         IReadOnlyDictionary<string, string> properties;
         try
         {
@@ -81,22 +104,11 @@ internal sealed partial record TazelPluginDescriptor(
         string? Text(string key) =>
             properties.TryGetValue(key, out string? value) && !string.IsNullOrWhiteSpace(value) ? value.Trim() : null;
 
-        string? publisher = Text("publisher");
-        string? name = Text("name");
-        string? version = Text("version");
-        if (publisher is null || !IsIdentifier(publisher))
+        string[] identity = [.. IdentityKeys.Where(properties.ContainsKey)];
+        if (identity.Length > 0)
         {
-            return "The descriptor needs a publisher that is one identifier.";
-        }
-
-        if (name is null || !IsIdentifier(name))
-        {
-            return "The descriptor needs a name that is one identifier.";
-        }
-
-        if (version is null || !IsVersion(version))
-        {
-            return "The descriptor needs an exact version of three to five numbers.";
+            return $"The descriptor names {string.Join(", ", identity)}; " +
+                "ViGet takes who a plugin is from the command that publishes it, so its JAR names none.";
         }
 
         if (!int.TryParse(Text("apiVersion"), out int apiVersion) || apiVersion < 1)
@@ -128,11 +140,11 @@ internal sealed partial record TazelPluginDescriptor(
 
     /// <summary>One identifier: a letter or <c>_</c>, then letters, digits or <c>_</c>.</summary>
     /// <returns>The compiled expression.</returns>
-    [GeneratedRegex("^[A-Za-z_][A-Za-z0-9_]*$")]
+    [GeneratedRegex(@"^[A-Za-z_][A-Za-z0-9_]*\z")]
     private static partial Regex IdentifierPattern();
 
     /// <summary>An exact version of three to five numbers without leading zeros, as Tazel accepts it.</summary>
     /// <returns>The compiled expression.</returns>
-    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,4}(?:-[0-9A-Za-z.-]+)?$")]
+    [GeneratedRegex(@"^(?:0|[1-9][0-9]*)(?:\.(?:0|[1-9][0-9]*)){2,4}(?:-[0-9A-Za-z.-]+)?\z")]
     private static partial Regex VersionPattern();
 }

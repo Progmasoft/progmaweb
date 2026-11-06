@@ -7,7 +7,8 @@ namespace Progmasoft.Progmaweb.Api.ViGet;
 
 /// <summary>
 /// The commands that manage the Tazel plugin catalog on the server, while publishing is not open through the API:
-/// <c>viget publish-tazel-plugin &lt;jar&gt;</c> and <c>viget yank-tazel-plugin &lt;Publisher&gt; &lt;Name&gt;
+/// <c>viget publish-tazel-plugin &lt;Publisher&gt; &lt;Name&gt; &lt;Version&gt; &lt;jar&gt;</c>, which names who the
+/// plugin is because its JAR does not, and <c>viget yank-tazel-plugin &lt;Publisher&gt; &lt;Name&gt;
 /// &lt;Version&gt; [--undo]</c>. They run with the configuration of the service, as its user.
 /// </summary>
 internal static class ViGetCommand
@@ -37,7 +38,7 @@ internal static class ViGetCommand
 
         switch (args)
         {
-            case ["publish-tazel-plugin", string path]:
+            case ["publish-tazel-plugin", string publisher, string name, string version, string path]:
             {
                 if (!File.Exists(path))
                 {
@@ -47,7 +48,8 @@ internal static class ViGetCommand
 
                 TazelPluginPublishing publishing = services.GetRequiredService<TazelPluginPublishing>();
                 PublishResult result = await publishing.PublishAsync(
-                    await File.ReadAllBytesAsync(path, cancellationToken), cancellationToken);
+                    await File.ReadAllBytesAsync(path, cancellationToken), publisher, name, version,
+                    cancellationToken);
                 if (!result.Published)
                 {
                     await errors.WriteLineAsync(result.Error);
@@ -77,7 +79,7 @@ internal static class ViGetCommand
             }
             default:
                 await errors.WriteLineAsync(
-                    "usage: viget publish-tazel-plugin <jar>\n" +
+                    "usage: viget publish-tazel-plugin <Publisher> <Name> <Version> <jar>\n" +
                     "       viget yank-tazel-plugin <Publisher> <Name> <Version> [--undo]");
                 return 2;
         }
