@@ -22,7 +22,8 @@ client address.
 ## Files
 
 - `setup.sh`: packages, the `llama` and `aisupport` users, llama.cpp and both models checked against their SHA-256,
-  the units and the firewall. It changes nothing that is already in place.
+  the units, the firewall, the certificate with a renewal hook that reloads nginx, and the nginx logs without client
+  addresses (`nginx-no-ip.pl`, the same change as on the first server). It changes nothing that is already in place.
 - `llama-chat.service`, `llama-embed.service`, `aisupport.service`: the units.
 - `aisupport.conf`: the nginx site, in `/etc/nginx/conf.d/`. The certificate comes from Let's Encrypt through the
   webroot `/var/lib/letsencrypt`.

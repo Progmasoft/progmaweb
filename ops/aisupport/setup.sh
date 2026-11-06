@@ -61,4 +61,37 @@ systemctl enable aisupport.service
 
 firewall-cmd --permanent --add-service=http --add-service=https
 firewall-cmd --reload
-systemctl enable --now nginx.service
+
+# No log of nginx holds a client address (https://progmasoft.com/privacy): the access log has none, and the error
+# log, which names the client of a failed request, keeps only critical entries.
+perl nginx-no-ip.pl
+sed -i 's#^error_log /var/log/nginx/error.log notice;#error_log /var/log/nginx/error.log crit;#' /etc/nginx/nginx.conf
+
+# The certificate: first a site that answers the challenge on port 80, then the site of aisupport.conf.
+if [[ ! -e /etc/letsencrypt/live/aisupport.progmasoft.com/fullchain.pem ]]; then
+    cat > /etc/nginx/conf.d/aisupport.conf <<'SITE'
+server {
+    listen 80;
+    listen [::]:80;
+    server_name aisupport.progmasoft.com;
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/lib/letsencrypt;
+        default_type text/plain;
+    }
+}
+SITE
+    restorecon /etc/nginx/conf.d/aisupport.conf
+    systemctl enable --now nginx.service
+    systemctl reload nginx.service
+    certbot certonly --webroot -w /var/lib/letsencrypt -d aisupport.progmasoft.com \
+        --non-interactive --agree-tos --email support@progmasoft.com --no-eff-email
+fi
+install -m 0644 aisupport.conf /etc/nginx/conf.d/aisupport.conf
+install -d -m 0755 /etc/letsencrypt/renewal-hooks/deploy
+printf '#!/bin/sh\n# nginx reads a renewed certificate only when it reloads.\nsystemctl reload nginx\n' \
+    > /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
+chmod 0755 /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
+restorecon -R /etc/nginx /etc/letsencrypt/renewal-hooks
+nginx -t
+systemctl enable --now nginx.service certbot-renew.timer
+systemctl reload nginx.service
