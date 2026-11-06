@@ -49,7 +49,11 @@ test("the privacy policy keeps the IP address for ViGet uploads only and sells n
     text.startsWith("We keep your IP address for one purpose only."),
   );
   assert.ok(address);
-  assert.match(address, /upload a package or a plugin to ViGet/);
+  assert.match(
+    address,
+    /ViGet will record the IP address each upload came from/,
+  );
+  assert.match(address, /ViGet does not yet take uploads from accounts/);
   assert.match(address, /competent authorities/);
   assert.ok(
     privacy.some((text) =>

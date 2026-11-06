@@ -29,7 +29,7 @@ export const deDE: PolicyMessages = {
       {
         heading: "Ihre IP-Adresse",
         paragraphs: [
-          "Wir speichern Ihre IP-Adresse nur zu einem einzigen Zweck. Wenn Sie ein Paket oder ein Plugin auf ViGet hochladen, speichern wir die IP-Adresse, von der der Upload kam, zusammen mit dem Upload. Stellt sich heraus, dass der Upload Schadsoftware enthält, verwenden wir diese Adresse, um festzustellen, woher er kam, und übergeben sie den zuständigen Behörden. Für nichts anderes verwenden wir sie.",
+          "Wir speichern Ihre IP-Adresse nur zu einem einzigen Zweck. ViGet nimmt noch keine Uploads von Konten an: Bisher veröffentlicht nur Progmasoft dort. Sobald es das tut, speichert ViGet die IP-Adresse, von der ein Upload kam, zusammen mit dem Upload. Stellt sich heraus, dass ein Upload Schadsoftware enthält, verwenden wir diese Adresse, um festzustellen, woher er kam, und übergeben sie den zuständigen Behörden. Für nichts anderes verwenden wir sie.",
           "Wir speichern keine IP-Adressen zu Ihrem Konto, zu Ihren Sitzungen oder in den Zugriffsprotokollen unserer Webserver.",
           "Um das Erraten von Passwörtern zu bremsen, zählt der Anmeldedienst einige Minuten lang Anfragen je Adresse. Diese Zählung liegt nur im Arbeitsspeicher und wird nie gespeichert.",
         ],
@@ -57,7 +57,7 @@ export const deDE: PolicyMessages = {
       {
         heading: "Wie lange wir speichern",
         paragraphs: [
-          "Kontodaten bleiben gespeichert, solange das Konto besteht. Eine Sitzung wird entfernt, sobald sie beendet ist. Die IP-Adresse eines ViGet-Uploads bleibt gespeichert, solange der Upload auf ViGet liegt, und ein Jahr nach seiner Entfernung, damit auch einer spät eingehenden Meldung noch nachgegangen werden kann.",
+          "Kontodaten bleiben gespeichert, solange das Konto besteht. Eine Sitzung wird entfernt, sobald sie beendet ist. Die IP-Adresse eines ViGet-Uploads wird gespeichert, solange der Upload auf ViGet liegt, und ein Jahr nach seiner Entfernung, damit auch einer spät eingehenden Meldung noch nachgegangen werden kann.",
         ],
       },
       {
@@ -89,14 +89,14 @@ export const deDE: PolicyMessages = {
       {
         heading: "Verbindungen",
         paragraphs: [
-          "Jede Seite von Progmasoft wird nur über HTTPS ausgeliefert, und Browser werden angewiesen, dabei zu bleiben (HSTS). Jede Seite trägt eine Content Security Policy, die nur die Skripte zulässt, die die Seite selbst nennt.",
+          "Jede Seite von Progmasoft wird nur über HTTPS ausgeliefert, und Browser werden angewiesen, dabei zu bleiben (HSTS). Jede Seite trägt eine Content Security Policy, die nur die Skripte zulässt, die die Seite selbst nennt, und das Analyseskript von Cloudflare.",
         ],
       },
       {
         heading: "Schadsoftware auf ViGet",
         paragraphs: [
           "Es ist verboten, Schadsoftware auf ViGet hochzuladen: Software, die den Computern, auf denen sie läuft, schadet, sie ausspäht oder die Kontrolle über sie übernimmt, oder die etwas anderes tut, als sie angibt.",
-          "Wenn wir solche Software finden oder auf sie hingewiesen werden, entfernen wir sie, schließen das Konto, das sie hochgeladen hat, und übergeben die IP-Adresse des Uploads den zuständigen Behörden, wie es die Datenschutzerklärung beschreibt.",
+          "Wenn wir solche Software finden oder auf sie hingewiesen werden, nehmen wir sie von ViGet: Ihre Dateien werden nicht mehr ausgeliefert und nur noch als Beweismittel unzugänglich aufbewahrt. Wir schließen das Konto, das sie hochgeladen hat, und übergeben die IP-Adresse des Uploads den zuständigen Behörden, wie es die Datenschutzerklärung beschreibt.",
           "Jedes Plugin, das ViGet ausliefert, ist mit seinem SHA-256-Digest verzeichnet, und Tazel prüft den Digest, bevor es das Plugin verwendet.",
         ],
       },

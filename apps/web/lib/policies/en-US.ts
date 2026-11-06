@@ -29,7 +29,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "Your IP address",
         paragraphs: [
-          "We keep your IP address for one purpose only. When you upload a package or a plugin to ViGet, we record the IP address the upload came from, together with the upload. If the upload turns out to contain malicious software, we use that address to establish where it came from and give it to the competent authorities. We use it for nothing else.",
+          "We keep your IP address for one purpose only. ViGet does not yet take uploads from accounts: only Progmasoft publishes to it. Once it does, ViGet will record the IP address each upload came from, together with the upload. If an upload turns out to contain malicious software, we will use that address to establish where it came from and give it to the competent authorities. We will use it for nothing else.",
           "We do not keep IP addresses with your account, with your sessions or in the access logs of our web servers.",
           "To slow down password guessing, the sign-in service counts requests per address for a few minutes. The count is held in memory and never written down.",
         ],
@@ -57,7 +57,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "How long we keep it",
         paragraphs: [
-          "Account data is kept for as long as the account exists. A session is removed once it has ended. The IP address of a ViGet upload is kept while the upload is on ViGet and for one year after it was removed, so that a report that arrives late can still be followed.",
+          "Account data is kept for as long as the account exists. A session is removed once it has ended. The IP address of a ViGet upload will be kept while the upload is on ViGet and for one year after it was removed, so that a report that arrives late can still be followed.",
         ],
       },
       {
@@ -89,14 +89,14 @@ export const enUS: PolicyMessages = {
       {
         heading: "Connections",
         paragraphs: [
-          "Every Progmasoft site is served only over HTTPS, and browsers are told to keep it that way (HSTS). Every page carries a Content Security Policy, which allows only the scripts the page itself names.",
+          "Every Progmasoft site is served only over HTTPS, and browsers are told to keep it that way (HSTS). Every page carries a Content Security Policy, which allows only the scripts the page itself names and the analytics script of Cloudflare.",
         ],
       },
       {
         heading: "Malicious software on ViGet",
         paragraphs: [
           "Uploading malicious software to ViGet is forbidden: software that harms, spies on or takes control of the computers it runs on, or that does something other than what it says it does.",
-          "When we find such software or are told about it, we remove it, close the account that uploaded it, and give the IP address of the upload to the competent authorities, as the Privacy Policy describes.",
+          "When we find such software or are told about it, we take it off ViGet: its files are no longer served, and are kept out of reach only as evidence. We close the account that uploaded it and give the IP address of the upload to the competent authorities, as the Privacy Policy describes.",
           "Every plugin ViGet serves is listed with its SHA-256 digest, and Tazel checks the digest before it uses the plugin.",
         ],
       },
