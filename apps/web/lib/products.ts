@@ -58,7 +58,7 @@ export const products: Record<ProductSlug, ProductFacts> = {
   },
   tazel: {
     name: "Tazel",
-    site: "https://tazel.tala.run/",
+    site: "https://tazel.net/",
     source: "https://github.com/Progmasoft/tazel",
     accent: "orange",
   },

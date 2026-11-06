@@ -48,7 +48,7 @@ export default async function TazelPluginsPage() {
                 >
                   {catalogs.backToRegistry}
                 </a>
-                <a className="viget-text-link" href="https://tazel.tala.run/">
+                <a className="viget-text-link" href="https://tazel.net/">
                   Tazel {forwardArrow(locale)}
                 </a>
               </div>
