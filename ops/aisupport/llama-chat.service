@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 # SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-# Qwen3.5 2B (Q4_K_M) for AI Support, without thinking. The four cores of the server process about 20 prompt tokens
-# and generate about 6 tokens a second, so one answer runs at a time, with the whole of the cores and a context of
+# Qwen3.5 2B (Q4_K_M) for AI Support, without thinking. The four cores of the server process about 37 prompt tokens
+# and generate about 9 tokens a second, so one answer runs at a time, with the whole of the cores and a context of
 # 4,096 tokens. The server listens on loopback only, for the aisupport service.
 [Unit]
 Description=AI Support chat model (llama-server, Qwen3.5 2B)

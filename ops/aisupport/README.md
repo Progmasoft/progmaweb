@@ -47,10 +47,11 @@ roll back, point `/srv/aisupport/current` at the previous release and restart `a
 ## Speed
 
 The four cores of the server (AMD EPYC at 2.0 GHz, about 10 GB/s of memory bandwidth, no GPU) run Qwen3.5 2B at about
-20 prompt tokens and 6 generated tokens a second (llama-bench, flash attention on, 2026-11-06), and
-Qwen3-Embedding 0.6B at about 50 prompt tokens a second. An answer reads a prompt of about 900 tokens before its first
-word and is limited to 400 tokens: the first word comes after about 45 seconds, and a long answer takes two minutes.
-The page says so while it waits. The first index, about 1,500 passages, takes about two hours to embed.
+37 prompt tokens and 9 generated tokens a second while the embedding server is idle (llama-bench, flash attention on,
+2026-11-06), and Qwen3-Embedding 0.6B at about 50 prompt tokens a second. An answer reads a prompt of about 900 tokens
+before its first word and is limited to 400 tokens: the first word comes after about 25 seconds, and an answer takes
+25 to 60 seconds. The page says it starts in about a minute. Both servers share the four cores, so while an index is
+being built answers are several times slower. The first index, about 1,500 passages, takes about two hours to embed.
 
 ## The model
 
