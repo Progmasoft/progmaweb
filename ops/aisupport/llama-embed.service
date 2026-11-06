@@ -17,7 +17,7 @@ ExecStart=/opt/llama/current/llama-server \
     --host 127.0.0.1 --port 8091 \
     --embedding --pooling last \
     --ctx-size 8192 --batch-size 2048 --ubatch-size 2048 --threads 4 \
-    --no-webui
+    --no-ui
 Environment=LD_LIBRARY_PATH=/opt/llama/current
 Restart=on-failure
 RestartSec=5s

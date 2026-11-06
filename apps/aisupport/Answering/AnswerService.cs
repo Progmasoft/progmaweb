@@ -16,7 +16,11 @@ internal sealed class AnswerService(ILanguageModels models, KnowledgeIndex index
     public const int MaximumQuestionLength = 1000;
 
     /// <summary>How many passages a prompt quotes.</summary>
-    private const int PassageCount = 4;
+    /// <remarks>
+    /// The server reads about 20 prompt tokens a second, so three passages of at most
+    /// <see cref="Corpus.DocumentChunker.MaximumLength"/> characters keep the wait for the first word under a minute.
+    /// </remarks>
+    private const int PassageCount = 3;
 
     /// <summary>The lowest similarity a quoted passage may have.</summary>
     private const float MinimumScore = 0.3f;

@@ -41,12 +41,12 @@ builder.Services.AddSingleton(services =>
 builder.Services.AddSingleton<AnswerService>();
 builder.Services.AddRateLimiter(options =>
 {
-    // Two answers at once keep the four cores of the server responsive; a few more wait their turn. The limit is
-    // the same for everyone: the service does not look at who asks.
+    // The chat model answers one question at a time with all four cores of the server (llama-chat.service); a few
+    // more wait their turn. The limit is the same for everyone: the service does not look at who asks.
     options.AddConcurrencyLimiter(AskEndpoints.ConcurrencyPolicy, limiter =>
     {
-        limiter.PermitLimit = 2;
-        limiter.QueueLimit = 6;
+        limiter.PermitLimit = 1;
+        limiter.QueueLimit = 4;
         limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
     options.RejectionStatusCode = StatusCodes.Status503ServiceUnavailable;

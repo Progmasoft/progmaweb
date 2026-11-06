@@ -40,7 +40,7 @@ internal sealed class LanguageModelOptions
     /// <summary>The llama-server that runs the embedding model.</summary>
     public Uri EmbeddingEndpoint { get; set; } = new("http://127.0.0.1:8091/");
     /// <summary>The most tokens of one answer.</summary>
-    public int MaximumAnswerTokens { get; set; } = 768;
+    public int MaximumAnswerTokens { get; set; } = 400;
 }
 
 /// <summary>Talks to two llama-server processes through their OpenAI-compatible API.</summary>

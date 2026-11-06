@@ -1,8 +1,9 @@
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 # SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
-# Qwen3.5 2B (Q4_K_M) for AI Support, without thinking. Two answers run at once, each with a context of 4,096 tokens;
-# the server listens on loopback only, for the aisupport service.
+# Qwen3.5 2B (Q4_K_M) for AI Support, without thinking. The four cores of the server process about 20 prompt tokens
+# and generate about 6 tokens a second, so one answer runs at a time, with the whole of the cores and a context of
+# 4,096 tokens. The server listens on loopback only, for the aisupport service.
 [Unit]
 Description=AI Support chat model (llama-server, Qwen3.5 2B)
 After=network-online.target
@@ -15,9 +16,9 @@ Group=llama
 ExecStart=/opt/llama/current/llama-server \
     --model /srv/models/Qwen3.5-2B-Q4_K_M.gguf \
     --host 127.0.0.1 --port 8090 \
-    --ctx-size 8192 --parallel 2 --threads 4 \
-    --jinja --chat-template-kwargs '{"enable_thinking":false}' \
-    --no-webui
+    --ctx-size 4096 --parallel 1 --threads 4 --flash-attn on \
+    --jinja --reasoning off \
+    --no-ui
 Environment=LD_LIBRARY_PATH=/opt/llama/current
 Restart=on-failure
 RestartSec=5s

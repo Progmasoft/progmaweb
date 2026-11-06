@@ -28,6 +28,7 @@ const texts = {
     security: "Security Policy",
     ask: "Ask",
     answering: "Answering…",
+    waiting: "The answer starts in about a minute: the model runs on four processor cores, without a GPU.",
     answerHeading: "Answer",
     sources: "Sources",
     model: "Answered by Qwen3.5 2B on a Progmasoft server.",
@@ -58,6 +59,7 @@ const texts = {
     security: "Sicherheitsrichtlinie",
     ask: "Fragen",
     answering: "Antwort entsteht …",
+    waiting: "Die Antwort beginnt in etwa einer Minute: Das Modell läuft auf vier Prozessorkernen, ohne GPU.",
     answerHeading: "Antwort",
     sources: "Quellen",
     model: "Beantwortet von Qwen3.5 2B auf einem Server von Progmasoft.",
@@ -88,6 +90,7 @@ const texts = {
     security: "Политика безопасности",
     ask: "Спросить",
     answering: "Отвечаю…",
+    waiting: "Ответ начнётся примерно через минуту: модель работает на четырёх ядрах процессора, без GPU.",
     answerHeading: "Ответ",
     sources: "Источники",
     model: "Отвечает Qwen3.5 2B на сервере Progmasoft.",
@@ -118,6 +121,7 @@ const texts = {
     security: "מדיניות אבטחה",
     ask: "שאלה",
     answering: "עונה…",
+    waiting: "התשובה תתחיל בעוד כדקה: המודל רץ על ארבע ליבות מעבד, בלי GPU.",
     answerHeading: "תשובה",
     sources: "מקורות",
     model: "התשובות מ־Qwen3.5 2B על שרת של Progmasoft.",
@@ -307,7 +311,10 @@ async function ask(event) {
   message.hidden = true;
   answer.hidden = false;
   showSources([]);
-  answerText.replaceChildren();
+  const waiting = document.createElement("p");
+  waiting.className = "waiting";
+  waiting.textContent = text.waiting;
+  answerText.replaceChildren(waiting);
   answerText.classList.add("thinking");
   submit.disabled = true;
   submit.textContent = text.answering;

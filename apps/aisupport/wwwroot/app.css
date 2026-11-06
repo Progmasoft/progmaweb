@@ -458,6 +458,10 @@ textarea:focus {
   vertical-align: super;
 }
 
+.answer-text .waiting {
+  color: var(--ink-500);
+}
+
 .answer-text.thinking::after {
   color: var(--ink-500);
   content: "…";

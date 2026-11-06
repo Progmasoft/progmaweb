@@ -14,7 +14,7 @@ namespace Progmasoft.Progmaweb.AiSupport.Corpus;
 internal static class DocumentChunker
 {
     /// <summary>The most characters of text in one passage.</summary>
-    public const int MaximumLength = 1500;
+    public const int MaximumLength = 900;
 
     /// <summary>The passages of a document.</summary>
     /// <param name="path">The path of the document in its repository; names it when it has no heading.</param>

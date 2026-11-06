@@ -10,12 +10,12 @@ answer a question:
 
 | Service | Listens on | What it does |
 | --- | --- | --- |
-| `llama-chat` | 127.0.0.1:8090 | llama-server with Qwen3.5 2B (Q4_K_M), thinking off, two answers at once |
+| `llama-chat` | 127.0.0.1:8090 | llama-server with Qwen3.5 2B (Q4_K_M), thinking off, one answer at a time |
 | `llama-embed` | 127.0.0.1:8091 | llama-server with Qwen3-Embedding 0.6B (Q8_0), the vectors of passages and questions |
 | `aisupport` | 127.0.0.1:5300 | `apps/aisupport`: the page, the index and `POST /api/ask` |
 
 nginx terminates TLS on 443 and passes the page and the stream of an answer to `aisupport`. The question goes to the
-embedding model, the four passages of the index closest to it go with the question to the chat model, and the answer
+embedding model, the three passages of the index closest to it go with the question to the chat model, and the answer
 streams back with the passages as its sources. Neither questions nor answers are written anywhere, and no log holds a
 client address.
 
@@ -40,5 +40,13 @@ scp aisupport.tar.gz ops/aisupport/deploy.sh root@13.140.205.74:/root/aisupport-
 ssh root@13.140.205.74 bash /root/aisupport-setup/deploy.sh "$(git rev-parse HEAD)" /root/aisupport-setup/aisupport.tar.gz
 ```
 
-The first index embeds every passage, which takes some minutes on four cores; later ones embed only what changed. To
+The first index embeds every passage; later ones embed only what changed. To
 roll back, point `/srv/aisupport/current` at the previous release and restart `aisupport`.
+
+## Speed
+
+The four cores of the server (AMD EPYC at 2.0 GHz, about 10 GB/s of memory bandwidth, no GPU) run Qwen3.5 2B at about
+20 prompt tokens and 6 generated tokens a second (llama-bench, flash attention on, 2026-11-06), and
+Qwen3-Embedding 0.6B at about 50 prompt tokens a second. An answer reads a prompt of about 900 tokens before its first
+word and is limited to 400 tokens: the first word comes after about 45 seconds, and a long answer takes two minutes.
+The page says so while it waits. The first index, about 1,500 passages, takes about two hours to embed.
