@@ -51,3 +51,19 @@ The four cores of the server (AMD EPYC at 2.0 GHz, about 10 GB/s of memory bandw
 Qwen3-Embedding 0.6B at about 50 prompt tokens a second. An answer reads a prompt of about 900 tokens before its first
 word and is limited to 400 tokens: the first word comes after about 45 seconds, and a long answer takes two minutes.
 The page says so while it waits. The first index, about 1,500 passages, takes about two hours to embed.
+
+## The model
+
+Qwen3.5 2B was chosen over Qwen3.5 0.8B and Qwen2.5 1.5B on 2026-11-06, on this server, with the same documentation
+excerpts and questions. llama-bench with the embedding server paused:
+
+| Model | Prompt tokens/s | Generated tokens/s |
+| --- | ---: | ---: |
+| Qwen3.5 0.8B Q4_K_M | 66 | 18.2 |
+| Qwen2.5 1.5B Instruct Q4_K_M | 42 | 9.6 |
+| Qwen3.5 2B Q4_K_M | 37 | 9.2 |
+
+Qwen3.5 0.8B is twice as fast but answered a Tazel question with syntax the excerpt does not have and said the
+documented form was unsupported. Qwen2.5 1.5B is no faster than Qwen3.5 2B. Qwen3.5 2B, sampling at temperature 0.3
+without a presence penalty, gave the documented syntax in English and Turkish and said it did not know when the
+excerpts held no answer; an answer took 25 to 60 seconds.

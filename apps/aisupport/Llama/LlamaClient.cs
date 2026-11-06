@@ -45,8 +45,11 @@ internal sealed class LanguageModelOptions
 
 /// <summary>Talks to two llama-server processes through their OpenAI-compatible API.</summary>
 /// <remarks>
-/// The chat model runs without thinking: every request sets <c>enable_thinking</c> to false in the chat template,
-/// and samples with the settings Qwen gives for that mode.
+/// The chat model runs without thinking: the server starts with <c>--reasoning off</c>, and every request also sets
+/// <c>enable_thinking</c> to false in the chat template. It samples cooler than the 0.7 Qwen gives for chat and without
+/// a presence penalty: an answer copies code and names from the excerpts, and a penalty on tokens that already
+/// appeared works against that. Compared on the server with the same excerpts (2026-11-06), these settings gave the
+/// documented syntax in every answer, where 0.7 with a penalty of 1.5 now and then invented its own.
 /// </remarks>
 /// <param name="http">A client without a base address; each call names its server.</param>
 /// <param name="options">The servers and the sampling.</param>
@@ -82,11 +85,11 @@ internal sealed class LlamaClient(HttpClient http, IOptions<LanguageModelOptions
             messages,
             stream = true,
             max_tokens = options.Value.MaximumAnswerTokens,
-            temperature = 0.7,
+            temperature = 0.3,
             top_p = 0.8,
             top_k = 20,
             min_p = 0.0,
-            presence_penalty = 1.5,
+            presence_penalty = 0.0,
             chat_template_kwargs = new { enable_thinking = false }
         };
         using HttpRequestMessage request = new(HttpMethod.Post, new Uri(options.Value.ChatEndpoint, "v1/chat/completions"))
