@@ -108,7 +108,7 @@ const texts = {
     eyebrow: "התמיכה של Progmasoft",
     titleStart: "שאלו את התיעוד.",
     titleAccent: "קבלו תשובה עם המקורות שלה.",
-    lede: "AI Support עונה על שאלות על Tala, ‏Tazel, ‏ViGet, ‏Catch3 והכלים של Progmasoft מתוך התיעוד שלהם. התשובות עלולות להיות שגויות: כדאי לבדוק אותן מול המקורות המקושרים.",
+    lede: "AI Support עונה על שאלות על Tala, \u200FTazel, \u200FViGet, \u200FCatch3 והכלים של Progmasoft מתוך התיעוד שלהם. התשובות עלולות להיות שגויות: כדאי לבדוק אותן מול המקורות המקושרים.",
     label: "השאלה שלך",
     placeholder: "איך מוסיפים תלות ב־Tazel?",
     examples: [
@@ -287,8 +287,8 @@ function fail(words) {
 }
 
 // Reads the server-sent events of /api/ask from the body of the response. A
-// failure to read reaches the caller, which shows it; the reader is released
-// either way.
+// failure to read or to parse becomes an error event, as if the service had
+// sent one; the reader is released either way.
 async function* events(response) {
   const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
   let buffer = "";
@@ -307,6 +307,8 @@ async function* events(response) {
         end = buffer.indexOf("\n\n");
       }
     }
+  } catch {
+    yield { name: "error", data: {} };
   } finally {
     reader.releaseLock();
   }
