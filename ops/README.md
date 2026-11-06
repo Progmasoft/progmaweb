@@ -214,8 +214,10 @@ The command checks the descriptor of the JAR, the publisher, its account and the
 
 ## Maven repository
 
-`maven.progmasoft.com/tazel` is a static Maven repository: it holds `com.progmasoft.tazel:tazel-api`, which plugins of
-Tazel compile against. It lives in `/srv/maven/tazel`, labelled like the files of ViGet:
+`maven.progmasoft.com/tazel` is a static Maven repository. It holds `com.progmasoft.tazel:tazel-api`, which plugins of
+Tazel compile against, and the Gradle plugin that builds them: `com.progmasoft.tazel:tazel-gradle-plugin` with its
+marker `com.progmasoft.tazel.plugin:com.progmasoft.tazel.plugin.gradle.plugin`. It lives in `/srv/maven/tazel`,
+labelled like the files of ViGet:
 
 ```sh
 install -d -m 0755 /srv/maven /srv/maven/tazel
@@ -223,12 +225,32 @@ semanage fcontext -a -t httpd_sys_content_t '/srv/maven(/.*)?'
 restorecon -R /srv/maven
 ```
 
-A release of Tazel publishes the API into a local copy of the repository and copies it back, so that
-`maven-metadata.xml` keeps the versions published before:
+A release of Tazel publishes the API and the Gradle plugin into a local copy of the repository and copies it back, so
+that `maven-metadata.xml` keeps the versions published before. The build of the API has a `staging` repository; the
+build of the Gradle plugin has none, and an init script outside the checkout adds the same one:
+
+```kotlin
+// staging-plugin.init.gradle.kts
+allprojects {
+    if (name == "tazel-gradle-plugin") {
+        pluginManager.withPlugin("maven-publish") {
+            extensions.configure<PublishingExtension> {
+                repositories {
+                    maven {
+                        name = "staging"
+                        url = uri(rootProject.layout.buildDirectory.dir("maven"))
+                    }
+                }
+            }
+        }
+    }
+}
+```
 
 ```sh
 scp -r root@91.151.88.130:/srv/maven/tazel/. build/maven/        # in the Tazel checkout
 ./gradlew :tazel-api:publishAllPublicationsToStagingRepository
+./gradlew --init-script staging-plugin.init.gradle.kts :tazel-gradle-plugin:publishAllPublicationsToStagingRepository
 scp -r build/maven/. root@91.151.88.130:/srv/maven/tazel/
 ssh root@91.151.88.130 'chown -R root:root /srv/maven && restorecon -R /srv/maven'
 ```
