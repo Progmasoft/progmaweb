@@ -103,7 +103,10 @@ task, not a public route.
 ## Response headers
 
 Nginx adds HSTS, `X-Content-Type-Options`, `X-Frame-Options: DENY`, a referrer policy and a permissions policy on
-every host. Next.js sets the same content headers for the responses it produces. The API sets its own, stricter set:
+every host. Next.js sets the same content headers for the responses it produces, and its proxy gives every page a
+content security policy with a nonce of its own (`apps/web/lib/content-security-policy.ts`): scripts come from the
+host, carry the nonce, or are Cloudflare's Web Analytics beacon; nothing may frame a page, and there is no
+`form-action`, because sign-in and consent end in redirects to other hosts. The API sets its own, stricter set:
 a content security policy that allows nothing, `Cache-Control: no-store`, and no referrer.
 
 ## Shared account identity
