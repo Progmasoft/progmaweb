@@ -37,7 +37,7 @@ internal sealed class OAuthTestClient(AccountApiFactory factory)
     {
         using HttpClient accounts = factory.CreateAccountClient(handleCookies: false);
         HttpResponseMessage registered = await accounts.PostAsJsonAsync("/api/v1/accounts/register",
-            new { accountName, email, password = "correct horse battery staple" }, Cancel);
+            new { accountName, email, password = "correct horse battery staple", acceptPolicies = true }, Cancel);
         Assert.Equal(HttpStatusCode.Created, registered.StatusCode);
         // The console knows the account of the Progmasoft account session; it has no sign-in of its own.
         string session = registered.Headers.GetValues("Set-Cookie")

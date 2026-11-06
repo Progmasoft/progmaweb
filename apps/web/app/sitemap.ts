@@ -40,5 +40,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: "https://progmasoft.com/privacy",
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: "https://progmasoft.com/security",
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 }

@@ -22,7 +22,7 @@ public sealed class AccountEndpointTests
         using HttpClient client = factory.CreateAccountClient(handleCookies: false);
 
         HttpResponseMessage response = await client.GetAsync(
-            "/api/v1/accounts/oauth/google/start?accountName=GoogleUser",
+            "/api/v1/accounts/oauth/google/start?accountName=GoogleUser&acceptPolicies=true",
             TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
@@ -60,6 +60,47 @@ public sealed class AccountEndpointTests
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/register?google=invalid-account-name", response.Headers.Location?.OriginalString);
+    }
+
+    [Theory]
+    [InlineData("/api/v1/accounts/oauth/google/start?accountName=GoogleUser")]
+    [InlineData("/api/v1/accounts/oauth/google/start?accountName=GoogleUser&acceptPolicies=false")]
+    public async Task GoogleRegistrationWithoutThePoliciesStaysOnTheSite(string start)
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient(handleCookies: false);
+
+        HttpResponseMessage response = await client.GetAsync(start, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/register?google=policies-required", response.Headers.Location?.OriginalString);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData(false)]
+    public async Task RegistrationWithoutThePoliciesIsRefused(bool? acceptPolicies)
+    {
+        await using AccountApiFactory factory = new();
+        using HttpClient client = factory.CreateAccountClient();
+
+        HttpResponseMessage response = await client.PostAsJsonAsync("/api/v1/accounts/register", new
+        {
+            accountName = "PolicyUser",
+            email = "policy@example.com",
+            password = "a-long-development-password",
+            acceptPolicies
+        }, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        using JsonDocument problem = JsonDocument.Parse(
+            await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
+        JsonElement messages = problem.RootElement.GetProperty("errors").GetProperty("acceptPolicies");
+        Assert.Equal([PolicyAcceptance.RequiredMessage], messages.EnumerateArray().Select(message => message.GetString()));
+
+        // The refusal kept neither the name nor the address.
+        HttpResponseMessage accepted = await RegisterAsync(client, "PolicyUser", "policy@example.com");
+        Assert.Equal(HttpStatusCode.Created, accepted.StatusCode);
     }
 
     [Fact]
@@ -109,7 +150,8 @@ public sealed class AccountEndpointTests
         {
             accountName = "PrimaryUser",
             email = "leitwolf1112@gmail.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, registration.StatusCode);
@@ -139,7 +181,8 @@ public sealed class AccountEndpointTests
         {
             accountName = "LogoutUser",
             email = "logout@example.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, registration.StatusCode);
 
@@ -165,7 +208,8 @@ public sealed class AccountEndpointTests
         {
             accountName,
             email = $"{Guid.NewGuid():N}@example.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -229,7 +273,8 @@ public sealed class AccountEndpointTests
         HttpResponseMessage missing = await client.PostAsJsonAsync("/api/v1/accounts/login", new
         {
             email = "missing@example.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
         HttpResponseMessage wrong = await client.PostAsJsonAsync("/api/v1/accounts/login", new
         {
@@ -284,6 +329,7 @@ public sealed class AccountEndpointTests
         {
             accountName,
             email,
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
 }

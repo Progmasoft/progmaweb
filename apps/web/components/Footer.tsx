@@ -4,10 +4,13 @@
 import { Brand } from "./Brand";
 import { getHomeMessages } from "@/lib/home-messages";
 import { getMessages, type Locale } from "@/lib/localization";
+import { policyUrls } from "@/lib/policies";
+import { getPolicyMessages } from "@/lib/policy-messages";
 import { getCatalogMessages } from "@/lib/products";
 
 export function Footer({ locale }: { locale: Locale }) {
   const { footer } = getMessages(locale);
+  const policies = getPolicyMessages(locale);
   const site = getHomeMessages(locale).navigation;
   const catalog = getCatalogMessages(locale);
   return (
@@ -32,6 +35,8 @@ export function Footer({ locale }: { locale: Locale }) {
           <a href="https://github.com/Progmasoft/progmaweb">
             {footer.websiteSource}
           </a>
+          <a href={policyUrls.privacy}>{policies.privacy.title}</a>
+          <a href={policyUrls.security}>{policies.security.title}</a>
         </div>
       </div>
       <div className="shell footer-bottom">

@@ -29,6 +29,7 @@ export default async function RegisterPage({
     "account-name-required": auth.googleAccountNameRequired,
     "account-name-unavailable": auth.googleAccountNameUnavailable,
     "invalid-account-name": auth.googleInvalidAccountName,
+    "policies-required": auth.googlePoliciesRequired,
   };
   const initialMessage = google ? googleMessages[google] : undefined;
 

@@ -23,6 +23,7 @@ public sealed class AccountServiceTests
                 null,
                 "google@example.com",
                 "GoogleUser",
+                PolicyAcceptance.CurrentVersion,
                 sessions,
                 TestContext.Current.CancellationToken);
 
@@ -44,7 +45,8 @@ public sealed class AccountServiceTests
             new RegisterAccountRequest(
                 "PasswordUser",
                 "unverified@example.com",
-                "a-long-development-password"),
+                "a-long-development-password",
+                true),
             sessions,
             TestContext.Current.CancellationToken);
         Assert.NotNull(registration);
@@ -53,6 +55,7 @@ public sealed class AccountServiceTests
             await accounts.AuthenticateGoogleAsync(
                 "google-subject-victim",
                 "unverified@example.com",
+                null,
                 null,
                 sessions,
                 TestContext.Current.CancellationToken);
@@ -85,6 +88,7 @@ public sealed class AccountServiceTests
                 "google-subject-race",
                 "race@example.com",
                 "GoogleUser",
+                PolicyAcceptance.CurrentVersion,
                 sessions,
                 TestContext.Current.CancellationToken);
 
@@ -107,6 +111,7 @@ public sealed class AccountServiceTests
                 "google-subject-stable",
                 "google@example.com",
                 "GoogleUser",
+                PolicyAcceptance.CurrentVersion,
                 sessions,
                 TestContext.Current.CancellationToken);
 
@@ -114,6 +119,7 @@ public sealed class AccountServiceTests
             await accounts.AuthenticateGoogleAsync(
                 "google-subject-stable",
                 "changed@example.com",
+                null,
                 null,
                 sessions,
                 TestContext.Current.CancellationToken);
@@ -123,6 +129,62 @@ public sealed class AccountServiceTests
         Assert.NotNull(second);
         Assert.Equal(GoogleAccountFailure.None, secondFailure);
         Assert.Equal(first.Account.Id, second.Account.Id);
+    }
+
+    [Fact]
+    public async Task RegistrationKeepsTheVersionOfThePoliciesAndTheMoment()
+    {
+        InMemoryAccountStore store = new();
+        AccountService accounts = new(store, TimeProvider.System);
+        SessionService sessions = new(
+            store,
+            TimeProvider.System,
+            Options.Create(new AccountSessionOptions()));
+
+        (AuthenticatedAccount? password, _) = await accounts.RegisterAsync(
+            new RegisterAccountRequest("PasswordUser", "password@example.com", "a-long-development-password", true),
+            sessions,
+            TestContext.Current.CancellationToken);
+        (AuthenticatedAccount? google, _) = await accounts.AuthenticateGoogleAsync(
+            "google-subject-policies",
+            "google@example.com",
+            "GoogleUser",
+            PolicyAcceptance.CurrentVersion,
+            sessions,
+            TestContext.Current.CancellationToken);
+
+        foreach (AuthenticatedAccount? authentication in new[] { password, google })
+        {
+            Assert.NotNull(authentication);
+            Assert.Equal(PolicyAcceptance.CurrentVersion, authentication.Account.PoliciesVersion);
+            Assert.Equal(authentication.Account.CreatedAt, authentication.Account.PoliciesAcceptedAt);
+        }
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("2020-01-01")]
+    public async Task GoogleAuthenticationCreatesNoAccountWithoutTheCurrentPolicies(string? policies)
+    {
+        InMemoryAccountStore store = new();
+        AccountService accounts = new(store, TimeProvider.System);
+        SessionService sessions = new(
+            store,
+            TimeProvider.System,
+            Options.Create(new AccountSessionOptions()));
+
+        (AuthenticatedAccount? authentication, GoogleAccountFailure failure) =
+            await accounts.AuthenticateGoogleAsync(
+                "google-subject-new",
+                "new@example.com",
+                "GoogleUser",
+                policies,
+                sessions,
+                TestContext.Current.CancellationToken);
+
+        Assert.Null(authentication);
+        Assert.Equal(GoogleAccountFailure.PoliciesRequired, failure);
+        Assert.Null(await store.FindByGoogleSubjectAsync("google-subject-new", TestContext.Current.CancellationToken));
     }
 
     private sealed class ConcurrentPasswordRegistrationStore(AccountRecord passwordAccount) : IAccountStore

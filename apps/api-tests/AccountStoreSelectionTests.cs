@@ -223,7 +223,8 @@ public sealed class DurableAccountApiTests
             {
                 accountName = "Survivor",
                 email = "survivor@example.com",
-                password = "a-long-development-password"
+                password = "a-long-development-password",
+                acceptPolicies = true
             }, TestContext.Current.CancellationToken);
             Assert.Equal(HttpStatusCode.Created, registration.StatusCode);
             cookie = await SessionCookieAsync(registration);
@@ -244,7 +245,8 @@ public sealed class DurableAccountApiTests
         HttpResponseMessage login = await restarted.PostAsJsonAsync("/api/v1/accounts/login", new
         {
             email = "survivor@example.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, login.StatusCode);
 
@@ -252,7 +254,8 @@ public sealed class DurableAccountApiTests
         {
             accountName = "survivor",
             email = "other@example.com",
-            password = "a-long-development-password"
+            password = "a-long-development-password",
+            acceptPolicies = true
         }, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, again.StatusCode);
 

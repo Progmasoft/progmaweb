@@ -979,6 +979,23 @@ a {
   border-color: var(--accent);
 }
 
+.consent-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--ink-650);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.consent-field input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--violet-600);
+}
+
 .form-switch {
   margin: 0;
   color: var(--ink-650);

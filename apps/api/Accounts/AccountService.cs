@@ -38,7 +38,7 @@ internal sealed class AccountService(
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>
     /// The signed-in account and no errors, or no account and the messages of each refused field, keyed by
-    /// <c>accountName</c>, <c>email</c> and <c>password</c>.
+    /// <c>accountName</c>, <c>email</c>, <c>password</c> and <c>acceptPolicies</c>.
     /// </returns>
     public async ValueTask<(AuthenticatedAccount? Authentication, Dictionary<string, string[]> Errors)> RegisterAsync(
         RegisterAccountRequest request,
@@ -52,6 +52,7 @@ internal sealed class AccountService(
             return (null, errors);
         }
 
+        DateTimeOffset now = timeProvider.GetUtcNow();
         AccountRecord provisional = new(
             Guid.NewGuid(),
             accountName,
@@ -60,7 +61,9 @@ internal sealed class AccountService(
             normalizedEmail,
             null,
             string.Empty,
-            timeProvider.GetUtcNow());
+            now,
+            PolicyAcceptance.CurrentVersion,
+            now);
 
         string passwordHash = passwordHasher.HashPassword(provisional, request.Password!);
         AccountRecord account = provisional with { PasswordHash = passwordHash };
@@ -148,6 +151,10 @@ internal sealed class AccountService(
     /// <param name="providerSubject">Subject identifier Google issued for the identity.</param>
     /// <param name="providerEmail">Email address Google reported for the identity.</param>
     /// <param name="requestedAccountName">Account name to create for a new identity; may be <see langword="null"/>.</param>
+    /// <param name="acceptedPolicies">
+    /// Version of the policies the person accepted before leaving for Google; a new identity creates an account only
+    /// when it is <see cref="PolicyAcceptance.CurrentVersion"/>.
+    /// </param>
     /// <param name="sessions">Session service.</param>
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>The signed-in account, or no account and the reason.</returns>
@@ -156,6 +163,7 @@ internal sealed class AccountService(
             string? providerSubject,
             string? providerEmail,
             string? requestedAccountName,
+            string? acceptedPolicies,
             SessionService sessions,
             CancellationToken cancellationToken)
     {
@@ -191,6 +199,12 @@ internal sealed class AccountService(
             return (null, GoogleAccountFailure.InvalidAccountName);
         }
 
+        if (acceptedPolicies != PolicyAcceptance.CurrentVersion)
+        {
+            return (null, GoogleAccountFailure.PoliciesRequired);
+        }
+
+        DateTimeOffset now = timeProvider.GetUtcNow();
         AccountRecord account = new(
             Guid.NewGuid(),
             accountName,
@@ -199,7 +213,9 @@ internal sealed class AccountService(
             normalizedEmail,
             providerSubject,
             null,
-            timeProvider.GetUtcNow());
+            now,
+            PolicyAcceptance.CurrentVersion,
+            now);
         CreateAccountResult result = await store.CreateAsync(account, cancellationToken);
 
         if (result.Status is CreateAccountStatus.AccountNameUnavailable)
@@ -302,6 +318,11 @@ internal sealed class AccountService(
             errors["password"] = [passwordError];
         }
 
+        if (request.AcceptPolicies is not true)
+        {
+            errors["acceptPolicies"] = [PolicyAcceptance.RequiredMessage];
+        }
+
         return errors;
     }
 }
@@ -321,5 +342,7 @@ internal enum GoogleAccountFailure
     /// <summary>The supplied account name breaks <see cref="AccountNamePolicy"/>.</summary>
     InvalidAccountName,
     /// <summary>The supplied account name is taken.</summary>
-    AccountNameUnavailable
+    AccountNameUnavailable,
+    /// <summary>The identity is new and the person did not accept the current policies.</summary>
+    PoliciesRequired
 }

@@ -22,7 +22,7 @@ public sealed class SessionLifetimeTests
         AccountService accounts = new(store, clock);
         SessionService sessions = new(store, clock, Options.Create(options));
         (AuthenticatedAccount? registration, _) = await accounts.RegisterAsync(
-            new RegisterAccountRequest("LifetimeUser", "lifetime@example.com", "a-long-development-password"),
+            new RegisterAccountRequest("LifetimeUser", "lifetime@example.com", "a-long-development-password", true),
             sessions,
             TestContext.Current.CancellationToken);
         return Assert.IsType<AuthenticatedAccount>(registration).ExpiresAt;

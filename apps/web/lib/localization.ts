@@ -264,6 +264,15 @@ export const messages = {
         "That Account name is unavailable. Choose another name.",
       googleInvalidAccountName:
         "Use a valid Account name before continuing with Google.",
+      googlePoliciesRequired:
+        "Accept the Privacy Policy and the Security Policy before continuing with Google.",
+      consentStart: "I have read and accept the ",
+      consentPrivacy: "Privacy Policy",
+      consentMiddle: " and the ",
+      consentSecurity: "Security Policy",
+      consentEnd: ".",
+      consentRequired:
+        "Accept the Privacy Policy and the Security Policy to create an account.",
     },
     dashboard: {
       loading: "Loading account…",
@@ -518,6 +527,15 @@ export const messages = {
         "Dieser Kontoname ist nicht verfügbar. Wählen Sie einen anderen Namen.",
       googleInvalidAccountName:
         "Verwenden Sie einen gültigen Kontonamen, bevor Sie mit Google fortfahren.",
+      googlePoliciesRequired:
+        "Nehmen Sie die Datenschutzerklärung und die Sicherheitsrichtlinie an, bevor Sie mit Google fortfahren.",
+      consentStart: "Ich habe die ",
+      consentPrivacy: "Datenschutzerklärung",
+      consentMiddle: " und die ",
+      consentSecurity: "Sicherheitsrichtlinie",
+      consentEnd: " gelesen und nehme sie an.",
+      consentRequired:
+        "Nehmen Sie die Datenschutzerklärung und die Sicherheitsrichtlinie an, um ein Konto zu erstellen.",
     },
     dashboard: {
       loading: "Konto wird geladen…",
@@ -773,6 +791,15 @@ export const messages = {
         "Это имя аккаунта недоступно. Выберите другое.",
       googleInvalidAccountName:
         "Укажите допустимое имя аккаунта, прежде чем продолжить с Google.",
+      googlePoliciesRequired:
+        "Примите Политику конфиденциальности и Политику безопасности, прежде чем продолжить с Google.",
+      consentStart: "Я прочитал(а) и принимаю ",
+      consentPrivacy: "Политику конфиденциальности",
+      consentMiddle: " и ",
+      consentSecurity: "Политику безопасности",
+      consentEnd: ".",
+      consentRequired:
+        "Примите Политику конфиденциальности и Политику безопасности, чтобы создать аккаунт.",
     },
     dashboard: {
       loading: "Загрузка аккаунта…",
@@ -1012,6 +1039,15 @@ export const messages = {
       googleAccountNameRequired: "יש לבחור שם חשבון לפני ההמשך עם Google.",
       googleAccountNameUnavailable: "שם החשבון הזה אינו זמין. יש לבחור שם אחר.",
       googleInvalidAccountName: "יש להזין שם חשבון תקין לפני ההמשך עם Google.",
+      googlePoliciesRequired:
+        "יש לקבל את מדיניות הפרטיות ואת מדיניות האבטחה לפני ההמשך עם Google.",
+      consentStart: "קראתי ואני מקבל/ת את ",
+      consentPrivacy: "מדיניות הפרטיות",
+      consentMiddle: " ואת ",
+      consentSecurity: "מדיניות האבטחה",
+      consentEnd: ".",
+      consentRequired:
+        "יש לקבל את מדיניות הפרטיות ואת מדיניות האבטחה כדי ליצור חשבון.",
     },
     dashboard: {
       loading: "החשבון נטען…",
