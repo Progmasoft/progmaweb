@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+[Unit]
+Description=Progmasoft AI Support
+After=network-online.target llama-chat.service llama-embed.service
+Wants=network-online.target llama-chat.service llama-embed.service
+
+[Service]
+Type=exec
+User=aisupport
+Group=aisupport
+WorkingDirectory=/srv/aisupport/current
+ExecStart=/usr/bin/dotnet /srv/aisupport/current/Progmaweb.AiSupport.dll
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5300
+Environment=AiSupport__IndexPath=/srv/aisupport/index/index.json
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=30s
+
+# The service reads its release and its index and writes nothing. Questions and answers stay in memory.
+UMask=0077
+CapabilityBoundingSet=
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectHome=true
+ProtectHostname=true
+ProtectSystem=strict
+ProtectKernelLogs=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RemoveIPC=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+# MemoryDenyWriteExecute is omitted: CoreCLR's JIT needs executable mappings at run time.
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

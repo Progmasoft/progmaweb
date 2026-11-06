@@ -1,0 +1,22 @@
+<!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
+
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Progmasoft.Progmaweb.AiSupport.Tests</RootNamespace>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.11" />
+    <PackageReference Include="coverlet.MTP" Version="8.0.0" />
+    <PackageReference Include="xunit.v3.mtp-v2" Version="4.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\aisupport\Progmaweb.AiSupport.csproj" />
+  </ItemGroup>
+</Project>

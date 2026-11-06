@@ -5,5 +5,7 @@
   <Folder Name="/apps/">
     <Project Path="apps/api/Progmaweb.Api.csproj" />
     <Project Path="apps/api-tests/Progmaweb.Api.Tests.csproj" />
+    <Project Path="apps/aisupport/Progmaweb.AiSupport.csproj" />
+    <Project Path="apps/aisupport-tests/Progmaweb.AiSupport.Tests.csproj" />
   </Folder>
 </Solution>

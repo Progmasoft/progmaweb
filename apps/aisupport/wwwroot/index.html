@@ -1,0 +1,124 @@
+<!doctype html>
+<!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
+<html lang="en-US" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Ask about Tala, Tazel, ViGet, Catch3 and the Progmasoft tools, and get an answer from their documentation."
+    />
+    <title>AI Support · Progmasoft</title>
+    <link rel="canonical" href="https://aisupport.progmasoft.com/" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="app.css" />
+    <!-- Sets the theme before the first paint, so a visitor who chose dark never sees light. -->
+    <script src="theme.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="https://progmasoft.com/">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="brand-tile brand-tile-slate"></span>
+            <span class="brand-tile brand-tile-teal"></span>
+            <span class="brand-tile brand-tile-violet"></span>
+            <span class="brand-tile brand-tile-orange"></span>
+          </span>
+          <strong class="brand-name">Progmasoft</strong>
+          <span class="brand-product">AI Support</span>
+        </a>
+        <nav class="primary-nav" aria-label="Progmasoft">
+          <a href="https://product.progmasoft.com/" data-text="products">Products</a>
+          <a href="https://console.progmasoft.com/" data-text="developers">Developers</a>
+          <a href="https://github.com/Progmasoft">GitHub</a>
+          <a class="button button-small" href="https://account.progmasoft.com/" data-text="account">Account</a>
+          <button class="theme-toggle" type="button" id="theme" aria-pressed="false">
+            <span aria-hidden="true">◐</span>
+            <span data-text="dark">Dark</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="shell hero-inner">
+          <p class="eyebrow" data-text="eyebrow">Progmasoft support</p>
+          <h1>
+            <span data-text="titleStart">Ask the documentation.</span>
+            <span class="accent" data-text="titleAccent">Get the answer with its sources.</span>
+          </h1>
+          <p class="lede" data-text="lede">
+            AI Support answers questions about Tala, Tazel, ViGet, Catch3 and the Progmasoft tools from their
+            documentation. It can be wrong: check what it says against the sources it links.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="workspace">
+          <form class="card ask" id="ask">
+            <label class="ask-label" for="question" data-text="label">Your question</label>
+            <textarea
+              id="question"
+              name="question"
+              rows="4"
+              maxlength="1000"
+              required
+              data-placeholder="placeholder"
+              placeholder="How do I add a dependency in Tazel?"
+            ></textarea>
+            <div class="examples" id="examples" aria-label="Examples"></div>
+            <div class="ask-row">
+              <p class="note">
+                <span data-text="note">Your question is not stored.</span>
+                <a href="https://progmasoft.com/privacy" data-text="privacy">Privacy Policy</a>
+              </p>
+              <button class="button pill" type="submit" id="submit" data-text="ask">Ask</button>
+            </div>
+          </form>
+
+          <article class="card answer" id="answer" aria-live="polite" hidden>
+            <p class="eyebrow" data-text="answerHeading">Answer</p>
+            <div class="answer-text" id="answer-text"></div>
+            <div class="sources" id="sources" hidden>
+              <h2 data-text="sources">Sources</h2>
+              <ol id="source-list"></ol>
+            </div>
+          </article>
+          <p class="message" id="message" role="alert" hidden></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div>
+          <span class="brand">
+            <span class="brand-mark" aria-hidden="true">
+              <span class="brand-tile brand-tile-slate"></span>
+              <span class="brand-tile brand-tile-teal"></span>
+              <span class="brand-tile brand-tile-violet"></span>
+              <span class="brand-tile brand-tile-orange"></span>
+            </span>
+            <strong class="brand-name">Progmasoft</strong>
+          </span>
+          <p data-text="model">Answered by Qwen3.5 2B on a Progmasoft server.</p>
+        </div>
+        <div class="footer-links">
+          <a href="mailto:support@progmasoft.com" data-text="human">Write to a person</a>
+          <a href="https://progmasoft.com/privacy" data-text="privacy">Privacy Policy</a>
+          <a href="https://progmasoft.com/security" data-text="security">Security Policy</a>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <span>© 2026 Progmasoft</span>
+      </div>
+    </footer>
+  </body>
+</html>

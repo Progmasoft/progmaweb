@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+# Qwen3.5 2B (Q4_K_M) for AI Support, without thinking. Two answers run at once, each with a context of 4,096 tokens;
+# the server listens on loopback only, for the aisupport service.
+[Unit]
+Description=AI Support chat model (llama-server, Qwen3.5 2B)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=llama
+Group=llama
+ExecStart=/opt/llama/current/llama-server \
+    --model /srv/models/Qwen3.5-2B-Q4_K_M.gguf \
+    --host 127.0.0.1 --port 8090 \
+    --ctx-size 8192 --parallel 2 --threads 4 \
+    --jinja --chat-template-kwargs '{"enable_thinking":false}' \
+    --no-webui
+Environment=LD_LIBRARY_PATH=/opt/llama/current
+Restart=on-failure
+RestartSec=5s
+UMask=0077
+CapabilityBoundingSet=
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectHome=true
+ProtectHostname=true
+ProtectSystem=strict
+ProtectKernelLogs=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

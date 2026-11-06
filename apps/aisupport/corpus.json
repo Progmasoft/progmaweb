@@ -1,0 +1,46 @@
+{
+  "sources": [
+    {
+      "repository": "tala",
+      "branch": "main",
+      "include": ["README.md", "Documents/**/*.md", "Spec/**/*.tala", "Spec/README.md"],
+      "exclude": ["Documents/Contributing/**"],
+      "links": "github"
+    },
+    {
+      "repository": "tazel.net",
+      "branch": "main",
+      "include": ["content/en-US/docs/**/*.md"],
+      "exclude": [],
+      "links": "tazel-docs"
+    },
+    {
+      "repository": "catch3",
+      "branch": "devel",
+      "include": ["README.md", "docs/*.md"],
+      "exclude": ["docs/contributing.md"],
+      "links": "github"
+    },
+    {
+      "repository": "talafmt",
+      "branch": "main",
+      "include": ["README.md"],
+      "exclude": [],
+      "links": "github"
+    },
+    {
+      "repository": "talalint",
+      "branch": "main",
+      "include": ["README.md"],
+      "exclude": [],
+      "links": "github"
+    },
+    {
+      "repository": "tala-analyzer",
+      "branch": "main",
+      "include": ["README.md", "vscode/README.md", "intellij/README.md"],
+      "exclude": [],
+      "links": "github"
+    }
+  ]
+}

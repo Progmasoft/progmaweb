@@ -1,0 +1,567 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 */
+
+/* The look of progmasoft.com: its tokens, header, hero and footer, so AI Support
+   reads as one more Progmasoft site. Light by default; dark is a kept choice. */
+
+:root {
+  --blue-700: #004e8c;
+  --blue-600: #0066b8;
+  --blue-100: #dff0ff;
+  --violet: #6d4fe0;
+  --teal: #0f9e94;
+  --ink-950: #121417;
+  --ink-800: #2a2f35;
+  --ink-650: #4c545d;
+  --ink-500: #68717c;
+  --line: #d9dee4;
+  --line-strong: #b9c1ca;
+  --surface: #ffffff;
+  --surface-muted: #f5f7f9;
+  --surface-blue: #f1f8ff;
+  --header-surface: rgb(255 255 255 / 94%);
+  --glow: rgb(0 120 212 / 14%);
+  --danger: #b42318;
+  --shadow-sm: 0 2px 8px rgb(18 20 23 / 8%);
+  --shadow-md: 0 16px 44px rgb(18 20 23 / 12%);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --blue-700: #86c8ff;
+  --blue-600: #5db5f7;
+  --blue-100: #14314a;
+  --violet: #a98bff;
+  --teal: #4fd1c5;
+  --ink-950: #f4f6f8;
+  --ink-800: #dfe4e9;
+  --ink-650: #bac3cc;
+  --ink-500: #98a4af;
+  --line: #343c45;
+  --line-strong: #53606d;
+  --surface: #101317;
+  --surface-muted: #171c22;
+  --surface-blue: #10283a;
+  --header-surface: rgb(16 19 23 / 94%);
+  --glow: rgb(54 159 232 / 18%);
+  --danger: #ff8f86;
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 28%);
+  --shadow-md: 0 16px 44px rgb(0 0 0 / 42%);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink-950);
+  font-family:
+    "Segoe UI Variable",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--blue-600);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.shell {
+  width: min(calc(100% - 40px), 1180px);
+  margin-inline: auto;
+}
+
+/* Header */
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: var(--header-surface);
+  backdrop-filter: blur(14px);
+}
+
+.header-inner {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink-950);
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.brand-tile-slate {
+  background: #3b4658;
+}
+
+.brand-tile-teal {
+  background: #1e7188;
+}
+
+.brand-tile-violet {
+  background: #7655fa;
+}
+
+.brand-tile-orange {
+  background: #dc7644;
+}
+
+.brand-name {
+  color: #8e0000;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+:root[data-theme="dark"] .brand-name {
+  color: #f23636;
+}
+
+.brand-product {
+  margin-inline-start: 5px;
+  padding-inline-start: 16px;
+  border-inline-start: 2px solid var(--ink-800);
+  color: var(--ink-800);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.primary-nav > a:not(.button) {
+  color: var(--ink-800);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.primary-nav > a:not(.button):hover {
+  color: var(--blue-600);
+  text-decoration: none;
+}
+
+.theme-toggle {
+  min-height: 34px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-800);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.theme-toggle:hover {
+  border-color: var(--blue-600);
+  background: var(--surface-blue);
+}
+
+/* Buttons */
+
+.button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 21px;
+  border: 1px solid var(--blue-600);
+  border-radius: var(--radius-sm);
+  background: var(--blue-600);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  line-height: 1.2;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+:root[data-theme="dark"] .button {
+  color: #101317;
+}
+
+.button:hover {
+  border-color: var(--blue-700);
+  background: var(--blue-700);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+
+.button:disabled {
+  cursor: progress;
+  opacity: 0.68;
+}
+
+.button-small {
+  min-height: 36px;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.pill {
+  min-width: 132px;
+  padding: 13px 26px;
+  border-radius: 999px;
+}
+
+/* Hero: the gradients and the grid of progmasoft.com. */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(60% 80% at 85% 10%, rgb(109 79 224 / 14%), transparent 70%),
+    radial-gradient(50% 70% at 10% 90%, rgb(15 158 148 / 12%), transparent 70%),
+    radial-gradient(40% 60% at 60% 60%, var(--glow), transparent 70%),
+    var(--surface);
+}
+
+.hero::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  content: "";
+  mask-image: radial-gradient(70% 70% at 50% 40%, black, transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  padding-block: 88px 80px;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--blue-700);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.095em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.hero h1 .accent {
+  background: linear-gradient(100deg, var(--blue-600), var(--violet) 55%, var(--teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  max-width: 640px;
+  margin: 26px 0 0;
+  color: var(--ink-650);
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.6;
+}
+
+/* The question and the answer */
+
+.section {
+  padding-block: 56px 96px;
+  background: var(--surface-muted);
+}
+
+.workspace {
+  max-width: 880px;
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.ask-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 650;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  min-height: 112px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-950);
+  font: inherit;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+textarea:hover {
+  border-color: var(--ink-500);
+}
+
+textarea:focus {
+  border-color: var(--blue-600);
+  outline: 3px solid var(--blue-100);
+}
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.examples button {
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--ink-800);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+
+.examples button:hover {
+  border-color: var(--blue-600);
+  background: var(--surface-blue);
+  color: var(--blue-700);
+}
+
+.ask-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.note {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: 14px;
+}
+
+.note a {
+  margin-inline-start: 6px;
+}
+
+.answer .eyebrow {
+  margin-bottom: 10px;
+}
+
+.answer-text {
+  font-size: 16.5px;
+  line-height: 1.7;
+}
+
+.answer-text p {
+  margin: 0 0 14px;
+}
+
+.answer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.answer-text pre {
+  overflow-x: auto;
+  margin: 0 0 14px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: #0d1117;
+  color: #e6edf3;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.answer-text code {
+  font-family: "Cascadia Code", Consolas, monospace;
+}
+
+.answer-text :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  font-size: 0.92em;
+}
+
+.answer-text .cite {
+  margin-inline-start: 2px;
+  font-size: 0.75em;
+  font-weight: 700;
+  vertical-align: super;
+}
+
+.answer-text.thinking::after {
+  color: var(--ink-500);
+  content: "…";
+}
+
+.sources {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.sources h2 {
+  margin: 0 0 10px;
+  color: var(--ink-650);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sources ol {
+  margin: 0;
+  padding-inline-start: 22px;
+  font-size: 15px;
+}
+
+.sources li + li {
+  margin-top: 4px;
+}
+
+.message {
+  margin: 0;
+  padding: 14px 18px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+}
+
+/* Footer */
+
+.site-footer {
+  border-top: 1px solid #343a40;
+  background: #20252a;
+  color: #d8dde2;
+}
+
+.site-footer .brand-name {
+  color: #ff5c5c;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  padding-block: 48px;
+}
+
+.footer-inner p {
+  max-width: 430px;
+  margin: 14px 0 0;
+  color: #aeb6bf;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: #d8dde2;
+}
+
+.footer-bottom {
+  padding-block: 22px;
+  border-top: 1px solid #3a4148;
+  color: #aeb6bf;
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .primary-nav > a:not(.button) {
+    display: none;
+  }
+
+  .primary-nav {
+    gap: 12px;
+  }
+
+  .brand-product {
+    padding-inline-start: 10px;
+    font-size: 14px;
+  }
+
+  .hero-inner {
+    padding-block: 56px 48px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .pill {
+    width: 100%;
+  }
+}
