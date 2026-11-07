@@ -11,7 +11,15 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 /// <param name="AccountName">Requested account name; see <see cref="AccountNamePolicy"/>.</param>
 /// <param name="Email">Email address of the account; see <see cref="EmailAddressPolicy"/>.</param>
 /// <param name="Password">Password in plain text; see <see cref="PasswordPolicy"/>. It is hashed before it is stored.</param>
-public sealed record RegisterAccountRequest(string? AccountName, string? Email, string? Password);
+/// <param name="AcceptPolicies">
+/// Whether the person accepted the Privacy Policy and the Security Policy; anything but <see langword="true"/> is
+/// refused. See <see cref="PolicyAcceptance"/>.
+/// </param>
+public sealed record RegisterAccountRequest(
+    string? AccountName,
+    string? Email,
+    string? Password,
+    bool? AcceptPolicies = null);
 
 /// <summary>Body of <c>POST /api/v1/accounts/login</c>.</summary>
 /// <param name="Email">Email address the account was registered with.</param>

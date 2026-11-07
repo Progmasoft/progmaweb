@@ -36,7 +36,7 @@ public sealed class UnconfiguredGoogleTests
 
         HttpResponseMessage registration = await client.PostAsJsonAsync(
             "/api/v1/accounts/register",
-            new RegisterAccountRequest("LocalUser1", "local@example.com", password),
+            new RegisterAccountRequest("LocalUser1", "local@example.com", password, true),
             TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Created, registration.StatusCode);
 

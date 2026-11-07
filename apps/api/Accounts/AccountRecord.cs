@@ -16,6 +16,11 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 /// ASP.NET Core Identity password hash; <see langword="null"/> for an account that signs in through Google only.
 /// </param>
 /// <param name="CreatedAt">Moment the account was created, in UTC.</param>
+/// <param name="PoliciesVersion">
+/// Version of the policies the owner accepted, <see cref="PolicyAcceptance.CurrentVersion"/> at the time;
+/// <see langword="null"/> for an account created before registration asked for it, or by operations tooling.
+/// </param>
+/// <param name="PoliciesAcceptedAt">Moment the owner accepted them, in UTC; null when the version is.</param>
 internal sealed record AccountRecord(
     Guid Id,
     string AccountName,
@@ -24,7 +29,9 @@ internal sealed record AccountRecord(
     string NormalizedEmail,
     string? GoogleSubject,
     string? PasswordHash,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt,
+    string? PoliciesVersion = null,
+    DateTimeOffset? PoliciesAcceptedAt = null);
 
 /// <summary>A session as the store keeps it.</summary>
 /// <param name="TokenDigest">SHA-256 digest of the session token. The token itself is never stored.</param>

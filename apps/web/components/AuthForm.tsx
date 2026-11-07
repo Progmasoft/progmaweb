@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type MouseEvent, useId, useState } from "react";
 import { getMessages, type Locale } from "@/lib/localization";
+import { policyUrls } from "@/lib/policies";
 
 type AuthMode = "login" | "register";
 
@@ -58,7 +59,17 @@ export function AuthForm({ initialMessage, locale, mode }: AuthFormProps) {
         accountName.reportValidity();
         return;
       }
+      const acceptPolicies = form?.elements.namedItem("acceptPolicies");
+      if (!(acceptPolicies instanceof HTMLInputElement)) {
+        setMessage(auth.consentRequired);
+        return;
+      }
+      if (!acceptPolicies.checkValidity()) {
+        acceptPolicies.reportValidity();
+        return;
+      }
       parameters.set("accountName", accountName.value);
+      parameters.set("acceptPolicies", "true");
     }
 
     const query = parameters.size === 0 ? "" : `?${parameters.toString()}`;
@@ -86,6 +97,7 @@ export function AuthForm({ initialMessage, locale, mode }: AuthFormProps) {
             accountName: String(form.get("accountName") ?? ""),
             email: String(form.get("email") ?? ""),
             password,
+            acceptPolicies: form.get("acceptPolicies") === "on",
           }
         : {
             email: String(form.get("email") ?? ""),
@@ -227,6 +239,28 @@ export function AuthForm({ initialMessage, locale, mode }: AuthFormProps) {
             maxLength={256}
             required
           />
+        </div>
+      )}
+
+      {mode === "register" && (
+        <div className="consent-field">
+          <input
+            id={`${formId}-accept-policies`}
+            name="acceptPolicies"
+            type="checkbox"
+            required
+          />
+          <label htmlFor={`${formId}-accept-policies`}>
+            {auth.consentStart}
+            <a href={policyUrls.privacy} target="_blank" rel="noopener">
+              {auth.consentPrivacy}
+            </a>
+            {auth.consentMiddle}
+            <a href={policyUrls.security} target="_blank" rel="noopener">
+              {auth.consentSecurity}
+            </a>
+            {auth.consentEnd}
+          </label>
         </div>
       )}
 

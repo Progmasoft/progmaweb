@@ -53,6 +53,17 @@ internal static class AccountSchema
 
         CREATE INDEX sessions_expires_at_idx ON sessions (expires_at);
         CREATE INDEX sessions_account_id_idx ON sessions (account_id);
+        """,
+        // 2: the policies an account accepted at registration.
+        //
+        // Accounts created before step 2 accepted none, and keep null in both columns; the constraint keeps the
+        // version and the moment together.
+        """
+        ALTER TABLE accounts
+            ADD COLUMN policies_version     text,
+            ADD COLUMN policies_accepted_at timestamptz,
+            ADD CONSTRAINT accounts_policies_check
+                CHECK ((policies_version IS NULL) = (policies_accepted_at IS NULL));
         """
     ];
 

@@ -65,6 +65,26 @@ public abstract class AccountStoreContractTests
         Assert.Equal("AQAAAA-hash", found.PasswordHash);
         Assert.Equal("Grace", found.AccountName);
         Assert.Equal("grace@example.com", found.Email);
+        Assert.Null(found.PoliciesVersion);
+        Assert.Null(found.PoliciesAcceptedAt);
+    }
+
+    [Fact]
+    public async Task AnAccountKeepsThePoliciesItAccepted()
+    {
+        IAccountStore store = await CreateStoreAsync();
+        AccountRecord account = Account("Hopper", "hopper@example.com") with
+        {
+            PoliciesVersion = PolicyAcceptance.CurrentVersion,
+            PoliciesAcceptedAt = Moment
+        };
+
+        AccountRecord stored = Assert.IsType<AccountRecord>((await store.CreateAsync(account, Cancellation)).Account);
+
+        AccountRecord found = Assert.IsType<AccountRecord>(await store.FindByIdAsync(account.Id, Cancellation));
+        Assert.Equal(stored, found);
+        Assert.Equal(PolicyAcceptance.CurrentVersion, found.PoliciesVersion);
+        Assert.True((Moment - found.PoliciesAcceptedAt!.Value).Duration() < TimeSpan.FromMicroseconds(1));
     }
 
     [Fact]

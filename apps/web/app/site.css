@@ -530,3 +530,35 @@
     transform: none;
   }
 }
+
+/* Policies */
+
+.pm-policy-version {
+  margin-top: 16px;
+  color: var(--ink-650);
+  font-size: 0.95rem;
+}
+
+.pm-policy {
+  max-width: 760px;
+}
+
+.pm-policy section + section {
+  margin-top: 40px;
+}
+
+.pm-policy h2 {
+  margin-bottom: 12px;
+  font-size: 1.35rem;
+}
+
+.pm-policy p {
+  margin-block: 0 14px;
+  line-height: 1.7;
+}
+
+.pm-policy-see-also {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}

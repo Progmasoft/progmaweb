@@ -25,19 +25,24 @@ internal sealed class PostgresAccountStore(NpgsqlDataSource dataSource) : IAccou
 
     /// <summary>The columns of an account, in the order <see cref="ReadAccount"/> reads them.</summary>
     private const string AccountColumns =
-        "id, account_name, normalized_account_name, email, normalized_email, google_subject, password_hash, created_at";
+        "id, account_name, normalized_account_name, email, normalized_email, google_subject, password_hash, created_at, " +
+        "policies_version, policies_accepted_at";
 
     /// <inheritdoc/>
     public async ValueTask<CreateAccountResult> CreateAsync(AccountRecord account, CancellationToken cancellationToken)
     {
-        AccountRecord stored = account with { CreatedAt = ToStoredPrecision(account.CreatedAt) };
+        AccountRecord stored = account with
+        {
+            CreatedAt = ToStoredPrecision(account.CreatedAt),
+            PoliciesAcceptedAt = account.PoliciesAcceptedAt is { } accepted ? ToStoredPrecision(accepted) : null
+        };
 
         for (int attempt = 0; attempt < CreateAttempts; attempt++)
         {
             // A row that breaks a unique index is skipped instead of raising an error, so that a taken name is an
             // ordinary answer and the transaction log holds no failed statement for it.
             await using (NpgsqlCommand insert = dataSource.CreateCommand(
-                $"INSERT INTO accounts ({AccountColumns}) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT DO NOTHING"))
+                $"INSERT INTO accounts ({AccountColumns}) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT DO NOTHING"))
             {
                 insert.Parameters.AddWithValue(stored.Id);
                 insert.Parameters.AddWithValue(stored.AccountName);
@@ -47,6 +52,8 @@ internal sealed class PostgresAccountStore(NpgsqlDataSource dataSource) : IAccou
                 insert.Parameters.AddWithValue(NullableText(stored.GoogleSubject));
                 insert.Parameters.AddWithValue(NullableText(stored.PasswordHash));
                 insert.Parameters.AddWithValue(stored.CreatedAt);
+                insert.Parameters.AddWithValue(NullableText(stored.PoliciesVersion));
+                insert.Parameters.Add(new NpgsqlParameter<DateTimeOffset?> { TypedValue = stored.PoliciesAcceptedAt });
                 if (await insert.ExecuteNonQueryAsync(cancellationToken) == 1)
                 {
                     return CreateAccountResult.Created(stored);
@@ -188,7 +195,9 @@ internal sealed class PostgresAccountStore(NpgsqlDataSource dataSource) : IAccou
         reader.GetString(4),
         reader.IsDBNull(5) ? null : reader.GetString(5),
         reader.IsDBNull(6) ? null : reader.GetString(6),
-        reader.GetFieldValue<DateTimeOffset>(7));
+        reader.GetFieldValue<DateTimeOffset>(7),
+        reader.IsDBNull(8) ? null : reader.GetString(8),
+        reader.IsDBNull(9) ? null : reader.GetFieldValue<DateTimeOffset>(9));
 
     /// <summary>Converts an optional text to a parameter value.</summary>
     /// <param name="value">The text, or <see langword="null"/>.</param>

@@ -73,6 +73,41 @@ without a database for a short time.
 The account database belongs to Progmaweb alone. Other services on the host have their own databases and roles; do
 not share a role or a database with them.
 
+### Deleting an account
+
+The Privacy Policy lets an owner ask, from the address of the account, to have it deleted. The API has no deletion
+endpoint, so support does it in the database, after checking that the request came from that address. Dump the
+database first (`pg_dump progmaweb_accounts`), then, as the `progmaweb` role, in one transaction, with the `id` of the
+account (`select id from accounts where normalized_account_name = upper('<Name>')`):
+
+```sql
+BEGIN;
+-- What the account allowed applications to do: OpenIddict keeps the account id as the subject.
+DELETE FROM oauth_tokens WHERE "Subject" = '<id>';
+DELETE FROM oauth_authorizations WHERE "Subject" = '<id>';
+-- Applications the account alone owns, with what was issued for them.
+CREATE TEMP TABLE owned ON COMMIT DROP AS
+    SELECT "ApplicationId" AS id FROM oauth_application_owners GROUP BY "ApplicationId"
+    HAVING bool_and("AccountId" = '<id>');
+DELETE FROM oauth_tokens WHERE "ApplicationId" IN (SELECT id FROM owned);
+DELETE FROM oauth_authorizations WHERE "ApplicationId" IN (SELECT id FROM owned);
+DELETE FROM oauth_applications WHERE "Id" IN (SELECT id FROM owned);
+-- The account; its sessions and its remaining application ownerships go with it (ON DELETE CASCADE).
+DELETE FROM accounts WHERE id = '<id>';
+COMMIT;
+```
+
+The Tazel plugins an account published stay in ViGet under its name: projects depend on them, and a removed name
+could be registered by someone else. Delete the dump once the deletion is confirmed.
+
+### Logs without client addresses
+
+The Privacy Policy says that IP addresses are kept only with ViGet uploads. On both servers the `main` log format of
+`/etc/nginx/nginx.conf` therefore has no `$remote_addr` and no `$http_x_forwarded_for`, and `error_log` keeps only
+`crit` entries, because a lower level names the client of a failed request. The change is
+`ops/aisupport/nginx-no-ip.pl` (applied by hand on the first server on 2026-11-06, with a copy of the previous file
+in `/root/policy-20261106`). A new site in `conf.d` uses the `main` format or one of its own without an address.
+
 ### Releases and rollback
 
 - Restarting the API keeps every account and session. Step 4 of the activation contract applies to both services.
@@ -211,6 +246,26 @@ The publisher of the descriptor must be the name of an existing Progmasoft Accou
 
 The command checks the descriptor of the JAR, the publisher, its account and the version, which is never replaced.
 `viget yank-tazel-plugin <Publisher> <Name> <Version>` yanks a version, and `--undo` takes the yank back.
+
+### Taking malicious software off ViGet
+
+The Security Policy (progmasoft.com/security) says that malicious software found on ViGet is taken off it and that
+the uploader's account is closed. A yank alone does not do that: it marks the version, while Nginx keeps serving the
+JAR and Cloudflare keeps its copy for a year. Taking a version off ViGet is four steps, as root:
+
+1. Yank the version with `viget yank-tazel-plugin`, as above, so Tazel no longer resolves it.
+2. Move the JAR out of `/srv/viget/files` into `/root/quarantine/viget/<Publisher>/<Name>/<Version>/` (mode 0700). It
+   stops being served, and the file stays as evidence for the authorities; it is not deleted.
+3. Purge its address from the Cloudflare cache (`POST /zones/<zone>/purge_cache` with
+   `{"files": ["https://viget.progmasoft.com/dslplugins/tazel/<Publisher>/<Name>/<Version>/<Name>-<Version>.jar"]}`)
+   and check that the address now answers 404.
+4. Close the account that uploaded it, as described under "Deleting an account", once whatever the authorities need
+   from it has been kept.
+
+ViGet takes uploads only from the publishers `ViGet__TazelPublishers` names, through the command above. When uploads
+open to every account, the upload endpoint has to keep the IP address of each upload with the upload, for as long as
+the upload is on ViGet and one year after it is removed: the Privacy Policy promises exactly that, and nothing else
+keeps an IP address.
 
 ## Maven repository
 

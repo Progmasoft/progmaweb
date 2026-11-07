@@ -48,12 +48,15 @@ internal static class AccountEndpoints
     /// <param name="accountName">
     /// Account name to create when the Google identity is new; omitted when signing in to an existing account.
     /// </param>
+    /// <param name="acceptPolicies">
+    /// Whether the person accepted the Privacy Policy and the Security Policy; required with an account name.
+    /// </param>
     /// <param name="configuration">Application configuration with the Google client credentials.</param>
     /// <returns>
     /// A challenge that sends the browser to Google, a redirect back to registration when the name is invalid, or
     /// 503 when Google sign-in is not configured.
     /// </returns>
-    private static IResult StartGoogleAsync(string? accountName, IConfiguration configuration)
+    private static IResult StartGoogleAsync(string? accountName, bool? acceptPolicies, IConfiguration configuration)
     {
         if (string.IsNullOrWhiteSpace(configuration["Authentication:Google:ClientId"]) ||
             string.IsNullOrWhiteSpace(configuration["Authentication:Google:ClientSecret"]))
@@ -70,6 +73,13 @@ internal static class AccountEndpoints
             return Results.Redirect("/register?google=invalid-account-name");
         }
 
+        // A registration leaves for Google only after the person accepted the policies, so a refusal is shown on
+        // the form rather than after the round trip.
+        if (normalized is not null && acceptPolicies is not true)
+        {
+            return Results.Redirect("/register?google=policies-required");
+        }
+
         AuthenticationProperties properties = new()
         {
             RedirectUri = "/api/v1/accounts/oauth/google/complete"
@@ -77,6 +87,7 @@ internal static class AccountEndpoints
         if (normalized is not null)
         {
             properties.Items["accountName"] = normalized;
+            properties.Items["policies"] = PolicyAcceptance.CurrentVersion;
         }
 
         return Results.Challenge(properties, [GoogleDefaults.AuthenticationScheme]);
@@ -104,8 +115,10 @@ internal static class AccountEndpoints
         string? subject = external.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
         string? accountName = null;
         external.Properties?.Items.TryGetValue("accountName", out accountName);
+        string? policies = null;
+        external.Properties?.Items.TryGetValue("policies", out policies);
         (AuthenticatedAccount? authentication, GoogleAccountFailure failure) =
-            await accounts.AuthenticateGoogleAsync(subject, email, accountName, sessions, cancellationToken);
+            await accounts.AuthenticateGoogleAsync(subject, email, accountName, policies, sessions, cancellationToken);
         await context.SignOutAsync(ExternalCookieScheme);
 
         if (authentication is null)
@@ -115,6 +128,7 @@ internal static class AccountEndpoints
                 GoogleAccountFailure.AccountNameRequired => "/register?google=account-name-required",
                 GoogleAccountFailure.InvalidAccountName => "/register?google=invalid-account-name",
                 GoogleAccountFailure.AccountNameUnavailable => "/register?google=account-name-unavailable",
+                GoogleAccountFailure.PoliciesRequired => "/register?google=policies-required",
                 _ => "/login?google=failed"
             };
             return Results.Redirect(destination);
