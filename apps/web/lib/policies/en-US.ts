@@ -15,7 +15,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "Who we are",
         paragraphs: [
-          "Progmasoft runs progmasoft.com, Progmasoft Account, Progmasoft Credentials and the Progmasoft Console, ViGet, AI Support and the Progmasoft product sites. This policy covers all of them. Write to support@progmasoft.com with any question about it.",
+          "Progmasoft runs progmasoft.com, Progmasoft Account, Progmasoft Credentials and the Progmasoft Console, ViGet and the Progmasoft product sites. This policy covers all of them. Write to support@progmasoft.com with any question about it.",
         ],
       },
       {
@@ -45,7 +45,6 @@ export const enUS: PolicyMessages = {
         paragraphs: [
           "Our sites are served through Cloudflare, which carries every request to us and protects the sites against attacks. To do that, Cloudflare processes your IP address under its own privacy policy. The pages use Cloudflare Web Analytics, which counts visits without cookies and without identifying you.",
           "If you sign in with Google, Google tells us the identifier and the email address of your Google identity, and nothing else of your Google account.",
-          "Questions asked on AI Support are answered by a model that runs on our own server. They are not stored, and they are not sent to anyone else.",
         ],
       },
       {

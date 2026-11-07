@@ -15,7 +15,7 @@ export const ruRU: PolicyMessages = {
       {
         heading: "Кто мы",
         paragraphs: [
-          "Progmasoft управляет сайтом progmasoft.com, Progmasoft Account, Progmasoft Credentials и Progmasoft Console, ViGet, AI Support и сайтами продуктов Progmasoft. Эта политика распространяется на все из них. Вопросы о ней присылайте на support@progmasoft.com.",
+          "Progmasoft управляет сайтом progmasoft.com, Progmasoft Account, Progmasoft Credentials и Progmasoft Console, ViGet и сайтами продуктов Progmasoft. Эта политика распространяется на все из них. Вопросы о ней присылайте на support@progmasoft.com.",
         ],
       },
       {
@@ -45,7 +45,6 @@ export const ruRU: PolicyMessages = {
         paragraphs: [
           "Наши сайты обслуживаются через Cloudflare, который доставляет нам каждый запрос и защищает сайты от атак. Для этого Cloudflare обрабатывает ваш IP-адрес согласно собственной политике конфиденциальности. Страницы используют Cloudflare Web Analytics, который считает посещения без cookie и без вашей идентификации.",
           "Если вы входите через Google, Google сообщает нам идентификатор и адрес электронной почты вашей учётной записи Google и больше ничего из вашего аккаунта Google.",
-          "На вопросы в AI Support отвечает модель, работающая на нашем собственном сервере. Вопросы не сохраняются и никому не передаются.",
         ],
       },
       {

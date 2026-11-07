@@ -14,7 +14,7 @@ export const heIL: PolicyMessages = {
       {
         heading: "מי אנחנו",
         paragraphs: [
-          "Progmasoft מפעילה את progmasoft.com, את Progmasoft Account, את Progmasoft Credentials ואת Progmasoft Console, את ViGet, את AI Support ואת אתרי המוצרים של Progmasoft. המדיניות הזו חלה על כולם. שאלות עליה אפשר לשלוח אל support@progmasoft.com.",
+          "Progmasoft מפעילה את progmasoft.com, את Progmasoft Account, את Progmasoft Credentials ואת Progmasoft Console, את ViGet ואת אתרי המוצרים של Progmasoft. המדיניות הזו חלה על כולם. שאלות עליה אפשר לשלוח אל support@progmasoft.com.",
         ],
       },
       {
@@ -44,7 +44,6 @@ export const heIL: PolicyMessages = {
         paragraphs: [
           "האתרים שלנו מוגשים דרך Cloudflare, שמעבירה אלינו כל בקשה ומגינה על האתרים מפני התקפות. לשם כך Cloudflare מעבדת את כתובת ה־IP שלך לפי מדיניות הפרטיות שלה. הדפים משתמשים ב־Cloudflare Web Analytics, שסופר ביקורים בלי עוגיות ובלי לזהות אותך.",
           "אם מתחברים עם Google, ‏Google מוסרת לנו את המזהה ואת כתובת הדוא״ל של זהות ה־Google שלך, ושום דבר אחר מחשבון ה־Google.",
-          "על שאלות ב־AI Support עונה מודל שרץ על השרת שלנו. השאלות אינן נשמרות ואינן נשלחות לאף אחד אחר.",
         ],
       },
       {
