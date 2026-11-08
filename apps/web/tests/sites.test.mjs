@@ -12,7 +12,7 @@ import {
   productSlugs,
   products,
 } from "../lib/products.ts";
-import { catch3Route, idesRoute, productRoute } from "../lib/sites.ts";
+import { catch3Route, productRoute } from "../lib/sites.ts";
 
 function shape(value) {
   if (Array.isArray(value)) {
@@ -40,7 +40,7 @@ test("every language has the same home, catalog and product-site text", () => {
 test("the catalog lists the products the user named, each with a site", () => {
   assert.deepEqual(
     [...productSlugs],
-    ["tala-lang", "talac", "talafmt", "talalint", "tazel", "xide", "catch3"],
+    ["tala-lang", "talac", "talafmt", "talalint", "tazel", "catch3"],
   );
   for (const slug of productSlugs) {
     assert.match(products[slug].site, /^https:\/\//, slug);
@@ -50,9 +50,9 @@ test("the catalog lists the products the user named, each with a site", () => {
       slug,
     );
   }
-  assert.equal(products.xide.site, "https://ides.progmasoft.com/xide");
   assert.equal(products.catch3.site, "https://catch3.progmasoft.com/");
   assert.equal(isProductSlug("viget"), false);
+  assert.equal(isProductSlug("xide"), false);
 });
 
 test("the home page names areas, not products", () => {
@@ -73,9 +73,6 @@ test("the product hosts map to their internal routes", () => {
   assert.equal(productRoute("/tala-lang/"), "/products/tala-lang");
   assert.equal(productRoute("/talac/extra"), null);
   assert.equal(productRoute("/../x"), null);
-  assert.equal(idesRoute("/"), "/ides");
-  assert.equal(idesRoute("/xide"), "/ides/xide");
-  assert.equal(idesRoute("/other"), null);
   assert.equal(catch3Route("/"), "/catch3");
   assert.equal(catch3Route("/docs"), null);
 });

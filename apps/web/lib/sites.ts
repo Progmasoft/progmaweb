@@ -23,15 +23,6 @@ export function productRoute(pathname: string): string | null {
     : null;
 }
 
-/** The public pages of ides.progmasoft.com: the list and Xide. */
-export function idesRoute(pathname: string): string | null {
-  const path = trimmed(pathname);
-  if (path === "/") {
-    return "/ides";
-  }
-  return path === "/xide" ? "/ides/xide" : null;
-}
-
 /** The public page of catch3.progmasoft.com. */
 export function catch3Route(pathname: string): string | null {
   return trimmed(pathname) === "/" ? "/catch3" : null;
