@@ -13,7 +13,6 @@ export const productSlugs = [
   "talafmt",
   "talalint",
   "tazel",
-  "xide",
   "catch3",
 ] as const;
 export type ProductSlug = (typeof productSlugs)[number];
@@ -62,12 +61,6 @@ export const products: Record<ProductSlug, ProductFacts> = {
     source: "https://github.com/Progmasoft/tazel",
     accent: "orange",
   },
-  xide: {
-    name: "Xide",
-    site: "https://ides.progmasoft.com/xide",
-    source: "https://github.com/Progmasoft/xide",
-    accent: "slate",
-  },
   catch3: {
     name: "Catch3",
     site: "https://catch3.progmasoft.com/",
@@ -101,7 +94,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "en-US": {
     metadataTitle: "Products",
     metadataDescription:
-      "The products of Progmasoft: the Tala language and its tools, the Xide IDE and the Catch3 testing toolkit.",
+      "The products of Progmasoft: the Tala language with its tools, and the Catch3 testing toolkit.",
     eyebrow: "Progmasoft products",
     title: "Products",
     description:
@@ -172,18 +165,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Extensible with DSL plugins",
         ],
       },
-      xide: {
-        category: "Integrated development environment",
-        tagline: "The planned IDE for Tala.",
-        description:
-          "Xide is the integrated development environment for Tala, written in Kotlin with Compose Multiplatform. It is early work and not yet ready for daily use.",
-        features: [
-          "A desktop shell with a project tree, tabbed editor and problems view",
-          "Tala, Kotlin, Java, Groovy and Python with syntax colouring",
-          "Checks Tala files with the structured diagnostics of talac",
-          "Extensions as Kotlin/JVM JARs",
-        ],
-      },
       catch3: {
         category: "Testing toolkit",
         tagline: "C++ testing beyond assertions.",
@@ -201,7 +182,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "de-DE": {
     metadataTitle: "Produkte",
     metadataDescription:
-      "Die Produkte von Progmasoft: die Sprache Tala und ihre Werkzeuge, die IDE Xide und das Testwerkzeug Catch3.",
+      "Die Produkte von Progmasoft: die Sprache Tala mit ihren Werkzeugen und das Testwerkzeug Catch3.",
     eyebrow: "Progmasoft-Produkte",
     title: "Produkte",
     description:
@@ -272,18 +253,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Erweiterbar mit DSL-Plugins",
         ],
       },
-      xide: {
-        category: "Integrierte Entwicklungsumgebung",
-        tagline: "Die geplante IDE für Tala.",
-        description:
-          "Xide ist die integrierte Entwicklungsumgebung für Tala, geschrieben in Kotlin mit Compose Multiplatform. Sie ist in einem frühen Stadium und noch nicht für den täglichen Einsatz bereit.",
-        features: [
-          "Eine Desktop-Oberfläche mit Projektbaum, Editor-Tabs und Problemansicht",
-          "Tala, Kotlin, Java, Groovy und Python mit Syntaxhervorhebung",
-          "Prüft Tala-Dateien mit den strukturierten Diagnosen von talac",
-          "Erweiterungen als Kotlin/JVM-JARs",
-        ],
-      },
       catch3: {
         category: "Testwerkzeug",
         tagline: "C++-Tests jenseits von Assertions.",
@@ -301,7 +270,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "ru-RU": {
     metadataTitle: "Продукты",
     metadataDescription:
-      "Продукты Progmasoft: язык Tala и его инструменты, среда разработки Xide и набор для тестирования Catch3.",
+      "Продукты Progmasoft: язык Tala с его инструментами и набор для тестирования Catch3.",
     eyebrow: "Продукты Progmasoft",
     title: "Продукты",
     description:
@@ -372,18 +341,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Расширяется DSL-плагинами",
         ],
       },
-      xide: {
-        category: "Интегрированная среда разработки",
-        tagline: "Будущая среда разработки для Tala.",
-        description:
-          "Xide — интегрированная среда разработки для Tala на Kotlin и Compose Multiplatform. Это ранняя стадия, ещё не готовая к повседневной работе.",
-        features: [
-          "Настольная оболочка с деревом проекта, вкладками редактора и окном проблем",
-          "Tala, Kotlin, Java, Groovy и Python с подсветкой синтаксиса",
-          "Проверка файлов Tala через структурированную диагностику talac",
-          "Расширения в виде JAR для Kotlin/JVM",
-        ],
-      },
       catch3: {
         category: "Набор для тестирования",
         tagline: "Тестирование C++ за пределами утверждений.",
@@ -401,7 +358,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "he-IL": {
     metadataTitle: "מוצרים",
     metadataDescription:
-      "המוצרים של Progmasoft: שפת Tala והכלים שלה, סביבת הפיתוח Xide וערכת הבדיקות Catch3.",
+      "המוצרים של Progmasoft: שפת Tala עם הכלים שלה וערכת הבדיקות Catch3.",
     eyebrow: "המוצרים של Progmasoft",
     title: "מוצרים",
     description:
@@ -470,18 +427,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "חבילות מ־ViGet עם קובץ נעילה",
           "מפעיל את המהדר, מעצב הקוד והלינטר",
           "ניתן להרחבה בתוספי DSL",
-        ],
-      },
-      xide: {
-        category: "סביבת פיתוח משולבת",
-        tagline: "סביבת הפיתוח המתוכננת ל־Tala.",
-        description:
-          "Xide היא סביבת הפיתוח המשולבת ל־Tala, שנכתבת ב־Kotlin עם Compose Multiplatform. היא בשלב מוקדם ועדיין לא מוכנה לשימוש יומיומי.",
-        features: [
-          "מעטפת לשולחן העבודה עם עץ פרויקט, לשוניות עורך ותצוגת בעיות",
-          "Tala,‏ Kotlin,‏ Java,‏ Groovy ו־Python עם צביעת תחביר",
-          "בודקת קובצי Tala עם האבחונים המובנים של talac",
-          "הרחבות כקובצי JAR של Kotlin/JVM",
         ],
       },
       catch3: {
