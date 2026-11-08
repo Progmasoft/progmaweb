@@ -10,7 +10,7 @@ import {
   requestHost,
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
-import { catch3Route, idesRoute, productRoute } from "@/lib/sites";
+import { catch3Route, productRoute } from "@/lib/sites";
 import {
   contentSecurityPolicy,
   createNonce,
@@ -57,7 +57,6 @@ const ownSites: OwnSite[] = [
     route: productRoute,
     api: false,
   },
-  { hosts: hostsOf("ides"), root: "/ides", route: idesRoute, api: false },
   { hosts: hostsOf("catch3"), root: "/catch3", route: catch3Route, api: false },
 ];
 
