@@ -16,6 +16,14 @@ overrides:
   # validating oversized constrained collections (fixed in 4.6.6). The plugin
   # accepts any zod 4; remove this once it resolves a fixed release itself.
   "zod@<4.6.6": 4.6.7
+  # c8 reaches glob 13 and minimatch 10 through test-exclude 8, the latest
+  # release. glob before 14.0.2 keeps walking the file system after its
+  # AbortSignal fired, and minimatch before 11.0.1 can be made to expand a
+  # pattern without bound. test-exclude uses only their stable glob and match
+  # calls, which the fixed majors keep. Remove these once test-exclude
+  # depends on fixed releases itself.
+  "glob@>=9.0.0 <14.0.2": 14.0.4
+  "minimatch@>=7.0.0 <11.0.1": 11.0.5
 auditConfig:
   ignoreGhsas:
     # braces <= 3.0.3: stack exhaustion on deeply nested brace patterns. No

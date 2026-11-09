@@ -104,9 +104,17 @@ could be registered by someone else. Delete the dump once the deletion is confir
 
 The Privacy Policy says that IP addresses are kept only with ViGet uploads. On both servers the `main` log format of
 `/etc/nginx/nginx.conf` therefore has no `$remote_addr` and no `$http_x_forwarded_for`, and `error_log` keeps only
-`crit` entries, because a lower level names the client of a failed request. The change is
-`ops/aisupport/nginx-no-ip.pl` (applied by hand on the first server on 2026-11-06, with a copy of the previous file
-in `/root/policy-20261106`). A new site in `conf.d` uses the `main` format or one of its own without an address.
+`crit` entries, because a lower level names the client of a failed request. The change was applied by hand on the
+first server on 2026-11-06, with a copy of the previous file in `/root/policy-20261106`. A new site in `conf.d` uses the `main` format or one of its own without an address.
+
+### Visitor addresses behind Cloudflare
+
+Cloudflare proxies the hosts, so Nginx is reached by Cloudflare edges, and one visitor's requests arrive from
+many of them. `nginx/cloudflare-real-ip.conf`, installed as `/etc/nginx/conf.d/00-cloudflare-real-ip.conf`, takes
+the visitor from `CF-Connecting-IP` when, and only when, the peer is in a Cloudflare range. Without it the API
+rate-limits sign-in by edge: one visitor never reaches the limit and unrelated visitors share one. Compare its ranges
+with <https://www.cloudflare.com/ips/> when Cloudflare announces a change. The address is used for the limit
+alone; the logs above still keep none.
 
 ### Releases and rollback
 
