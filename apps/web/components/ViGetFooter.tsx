@@ -15,11 +15,13 @@ export function ViGetFooter({ locale }: { locale: Locale }) {
         </div>
         <div>
           <strong>{viget.registry}</strong>
-          <a href="https://viget.progmasoft.com/langs/tala">{viget.packages}</a>
+          <a href="https://viget.progmasoft.com/#languages-title">
+            {viget.packages}
+          </a>
           <a href="https://viget.progmasoft.com/dslplugins/tazel">
             {viget.dslPlugins}
           </a>
-          <a href="https://tala.run/">Tala</a>
+          <a href="https://tazel.net/">Tazel</a>
         </div>
         <div>
           <strong>Progmasoft</strong>

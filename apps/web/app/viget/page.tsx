@@ -47,8 +47,11 @@ export default async function ViGetPage() {
                 >
                   {viget.createAccount}
                 </a>
-                <a className="button button-secondary" href="https://tala.run/">
-                  {viget.exploreTala}
+                <a
+                  className="button button-secondary"
+                  href="https://tazel.net/"
+                >
+                  {viget.exploreTazel}
                 </a>
               </div>
             </div>

@@ -12,11 +12,31 @@ export type Catalog = {
   readonly path?: string;
 };
 
+/** The languages ViGet hosts packages of, by the last segment of their path. */
+export const languageSlugs = ["c", "cpp", "objc"] as const;
+
+/** One language catalog, such as `c` for /langs/c. */
+export type LanguageSlug = (typeof languageSlugs)[number];
+
+/** Whether [value] names a language catalog. */
+export function isLanguageSlug(value: string): value is LanguageSlug {
+  return (languageSlugs as readonly string[]).includes(value);
+}
+
+/** The name of each language as the catalogs spell it; names are not translated. */
+export const languageNames: Record<LanguageSlug, string> = {
+  c: "C",
+  cpp: "C++",
+  objc: "Objective-C",
+};
+
 /** The languages whose packages ViGet hosts, in the order the page lists them. */
-export const languageCatalogs: readonly Catalog[] = [
-  { name: "Tala", path: "/langs/tala" },
-  { name: "C++" },
-];
+export const languageCatalogs: readonly Catalog[] = languageSlugs.map(
+  (slug) => ({
+    name: languageNames[slug],
+    path: `/langs/${slug}`,
+  }),
+);
 
 /** The build systems whose DSL plugins ViGet hosts, in the order the page lists them. */
 export const buildSystemCatalogs: readonly Catalog[] = [
@@ -29,6 +49,13 @@ export const buildSystemCatalogs: readonly Catalog[] = [
 export const languagesHeading = "LANGUAGES";
 export const buildSystemsHeading = "BUILD SYSTEM DSL PLUGINS";
 
+/** The words of the page of one language catalog. */
+type LanguageText = {
+  title: string;
+  description: string;
+  emptyTitle: string;
+};
+
 type CatalogText = {
   statusEyebrow: string;
   languagesDescription: string;
@@ -37,10 +64,8 @@ type CatalogText = {
   holds: Record<string, string>;
   notAvailable: string;
   open: string;
-  talaTitle: string;
-  talaDescription: string;
-  talaEmptyTitle: string;
-  talaEmptyDescription: string;
+  languages: Record<LanguageSlug, LanguageText>;
+  languageEmptyDescription: string;
   tazelTitle: string;
   tazelDescription: string;
   backToRegistry: string;
@@ -54,21 +79,40 @@ const text: Record<Locale, CatalogText> = {
     buildSystemsDescription:
       "Plugins that extend the project file of a build system.",
     holds: {
-      Tala: "Libraries and applications written in Tala.",
+      C: "Libraries and applications written in C.",
+      "C++": "Libraries and applications written in C++.",
+      "Objective-C":
+        "Libraries and applications written in Objective-C and Objective-C++.",
       Tazel: "Kotlin JAR plugins for the project file of Tazel.",
       Gradle: "Gradle plugins of Progmasoft, from the Gradle Plugin Portal.",
     },
     notAvailable: "Not available yet",
     open: "Open catalog",
-    talaTitle: "Tala packages",
-    talaDescription:
-      "Libraries and applications written in Tala, distributed as .vipkg artifacts and published under a Progmasoft Account.",
-    talaEmptyTitle: "No Tala packages yet.",
-    talaEmptyDescription:
+    languages: {
+      c: {
+        title: "C packages",
+        description:
+          "Libraries and applications written in C, distributed as .vipkg artifacts and published under a Progmasoft Account.",
+        emptyTitle: "No C packages yet.",
+      },
+      cpp: {
+        title: "C++ packages",
+        description:
+          "Libraries and applications written in C++, distributed as .vipkg artifacts and published under a Progmasoft Account.",
+        emptyTitle: "No C++ packages yet.",
+      },
+      objc: {
+        title: "Objective-C packages",
+        description:
+          "Libraries and applications written in Objective-C and Objective-C++, distributed as .vipkg artifacts and published under a Progmasoft Account.",
+        emptyTitle: "No Objective-C packages yet.",
+      },
+    },
+    languageEmptyDescription:
       "The catalog is ready and intentionally contains no placeholder packages. Publishing opens with the ViGet client of Tazel.",
     tazelTitle: "Tazel DSL plugins",
     tazelDescription:
-      "Kotlin JAR plugins that extend the project file of Tazel, the build system of Tala. They are separate from .vipkg packages.",
+      "Kotlin JAR plugins that extend the project file of Tazel, the build system for C, C++, Objective-C, Objective-C++ and Zig. They are separate from .vipkg packages.",
     backToRegistry: "Back to ViGet",
   },
   "de-DE": {
@@ -78,21 +122,40 @@ const text: Record<Locale, CatalogText> = {
     buildSystemsDescription:
       "Plugins, die die Projektdatei eines Build-Systems erweitern.",
     holds: {
-      Tala: "Bibliotheken und Anwendungen, geschrieben in Tala.",
+      C: "Bibliotheken und Anwendungen, geschrieben in C.",
+      "C++": "Bibliotheken und Anwendungen, geschrieben in C++.",
+      "Objective-C":
+        "Bibliotheken und Anwendungen, geschrieben in Objective-C und Objective-C++.",
       Tazel: "Kotlin-JAR-Plugins für die Projektdatei von Tazel.",
       Gradle: "Gradle-Plugins von Progmasoft, vom Gradle Plugin Portal.",
     },
     notAvailable: "Noch nicht verfügbar",
     open: "Katalog öffnen",
-    talaTitle: "Tala-Pakete",
-    talaDescription:
-      "Bibliotheken und Anwendungen in Tala, verteilt als .vipkg-Artefakte und veröffentlicht unter einem Progmasoft-Konto.",
-    talaEmptyTitle: "Noch keine Tala-Pakete.",
-    talaEmptyDescription:
+    languages: {
+      c: {
+        title: "C-Pakete",
+        description:
+          "Bibliotheken und Anwendungen in C, verteilt als .vipkg-Artefakte und veröffentlicht unter einem Progmasoft-Konto.",
+        emptyTitle: "Noch keine C-Pakete.",
+      },
+      cpp: {
+        title: "C++-Pakete",
+        description:
+          "Bibliotheken und Anwendungen in C++, verteilt als .vipkg-Artefakte und veröffentlicht unter einem Progmasoft-Konto.",
+        emptyTitle: "Noch keine C++-Pakete.",
+      },
+      objc: {
+        title: "Objective-C-Pakete",
+        description:
+          "Bibliotheken und Anwendungen in Objective-C und Objective-C++, verteilt als .vipkg-Artefakte und veröffentlicht unter einem Progmasoft-Konto.",
+        emptyTitle: "Noch keine Objective-C-Pakete.",
+      },
+    },
+    languageEmptyDescription:
       "Der Katalog ist bereit und enthält bewusst keine Platzhalterpakete. Die Veröffentlichung öffnet mit dem ViGet-Client von Tazel.",
     tazelTitle: "Tazel-DSL-Plugins",
     tazelDescription:
-      "Kotlin-JAR-Plugins, die die Projektdatei von Tazel, dem Build-System von Tala, erweitern. Sie sind von .vipkg-Paketen getrennt.",
+      "Kotlin-JAR-Plugins, die die Projektdatei von Tazel erweitern, dem Build-System für C, C++, Objective-C, Objective-C++ und Zig. Sie sind von .vipkg-Paketen getrennt.",
     backToRegistry: "Zurück zu ViGet",
   },
   "ru-RU": {
@@ -102,21 +165,40 @@ const text: Record<Locale, CatalogText> = {
     buildSystemsDescription:
       "Плагины, расширяющие файл проекта системы сборки.",
     holds: {
-      Tala: "Библиотеки и приложения, написанные на Tala.",
+      C: "Библиотеки и приложения, написанные на C.",
+      "C++": "Библиотеки и приложения, написанные на C++.",
+      "Objective-C":
+        "Библиотеки и приложения, написанные на Objective-C и Objective-C++.",
       Tazel: "Плагины Kotlin JAR для файла проекта Tazel.",
       Gradle: "Плагины Gradle от Progmasoft, с Gradle Plugin Portal.",
     },
     notAvailable: "Пока недоступно",
     open: "Открыть каталог",
-    talaTitle: "Пакеты Tala",
-    talaDescription:
-      "Библиотеки и приложения на Tala, распространяемые как артефакты .vipkg и публикуемые от имени учётной записи Progmasoft.",
-    talaEmptyTitle: "Пакетов Tala пока нет.",
-    talaEmptyDescription:
+    languages: {
+      c: {
+        title: "Пакеты C",
+        description:
+          "Библиотеки и приложения на C, распространяемые как артефакты .vipkg и публикуемые от имени учётной записи Progmasoft.",
+        emptyTitle: "Пакетов C пока нет.",
+      },
+      cpp: {
+        title: "Пакеты C++",
+        description:
+          "Библиотеки и приложения на C++, распространяемые как артефакты .vipkg и публикуемые от имени учётной записи Progmasoft.",
+        emptyTitle: "Пакетов C++ пока нет.",
+      },
+      objc: {
+        title: "Пакеты Objective-C",
+        description:
+          "Библиотеки и приложения на Objective-C и Objective-C++, распространяемые как артефакты .vipkg и публикуемые от имени учётной записи Progmasoft.",
+        emptyTitle: "Пакетов Objective-C пока нет.",
+      },
+    },
+    languageEmptyDescription:
       "Каталог готов и намеренно не содержит пакетов-заглушек. Публикация откроется вместе с клиентом ViGet в Tazel.",
     tazelTitle: "DSL-плагины Tazel",
     tazelDescription:
-      "Плагины Kotlin JAR, расширяющие файл проекта Tazel, системы сборки Tala. Они отделены от пакетов .vipkg.",
+      "Плагины Kotlin JAR, расширяющие файл проекта Tazel — системы сборки для C, C++, Objective-C, Objective-C++ и Zig. Они отделены от пакетов .vipkg.",
     backToRegistry: "Назад к ViGet",
   },
   "he-IL": {
@@ -124,21 +206,39 @@ const text: Record<Locale, CatalogText> = {
     languagesDescription: "חבילות שנכתבו בשפה, כתוצרי ‎.vipkg.",
     buildSystemsDescription: "תוספים שמרחיבים את קובץ הפרויקט של מערכת בנייה.",
     holds: {
-      Tala: "ספריות ויישומים שנכתבו ב-Tala.",
+      C: "ספריות ויישומים שנכתבו ב-C.",
+      "C++": "ספריות ויישומים שנכתבו ב-C++.",
+      "Objective-C": "ספריות ויישומים שנכתבו ב-Objective-C וב-Objective-C++.",
       Tazel: "תוספי Kotlin JAR עבור קובץ הפרויקט של Tazel.",
       Gradle: "תוספי Gradle של Progmasoft, מ-Gradle Plugin Portal.",
     },
     notAvailable: "עוד לא זמין",
     open: "פתיחת הקטלוג",
-    talaTitle: "חבילות Tala",
-    talaDescription:
-      "ספריות ויישומים ב-Tala, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
-    talaEmptyTitle: "עוד אין חבילות Tala.",
-    talaEmptyDescription:
+    languages: {
+      c: {
+        title: "חבילות C",
+        description:
+          "ספריות ויישומים ב-C, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
+        emptyTitle: "עוד אין חבילות C.",
+      },
+      cpp: {
+        title: "חבילות C++",
+        description:
+          "ספריות ויישומים ב-C++, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
+        emptyTitle: "עוד אין חבילות C++.",
+      },
+      objc: {
+        title: "חבילות Objective-C",
+        description:
+          "ספריות ויישומים ב-Objective-C וב-Objective-C++, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
+        emptyTitle: "עוד אין חבילות Objective-C.",
+      },
+    },
+    languageEmptyDescription:
       "הקטלוג מוכן, ובכוונה אין בו חבילות ממלאות מקום. הפרסום ייפתח יחד עם לקוח ה-ViGet של Tazel.",
     tazelTitle: "תוספי DSL של Tazel",
     tazelDescription:
-      "תוספי Kotlin JAR שמרחיבים את קובץ הפרויקט של Tazel, מערכת הבנייה של Tala. הם נפרדים מחבילות ‎.vipkg.",
+      "תוספי Kotlin JAR שמרחיבים את קובץ הפרויקט של Tazel, מערכת הבנייה ל-C, ל-C++, ל-Objective-C, ל-Objective-C++ ול-Zig. הם נפרדים מחבילות ‎.vipkg.",
     backToRegistry: "חזרה ל-ViGet",
   },
 };

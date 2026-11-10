@@ -16,7 +16,7 @@ export function ViGetHeader({ locale }: { locale: Locale }) {
           <span>ViGet</span>
         </div>
         <nav className="primary-nav" aria-label={viget.navigationLabel}>
-          <Link href="https://viget.progmasoft.com/langs/tala">
+          <Link href="https://viget.progmasoft.com/#languages-title">
             {viget.packages}
           </Link>
           <Link href="https://viget.progmasoft.com/dslplugins/tazel">
