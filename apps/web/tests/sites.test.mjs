@@ -40,7 +40,7 @@ test("every language has the same home, catalog and product-site text", () => {
 test("the catalog lists the products the user named, each with a site", () => {
   assert.deepEqual(
     [...productSlugs],
-    ["tala-lang", "talac", "talafmt", "talalint", "tazel", "catch3"],
+    ["tazel", "catch3"],
   );
   for (const slug of productSlugs) {
     assert.match(products[slug].site, /^https:\/\//, slug);
@@ -69,9 +69,9 @@ test("the home page names areas, not products", () => {
 
 test("the product hosts map to their internal routes", () => {
   assert.equal(productRoute("/"), "/products");
-  assert.equal(productRoute("/talac"), "/products/talac");
-  assert.equal(productRoute("/tala-lang/"), "/products/tala-lang");
-  assert.equal(productRoute("/talac/extra"), null);
+  assert.equal(productRoute("/tazel"), "/products/tazel");
+  assert.equal(productRoute("/catch3/"), "/products/catch3");
+  assert.equal(productRoute("/tazel/extra"), null);
   assert.equal(productRoute("/../x"), null);
   assert.equal(catch3Route("/"), "/catch3");
   assert.equal(catch3Route("/docs"), null);

@@ -8,10 +8,6 @@ import type { Locale } from "./localization";
  * own site; the catalog only introduces it and leads on.
  */
 export const productSlugs = [
-  "tala-lang",
-  "talac",
-  "talafmt",
-  "talalint",
   "tazel",
   "catch3",
 ] as const;
@@ -31,30 +27,6 @@ interface ProductFacts {
 }
 
 export const products: Record<ProductSlug, ProductFacts> = {
-  "tala-lang": {
-    name: "Tala",
-    site: "https://tala.run/",
-    source: "https://github.com/Progmasoft/tala",
-    accent: "violet",
-  },
-  talac: {
-    name: "talac",
-    site: "https://talac.tala.run/",
-    source: "https://github.com/Progmasoft/tala",
-    accent: "blue",
-  },
-  talafmt: {
-    name: "talafmt",
-    site: "https://talafmt.tala.run/",
-    source: "https://github.com/Progmasoft/talafmt",
-    accent: "teal",
-  },
-  talalint: {
-    name: "talalint",
-    site: "https://talalint.tala.run/",
-    source: "https://github.com/Progmasoft/talalint",
-    accent: "green",
-  },
   tazel: {
     name: "Tazel",
     site: "https://tazel.net/",
@@ -94,7 +66,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "en-US": {
     metadataTitle: "Products",
     metadataDescription:
-      "The products of Progmasoft: the Tala language with its tools, and the Catch3 testing toolkit.",
+      "The products of Progmasoft: the Tazel build system and the Catch3 testing toolkit.",
     eyebrow: "Progmasoft products",
     title: "Products",
     description:
@@ -105,64 +77,16 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     features: "What it does",
     back: "All products",
     products: {
-      "tala-lang": {
-        category: "Programming language",
-        tagline: "A lazy, statically typed language.",
-        description:
-          "Tala evaluates by need and checks types before it runs. Programs are organized in namespaces and classes, and an executable starts at a parameterless static Main method.",
-        features: [
-          "Call-by-need evaluation with effects kept out of sight of the types",
-          "Namespaces and classes; no top-level functions",
-          "The System standard library and the Progmasoft library",
-          "Packages published on ViGet",
-        ],
-      },
-      talac: {
-        category: "Compiler",
-        tagline: "The Tala compiler.",
-        description:
-          "talac turns Tala sources into native executables. Its frontend parses, resolves and type-checks in Haskell; its backend lowers through its own intermediate representations to LLVM in C++.",
-        features: [
-          "One program from any number of source files",
-          "Inspectable intermediate stages (.core, .xpp, .xmm)",
-          "Native executables through LLVM",
-          "A command line read by a typed parser",
-        ],
-      },
-      talafmt: {
-        category: "Formatter",
-        tagline: "One layout for every Tala file.",
-        description:
-          "talafmt rewrites Tala sources in place to one consistent layout, or checks them without changing anything.",
-        features: [
-          "Formats files in place by default",
-          "--check for continuous integration",
-          "Output as files, standard output, coverage, Checkstyle or JSON",
-          "Settings in talafmt.kts",
-        ],
-      },
-      talalint: {
-        category: "Linter",
-        tagline: "Finds what a compiler lets through.",
-        description:
-          "talalint reports what is wrong with Tala sources: the diagnostics of the Tala compiler frontend, and checks of its own on the physical source.",
-        features: [
-          "The diagnostics of the Tala compiler, under the compiler check",
-          "Trailing whitespace, mixed line endings and a missing final newline",
-          "--fix applies only safe fixes to the physical source",
-          "Runs from Tazel with tazel lint",
-        ],
-      },
       tazel: {
         category: "Build system and package manager",
-        tagline: "Builds Tala projects and their packages.",
+        tagline: "Builds C, C++, Objective-C, Objective-C++ and Zig.",
         description:
-          "Tazel reads a project from BUILD.kts, resolves its packages from ViGet, records them in a lockfile and runs talac to build.",
+          "Tazel reads a module from MODULE.kts and one BUILD.kts per package, compiles each translation unit on its own and builds again only what changed.",
         features: [
-          "Projects described in a Kotlin DSL (BUILD.kts)",
-          "Packages from ViGet, with a lockfile",
-          "Runs the compiler, formatter and linter",
-          "Extensible with DSL plugins",
+          "Kotlin project files, MODULE.kts and BUILD.kts, with labels such as //app/:greeter",
+          "Clang, GCC and zig cc from the machine; cross builds by LLVM target triple",
+          "Incremental per action, by the content of every input",
+          "Commands of your own in tazel_custom.txt",
         ],
       },
       catch3: {
@@ -182,7 +106,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "de-DE": {
     metadataTitle: "Produkte",
     metadataDescription:
-      "Die Produkte von Progmasoft: die Sprache Tala mit ihren Werkzeugen und das Testwerkzeug Catch3.",
+      "Die Produkte von Progmasoft: das Build-System Tazel und das Testwerkzeug Catch3.",
     eyebrow: "Progmasoft-Produkte",
     title: "Produkte",
     description:
@@ -193,64 +117,16 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     features: "Was es kann",
     back: "Alle Produkte",
     products: {
-      "tala-lang": {
-        category: "Programmiersprache",
-        tagline: "Eine träge, statisch typisierte Sprache.",
-        description:
-          "Tala wertet nach Bedarf aus und prüft Typen vor der Ausführung. Programme sind in Namespaces und Klassen gegliedert; ein Programm beginnt bei einer parameterlosen statischen Main-Methode.",
-        features: [
-          "Auswertung nach Bedarf, Effekte bleiben für die Typen unsichtbar",
-          "Namespaces und Klassen; keine Funktionen auf oberster Ebene",
-          "Die Standardbibliothek System und die Progmasoft-Bibliothek",
-          "Pakete auf ViGet",
-        ],
-      },
-      talac: {
-        category: "Compiler",
-        tagline: "Der Tala-Compiler.",
-        description:
-          "talac übersetzt Tala-Quellen in native Programme. Das Frontend parst, löst Namen auf und prüft Typen in Haskell; das Backend senkt über eigene Zwischendarstellungen in C++ nach LLVM ab.",
-        features: [
-          "Ein Programm aus beliebig vielen Quelldateien",
-          "Einsehbare Zwischenstufen (.core, .xpp, .xmm)",
-          "Native Programme über LLVM",
-          "Eine Kommandozeile mit typisiertem Parser",
-        ],
-      },
-      talafmt: {
-        category: "Formatierer",
-        tagline: "Ein Layout für jede Tala-Datei.",
-        description:
-          "talafmt bringt Tala-Quellen direkt in ein einheitliches Layout oder prüft sie, ohne etwas zu ändern.",
-        features: [
-          "Formatiert Dateien standardmäßig direkt",
-          "--check für die kontinuierliche Integration",
-          "Ausgabe als Dateien, Standardausgabe, Abdeckung, Checkstyle oder JSON",
-          "Einstellungen in talafmt.kts",
-        ],
-      },
-      talalint: {
-        category: "Linter",
-        tagline: "Findet, was ein Compiler durchlässt.",
-        description:
-          "talalint meldet, was an Tala-Quellen nicht stimmt: die Diagnosen des Tala-Compiler-Frontends und eigene Prüfungen der physischen Quelle.",
-        features: [
-          "Die Diagnosen des Tala-Compilers unter der Prüfung compiler",
-          "Leerzeichen am Zeilenende, gemischte Zeilenenden und ein fehlender Zeilenumbruch am Dateiende",
-          "--fix wendet nur sichere Korrekturen an der physischen Quelle an",
-          "Läuft aus Tazel mit tazel lint",
-        ],
-      },
       tazel: {
         category: "Build-System und Paketmanager",
-        tagline: "Baut Tala-Projekte und ihre Pakete.",
+        tagline: "Baut C, C++, Objective-C, Objective-C++ und Zig.",
         description:
-          "Tazel liest ein Projekt aus BUILD.kts, löst seine Pakete aus ViGet auf, hält sie in einer Lock-Datei fest und baut mit talac.",
+          "Tazel liest ein Modul aus MODULE.kts und einer BUILD.kts je Paket, übersetzt jede Übersetzungseinheit für sich und baut nur neu, was sich geändert hat.",
         features: [
-          "Projekte in einer Kotlin-DSL (BUILD.kts)",
-          "Pakete aus ViGet mit Lock-Datei",
-          "Startet Compiler, Formatierer und Linter",
-          "Erweiterbar mit DSL-Plugins",
+          "Projektdateien in Kotlin, MODULE.kts und BUILD.kts, mit Labels wie //app/:greeter",
+          "Clang, GCC und zig cc vom Rechner; Cross-Builds per LLVM-Target-Triple",
+          "Inkrementell je Aktion, nach dem Inhalt jeder Eingabe",
+          "Eigene Befehle in tazel_custom.txt",
         ],
       },
       catch3: {
@@ -270,7 +146,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "ru-RU": {
     metadataTitle: "Продукты",
     metadataDescription:
-      "Продукты Progmasoft: язык Tala с его инструментами и набор для тестирования Catch3.",
+      "Продукты Progmasoft: система сборки Tazel и набор для тестирования Catch3.",
     eyebrow: "Продукты Progmasoft",
     title: "Продукты",
     description:
@@ -281,64 +157,16 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     features: "Что он умеет",
     back: "Все продукты",
     products: {
-      "tala-lang": {
-        category: "Язык программирования",
-        tagline: "Ленивый язык со статической типизацией.",
-        description:
-          "Tala вычисляет по необходимости и проверяет типы до запуска. Программы организованы в пространства имён и классы, а исполняемая программа начинается со статического метода Main без параметров.",
-        features: [
-          "Вычисление по необходимости; эффекты скрыты от типов",
-          "Пространства имён и классы; без функций верхнего уровня",
-          "Стандартная библиотека System и библиотека Progmasoft",
-          "Пакеты публикуются в ViGet",
-        ],
-      },
-      talac: {
-        category: "Компилятор",
-        tagline: "Компилятор Tala.",
-        description:
-          "talac превращает исходные тексты Tala в исполняемые программы. Фронтенд разбирает, разрешает имена и проверяет типы на Haskell; бэкенд на C++ через собственные промежуточные представления доходит до LLVM.",
-        features: [
-          "Одна программа из любого числа исходных файлов",
-          "Доступные для просмотра промежуточные этапы (.core, .xpp, .xmm)",
-          "Исполняемые программы через LLVM",
-          "Командная строка с типизированным разбором",
-        ],
-      },
-      talafmt: {
-        category: "Форматировщик",
-        tagline: "Единое оформление для каждого файла Tala.",
-        description:
-          "talafmt приводит исходные тексты Tala к единому оформлению на месте или только проверяет их, ничего не меняя.",
-        features: [
-          "По умолчанию форматирует файлы на месте",
-          "--check для непрерывной интеграции",
-          "Вывод в файлы, стандартный вывод, покрытие, Checkstyle или JSON",
-          "Настройки в talafmt.kts",
-        ],
-      },
-      talalint: {
-        category: "Линтер",
-        tagline: "Находит то, что пропускает компилятор.",
-        description:
-          "talalint сообщает, что не так в исходных текстах Tala: диагностику фронтенда компилятора Tala и собственные проверки физического текста.",
-        features: [
-          "Диагностика компилятора Tala в проверке compiler",
-          "Пробелы в конце строк, смешанные концы строк и отсутствие перевода строки в конце файла",
-          "--fix применяет только безопасные исправления физического текста",
-          "Запускается из Tazel командой tazel lint",
-        ],
-      },
       tazel: {
         category: "Система сборки и менеджер пакетов",
-        tagline: "Собирает проекты Tala и их пакеты.",
+        tagline: "Собирает C, C++, Objective-C, Objective-C++ и Zig.",
         description:
-          "Tazel читает проект из BUILD.kts, разрешает его пакеты из ViGet, фиксирует их в lock-файле и собирает с помощью talac.",
+          "Tazel читает модуль из MODULE.kts и по одному BUILD.kts на пакет, компилирует каждую единицу трансляции отдельно и пересобирает только то, что изменилось.",
         features: [
-          "Проекты описываются на Kotlin DSL (BUILD.kts)",
-          "Пакеты из ViGet с lock-файлом",
-          "Запускает компилятор, форматировщик и линтер",
-          "Расширяется DSL-плагинами",
+          "Файлы проекта на Kotlin, MODULE.kts и BUILD.kts, с метками вида //app/:greeter",
+          "Clang, GCC и zig cc с машины; кросс-сборка по LLVM target triple",
+          "Инкрементальная сборка на уровне действий, по содержимому каждого входа",
+          "Собственные команды в tazel_custom.txt",
         ],
       },
       catch3: {
@@ -358,7 +186,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
   "he-IL": {
     metadataTitle: "מוצרים",
     metadataDescription:
-      "המוצרים של Progmasoft: שפת Tala עם הכלים שלה וערכת הבדיקות Catch3.",
+      "המוצרים של Progmasoft: מערכת הבנייה Tazel וערכת הבדיקות Catch3.",
     eyebrow: "המוצרים של Progmasoft",
     title: "מוצרים",
     description:
@@ -369,64 +197,16 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     features: "מה הוא עושה",
     back: "כל המוצרים",
     products: {
-      "tala-lang": {
-        category: "שפת תכנות",
-        tagline: "שפה עצלה עם טיפוסים סטטיים.",
-        description:
-          "Tala מחשבת לפי הצורך ובודקת טיפוסים לפני ההרצה. התוכניות מאורגנות במרחבי שמות ובמחלקות, ותוכנית מתחילה במתודת Main סטטית בלי פרמטרים.",
-        features: [
-          "חישוב לפי הצורך; האפקטים נשארים מחוץ לטיפוסים",
-          "מרחבי שמות ומחלקות; אין פונקציות ברמה העליונה",
-          "הספרייה הסטנדרטית System והספרייה של Progmasoft",
-          "חבילות שמתפרסמות ב־ViGet",
-        ],
-      },
-      talac: {
-        category: "מהדר",
-        tagline: "המהדר של Tala.",
-        description:
-          "talac הופך קוד Tala לתוכניות מכונה. החלק הקדמי מנתח, פותר שמות ובודק טיפוסים ב־Haskell; החלק האחורי ב־C++ יורד דרך ייצוגי ביניים משלו אל LLVM.",
-        features: [
-          "תוכנית אחת מכל מספר של קובצי מקור",
-          "שלבי ביניים שאפשר לבחון (‎.core,‏ .xpp,‏ .xmm)",
-          "תוכניות מכונה דרך LLVM",
-          "שורת פקודה שנקראת במנתח עם טיפוסים",
-        ],
-      },
-      talafmt: {
-        category: "מעצב קוד",
-        tagline: "פריסה אחת לכל קובץ Tala.",
-        description:
-          "talafmt משכתב קוד Tala במקום לפריסה אחידה, או בודק אותו בלי לשנות דבר.",
-        features: [
-          "מעצב קבצים במקום כברירת מחדל",
-          "‏--check לאינטגרציה רציפה",
-          "פלט כקבצים, פלט תקני, כיסוי, Checkstyle או JSON",
-          "הגדרות ב־talafmt.kts",
-        ],
-      },
-      talalint: {
-        category: "לינטר",
-        tagline: "מוצא את מה שהמהדר מעביר.",
-        description:
-          "talalint מדווח מה לא תקין בקוד Tala: האבחונים של החלק הקדמי של מהדר Tala, ובדיקות משלו על הטקסט הפיזי.",
-        features: [
-          "האבחונים של מהדר Tala, תחת הבדיקה compiler",
-          "רווחים בסוף שורה, סופי שורה מעורבים ושורה חדשה חסרה בסוף הקובץ",
-          "‏--fix מחיל רק תיקונים בטוחים על הטקסט הפיזי",
-          "רץ מתוך Tazel עם tazel lint",
-        ],
-      },
       tazel: {
         category: "מערכת בנייה ומנהל חבילות",
-        tagline: "בונה פרויקטים של Tala ואת החבילות שלהם.",
+        tagline: "בונה C,‏ C++,‏ Objective-C,‏ Objective-C++ ו־Zig.",
         description:
-          "Tazel קורא פרויקט מ־BUILD.kts, פותר את החבילות שלו מ־ViGet, רושם אותן בקובץ נעילה ובונה עם talac.",
+          "Tazel קורא מודול מ־MODULE.kts ומקובץ BUILD.kts אחד לכל חבילה, מהדר כל יחידת תרגום בנפרד ובונה מחדש רק את מה שהשתנה.",
         features: [
-          "פרויקטים שמתוארים ב־Kotlin DSL ‏(BUILD.kts)",
-          "חבילות מ־ViGet עם קובץ נעילה",
-          "מפעיל את המהדר, מעצב הקוד והלינטר",
-          "ניתן להרחבה בתוספי DSL",
+          "קובצי פרויקט ב־Kotlin,‏ MODULE.kts ו־BUILD.kts, עם תוויות כמו //app/:greeter",
+          "Clang,‏ GCC ו־zig cc מהמחשב; בנייה צולבת לפי LLVM target triple",
+          "בנייה מצטברת ברמת הפעולה, לפי התוכן של כל קלט",
+          "פקודות משלך ב־tazel_custom.txt",
         ],
       },
       catch3: {
