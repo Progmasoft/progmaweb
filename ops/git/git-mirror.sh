@@ -40,9 +40,16 @@ for name in $names; do
       git -C "$repository" repack -a -d -b -q
       touch "$repository/info/web/repacked"
     fi
-    # HEAD follows the default branch of GitHub.
-    head=$(git -C "$repository" ls-remote --symref origin HEAD | sed -n 's|^ref: refs/heads/\([^[:space:]]*\)[[:space:]]*HEAD$|\1|p')
-    [ -n "$head" ] && git -C "$repository" symbolic-ref HEAD "refs/heads/$head"
+    # HEAD follows the default branch of GitHub; a failed lookup fails the run.
+    if advertised=$(git -C "$repository" ls-remote --symref origin HEAD); then
+      head=$(printf '%s\n' "$advertised" | sed -n 's|^ref: refs/heads/\([^[:space:]]*\)[[:space:]]*HEAD$|\1|p')
+      [ -n "$head" ] && git -C "$repository" symbolic-ref HEAD "refs/heads/$head"
+    else
+      echo "git-mirror: the default branch of $name could not be read" >&2
+      status=1
+    fi
+    # git-http-backend serves only repositories with this file.
+    touch "$repository/git-daemon-export-ok"
     # cgit shows the age of the last change of a repository from this file.
     git -C "$repository" for-each-ref --sort=-committerdate --count=1 \
       --format='%(committerdate:iso8601)' refs/heads > "$repository/info/web/last-modified"
@@ -50,5 +57,18 @@ for name in $names; do
     echo "git-mirror: fetching $name failed" >&2
     status=1
   fi
+done
+# A repository no longer listed stops being served at once and is removed.
+for repository in "$root"/*.git; do
+  [ -d "$repository" ] || continue
+  name=$(basename "$repository" .git)
+  case " $(printf '%s ' $names)" in
+    *" $name "*) ;;
+    *)
+      rm -f "$repository/git-daemon-export-ok"
+      rm -rf -- "$repository"
+      echo "git-mirror: removed $name, which is no longer listed" >&2
+      ;;
+  esac
 done
 exit "$status"

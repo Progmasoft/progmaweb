@@ -320,7 +320,9 @@ Packages: `git-core`, and `cgit` and `fcgiwrap` from EPEL; `checkpolicy` builds 
 - **Mirrors.** `git-mirror` fetches only branches and tags from `https://github.com/Progmasoft/<name>.git` (never the
   pull-request refs), prunes what GitHub removed, follows its default branch, and repacks into one pack with a bitmap
   when something changed, so a clone starts sending at once. It needs no credentials. A new repository needs a line in
-  `repositories` and a `repo.url` block in `cgitrc`.
+  `repositories` and a `repo.url` block in `cgitrc`. git-http-backend serves only the mirrors `git-mirror` marks with
+  `git-daemon-export-ok`; a mirror taken off `repositories` loses the mark and is deleted on the next run, so a
+  repository that becomes private or archived stops being cloned within ten minutes.
 - **Read only.** Nginx answers 403 to `git-receive-pack` and to the dumb protocol; git-http-backend gets no user; the
   mirrors belong to `gitmirror` and are read as `cgit`, trusted through `safe.directory` for that backend only.
 - **SELinux.** `/srv/git/mirrors` is `git_sys_content_t` and `/var/cache/cgit` `git_rw_content_t` (package default).
@@ -331,14 +333,18 @@ Packages: `git-core`, and `cgit` and `fcgiwrap` from EPEL; `checkpolicy` builds 
   ```sh
   semanage fcontext -a -t git_sys_content_t '/srv/git/mirrors(/.*)?'
   semanage fcontext -a -t bin_t /usr/local/libexec/git-mirror
+  # /usr/sbin is an equivalence of /usr/bin, so semanage takes the /usr/bin spelling; restorecon on
+  # /usr/sbin/fcgiwrap then gives it httpd_exec_t (check with ls -Z).
   semanage fcontext -a -t httpd_exec_t /usr/bin/fcgiwrap
   semanage fcontext -a -t git_script_exec_t /usr/libexec/git-core/git-http-backend
   restorecon -RF /srv/git /usr/local/libexec/git-mirror /usr/sbin/fcgiwrap /usr/libexec/git-core/git-http-backend
   ```
 
+  `/srv/git/www/static` needs no rule of its own: the stock policy labels `/srv/*/www` `httpd_sys_content_t`.
 - **No Cloudflare proxy.** `git.progmasoft.com` is a DNS-only A record: through the proxy, a clone of a large repository
   (catch3, about 25 MB) never reached the client, while the origin served it in under a minute. The address of the server
-  is public through `mail.progmasoft.com` anyway; Nginx limits requests and connections per address itself.
+  is public through `mail.progmasoft.com` anyway; Nginx limits requests and connections per address itself. The record
+  is in `cloudflarectl/config.progmasoft.json`.
 - **Look.** No README is rendered (cgit would include its HTML unfiltered) and no script runs: the content security
   policy allows none, and Nginx removes the inline `onchange` handlers of cgit's menus, whose buttons do the same.
 - **Certificate.** The certificate of `progmasoft.com` names `git.progmasoft.com` (webroot, `--expand`).
