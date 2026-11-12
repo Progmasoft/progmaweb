@@ -7,10 +7,7 @@ import type { Locale } from "./localization";
  * The products of product.progmasoft.com. Each one has a page there and its
  * own site; the catalog only introduces it and leads on.
  */
-export const productSlugs = [
-  "tazel",
-  "catch3",
-] as const;
+export const productSlugs = ["tazel", "catch3"] as const;
 export type ProductSlug = (typeof productSlugs)[number];
 
 export function isProductSlug(value: string): value is ProductSlug {

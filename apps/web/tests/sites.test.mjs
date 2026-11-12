@@ -38,10 +38,7 @@ test("every language has the same home, catalog and product-site text", () => {
 });
 
 test("the catalog lists the products the user named, each with a site", () => {
-  assert.deepEqual(
-    [...productSlugs],
-    ["tazel", "catch3"],
-  );
+  assert.deepEqual([...productSlugs], ["tazel", "catch3"]);
   for (const slug of productSlugs) {
     assert.match(products[slug].site, /^https:\/\//, slug);
     assert.match(
