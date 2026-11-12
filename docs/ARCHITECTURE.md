@@ -46,7 +46,8 @@ One build serves three hosts. The host of a request, not a separate deployment, 
 2. **Account root.** `/` on the account host is rewritten to the internal `/account` page, so the account landing page
    has the short URL.
 3. **ViGet.** On the ViGet host `/` is rewritten to `/viget`, `/langs/c`, `/langs/cpp` and `/langs/objc` to
-   `/viget/langs/<language>` and `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs` redirects permanently to
+   `/viget/langs/<language>` and `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs` and the old `/langs/tala`
+   addresses redirect permanently to
    the language list of the home page and `/dslplugins` to the Tazel catalog. `/login`, `/register` and `/recover` redirect to the account host.
 4. **Internal trees stay internal.** `/viget/...` on any other host redirects to the ViGet host, and `/account` on any
    other host redirects to the account host.

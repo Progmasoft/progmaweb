@@ -17,7 +17,7 @@ the ASP.NET Core API.
 - `viget.progmasoft.com` shows the state of the registry first, then two groups: LANGUAGES and BUILD SYSTEM DSL PLUGINS.
   An open catalog links to its page; a catalog that is not offered yet is a gray, disabled button.
 - `viget.progmasoft.com/langs/c`, `/langs/cpp` and `/langs/objc` serve the catalogs of C, C++ and Objective-C packages
-  (`.vipkg`; Objective-C++ belongs to `/langs/objc`); `/langs` leads to the language list on the home page.
+  (`.vipkg`; Objective-C++ belongs to `/langs/objc`); `/langs` and the old `/langs/tala` addresses lead to the language list on the home page.
 - `viget.progmasoft.com/dslplugins/tazel` serves the catalog of Kotlin DSL plugins for Tazel; `/dslplugins` leads there.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing

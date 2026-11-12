@@ -83,7 +83,9 @@ test("the ViGet host serves both catalogs and leads the bare groups to them", ()
     proxy,
     /internalRoute\(request, `\/viget\/langs\/\$\{language\[1\]\}`\)/,
   );
-  assert.doesNotMatch(proxy, /langs\/tala/);
+  // The Tala catalog is not served; its old addresses lead to the language list.
+  assert.doesNotMatch(proxy, /viget\/langs\/tala/);
+  assert.match(proxy, /\^\\\/langs\\\/tala\(\\\/\.\*\)\?\$/);
   assert.match(proxy, /internalRoute\(request, "\/viget\/dslplugins\/tazel"\)/);
   assert.match(
     proxy,

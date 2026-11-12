@@ -204,8 +204,14 @@ function route(request: NextRequest, headers: Headers): NextResponse {
         internalRoute(request, "/viget/dslplugins/gradle"),
       );
     }
-    // The languages are listed on the home page of ViGet.
-    if (pathname === "/langs" || pathname === "/langs/") {
+    // The languages are listed on the home page of ViGet. The Tala catalog is
+    // gone with Tala; its old addresses, which tala.run and earlier
+    // documentation link to, lead to the list as well.
+    if (
+      pathname === "/langs" ||
+      pathname === "/langs/" ||
+      /^\/langs\/tala(\/.*)?$/.test(pathname)
+    ) {
       return NextResponse.redirect(
         new URL("https://viget.progmasoft.com/#languages-title"),
         308,
