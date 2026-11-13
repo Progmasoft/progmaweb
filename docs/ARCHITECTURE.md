@@ -45,9 +45,10 @@ One build serves three hosts. The host of a request, not a separate deployment, 
    same URL without the parameter. See [Localization](LOCALIZATION.md).
 2. **Account root.** `/` on the account host is rewritten to the internal `/account` page, so the account landing page
    has the short URL.
-3. **ViGet.** On the ViGet host `/` is rewritten to `/viget`, `/langs/tala` to `/viget/langs/tala` and
-   `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs` and `/dslplugins` redirect permanently to those two
-   catalogs. `/login`, `/register` and `/recover` redirect to the account host.
+3. **ViGet.** On the ViGet host `/` is rewritten to `/viget`, `/langs/c`, `/langs/cpp` and `/langs/objc` to
+   `/viget/langs/<language>` and `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs` and the old `/langs/tala`
+   addresses redirect permanently to
+   the language list of the home page and `/dslplugins` to the Tazel catalog. `/login`, `/register` and `/recover` redirect to the account host.
 4. **Internal trees stay internal.** `/viget/...` on any other host redirects to the ViGet host, and `/account` on any
    other host redirects to the account host.
 
@@ -65,7 +66,7 @@ The host is read from `X-Forwarded-Host` first and `Host` second, without the po
 | `/login`, `/register`, `/recover` | authentication and recovery | no |
 | `/<Account>/dashboard` | dashboard of the signed-in account | no |
 | `/viget` (shown as `/` on the ViGet host) | registry status and the list of catalogs | yes |
-| `/viget/langs/tala` (shown as `/langs/tala`) | catalog of Tala packages | yes |
+| `/viget/langs/<language>` (shown as `/langs/c`, `/langs/cpp`, `/langs/objc`) | catalog of the packages of one language | yes |
 | `/viget/dslplugins/tazel` (shown as `/dslplugins/tazel`) | catalog of Tazel DSL plugins | yes |
 
 `robots.txt` and `sitemap.xml` are generated per host: the ViGet host lists its home page and its two catalog pages,

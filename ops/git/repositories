@@ -1,0 +1,9 @@
+# The repositories git-mirror.service mirrors from https://github.com/Progmasoft, one per line.
+# Each must also have a repo.url entry in cgitrc. Installed as /etc/git-mirror/repositories.
+tazel
+tazelish
+tazel.net
+catch3
+progmasoft-cpp
+progmaweb
+website

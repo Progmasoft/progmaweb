@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+# fcgiwrap@cgit runs in httpd_t under NoNewPrivileges, which systemd sets for its sandboxing.
+# This lets cgit and git-http-backend move from there into git_script_t, the narrower domain the
+# policy gives them; nothing else is allowed. Built and loaded with:
+#   checkmodule -M -m -o progmasoft_cgit.mod progmasoft_cgit.te
+#   semodule_package -o progmasoft_cgit.pp -m progmasoft_cgit.mod
+#   semodule -i progmasoft_cgit.pp
+module progmasoft_cgit 1.0;
+
+require {
+    type httpd_t;
+    type git_script_t;
+    class process2 nnp_transition;
+}
+
+allow httpd_t git_script_t:process2 nnp_transition;

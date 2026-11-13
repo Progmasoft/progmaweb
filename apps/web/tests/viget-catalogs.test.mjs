@@ -9,17 +9,19 @@ import {
   buildSystemsHeading,
   catalogText,
   languageCatalogs,
+  languageSlugs,
   languagesHeading,
 } from "../lib/viget-catalogs.ts";
 
 const locales = ["en-US", "de-DE", "ru-RU", "he-IL"];
 
-test("the registry lists Tala and C++, then Tazel and Gradle, under their own headings", () => {
+test("the registry lists C, C++ and Objective-C, then Tazel and Gradle, under their own headings", () => {
   assert.equal(languagesHeading, "LANGUAGES");
   assert.equal(buildSystemsHeading, "BUILD SYSTEM DSL PLUGINS");
   assert.deepEqual(languageCatalogs, [
-    { name: "Tala", path: "/langs/tala" },
-    { name: "C++" },
+    { name: "C", path: "/langs/c" },
+    { name: "C++", path: "/langs/cpp" },
+    { name: "Objective-C", path: "/langs/objc" },
   ]);
   assert.deepEqual(buildSystemCatalogs, [
     { name: "Tazel", path: "/dslplugins/tazel" },
@@ -42,10 +44,19 @@ test("every open catalog says what it holds in every language", () => {
         assert.ok(value.trim().length > 0, `${locale} ${key}`);
     }
   }
-  assert.notEqual(
-    catalogText("de-DE").talaTitle,
-    catalogText("en-US").talaTitle,
-  );
+  for (const slug of languageSlugs) {
+    for (const locale of locales) {
+      const page = catalogText(locale).languages[slug];
+      for (const value of Object.values(page))
+        assert.ok(value.trim().length > 0, `${locale} ${slug}`);
+    }
+    assert.notEqual(
+      catalogText("de-DE").languages[slug].title,
+      catalogText("en-US").languages[slug].title,
+    );
+  }
+  // Tala is no longer developed; no catalog text names it.
+  assert.doesNotMatch(JSON.stringify(locales.map(catalogText)), /Tala\b/);
 });
 
 test("a catalog that is not offered yet is a disabled button and links nowhere", () => {
@@ -67,11 +78,18 @@ test("a catalog that is not offered yet is a disabled button and links nowhere",
 
 test("the ViGet host serves both catalogs and leads the bare groups to them", () => {
   const proxy = readFileSync(new URL("../proxy.ts", import.meta.url), "utf8");
-  assert.match(proxy, /internalRoute\(request, "\/viget\/langs\/tala"\)/);
+  assert.match(proxy, /\^\\\/langs\\\/\(c\|cpp\|objc\)\\\/\?\$/);
+  assert.match(
+    proxy,
+    /internalRoute\(request, `\/viget\/langs\/\$\{language\[1\]\}`\)/,
+  );
+  // The Tala catalog is not served; its old addresses lead to the language list.
+  assert.doesNotMatch(proxy, /viget\/langs\/tala/);
+  assert.match(proxy, /\^\\\/langs\\\/tala\(\\\/\.\*\)\?\$/);
   assert.match(proxy, /internalRoute\(request, "\/viget\/dslplugins\/tazel"\)/);
   assert.match(
     proxy,
-    /"https:\/\/viget\.progmasoft\.com\/langs\/tala"\),\s*308/,
+    /"https:\/\/viget\.progmasoft\.com\/#languages-title"\),\s*308/,
   );
   assert.match(
     proxy,
