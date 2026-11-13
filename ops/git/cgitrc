@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+
+# cgit of https://git.progmasoft.com: read-only mirrors of the public repositories of Progmasoft
+# that are under development. Development happens on GitHub; git-mirror.timer fetches from there.
+# Installed as /etc/cgitrc.
+
+root-title=Progmasoft Git
+root-desc=Read-only mirrors of the repositories of Progmasoft. Issues and pull requests are on GitHub.
+virtual-root=/
+remove-suffix=1
+
+# The look of progmasoft.com: its stylesheet, header and footer.
+css=/static/progmasoft-git.css
+favicon=/static/icon.svg
+logo=
+head-include=/etc/cgit/progmasoft/head.html
+header=/etc/cgit/progmasoft/header.html
+footer=/etc/cgit/progmasoft/footer.html
+
+# Clones go to git-http-backend (smart HTTP, upload-pack only); cgit's own dumb HTTP stays off.
+enable-http-clone=0
+clone-url=https://git.progmasoft.com/$CGIT_REPO_URL
+
+# No README is rendered: without a filter cgit would include its HTML as it is.
+enable-index-owner=0
+enable-index-links=0
+enable-blame=0
+enable-commit-graph=0
+enable-log-filecount=1
+enable-log-linecount=0
+noplainemail=1
+max-stats=
+snapshots=tar.gz
+side-by-side-diffs=0
+robots=index, nofollow
+
+cache-root=/var/cache/cgit
+cache-size=1000
+
+section=Tazel
+repo.url=tazel
+repo.path=/srv/git/mirrors/tazel.git
+repo.desc=A build system and package manager for C, C++, Objective-C, Objective-C++ and Zig, with Kotlin project files.
+repo.homepage=https://github.com/Progmasoft/tazel
+
+repo.url=tazelish
+repo.path=/srv/git/mirrors/tazelish.git
+repo.desc=Installs Tazel and chooses which version of it runs.
+repo.homepage=https://github.com/Progmasoft/tazelish
+
+repo.url=tazel.net
+repo.path=/srv/git/mirrors/tazel.net.git
+repo.desc=The site of Tazel, tazel.net.
+repo.homepage=https://github.com/Progmasoft/tazel.net
+
+section=C++
+repo.url=catch3
+repo.path=/srv/git/mirrors/catch3.git
+repo.desc=Progmasoft Catch3: an independently maintained C++17 test framework with a parallel runner, property checks, snapshots and structured results.
+repo.homepage=https://github.com/Progmasoft/catch3
+
+repo.url=progmasoft-cpp
+repo.path=/srv/git/mirrors/progmasoft-cpp.git
+repo.desc=The C++ style guide of Progmasoft: naming, formatting, language rules, errors, ownership, ABI, testing and tooling.
+repo.homepage=https://github.com/Progmasoft/progmasoft-cpp
+
+section=Sites
+repo.url=progmaweb
+repo.path=/srv/git/mirrors/progmaweb.git
+repo.desc=The site and account service of Progmasoft: a Next.js frontend and an ASP.NET Core API.
+repo.homepage=https://github.com/Progmasoft/progmaweb
+
+repo.url=website
+repo.path=/srv/git/mirrors/website.git
+repo.desc=The site of tala.run: a Vue frontend and an ASP.NET Core API.
+repo.homepage=https://github.com/Progmasoft/website
