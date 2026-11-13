@@ -1,0 +1,716 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 */
+
+/* The look of progmasoft.com for cgit: the same tokens, brand, header and footer as
+   apps/web/app/globals.css, applied to the markup cgit writes. Light, like the default of
+   progmasoft.com; this site keeps no preferences. */
+
+:root {
+  --blue-700: #004e8c;
+  --blue-600: #0066b8;
+  --blue-500: #0078d4;
+  --blue-100: #dff0ff;
+  --green-600: #16825d;
+  --ink-950: #121417;
+  --ink-800: #2a2f35;
+  --ink-650: #4c545d;
+  --ink-500: #68717c;
+  --line: #d9dee4;
+  --line-strong: #b9c1ca;
+  --surface: #ffffff;
+  --surface-muted: #f5f7f9;
+  --surface-blue: #f1f8ff;
+  --header-surface: rgb(255 255 255 / 94%);
+  --danger: #b42318;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shell: 1180px;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink-950);
+  font-family:
+    "Segoe UI Variable",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  /* The header and footer reach the edges of the window from inside div#cgit. */
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--blue-600);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 3px;
+}
+
+.shell {
+  width: min(calc(100% - 40px), var(--shell));
+  margin-inline: auto;
+}
+
+/* ----- Header and footer, as on progmasoft.com ----- */
+
+.site-header {
+  min-height: 68px;
+  border-bottom: 1px solid var(--line);
+  background: var(--header-surface);
+}
+
+.header-inner {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink-950);
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.brand-tile {
+  display: block;
+}
+
+.brand-tile-slate {
+  background: #3b4658;
+}
+
+.brand-tile-teal {
+  background: #1e7188;
+}
+
+.brand-tile-violet {
+  background: #7655fa;
+}
+
+.brand-tile-orange {
+  background: #dc7644;
+}
+
+.brand-name {
+  color: #8e0000;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand-product {
+  border-left: 2px solid var(--ink-800);
+  margin-left: 5px;
+  padding-left: 16px;
+  color: var(--ink-800);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.primary-nav a {
+  color: var(--ink-800);
+  font-weight: 600;
+}
+
+.primary-nav a:hover {
+  color: var(--blue-600);
+  text-decoration: none;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--blue-600);
+  color: #fff;
+  font-weight: 700;
+}
+
+.primary-nav a.button,
+.primary-nav a.button:hover {
+  color: #fff;
+}
+
+.button:hover {
+  background: var(--blue-700);
+  text-decoration: none;
+}
+
+.button-small {
+  min-height: 36px;
+  padding: 7px 14px;
+  font-size: 14px;
+}
+
+.mirror-note {
+  margin-block: 18px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  background: var(--surface-blue);
+  color: var(--ink-650);
+  font-size: 14px;
+}
+
+.site-footer {
+  margin-top: 56px;
+  border-top: 1px solid #343a40;
+  background: #20252a;
+  color: #d8dde2;
+}
+
+.footer-bottom {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+/* ----- The page cgit writes ----- */
+
+div#cgit {
+  width: min(calc(100% - 40px), var(--shell));
+  margin-inline: auto;
+}
+
+/* cgit writes the header before div#cgit and the footer inside it; the footer still reaches the
+   edges of the window. */
+div#cgit > .site-footer {
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+}
+
+table#header {
+  width: 100%;
+  margin-top: 28px;
+  border-collapse: collapse;
+}
+
+table#header td.logo {
+  display: none;
+}
+
+table#header td.main {
+  color: var(--ink-950);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+table#header td.main a {
+  color: var(--ink-950);
+}
+
+table#header td.sub {
+  padding-top: 4px;
+  color: var(--ink-650);
+  font-size: 16px;
+}
+
+table#header td.form {
+  text-align: right;
+  vertical-align: middle;
+}
+
+table#header td.form form {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+table#header td.form select {
+  max-width: 260px;
+}
+
+select,
+input[type="search"],
+input[type="text"],
+input[type="submit"] {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+  background: var(--surface);
+  color: var(--ink-800);
+  font: inherit;
+  font-size: 14px;
+}
+
+input[type="submit"] {
+  border-color: var(--blue-600);
+  background: var(--blue-600);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background: var(--blue-700);
+}
+
+table.tabs {
+  width: 100%;
+  margin-top: 22px;
+  border-collapse: collapse;
+  border-bottom: 1px solid var(--line);
+}
+
+table.tabs td {
+  padding: 0;
+  vertical-align: bottom;
+}
+
+table.tabs td a {
+  display: inline-block;
+  margin-right: 22px;
+  border-bottom: 3px solid transparent;
+  padding: 10px 0 9px;
+  color: var(--ink-650);
+  font-weight: 600;
+}
+
+table.tabs td a.active,
+table.tabs td a:hover {
+  border-bottom-color: var(--blue-600);
+  color: var(--ink-950);
+  text-decoration: none;
+}
+
+table.tabs td.form {
+  padding-bottom: 8px;
+  text-align: right;
+}
+
+table.tabs td.form form {
+  display: inline-flex;
+  gap: 6px;
+}
+
+div.path {
+  margin-top: 14px;
+  color: var(--ink-650);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+div.content {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+div.cgit-panel {
+  float: right;
+  margin: 0 0 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  background: var(--surface-muted);
+  font-size: 13px;
+}
+
+div.cgit-panel b {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Lists: the repositories, refs, log and tree. */
+table.list {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+table.list th {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px;
+  background: var(--surface-muted);
+  color: var(--ink-650);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+
+table.list td {
+  border-bottom: 1px solid var(--line);
+  padding: 9px 12px;
+  vertical-align: top;
+}
+
+table.list tr:last-child td {
+  border-bottom: 0;
+}
+
+table.list tr:hover td {
+  background: var(--surface-blue);
+}
+
+table.list tr.nohover:hover td,
+table.list tr.nohover-highlight:hover td {
+  background: transparent;
+}
+
+/* The empty rows cgit puts between the parts of a summary. */
+table.list tr.nohover > td[colspan] {
+  height: 14px;
+  border-bottom: 0;
+  padding: 0;
+  font-size: 0;
+}
+
+table.list tr.nohover > th {
+  border-top: 1px solid var(--line);
+}
+
+table.list th a {
+  color: inherit;
+}
+
+table.list td.reposection {
+  padding-top: 20px;
+  background: var(--surface);
+  color: var(--ink-950);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+table.list td.toplevel-repo a,
+table.list td.sublevel-repo a {
+  font-weight: 650;
+}
+
+table.list td.commitgraph,
+table.list td.ls-mode,
+table.list td.ls-size,
+table.list td.sha1,
+td.ls-mode,
+td.sha1 {
+  color: var(--ink-500);
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+table.list td.ls-size {
+  text-align: right;
+}
+
+a.ls-dir {
+  font-weight: 650;
+}
+
+a.ls-blob,
+a.ls-dir,
+a.ls-mod {
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+span.age-mins,
+span.age-hours {
+  color: var(--green-600);
+  font-weight: 600;
+}
+
+span.age-days,
+span.age-weeks,
+span.age-months,
+span.age-years {
+  color: var(--ink-500);
+}
+
+a.branch-deco,
+a.tag-deco,
+a.tag-annotated-deco,
+a.remote-deco,
+a.deco {
+  margin-left: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 1px 8px;
+  background: var(--surface-muted);
+  color: var(--ink-800);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+a.branch-deco {
+  border-color: #a7d3b9;
+  background: #eaf7ef;
+  color: var(--green-600);
+}
+
+a.tag-deco,
+a.tag-annotated-deco {
+  border-color: #bcd8f2;
+  background: var(--surface-blue);
+  color: var(--blue-700);
+}
+
+ul.pager {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.pager a {
+  display: inline-block;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+}
+
+/* A commit. */
+table.commit-info {
+  width: auto;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.commit-info th {
+  width: 90px;
+  padding: 4px 12px 4px 0;
+  color: var(--ink-650);
+  font-weight: 600;
+  text-align: left;
+  vertical-align: top;
+}
+
+table.commit-info td {
+  padding: 4px 0;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+div.commit-subject {
+  margin: 20px 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+div.commit-msg {
+  border-left: 3px solid var(--line);
+  padding-left: 14px;
+  color: var(--ink-800);
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+div.notes-header,
+div.notes {
+  font-size: 13px;
+}
+
+div.diffstat-header {
+  margin-top: 22px;
+  font-weight: 700;
+}
+
+table.diffstat {
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  border-collapse: separate;
+  border-spacing: 0;
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+table.diffstat td {
+  padding: 2px 8px;
+}
+
+table.diffstat td.graph table {
+  border-collapse: collapse;
+}
+
+/* Only the bars of the graph are coloured; a file cell has the same class names. */
+table.diffstat td.graph td.add {
+  background: var(--green-600);
+}
+
+table.diffstat td.graph td.rem {
+  background: var(--danger);
+}
+
+div.diffstat-summary {
+  margin-top: 6px;
+  color: var(--ink-650);
+  font-size: 13px;
+}
+
+/* Diffs and files. */
+table.diff {
+  width: 100%;
+  margin-top: 18px;
+  border-collapse: collapse;
+}
+
+table.diff td {
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: pre;
+}
+
+table.diff td div.head {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  padding: 8px 10px;
+  background: var(--surface-muted);
+  color: var(--ink-950);
+  font-weight: 700;
+  white-space: normal;
+}
+
+table.diff td div.hunk {
+  padding: 2px 10px;
+  background: var(--surface-blue);
+  color: var(--blue-700);
+}
+
+table.diff td div.add {
+  padding: 0 10px;
+  background: #e8f6ee;
+  color: #0d5c3f;
+}
+
+table.diff td div.del {
+  padding: 0 10px;
+  background: #fdeceb;
+  color: #8c1d14;
+}
+
+table.diff td div.ctx {
+  padding: 0 10px;
+  color: var(--ink-800);
+}
+
+table.blob {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+table.blob td {
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+table.blob td.linenumbers {
+  border-right: 1px solid var(--line);
+  background: var(--surface-muted);
+  text-align: right;
+}
+
+table.blob td.linenumbers a {
+  color: var(--ink-500);
+}
+
+table.blob pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+div.error {
+  border: 1px solid #f3c5c1;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  background: #fdeceb;
+  color: var(--danger);
+}
+
+/* cgit's own footer is replaced by the one of progmasoft.com. */
+div.footer {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .primary-nav {
+    gap: 14px;
+  }
+
+  .primary-nav a:not(.button) {
+    display: none;
+  }
+
+  .brand-product {
+    padding-left: 10px;
+  }
+
+  table#header td.form,
+  table.tabs td.form {
+    display: none;
+  }
+
+  table#header td.main {
+    font-size: 24px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-block: 14px;
+  }
+}
