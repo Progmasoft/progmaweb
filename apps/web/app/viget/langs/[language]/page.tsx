@@ -2,26 +2,49 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow, getMessages } from "@/lib/localization";
-import { catalogText } from "@/lib/viget-catalogs";
+import { getMessages } from "@/lib/localization";
+import {
+  catalogText,
+  isLanguageSlug,
+  languageSlugs,
+} from "@/lib/viget-catalogs";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const catalogs = catalogText(await getLocale());
+type Parameters = { params: Promise<{ language: string }> };
+
+// The languages are fixed; any other segment is no catalog.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return languageSlugs.map((language) => ({ language }));
+}
+
+export async function generateMetadata({
+  params,
+}: Parameters): Promise<Metadata> {
+  const { language } = await params;
+  if (!isLanguageSlug(language)) return { title: "ViGet" };
+  const page = catalogText(await getLocale()).languages[language];
   return {
-    title: `${catalogs.talaTitle} · ViGet`,
-    description: catalogs.talaDescription,
-    alternates: { canonical: "https://viget.progmasoft.com/langs/tala" },
+    title: `${page.title} · ViGet`,
+    description: page.description,
+    alternates: {
+      canonical: `https://viget.progmasoft.com/langs/${language}`,
+    },
     robots: { index: true, follow: true },
   };
 }
 
-export default async function TalaPackagesPage() {
+export default async function LanguagePackagesPage({ params }: Parameters) {
+  const { language } = await params;
+  if (!isLanguageSlug(language)) notFound();
   const locale = await getLocale();
   const { viget } = getMessages(locale);
   const catalogs = catalogText(locale);
+  const page = catalogs.languages[language];
   return (
     <div className="viget-surface">
       <ViGetHeader locale={locale} />
@@ -30,17 +53,14 @@ export default async function TalaPackagesPage() {
           <div className="shell viget-plugin-grid">
             <div className="viget-hero-copy">
               <p className="eyebrow">ViGet · LANGUAGES</p>
-              <h1>{catalogs.talaTitle}</h1>
-              <p>{catalogs.talaDescription}</p>
+              <h1>{page.title}</h1>
+              <p>{page.description}</p>
               <div className="hero-actions">
                 <a
                   className="button button-secondary"
                   href="https://viget.progmasoft.com/"
                 >
                   {catalogs.backToRegistry}
-                </a>
-                <a className="viget-text-link" href="https://tala.run/">
-                  Tala {forwardArrow(locale)}
                 </a>
               </div>
             </div>
@@ -52,8 +72,8 @@ export default async function TalaPackagesPage() {
                 <span aria-hidden="true" />
                 {viget.available}
               </div>
-              <h2 id="package-availability-title">{catalogs.talaEmptyTitle}</h2>
-              <p>{catalogs.talaEmptyDescription}</p>
+              <h2 id="package-availability-title">{page.emptyTitle}</h2>
+              <p>{catalogs.languageEmptyDescription}</p>
               <dl>
                 <div>
                   <dt>{viget.packageFormat}</dt>
@@ -68,7 +88,7 @@ export default async function TalaPackagesPage() {
                   <dd>{viget.publishingClosed}</dd>
                 </div>
               </dl>
-              <code>/langs/tala/&lt;Publisher&gt;/&lt;Name&gt;/</code>
+              <code>/langs/{language}/&lt;Publisher&gt;/&lt;Name&gt;/</code>
             </aside>
           </div>
         </section>

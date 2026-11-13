@@ -142,7 +142,7 @@ export const messages = {
       dashboardTitle: "Dashboard",
       vigetTitle: "ViGet Package Registry by Progmasoft",
       vigetDescription:
-        "The Tala package registry is online, but no packages have been published yet.",
+        "The package registry for C, C++ and Objective-C is online, but no packages have been published yet.",
       dslPluginsTitle: "DSL Plugins · ViGet Package Registry by Progmasoft",
       dslPluginsDescription:
         "The ViGet Kotlin DSL plugin catalog is online, but no plugins have been published yet.",
@@ -310,11 +310,11 @@ export const messages = {
       login: "Log in",
       register: "Register",
       homeEyebrow: "ViGet package registry",
-      homeTitle: "Packages for the Tala ecosystem.",
+      homeTitle: "Packages for C, C++ and Objective-C.",
       homeDescription:
-        "ViGet is the canonical source for Tala packages and project DSL plugins, operated directly by Progmasoft.",
+        "ViGet is the canonical source for C, C++ and Objective-C packages and for the DSL plugins of build systems, operated directly by Progmasoft.",
       createAccount: "Create account",
-      exploreTala: "Explore Tala",
+      exploreTazel: "Explore Tazel",
       available: "Registry available",
       emptyTitle: "The public catalog is empty.",
       emptyDescription:
@@ -327,10 +327,10 @@ export const messages = {
       catalogsTitle: "Two artifact types, one registry.",
       catalogsDescription:
         "Packages and project DSL plugins have separate, predictable coordinate spaces.",
-      talaPackages: "Tala packages",
+      languagePackages: "Packages",
       vipkgCatalog: "ViPkg catalog",
       vipkgDescription:
-        "Libraries and applications authored in Tala, distributed as .vipkg artifacts.",
+        "Libraries and applications in C, C++ and Objective-C, distributed as .vipkg artifacts.",
       projectExtensions: "Project extensions",
       kotlinPlugins: "Kotlin DSL plugins",
       kotlinDescription:
@@ -355,7 +355,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL plugins",
       pluginTitle: "Extend the project model.",
       pluginDescription:
-        "Kotlin DSL plugins are JAR artifacts for the project file of Tazel. They are separate from Tala .vipkg packages.",
+        "Kotlin DSL plugins are JAR artifacts for the project file of Tazel. They are separate from .vipkg packages.",
       backToPackages: "Back to packages",
       followDevelopment: "Follow development",
       pluginAvailable: "Catalog available",
@@ -380,7 +380,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet is the package and Kotlin DSL plugin registry for the Tala ecosystem.",
+        "ViGet is the registry of packages for C, C++ and Objective-C and of Kotlin DSL plugins.",
       registry: "Registry",
       support: "Support",
       source: "Source",
@@ -402,7 +402,7 @@ export const messages = {
       dashboardTitle: "Kontoübersicht",
       vigetTitle: "ViGet-Paketregistrierung von Progmasoft",
       vigetDescription:
-        "Die Tala-Paketregistrierung ist online, enthält aber noch keine veröffentlichten Pakete.",
+        "Die Paketregistrierung für C, C++ und Objective-C ist online, enthält aber noch keine veröffentlichten Pakete.",
       dslPluginsTitle: "DSL-Plugins · ViGet-Paketregistrierung von Progmasoft",
       dslPluginsDescription:
         "Der ViGet-Katalog für Kotlin-DSL-Plugins ist online, enthält aber noch keine veröffentlichten Plugins.",
@@ -574,11 +574,11 @@ export const messages = {
       login: "Anmelden",
       register: "Registrieren",
       homeEyebrow: "ViGet-Paketregistrierung",
-      homeTitle: "Pakete für das Tala-Ökosystem.",
+      homeTitle: "Pakete für C, C++ und Objective-C.",
       homeDescription:
-        "ViGet ist die kanonische Quelle für Tala-Pakete und Projekt-DSL-Plugins und wird direkt von Progmasoft betrieben.",
+        "ViGet ist die kanonische Quelle für Pakete in C, C++ und Objective-C und für die DSL-Plugins von Build-Systemen und wird direkt von Progmasoft betrieben.",
       createAccount: "Konto erstellen",
-      exploreTala: "Tala entdecken",
+      exploreTazel: "Tazel entdecken",
       available: "Paketregistrierung verfügbar",
       emptyTitle: "Der öffentliche Katalog ist leer.",
       emptyDescription:
@@ -591,10 +591,10 @@ export const messages = {
       catalogsTitle: "Zwei Artefakttypen, eine Paketregistrierung.",
       catalogsDescription:
         "Pakete und Projekt-DSL-Plugins besitzen getrennte, vorhersehbare Koordinatenräume.",
-      talaPackages: "Tala-Pakete",
+      languagePackages: "Pakete",
       vipkgCatalog: "ViPkg-Katalog",
       vipkgDescription:
-        "In Tala entwickelte Bibliotheken und Anwendungen, verteilt als .vipkg-Artefakte.",
+        "Bibliotheken und Anwendungen in C, C++ und Objective-C, verteilt als .vipkg-Artefakte.",
       projectExtensions: "Projekterweiterungen",
       kotlinPlugins: "Kotlin-DSL-Plugins",
       kotlinDescription:
@@ -619,7 +619,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin-DSL-Plugins",
       pluginTitle: "Das Projektmodell erweitern.",
       pluginDescription:
-        "Kotlin-DSL-Plugins sind JAR-Artefakte für die Projektdatei von Tazel. Sie sind von Tala-.vipkg-Paketen getrennt.",
+        "Kotlin-DSL-Plugins sind JAR-Artefakte für die Projektdatei von Tazel. Sie sind von .vipkg-Paketen getrennt.",
       backToPackages: "Zurück zu den Paketen",
       followDevelopment: "Entwicklung verfolgen",
       pluginAvailable: "Katalog verfügbar",
@@ -644,7 +644,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet ist die Paket- und Kotlin-DSL-Plugin-Registrierung für das Tala-Ökosystem.",
+        "ViGet ist die Registrierung für Pakete in C, C++ und Objective-C und für Kotlin-DSL-Plugins.",
       registry: "Paketregistrierung",
       support: "Support",
       source: "Quellcode",
@@ -666,7 +666,7 @@ export const messages = {
       dashboardTitle: "Панель управления",
       vigetTitle: "Реестр пакетов ViGet от Progmasoft",
       vigetDescription:
-        "Реестр пакетов Tala работает, но опубликованных пакетов пока нет.",
+        "Реестр пакетов для C, C++ и Objective-C работает, но опубликованных пакетов пока нет.",
       dslPluginsTitle: "DSL-плагины · Реестр пакетов ViGet от Progmasoft",
       dslPluginsDescription:
         "Каталог Kotlin DSL-плагинов ViGet работает, но опубликованных плагинов пока нет.",
@@ -838,11 +838,11 @@ export const messages = {
       login: "Войти",
       register: "Регистрация",
       homeEyebrow: "Реестр пакетов ViGet",
-      homeTitle: "Пакеты для экосистемы Tala.",
+      homeTitle: "Пакеты для C, C++ и Objective-C.",
       homeDescription:
-        "ViGet — канонический источник пакетов Tala и DSL-плагинов проектов, которым напрямую управляет Progmasoft.",
+        "ViGet — канонический источник пакетов для C, C++ и Objective-C и DSL-плагинов систем сборки, которым напрямую управляет Progmasoft.",
       createAccount: "Создать аккаунт",
-      exploreTala: "Подробнее о Tala",
+      exploreTazel: "Подробнее о Tazel",
       available: "Реестр доступен",
       emptyTitle: "Публичный каталог пуст.",
       emptyDescription:
@@ -855,10 +855,10 @@ export const messages = {
       catalogsTitle: "Два вида артефактов, один реестр.",
       catalogsDescription:
         "У пакетов и DSL-плагинов проектов отдельные предсказуемые пространства координат.",
-      talaPackages: "Пакеты Tala",
+      languagePackages: "Пакеты",
       vipkgCatalog: "Каталог ViPkg",
       vipkgDescription:
-        "Библиотеки и приложения, написанные на Tala, распространяются как артефакты .vipkg.",
+        "Библиотеки и приложения на C, C++ и Objective-C распространяются как артефакты .vipkg.",
       projectExtensions: "Расширения проектов",
       kotlinPlugins: "Kotlin DSL-плагины",
       kotlinDescription:
@@ -883,7 +883,7 @@ export const messages = {
       pluginEyebrow: "ViGet · Kotlin DSL-плагины",
       pluginTitle: "Расширяйте модель проекта.",
       pluginDescription:
-        "Kotlin DSL-плагины — это JAR-артефакты для файла проекта Tazel. Они отделены от пакетов Tala в формате .vipkg.",
+        "Kotlin DSL-плагины — это JAR-артефакты для файла проекта Tazel. Они отделены от пакетов в формате .vipkg.",
       backToPackages: "Назад к пакетам",
       followDevelopment: "Следить за разработкой",
       pluginAvailable: "Каталог доступен",
@@ -908,7 +908,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet — реестр пакетов и Kotlin DSL-плагинов экосистемы Tala.",
+        "ViGet — реестр пакетов для C, C++ и Objective-C и Kotlin DSL-плагинов.",
       registry: "Реестр",
       support: "Поддержка",
       source: "Исходный код",
@@ -929,7 +929,7 @@ export const messages = {
       dashboardTitle: "לוח בקרה",
       vigetTitle: "מאגר החבילות ViGet מבית Progmasoft",
       vigetDescription:
-        "מאגר החבילות של Tala פעיל, אך עדיין לא פורסמו בו חבילות.",
+        "מאגר החבילות ל-C, ל-C++ ול-Objective-C פעיל, אך עדיין לא פורסמו בו חבילות.",
       dslPluginsTitle: "תוספי DSL · מאגר החבילות ViGet מבית Progmasoft",
       dslPluginsDescription:
         "קטלוג תוספי Kotlin DSL של ViGet פעיל, אך עדיין לא פורסמו בו תוספים.",
@@ -1085,11 +1085,11 @@ export const messages = {
       login: "כניסה",
       register: "הרשמה",
       homeEyebrow: "מאגר החבילות ViGet",
-      homeTitle: "חבילות לאקוסיסטם של Tala.",
+      homeTitle: "חבילות ל-C, ל-C++ ול-Objective-C.",
       homeDescription:
-        "ViGet הוא המקור הרשמי לחבילות Tala ולתוספי DSL לפרויקטים, בהפעלה ישירה של Progmasoft.",
+        "ViGet הוא המקור הרשמי לחבילות C, ‏C++ ו-Objective-C ולתוספי DSL של מערכות בנייה, בהפעלה ישירה של Progmasoft.",
       createAccount: "יצירת חשבון",
-      exploreTala: "להכיר את Tala",
+      exploreTazel: "להכיר את Tazel",
       available: "המאגר זמין",
       emptyTitle: "הקטלוג הציבורי ריק.",
       emptyDescription:
@@ -1102,9 +1102,10 @@ export const messages = {
       catalogsTitle: "שני סוגי תוצרים, מאגר אחד.",
       catalogsDescription:
         "לחבילות ולתוספי DSL לפרויקטים יש מרחבי קואורדינטות נפרדים וצפויים.",
-      talaPackages: "חבילות Tala",
+      languagePackages: "חבילות",
       vipkgCatalog: "קטלוג ViPkg",
-      vipkgDescription: "ספריות ויישומים שנכתבו ב-Tala ומופצים כתוצרי ‎.vipkg.",
+      vipkgDescription:
+        "ספריות ויישומים ב-C, ב-C++ וב-Objective-C, שמופצים כתוצרי ‎.vipkg.",
       projectExtensions: "הרחבות לפרויקטים",
       kotlinPlugins: "תוספי Kotlin DSL",
       kotlinDescription:
@@ -1126,7 +1127,7 @@ export const messages = {
       pluginEyebrow: "ViGet · תוספי Kotlin DSL",
       pluginTitle: "להרחיב את מודל הפרויקט.",
       pluginDescription:
-        "תוספי Kotlin DSL הם תוצרי JAR עבור קובץ הפרויקט של Tazel. הם נפרדים מחבילות ‎.vipkg של Tala.",
+        "תוספי Kotlin DSL הם תוצרי JAR עבור קובץ הפרויקט של Tazel. הם נפרדים מחבילות ‎.vipkg.",
       backToPackages: "חזרה לחבילות",
       followDevelopment: "למעקב אחר הפיתוח",
       pluginAvailable: "הקטלוג זמין",
@@ -1150,7 +1151,7 @@ export const messages = {
         ],
       ],
       footerDescription:
-        "ViGet הוא מאגר החבילות ותוספי Kotlin DSL של האקוסיסטם של Tala.",
+        "ViGet הוא המאגר של חבילות ל-C, ל-C++ ול-Objective-C ושל תוספי Kotlin DSL.",
       registry: "מאגר",
       support: "תמיכה",
       source: "קוד מקור",

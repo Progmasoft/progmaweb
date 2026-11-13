@@ -166,10 +166,13 @@ function route(request: NextRequest, headers: Headers): NextResponse {
       return rewrite(headers, internalRoute(request, "/viget"));
     }
     // Packages are grouped by the language they are written in and DSL
-    // plugins by the build system they extend. A group without a catalog of
-    // its own leads to the one catalog there is.
-    if (pathname === "/langs/tala" || pathname === "/langs/tala/") {
-      return rewrite(headers, internalRoute(request, "/viget/langs/tala"));
+    // plugins by the build system they extend.
+    const language = /^\/langs\/(c|cpp|objc)\/?$/.exec(pathname);
+    if (language) {
+      return rewrite(
+        headers,
+        internalRoute(request, `/viget/langs/${language[1]}`),
+      );
     }
     if (pathname === "/dslplugins/tazel" || pathname === "/dslplugins/tazel/") {
       return rewrite(
@@ -201,9 +204,16 @@ function route(request: NextRequest, headers: Headers): NextResponse {
         internalRoute(request, "/viget/dslplugins/gradle"),
       );
     }
-    if (pathname === "/langs" || pathname === "/langs/") {
+    // The languages are listed on the home page of ViGet. The Tala catalog is
+    // gone with Tala; its old addresses, which tala.run and earlier
+    // documentation link to, lead to the list as well.
+    if (
+      pathname === "/langs" ||
+      pathname === "/langs/" ||
+      /^\/langs\/tala(\/.*)?$/.test(pathname)
+    ) {
       return NextResponse.redirect(
-        new URL("https://viget.progmasoft.com/langs/tala"),
+        new URL("https://viget.progmasoft.com/#languages-title"),
         308,
       );
     }

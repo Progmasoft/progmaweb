@@ -20,11 +20,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly",
         priority: 1,
       },
-      {
-        url: "https://viget.progmasoft.com/langs/tala",
-        changeFrequency: "weekly",
+      ...["c", "cpp", "objc"].map((language) => ({
+        url: `https://viget.progmasoft.com/langs/${language}`,
+        changeFrequency: "weekly" as const,
         priority: 0.8,
-      },
+      })),
       {
         url: "https://viget.progmasoft.com/dslplugins/tazel",
         changeFrequency: "weekly",
