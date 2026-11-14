@@ -3,6 +3,7 @@
 
 import type { ReactNode } from "react";
 import "../site.css";
+import "./catalog.css";
 
 export default function ProductsLayout({
   children,
