@@ -63,7 +63,7 @@ export default async function ProductsPage({ searchParams }: CatalogProps) {
       description={catalog.description}
     >
       <section className="pm-section">
-        <div className="pm-shell pm-catalog">
+        <div className="pm-shell pm-index">
           <dl className="pm-stats">
             {stats.map(([label, value]) => (
               <div key={label}>

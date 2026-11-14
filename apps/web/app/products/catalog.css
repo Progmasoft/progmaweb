@@ -31,9 +31,14 @@
   color: var(--blue-700);
 }
 
-.pm-catalog {
+.pm-index {
   display: grid;
   gap: 32px;
+}
+
+/* The hero already sets the page apart; the index starts close below it. */
+.pm-section:has(> .pm-index) {
+  padding-block-start: 48px;
 }
 
 .pm-stats {
@@ -137,6 +142,10 @@
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.pm-table tbody th {
+  min-inline-size: 200px;
 }
 
 .pm-table tbody th a {
@@ -251,5 +260,13 @@
 @media (max-width: 560px) {
   .pm-filter {
     grid-template-columns: 1fr;
+  }
+
+  .pm-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pm-stats dd {
+    font-size: 26px;
   }
 }

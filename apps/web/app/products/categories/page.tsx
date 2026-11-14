@@ -33,7 +33,7 @@ export default async function CategoriesPage() {
       description={catalog.categoriesDescription}
     >
       <section className="pm-section">
-        <div className="pm-shell pm-catalog">
+        <div className="pm-shell pm-index">
           {productCategories.map((category) => {
             const slugs = productSlugs.filter(
               (slug) => products[slug].category === category,

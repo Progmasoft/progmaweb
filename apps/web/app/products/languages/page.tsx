@@ -33,7 +33,7 @@ export default async function LanguagesPage() {
       description={catalog.languagesDescription}
     >
       <section className="pm-section">
-        <div className="pm-shell pm-catalog">
+        <div className="pm-shell pm-index">
           {productLanguages.map((language) => {
             const slugs = productSlugs.filter(
               (slug) => products[slug].language === language,

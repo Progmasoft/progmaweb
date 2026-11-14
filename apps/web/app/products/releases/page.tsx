@@ -39,7 +39,7 @@ export default async function ReleasesPage() {
       description={catalog.releasesDescription}
     >
       <section className="pm-section">
-        <div className="pm-shell pm-catalog">
+        <div className="pm-shell pm-index">
           {released.length === 0 ? (
             <p>{catalog.noReleases}</p>
           ) : (

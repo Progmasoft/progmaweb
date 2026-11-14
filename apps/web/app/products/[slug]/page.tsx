@@ -50,12 +50,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       catalog={catalog}
       view="all"
       title={product.name}
-      description={text.tagline}
+      description={text.description}
     >
       <section className="pm-section">
         <div className="pm-shell pm-detail">
           <div>
-            <p className="pm-lede">{text.description}</p>
             <div className="pm-heading">
               <h2>
                 {product.status === "released"
