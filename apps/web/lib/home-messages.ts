@@ -57,7 +57,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
       titleStart: "Technology built to",
       titleAccent: "last and to explain itself.",
       description:
-        "Progmasoft designs languages, compilers, build systems, developer tools and the services around them. Everything shares one discipline: explicit contracts, real verification and names that mean what they say.",
+        "Progmasoft designs build systems, testing tools, agentic development environments, data infrastructure and the services around them. Everything shares one discipline: explicit contracts, real verification and names that mean what they say.",
       explore: "Explore the technology",
       products: "See the products",
       poolLabel: "Areas of the Progmasoft technology pool",
@@ -69,8 +69,8 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         "Products come and grow; the technology underneath them is what we keep building. Each area is shared by everything Progmasoft makes.",
       areas: [
         [
-          "Languages and compilers",
-          "Language design, type systems, intermediate representations and native code generation.",
+          "Data infrastructure",
+          "Columnar in-memory formats and engines for large data on the JVM.",
         ],
         [
           "Build and packages",
@@ -78,7 +78,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         ],
         [
           "Developer tools",
-          "Formatters, linters, language servers and integrated development environments.",
+          "Formatters, linters and agentic development environments.",
         ],
         [
           "Quality and testing",
@@ -134,7 +134,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
       titleStart: "Technologie, gebaut um",
       titleAccent: "zu bleiben und sich zu erklären.",
       description:
-        "Progmasoft entwirft Sprachen, Compiler, Build-Systeme, Entwicklerwerkzeuge und die Dienste um sie herum. Alles folgt einer Disziplin: explizite Verträge, echte Prüfung und Namen, die sagen, was sie meinen.",
+        "Progmasoft entwirft Build-Systeme, Testwerkzeuge, agentische Entwicklungsumgebungen, Dateninfrastruktur und die Dienste um sie herum. Alles folgt einer Disziplin: explizite Verträge, echte Prüfung und Namen, die sagen, was sie meinen.",
       explore: "Technologie entdecken",
       products: "Zu den Produkten",
       poolLabel: "Bereiche des Progmasoft-Technologiepools",
@@ -146,8 +146,8 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         "Produkte entstehen und wachsen; die Technologie darunter bauen wir dauerhaft weiter. Jeder Bereich trägt alles, was Progmasoft macht.",
       areas: [
         [
-          "Sprachen und Compiler",
-          "Sprachentwurf, Typsysteme, Zwischendarstellungen und native Codeerzeugung.",
+          "Dateninfrastruktur",
+          "Spaltenorientierte In-Memory-Formate und Engines für große Datenmengen auf der JVM.",
         ],
         [
           "Build und Pakete",
@@ -155,7 +155,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         ],
         [
           "Entwicklerwerkzeuge",
-          "Formatierer, Linter, Language Server und integrierte Entwicklungsumgebungen.",
+          "Formatierer, Linter und agentische Entwicklungsumgebungen.",
         ],
         [
           "Qualität und Tests",
@@ -211,7 +211,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
       titleStart: "Технологии, созданные,",
       titleAccent: "чтобы служить долго и быть понятными.",
       description:
-        "Progmasoft создаёт языки, компиляторы, системы сборки, инструменты разработчика и сервисы вокруг них. Всё подчиняется одной дисциплине: явные контракты, настоящая проверка и имена, которые значат то, что говорят.",
+        "Progmasoft создаёт системы сборки, инструменты тестирования, агентные среды разработки, инфраструктуру данных и сервисы вокруг них. Всё подчиняется одной дисциплине: явные контракты, настоящая проверка и имена, которые значат то, что говорят.",
       explore: "Изучить технологии",
       products: "Перейти к продуктам",
       poolLabel: "Направления технологического пула Progmasoft",
@@ -223,8 +223,8 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         "Продукты появляются и растут; технологии под ними мы развиваем постоянно. Каждое направление служит всему, что делает Progmasoft.",
       areas: [
         [
-          "Языки и компиляторы",
-          "Проектирование языков, системы типов, промежуточные представления и генерация машинного кода.",
+          "Инфраструктура данных",
+          "Колоночные форматы данных в памяти и движки для больших данных на JVM.",
         ],
         [
           "Сборка и пакеты",
@@ -232,7 +232,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         ],
         [
           "Инструменты разработчика",
-          "Форматировщики, линтеры, языковые серверы и интегрированные среды разработки.",
+          "Форматировщики, линтеры и агентные среды разработки.",
         ],
         [
           "Качество и тестирование",
@@ -288,7 +288,7 @@ export const homeMessages: Record<Locale, HomeMessages> = {
       titleStart: "טכנולוגיה שנבנתה",
       titleAccent: "כדי להחזיק מעמד ולהסביר את עצמה.",
       description:
-        "Progmasoft מתכננת שפות, מהדרים, מערכות בנייה, כלי פיתוח והשירותים שסביבם. הכול נשען על משמעת אחת: חוזים מפורשים, אימות אמיתי ושמות שאומרים את מה שהם מתכוונים.",
+        "Progmasoft מתכננת מערכות בנייה, כלי בדיקות, סביבות פיתוח מבוססות סוכנים, תשתית נתונים והשירותים שסביבם. הכול נשען על משמעת אחת: חוזים מפורשים, אימות אמיתי ושמות שאומרים את מה שהם מתכוונים.",
       explore: "לגלות את הטכנולוגיה",
       products: "למוצרים",
       poolLabel: "התחומים במאגר הטכנולוגיה של Progmasoft",
@@ -300,14 +300,14 @@ export const homeMessages: Record<Locale, HomeMessages> = {
         "מוצרים נולדים וגדלים; הטכנולוגיה שמתחתיהם היא מה שאנחנו ממשיכים לבנות. כל תחום משרת את כל מה ש־Progmasoft עושה.",
       areas: [
         [
-          "שפות ומהדרים",
-          "תכנון שפות, מערכות טיפוסים, ייצוגי ביניים ויצירת קוד מכונה.",
+          "תשתית נתונים",
+          "תבניות נתונים עמודתיות בזיכרון ומנועים לנתונים גדולים על ה־JVM.",
         ],
         [
           "בנייה וחבילות",
           "בנייה שחוזרת על עצמה, פתרון תלויות, קובצי נעילה ומאגר חבילות.",
         ],
-        ["כלי פיתוח", "מעצבי קוד, לינטרים, שרתי שפה וסביבות פיתוח משולבות."],
+        ["כלי פיתוח", "מעצבי קוד, לינטרים וסביבות פיתוח מבוססות סוכנים."],
         [
           "איכות ובדיקות",
           "בדיקות מבוססות תכונות, בדיקות עם מצב ובדיקות מוטציה, כיסוי ובחירת בדיקות.",
