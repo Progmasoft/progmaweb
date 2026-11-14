@@ -18,9 +18,11 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   ) {
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
+  // Each host with pages of its own names its own sitemap.
   const sitemap =
-    canonicalHost === "viget.progmasoft.com"
-      ? "https://viget.progmasoft.com/sitemap.xml"
+    canonicalHost === "viget.progmasoft.com" ||
+    canonicalHost === "product.progmasoft.com"
+      ? `https://${canonicalHost}/sitemap.xml`
       : "https://progmasoft.com/sitemap.xml";
   return {
     rules: [

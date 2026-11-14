@@ -37,14 +37,23 @@ test("every language has the same home, catalog and product-site text", () => {
   }
 });
 
-test("the catalog lists the products the user named, each with a site", () => {
-  assert.deepEqual([...productSlugs], ["tazel", "catch3"]);
+test("the catalog lists the projects, each with its repository", () => {
+  assert.deepEqual(
+    [...productSlugs],
+    ["tazel", "catch3", "agenceland", "archer", "etincelle"],
+  );
   for (const slug of productSlugs) {
-    assert.match(products[slug].site, /^https:\/\//, slug);
-    assert.match(
-      products[slug].source,
-      /^https:\/\/github\.com\/Progmasoft\//,
-      slug,
+    const product = products[slug];
+    if (product.site !== undefined) {
+      assert.match(product.site, /^https:\/\//, slug);
+    }
+    assert.match(product.source, /^https:\/\/github\.com\/Progmasoft\//, slug);
+    assert.equal(product.issues, `${product.source}/issues`, slug);
+    assert.match(product.started, /^\d{4}-\d{2}-\d{2}$/, slug);
+    assert.equal(
+      product.status === "released",
+      product.latestRelease !== undefined,
+      `${slug}: released exactly when it has a release`,
     );
   }
   assert.equal(products.catch3.site, "https://catch3.progmasoft.com/");

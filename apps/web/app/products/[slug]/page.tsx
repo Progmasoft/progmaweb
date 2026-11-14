@@ -4,8 +4,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Footer } from "@/components/Footer";
-import { SiteHeader } from "@/components/SiteHeader";
+import {
+  CatalogPage,
+  formatDay,
+  StatusBadge,
+} from "@/components/ProductCatalog";
 import { getLocale } from "@/lib/locale.server";
 import { forwardArrow } from "@/lib/localization";
 import { getCatalogMessages, isProductSlug, products } from "@/lib/products";
@@ -21,15 +24,15 @@ export async function generateMetadata({
   if (!isProductSlug(slug)) {
     return {};
   }
-  const text = getCatalogMessages(await getLocale()).products[slug];
+  const catalog = getCatalogMessages(await getLocale());
   return {
-    title: `${products[slug].name} · ${text.category}`,
-    description: text.description,
+    title: `${products[slug].name} · ${catalog.categories[products[slug].category]}`,
+    description: catalog.products[slug].description,
     alternates: { canonical: `https://product.progmasoft.com/${slug}` },
   };
 }
 
-/** One product: what it is, what it does, and where it lives. */
+/** One project: what it is, what it does, its facts, and where it lives. */
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   if (!isProductSlug(slug)) {
@@ -39,51 +42,92 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const catalog = getCatalogMessages(locale);
   const product = products[slug];
   const text = catalog.products[slug];
+  const release = product.latestRelease;
   const arrow = forwardArrow(locale);
   return (
-    <div className="pm-page">
-      <SiteHeader locale={locale} />
-      <main>
-        <section className="pm-hero">
-          <div className="pm-shell pm-product-hero">
-            <p className="eyebrow">{text.category}</p>
-            <h1>
-              {product.name} <span>{text.tagline}</span>
-            </h1>
-            <p className="pm-lede">{text.description}</p>
-          </div>
-        </section>
-        <section className="pm-section">
-          <div className="pm-shell pm-detail">
-            <div>
-              <div className="pm-heading">
-                <h2>{catalog.features}</h2>
-              </div>
-              <ul className="pm-features">
-                {text.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
+    <CatalogPage
+      locale={locale}
+      catalog={catalog}
+      view="all"
+      title={product.name}
+      description={text.description}
+    >
+      <section className="pm-section">
+        <div className="pm-shell pm-detail">
+          <div>
+            <div className="pm-heading">
+              <h2>
+                {product.status === "released"
+                  ? catalog.features
+                  : catalog.featuresPlanned}
+              </h2>
             </div>
-            <aside className="pm-aside">
-              <span className={`pm-accent pm-accent-${product.accent}`} />
+            <ul className="pm-features">
+              {text.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+          <aside className="pm-aside">
+            <span className={`pm-accent pm-accent-${product.accent}`} />
+            <dl className="pm-facts">
+              <div>
+                <dt>{catalog.facts.status}</dt>
+                <dd>
+                  <StatusBadge status={product.status} catalog={catalog} />
+                </dd>
+              </div>
+              <div>
+                <dt>{catalog.facts.category}</dt>
+                <dd>{catalog.categories[product.category]}</dd>
+              </div>
+              <div>
+                <dt>{catalog.facts.language}</dt>
+                <dd dir="ltr">{product.language}</dd>
+              </div>
+              <div>
+                <dt>{catalog.facts.license}</dt>
+                <dd dir="ltr">{product.license}</dd>
+              </div>
+              <div>
+                <dt>{catalog.facts.release}</dt>
+                <dd>
+                  {release ? (
+                    <a href={release.url}>
+                      <bdi>{release.version}</bdi> ·{" "}
+                      {formatDay(locale, release.date)}
+                    </a>
+                  ) : (
+                    catalog.facts.none
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt>{catalog.facts.started}</dt>
+                <dd>
+                  <time dateTime={product.started}>
+                    {formatDay(locale, product.started)}
+                  </time>
+                </dd>
+              </div>
+            </dl>
+            {product.site ? (
               <a className="button" href={product.site}>
                 {catalog.site} {arrow}
               </a>
-              <a className="button button-secondary" href={product.source}>
-                {catalog.source}
-              </a>
-              <span className="pm-note" dir="ltr">
-                {product.site.replace(/^https:\/\//, "").replace(/\/$/, "")}
-              </span>
-              <Link className="pm-link" href="/">
-                {catalog.back}
-              </Link>
-            </aside>
-          </div>
-        </section>
-      </main>
-      <Footer locale={locale} />
-    </div>
+            ) : null}
+            <a className="button button-secondary" href={product.source}>
+              {catalog.source}
+            </a>
+            <a className="pm-link" href={product.issues}>
+              {catalog.issues}
+            </a>
+            <Link className="pm-link" href="/">
+              {catalog.back}
+            </Link>
+          </aside>
+        </div>
+      </section>
+    </CatalogPage>
   );
 }

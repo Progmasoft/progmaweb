@@ -3,6 +3,7 @@
 
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
+import { productSlugs } from "@/lib/products";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const requestHeaders = await headers();
@@ -30,6 +31,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly",
         priority: 0.8,
       },
+    ];
+  }
+  if (host === "product.progmasoft.com") {
+    return [
+      {
+        url: "https://product.progmasoft.com/",
+        changeFrequency: "weekly",
+        priority: 1,
+      },
+      ...["categories", "languages", "releases"].map((view) => ({
+        url: `https://product.progmasoft.com/${view}`,
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      })),
+      ...productSlugs.map((slug) => ({
+        url: `https://product.progmasoft.com/${slug}`,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      })),
     ];
   }
   return [
