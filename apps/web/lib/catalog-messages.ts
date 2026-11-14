@@ -19,7 +19,6 @@ export interface CatalogMessages {
   eyebrow: string;
   title: string;
   description: string;
-  details: string;
   site: string;
   source: string;
   issues: string;
@@ -68,7 +67,6 @@ export interface CatalogMessages {
     license: string;
     release: string;
     started: string;
-    links: string;
     none: string;
   };
   statuses: { released: string; development: string };
@@ -93,7 +91,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     title: "Products",
     description:
       "Every project of Progmasoft, with what it is, the language it is written in, where it stands and where it lives. Search them, or browse by category, by language or by release.",
-    details: "Details",
     site: "Visit the site",
     source: "Source code",
     issues: "Issues",
@@ -139,7 +136,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       license: "License",
       release: "Latest release",
       started: "Started",
-      links: "Links",
       none: "None yet",
     },
     statuses: { released: "Released", development: "In development" },
@@ -225,7 +221,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     title: "Produkte",
     description:
       "Alle Projekte von Progmasoft: was sie sind, in welcher Sprache sie geschrieben sind, wie weit sie sind und wo sie zu Hause sind. Durchsuchen Sie sie oder blättern Sie nach Kategorie, Sprache oder Release.",
-    details: "Details",
     site: "Zur Website",
     source: "Quellcode",
     issues: "Issues",
@@ -271,7 +266,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       license: "Lizenz",
       release: "Neuestes Release",
       started: "Begonnen",
-      links: "Links",
       none: "Noch keines",
     },
     statuses: { released: "Veröffentlicht", development: "In Entwicklung" },
@@ -358,7 +352,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     title: "Продукты",
     description:
       "Все проекты Progmasoft: что они собой представляют, на каком языке написаны, в каком они состоянии и где находятся. Ищите их или просматривайте по категории, языку или выпуску.",
-    details: "Подробнее",
     site: "Перейти на сайт",
     source: "Исходный код",
     issues: "Задачи",
@@ -404,7 +397,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       license: "Лицензия",
       release: "Последний выпуск",
       started: "Начат",
-      links: "Ссылки",
       none: "Пока нет",
     },
     statuses: { released: "Выпущен", development: "В разработке" },
@@ -490,7 +482,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
     title: "מוצרים",
     description:
       "כל הפרויקטים של Progmasoft: מה הם, באיזו שפה הם כתובים, באיזה שלב הם נמצאים והיכן הם נמצאים. חפשו אותם או עיינו בהם לפי קטגוריה, שפה או גרסה.",
-    details: "פרטים",
     site: "לאתר",
     source: "קוד מקור",
     issues: "דיווחי באגים",
@@ -536,7 +527,6 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       license: "רישיון",
       release: "הגרסה האחרונה",
       started: "התחיל",
-      links: "קישורים",
       none: "עדיין אין",
     },
     statuses: { released: "שוחרר", development: "בפיתוח" },

@@ -1,5 +1,7 @@
-/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
-/* SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 */
+/*
+ * SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+ * SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+ */
 
 /* The catalog of product.progmasoft.com: views, numbers, search, tables */
 
@@ -25,7 +27,7 @@
   border-color: var(--line-strong);
 }
 
-.pm-views a[aria-current="page"] {
+.pm-views [aria-current="page"] {
   border-color: var(--blue-600);
   background: var(--blue-100);
   color: var(--blue-700);
@@ -246,7 +248,7 @@
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 960px) {
+@media (width <= 960px) {
   .pm-filter {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -257,7 +259,7 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (width <= 560px) {
   .pm-filter {
     grid-template-columns: 1fr;
   }
