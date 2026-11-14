@@ -132,7 +132,7 @@ export const messages = {
     metadata: {
       homeTitle: "Progmasoft",
       homeDescription:
-        "Progmasoft builds programming-language, package-management, and developer-tooling systems.",
+        "Progmasoft makes build systems, testing tools, an agentic IDE and data infrastructure for developers.",
       accountTitle: "Account",
       accountDescription: "Access and manage your Progmasoft account.",
       loginTitle: "Sign in",
@@ -163,7 +163,7 @@ export const messages = {
     },
     footer: {
       summary:
-        "Programming-language infrastructure and developer systems built with durable contracts.",
+        "Developer tools and data infrastructure built with durable contracts.",
       products: "Products",
       openSource: "Open source",
       organization: "Organization",
@@ -391,7 +391,7 @@ export const messages = {
     metadata: {
       homeTitle: "Progmasoft",
       homeDescription:
-        "Progmasoft entwickelt Systeme für Programmiersprachen, Paketverwaltung und Entwicklerwerkzeuge.",
+        "Progmasoft entwickelt Build-Systeme, Testwerkzeuge, eine agentische IDE und Dateninfrastruktur für Entwickler.",
       accountTitle: "Konto",
       accountDescription: "Öffnen und verwalten Sie Ihr Progmasoft-Konto.",
       loginTitle: "Anmelden",
@@ -423,7 +423,7 @@ export const messages = {
     },
     footer: {
       summary:
-        "Programmiersprachen-Infrastruktur und Entwicklersysteme auf der Grundlage beständiger Verträge.",
+        "Entwicklerwerkzeuge und Dateninfrastruktur auf der Grundlage beständiger Verträge.",
       products: "Produkte",
       openSource: "Open Source",
       organization: "Organisation",
@@ -655,7 +655,7 @@ export const messages = {
     metadata: {
       homeTitle: "Progmasoft",
       homeDescription:
-        "Progmasoft разрабатывает системы для языков программирования, управления пакетами и инструментов разработчика.",
+        "Progmasoft создаёт системы сборки, инструменты тестирования, агентную среду разработки и инфраструктуру данных для разработчиков.",
       accountTitle: "Аккаунт",
       accountDescription: "Откройте свой аккаунт Progmasoft и управляйте им.",
       loginTitle: "Вход",
@@ -687,7 +687,7 @@ export const messages = {
     },
     footer: {
       summary:
-        "Инфраструктура языков программирования и системы для разработчиков, построенные на надёжных контрактах.",
+        "Инструменты разработчика и инфраструктура данных, построенные на надёжных контрактах.",
       products: "Продукты",
       openSource: "Открытый исходный код",
       organization: "Организация",
@@ -919,7 +919,7 @@ export const messages = {
     metadata: {
       homeTitle: "Progmasoft",
       homeDescription:
-        "Progmasoft בונה מערכות לשפות תכנות, לניהול חבילות ולכלי פיתוח.",
+        "Progmasoft בונה מערכות בנייה, כלי בדיקות, סביבת פיתוח מבוססת סוכנים ותשתית נתונים למפתחים.",
       accountTitle: "חשבון",
       accountDescription: "גישה לחשבון Progmasoft שלך וניהולו.",
       loginTitle: "כניסה",
@@ -949,7 +949,7 @@ export const messages = {
       language: "שפה",
     },
     footer: {
-      summary: "תשתית לשפות תכנות ומערכות למפתחים, הבנויות על חוזים יציבים.",
+      summary: "כלי פיתוח ותשתית נתונים, הבנויים על חוזים יציבים.",
       products: "מוצרים",
       openSource: "קוד פתוח",
       organization: "הארגון",

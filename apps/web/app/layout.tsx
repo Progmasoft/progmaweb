@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s · Progmasoft",
   },
   description:
-    "Progmasoft builds programming-language, package-management, and developer-tooling systems.",
+    "Progmasoft makes build systems, testing tools, an agentic IDE and data infrastructure for developers.",
   applicationName: "Progmasoft",
   robots: {
     index: true,
