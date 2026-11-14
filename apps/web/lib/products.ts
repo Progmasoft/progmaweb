@@ -1,227 +1,223 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
 
+import { catalogMessages, type CatalogMessages } from "./catalog-messages.ts";
 import type { Locale } from "./localization";
 
+export { catalogMessages, type CatalogMessages } from "./catalog-messages.ts";
+
 /**
- * The products of product.progmasoft.com. Each one has a page there and its
- * own site; the catalog only introduces it and leads on.
+ * The projects of product.progmasoft.com, in the order the catalog lists
+ * them. Each has a page there; the catalog introduces it and leads on.
  */
-export const productSlugs = ["tazel", "catch3"] as const;
+export const productSlugs = [
+  "tazel",
+  "catch3",
+  "agenceland",
+  "archer",
+  "etincelle",
+] as const;
 export type ProductSlug = (typeof productSlugs)[number];
 
 export function isProductSlug(value: string): value is ProductSlug {
   return productSlugs.includes(value as ProductSlug);
 }
 
-interface ProductFacts {
+export const productCategories = [
+  "build",
+  "testing",
+  "ide",
+  "data-format",
+  "data-processing",
+] as const;
+export type ProductCategory = (typeof productCategories)[number];
+
+export const productLanguages = [
+  "C++",
+  "Java",
+  "Kotlin",
+  "TypeScript",
+] as const;
+export type ProductLanguage = (typeof productLanguages)[number];
+
+/** `released` once a version is out; `development` before the first one. */
+export const productStatuses = ["released", "development"] as const;
+export type ProductStatus = (typeof productStatuses)[number];
+
+export interface ProductRelease {
+  version: string;
+  /** The day it was published, as YYYY-MM-DD. */
+  date: string;
+  url: string;
+}
+
+export interface ProductFacts {
   name: string;
-  /** The product's own site. */
-  site: string;
+  /** The project's own site, when it has one. */
+  site?: string;
   /** The public source repository. */
   source: string;
+  issues: string;
+  /** An SPDX license expression. */
+  license: string;
+  language: ProductLanguage;
+  category: ProductCategory;
+  status: ProductStatus;
+  /** The day its repository was created, as YYYY-MM-DD. */
+  started: string;
+  /** The newest release, when there is one. */
+  latestRelease?: ProductRelease;
   accent: "violet" | "blue" | "green" | "orange" | "teal" | "slate";
+}
+
+const progmasoftLicense = "MPL-2.0 WITH AdditionRef-Progmasoft-Exception-2.0";
+
+function github(name: string) {
+  return {
+    source: `https://github.com/Progmasoft/${name}`,
+    issues: `https://github.com/Progmasoft/${name}/issues`,
+  };
 }
 
 export const products: Record<ProductSlug, ProductFacts> = {
   tazel: {
     name: "Tazel",
     site: "https://tazel.net/",
-    source: "https://github.com/Progmasoft/tazel",
+    ...github("tazel"),
+    license: progmasoftLicense,
+    language: "Kotlin",
+    category: "build",
+    status: "development",
+    started: "2026-11-12",
     accent: "orange",
   },
   catch3: {
     name: "Catch3",
     site: "https://catch3.progmasoft.com/",
-    source: "https://github.com/Progmasoft/catch3",
+    ...github("catch3"),
+    license: "BSL-1.0",
+    language: "C++",
+    category: "testing",
+    status: "released",
+    started: "2026-09-24",
+    latestRelease: {
+      version: "0.3.0.2",
+      date: "2026-11-01",
+      url: "https://github.com/Progmasoft/catch3/releases/tag/catch3-0.3.0.2",
+    },
     accent: "green",
   },
-};
-
-interface ProductText {
-  category: string;
-  tagline: string;
-  description: string;
-  features: string[];
-}
-
-interface CatalogMessages {
-  metadataTitle: string;
-  metadataDescription: string;
-  eyebrow: string;
-  title: string;
-  description: string;
-  details: string;
-  site: string;
-  source: string;
-  features: string;
-  back: string;
-  products: Record<ProductSlug, ProductText>;
-}
-
-export const catalogMessages: Record<Locale, CatalogMessages> = {
-  "en-US": {
-    metadataTitle: "Products",
-    metadataDescription:
-      "The products of Progmasoft: the Tazel build system and the Catch3 testing toolkit.",
-    eyebrow: "Progmasoft products",
-    title: "Products",
-    description:
-      "Each product grows out of the Progmasoft technology pool and has its own site. Choose one to read more.",
-    details: "Details",
-    site: "Visit the site",
-    source: "Source code",
-    features: "What it does",
-    back: "All products",
-    products: {
-      tazel: {
-        category: "Build system and package manager",
-        tagline: "Builds C, C++, Objective-C, Objective-C++ and Zig.",
-        description:
-          "Tazel reads a module from MODULE.kts and one BUILD.kts per package, compiles each translation unit on its own and builds again only what changed.",
-        features: [
-          "Kotlin project files, MODULE.kts and BUILD.kts, with labels such as //app/:greeter",
-          "Clang, GCC and zig cc from the machine; cross builds by LLVM target triple",
-          "Incremental per action, by the content of every input",
-          "Commands of your own in tazel_custom.txt",
-        ],
-      },
-      catch3: {
-        category: "Testing toolkit",
-        tagline: "C++ testing beyond assertions.",
-        description:
-          "Catch3 keeps Catch2 compatibility and adds a native property-testing engine, with more kinds of testing on its roadmap.",
-        features: [
-          "Catch2-compatible tests",
-          "Property, stateful and metamorphic tests with shrinking",
-          "Text snapshots and JUnit-style XML results",
-          "Planned: own runner, mocking, coverage and mutation testing",
-        ],
-      },
-    },
+  agenceland: {
+    name: "Agenceland",
+    ...github("agenceland"),
+    license: "MIT",
+    language: "TypeScript",
+    category: "ide",
+    status: "development",
+    started: "2026-11-13",
+    accent: "violet",
   },
-  "de-DE": {
-    metadataTitle: "Produkte",
-    metadataDescription:
-      "Die Produkte von Progmasoft: das Build-System Tazel und das Testwerkzeug Catch3.",
-    eyebrow: "Progmasoft-Produkte",
-    title: "Produkte",
-    description:
-      "Jedes Produkt wächst aus dem Progmasoft-Technologiepool und hat eine eigene Website. Wählen Sie eines, um mehr zu lesen.",
-    details: "Details",
-    site: "Zur Website",
-    source: "Quellcode",
-    features: "Was es kann",
-    back: "Alle Produkte",
-    products: {
-      tazel: {
-        category: "Build-System und Paketmanager",
-        tagline: "Baut C, C++, Objective-C, Objective-C++ und Zig.",
-        description:
-          "Tazel liest ein Modul aus MODULE.kts und einer BUILD.kts je Paket, übersetzt jede Übersetzungseinheit für sich und baut nur neu, was sich geändert hat.",
-        features: [
-          "Projektdateien in Kotlin, MODULE.kts und BUILD.kts, mit Labels wie //app/:greeter",
-          "Clang, GCC und zig cc vom Rechner; Cross-Builds per LLVM-Target-Triple",
-          "Inkrementell je Aktion, nach dem Inhalt jeder Eingabe",
-          "Eigene Befehle in tazel_custom.txt",
-        ],
-      },
-      catch3: {
-        category: "Testwerkzeug",
-        tagline: "C++-Tests jenseits von Assertions.",
-        description:
-          "Catch3 bleibt Catch2-kompatibel und ergänzt eine native Engine für eigenschaftsbasierte Tests; weitere Testarten stehen auf dem Fahrplan.",
-        features: [
-          "Catch2-kompatible Tests",
-          "Eigenschafts-, zustandsbehaftete und metamorphe Tests mit Verkleinerung",
-          "Text-Snapshots und XML-Ergebnisse im JUnit-Stil",
-          "Geplant: eigener Runner, Mocking, Abdeckung und Mutationstests",
-        ],
-      },
-    },
+  archer: {
+    name: "Archer",
+    ...github("archer"),
+    license: progmasoftLicense,
+    language: "Java",
+    category: "data-format",
+    status: "development",
+    started: "2026-11-14",
+    accent: "blue",
   },
-  "ru-RU": {
-    metadataTitle: "Продукты",
-    metadataDescription:
-      "Продукты Progmasoft: система сборки Tazel и набор для тестирования Catch3.",
-    eyebrow: "Продукты Progmasoft",
-    title: "Продукты",
-    description:
-      "Каждый продукт вырастает из технологического пула Progmasoft и имеет собственный сайт. Выберите продукт, чтобы узнать больше.",
-    details: "Подробнее",
-    site: "Перейти на сайт",
-    source: "Исходный код",
-    features: "Что он умеет",
-    back: "Все продукты",
-    products: {
-      tazel: {
-        category: "Система сборки и менеджер пакетов",
-        tagline: "Собирает C, C++, Objective-C, Objective-C++ и Zig.",
-        description:
-          "Tazel читает модуль из MODULE.kts и по одному BUILD.kts на пакет, компилирует каждую единицу трансляции отдельно и пересобирает только то, что изменилось.",
-        features: [
-          "Файлы проекта на Kotlin, MODULE.kts и BUILD.kts, с метками вида //app/:greeter",
-          "Clang, GCC и zig cc с машины; кросс-сборка по LLVM target triple",
-          "Инкрементальная сборка на уровне действий, по содержимому каждого входа",
-          "Собственные команды в tazel_custom.txt",
-        ],
-      },
-      catch3: {
-        category: "Набор для тестирования",
-        tagline: "Тестирование C++ за пределами утверждений.",
-        description:
-          "Catch3 сохраняет совместимость с Catch2 и добавляет собственный движок тестирования на основе свойств; другие виды тестирования — в планах.",
-        features: [
-          "Тесты, совместимые с Catch2",
-          "Тесты свойств, с состоянием и метаморфные, с упрощением",
-          "Текстовые снимки и результаты в XML в стиле JUnit",
-          "В планах: свой запускатель, моки, покрытие и мутационное тестирование",
-        ],
-      },
-    },
-  },
-  "he-IL": {
-    metadataTitle: "מוצרים",
-    metadataDescription:
-      "המוצרים של Progmasoft: מערכת הבנייה Tazel וערכת הבדיקות Catch3.",
-    eyebrow: "המוצרים של Progmasoft",
-    title: "מוצרים",
-    description:
-      "כל מוצר צומח ממאגר הטכנולוגיה של Progmasoft ויש לו אתר משלו. בחרו מוצר כדי לקרוא עוד.",
-    details: "פרטים",
-    site: "לאתר",
-    source: "קוד מקור",
-    features: "מה הוא עושה",
-    back: "כל המוצרים",
-    products: {
-      tazel: {
-        category: "מערכת בנייה ומנהל חבילות",
-        tagline: "בונה C,‏ C++,‏ Objective-C,‏ Objective-C++ ו־Zig.",
-        description:
-          "Tazel קורא מודול מ־MODULE.kts ומקובץ BUILD.kts אחד לכל חבילה, מהדר כל יחידת תרגום בנפרד ובונה מחדש רק את מה שהשתנה.",
-        features: [
-          "קובצי פרויקט ב־Kotlin,‏ MODULE.kts ו־BUILD.kts, עם תוויות כמו //app/:greeter",
-          "Clang,‏ GCC ו־zig cc מהמחשב; בנייה צולבת לפי LLVM target triple",
-          "בנייה מצטברת ברמת הפעולה, לפי התוכן של כל קלט",
-          "פקודות משלך ב־tazel_custom.txt",
-        ],
-      },
-      catch3: {
-        category: "ערכת בדיקות",
-        tagline: "בדיקות C++‎ מעבר לטענות.",
-        description:
-          "Catch3 שומרת על תאימות ל־Catch2 ומוסיפה מנוע בדיקות מבוססות תכונות משלה; סוגי בדיקות נוספים נמצאים בתוכנית.",
-        features: [
-          "בדיקות תואמות Catch2",
-          "בדיקות תכונות, בדיקות עם מצב ובדיקות מטמורפיות, עם צמצום",
-          "תמונות מצב טקסטואליות ותוצאות XML בסגנון JUnit",
-          "בתוכנית: מריץ משלה, אובייקטים מדומים, כיסוי ובדיקות מוטציה",
-        ],
-      },
-    },
+  etincelle: {
+    name: "Etincelle",
+    ...github("etincelle"),
+    license: progmasoftLicense,
+    language: "Java",
+    category: "data-processing",
+    status: "development",
+    started: "2026-11-14",
+    accent: "teal",
   },
 };
 
 export function getCatalogMessages(locale: Locale): CatalogMessages {
   return catalogMessages[locale];
+}
+
+/** What the catalog's search form asks for; an empty field asks for anything. */
+export interface ProductFilter {
+  query: string;
+  category?: ProductCategory;
+  language?: ProductLanguage;
+  status?: ProductStatus;
+}
+
+function one(value: string | string[] | undefined): string {
+  return (Array.isArray(value) ? value[0] : value)?.trim() ?? "";
+}
+
+function member<T extends string>(
+  values: readonly T[],
+  value: string,
+): T | undefined {
+  return values.includes(value as T) ? (value as T) : undefined;
+}
+
+/**
+ * The filter of the catalog's query string: `q`, `category`, `language` and
+ * `status`. A value the catalog does not know is the same as no value.
+ */
+export function parseProductFilter(
+  search: Record<string, string | string[] | undefined>,
+): ProductFilter {
+  return {
+    query: one(search.q).slice(0, 100),
+    category: member(productCategories, one(search.category)),
+    language: member(productLanguages, one(search.language)),
+    status: member(productStatuses, one(search.status)),
+  };
+}
+
+/**
+ * The projects that match `filter`, in catalog order. The query matches the
+ * name, the category, the tagline and the description in `locale`, without
+ * regard to case.
+ */
+export function filterProducts(
+  locale: Locale,
+  filter: ProductFilter,
+): ProductSlug[] {
+  const messages = getCatalogMessages(locale);
+  const query = filter.query.toLocaleLowerCase(locale);
+  return productSlugs.filter((slug) => {
+    const product = products[slug];
+    if (filter.category && product.category !== filter.category) {
+      return false;
+    }
+    if (filter.language && product.language !== filter.language) {
+      return false;
+    }
+    if (filter.status && product.status !== filter.status) {
+      return false;
+    }
+    if (query === "") {
+      return true;
+    }
+    const text = messages.products[slug];
+    return [
+      product.name,
+      messages.categories[product.category],
+      text.tagline,
+      text.description,
+    ].some((field) => field.toLocaleLowerCase(locale).includes(query));
+  });
+}
+
+/** The releases of every project, newest first. */
+export function releases(): { slug: ProductSlug; release: ProductRelease }[] {
+  return productSlugs
+    .flatMap((slug) => {
+      const release = products[slug].latestRelease;
+      return release ? [{ slug, release }] : [];
+    })
+    .sort((a, b) => b.release.date.localeCompare(a.release.date));
 }
