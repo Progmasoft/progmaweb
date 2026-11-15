@@ -101,9 +101,9 @@ export const products: Record<ProductSlug, ProductFacts> = {
     status: "released",
     started: "2026-09-24",
     latestRelease: {
-      version: "0.3.0.2",
-      date: "2026-11-01",
-      url: "https://github.com/Progmasoft/catch3/releases/tag/catch3-0.3.0.2",
+      version: "0.4.0",
+      date: "2026-11-15",
+      url: "https://github.com/Progmasoft/catch3/releases/tag/catch3-0.4.0",
     },
     accent: "green",
   },
