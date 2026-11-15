@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 # Progmaweb
 
@@ -113,6 +113,6 @@ description. [Development](docs/DEVELOPMENT.md) explains each check.
 ## License
 
 Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Tala website, with the
-additional Progmasoft Patent Grant, Version 1.1. See `LICENSE.txt`, `PATENTS`,
+additional Progmasoft Patent Grant, Version 1.1. See `LICENSE.txt`, `PATENTS.md`,
 `LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.1.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
 respective licenses.

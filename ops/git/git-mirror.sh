@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Mirrors the repositories of /etc/git-mirror/repositories from https://github.com/Progmasoft into
 # /srv/git/mirrors/<name>.git: branches and tags only, never the pull-request refs of GitHub, with
