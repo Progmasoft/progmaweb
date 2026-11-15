@@ -707,6 +707,20 @@ div.footer {
     font-size: 24px;
   }
 
+  div#cgit {
+    width: calc(100% - 24px);
+  }
+
+  /* A list or a file wider than a phone scrolls inside its own box. */
+  table.list,
+  table.blob,
+  table.diff,
+  div.content pre {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
