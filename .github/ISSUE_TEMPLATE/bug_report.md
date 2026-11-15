@@ -5,7 +5,7 @@ title: "[Bug] "
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 This repository owns `progmasoft.com`, `account.progmasoft.com`, and `viget.progmasoft.com`. Never post passwords, verification codes, OAuth secrets, session cookies, email headers containing private data, or access tokens. Send security vulnerabilities privately to support@progmasoft.com.
 
