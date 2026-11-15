@@ -295,6 +295,24 @@ ssh root@91.151.88.130 'chown -R root:root /srv/maven && restorecon -R /srv/mave
 
 Published versions are never changed. The certificate of `progmasoft.com` must name `maven.progmasoft.com`.
 
+## JSON Schemas
+
+`schemastore.progmasoft.com/json/` serves the JSON Schemas of Progmasoft's file formats, such as
+`progmasoft-cpp-index.json` for the `index.json` of each folder of guidelines in Progmasoft/progmasoft-cpp. The schemas
+are in `ops/schemastore/json`, under CC0-1.0, and are served from `/srv/schemastore/json` by
+`ops/schemastore/nginx/schemastore.conf` (installed as `/etc/nginx/conf.d/schemastore.conf`), to any origin, with GET
+only:
+
+```sh
+install -d -m 0755 /srv/schemastore /srv/schemastore/json
+semanage fcontext -a -t httpd_sys_content_t '/srv/schemastore(/.*)?'
+scp ops/schemastore/json/*.json root@91.151.88.130:/srv/schemastore/json/
+ssh root@91.151.88.130 'chown -R root:root /srv/schemastore && chmod 0644 /srv/schemastore/json/*.json && restorecon -R /srv/schemastore'
+```
+
+A schema's `$id` is its address. A change that would reject files the schema accepted before gets a new file name
+instead. The certificate of `progmasoft.com` must name `schemastore.progmasoft.com`.
+
 ## Git mirrors
 
 `git.progmasoft.com` shows read-only mirrors of the public repositories under development, such as
