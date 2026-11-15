@@ -299,7 +299,7 @@ Published versions are never changed. The certificate of `progmasoft.com` must n
 
 `schemastore.progmasoft.com/json/` serves the JSON Schemas of Progmasoft's file formats, such as
 `progmasoft-cpp-index.json` for the `index.json` of each folder of guidelines in Progmasoft/progmasoft-cpp. The schemas
-are in `ops/schemastore/json`, under CC0-1.0, and are served from `/srv/schemastore/json` by
+are in `ops/schemastore/json`, under MIT-0, and are served from `/srv/schemastore/json` by
 `ops/schemastore/nginx/schemastore.conf` (installed as `/etc/nginx/conf.d/schemastore.conf`), to any origin, with GET
 only:
 
