@@ -299,7 +299,6 @@ export const messages = {
       products: "Connected Progmasoft products",
       publisherPrefix: "Publisher name",
       sameAccount: "your Account name",
-      profileDescription: "Developer ecosystem profile",
       planned: "Planned",
     },
     viget: {
@@ -563,7 +562,6 @@ export const messages = {
       products: "Verbundene Progmasoft-Produkte",
       publisherPrefix: "Publishername",
       sameAccount: "Ihr Kontoname",
-      profileDescription: "Profil im Entwicklerökosystem",
       planned: "Geplant",
     },
     viget: {
@@ -827,7 +825,6 @@ export const messages = {
       products: "Подключённые продукты Progmasoft",
       publisherPrefix: "Имя издателя",
       sameAccount: "ваше имя аккаунта",
-      profileDescription: "Профиль в экосистеме разработчика",
       planned: "Запланировано",
     },
     viget: {
@@ -1074,7 +1071,6 @@ export const messages = {
       products: "מוצרי Progmasoft מקושרים",
       publisherPrefix: "שם המפרסם",
       sameAccount: "שם החשבון שלך",
-      profileDescription: "פרופיל באקוסיסטם המפתחים",
       planned: "מתוכנן",
     },
     viget: {

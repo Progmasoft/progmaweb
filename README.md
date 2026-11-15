@@ -17,7 +17,7 @@ the ASP.NET Core API.
 - `viget.progmasoft.com` shows the state of the registry first, then two groups: LANGUAGES and BUILD SYSTEM DSL PLUGINS.
   An open catalog links to its page; a catalog that is not offered yet is a gray, disabled button.
 - `viget.progmasoft.com/langs/c`, `/langs/cpp` and `/langs/objc` serve the catalogs of C, C++ and Objective-C packages
-  (`.vipkg`; Objective-C++ belongs to `/langs/objc`); `/langs` and the old `/langs/tala` addresses lead to the language list on the home page.
+  (`.vipkg`; Objective-C++ belongs to `/langs/objc`); `/langs` leads to the language list on the home page.
 - `viget.progmasoft.com/dslplugins/tazel` serves the catalog of Kotlin DSL plugins for Tazel; `/dslplugins` leads there.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
@@ -59,8 +59,7 @@ menu is remembered across the three hosts. Hebrew text runs right to left while 
 - pnpm 11 or newer
 - .NET SDK 10
 
-The initial Progmaweb release, Git tag, and GitHub Release use version `1.0.0`. Tala compiler versions belong to
-the language repositories and do not determine this website's version.
+The initial Progmaweb release, Git tag, and GitHub Release use version `1.0.0`.
 
 ## Development
 
@@ -112,7 +111,7 @@ description. [Development](docs/DEVELOPMENT.md) explains each check.
 
 ## License
 
-Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, matching the Tala website, with the
+Progmaweb project-owned source code is licensed under `AGPL-3.0-or-later`, with the
 additional Progmasoft Patent Grant, Version 1.1. See `LICENSE.txt`, `PATENTS.md`,
 `LICENSES/AdditionRef-Progmasoft-Patent-Grant-1.1.txt`, and `NOTICE.txt`. Third-party dependencies remain under their
 respective licenses.

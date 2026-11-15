@@ -31,7 +31,7 @@ Install `postfix`, `opendkim`, `opendkim-tools`, `dovecot`, and `certbot`. Keep 
 `opendkim:opendkim` with mode `0600`, and make every parent key directory traversable by the `opendkim` group. On SELinux
 hosts, restore packaged contexts before starting the services.
 
-The support password is supplied only through `XSHARP_SUPPORT_EMAIL_PASSWORD` while provisioning. It is converted to the
+The support password is supplied only through `PROGMASOFT_SUPPORT_EMAIL_PASSWORD` while provisioning. It is converted to the
 host's password hash and must never be copied into a repository, environment file, or Postfix/Dovecot configuration.
 Remove the legacy `support: postmaster` alias before enabling local delivery, because aliases take precedence over the
 local account.

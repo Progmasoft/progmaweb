@@ -70,8 +70,3 @@ repo.url=progmaweb
 repo.path=/srv/git/mirrors/progmaweb.git
 repo.desc=The site and account service of Progmasoft: a Next.js frontend and an ASP.NET Core API.
 repo.homepage=https://github.com/Progmasoft/progmaweb
-
-repo.url=website
-repo.path=/srv/git/mirrors/website.git
-repo.desc=The site of tala.run: a Vue frontend and an ASP.NET Core API.
-repo.homepage=https://github.com/Progmasoft/website
