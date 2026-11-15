@@ -187,15 +187,6 @@ export function DashboardClient({
                 {dashboard.planned}
               </span>
             </div>
-            <div className="service-row">
-              <div>
-                <strong>Tala</strong>
-                <span>{dashboard.profileDescription}</span>
-              </div>
-              <span className="status-badge status-planned">
-                {dashboard.planned}
-              </span>
-            </div>
           </section>
         </div>
       </main>
