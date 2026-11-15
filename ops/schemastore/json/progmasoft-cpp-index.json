@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemastore.progmasoft.com/json/progmasoft-cpp-index.json",
+  "title": "Progmasoft C/C++ Styles guidelines index",
+  "description": "The index.json of a guidelines folder in Progmasoft C/C++ Styles (https://github.com/Progmasoft/progmasoft-cpp): the language versions it covers and every document with its chapter and the versions it applies to.",
+  "type": "object",
+  "required": ["title", "license", "standards", "documents"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "description": "This schema: https://schemastore.progmasoft.com/json/progmasoft-cpp-index.json.",
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "description": "The name of the guidelines, such as \"Progmasoft Core C++ Coding Guidelines\".",
+      "type": "string",
+      "minLength": 1
+    },
+    "license": {
+      "description": "The SPDX license identifier of the text of the guidelines.",
+      "type": "string",
+      "minLength": 1
+    },
+    "standards": {
+      "description": "The language versions the guidelines cover. Exactly one is the default.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/standard" },
+      "contains": {
+        "type": "object",
+        "properties": { "default": { "const": true } },
+        "required": ["default"]
+      },
+      "minContains": 1,
+      "maxContains": 1
+    },
+    "documents": {
+      "description": "Every document of the guidelines.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/document" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "A lowercase identifier: letters, digits and hyphens.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "path": {
+      "description": "A Markdown file, relative to the folder of index.json, with forward slashes.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+(/[A-Za-z0-9_.-]+)*\\.md$"
+    },
+    "standard": {
+      "type": "object",
+      "required": ["id", "name", "default", "for", "documents"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "The identifier documents use in their standards list, such as \"cpp20\"."
+        },
+        "name": {
+          "description": "The name of the version, such as \"C++20\".",
+          "type": "string",
+          "minLength": 1
+        },
+        "default": {
+          "description": "Whether a project uses this version unless it says otherwise.",
+          "type": "boolean"
+        },
+        "for": {
+          "description": "The projects this version is meant for.",
+          "type": "string",
+          "minLength": 1
+        },
+        "documents": {
+          "description": "The documents that hold the rules of this version alone.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/path" }
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "required": ["id", "title", "path", "standards"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "The identifier of the document, unique in the index."
+        },
+        "chapter": {
+          "description": "The chapter number of a document shared by every version; a version's own page has none.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "description": "The title of the document.",
+          "type": "string",
+          "minLength": 1
+        },
+        "path": { "$ref": "#/$defs/path" },
+        "standards": {
+          "description": "The identifiers of the versions the document applies to.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    }
+  }
+}
