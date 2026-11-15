@@ -5,7 +5,7 @@ title: "[Proposal] "
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
-<!-- SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1 -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 This repository owns the Next.js public surfaces and ASP.NET Core account API.
 
