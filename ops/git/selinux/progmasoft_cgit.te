@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
-# SPDX-License-Identifier: AGPL-3.0-or-later WITH AdditionRef-Progmasoft-Patent-Grant-1.1
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 # fcgiwrap@cgit runs in httpd_t under NoNewPrivileges, which systemd sets for its sandboxing.
 # This lets cgit and git-http-backend move from there into git_script_t, the narrower domain the
