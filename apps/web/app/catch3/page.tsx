@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Catch3 · ${catch3.tagline}`,
     description: catch3.description,
-    alternates: { canonical: "https://catch3.progmasoft.com/" },
+    alternates: { canonical: "https://catch3.uk/" },
   };
 }
 
@@ -33,7 +33,7 @@ TEST_CASE( "reversing twice gives the original", "[property]" ) {
         } );
 }`;
 
-/** catch3.progmasoft.com: the site of Catch3. */
+/** catch3.uk: the site of Catch3. */
 export default async function Catch3Page() {
   const locale = await getLocale();
   const { catch3, common } = getSitesMessages(locale);

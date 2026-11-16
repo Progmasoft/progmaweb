@@ -93,7 +93,7 @@ export const products: Record<ProductSlug, ProductFacts> = {
   },
   catch3: {
     name: "Catch3",
-    site: "https://catch3.progmasoft.com/",
+    site: "https://catch3.uk/",
     ...github("catch3"),
     license: "BSL-1.0",
     language: "C++",
