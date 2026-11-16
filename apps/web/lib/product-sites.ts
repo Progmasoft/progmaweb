@@ -4,7 +4,7 @@
 import type { Locale } from "./localization";
 
 /**
- * The text of the product site Progmaweb serves itself, catch3.progmasoft.com.
+ * The text of the product site Progmaweb serves itself, catch3.uk.
  * The facts follow the READMEs and documentation of the product repositories.
  */
 interface SitesMessages {
@@ -37,7 +37,7 @@ export const sitesMessages: Record<Locale, SitesMessages> = {
       eyebrow: "Progmasoft Catch3",
       tagline: "C++ testing beyond assertions.",
       description:
-        "Catch3 keeps the expressive test-writing model of Catch2 and adds a C++20 library of its own: native property testing, snapshots and structured results.",
+        "Catch3 keeps the expressive test-writing model of Catch2 and adds a C++17 library of its own: native property testing, snapshots and structured results.",
       disclaimer:
         "Catch3 is independently maintained. It is not an official Catch2 release and is not endorsed by Catch2's maintainers.",
       exampleTitle: "A first property",
@@ -89,7 +89,7 @@ export const sitesMessages: Record<Locale, SitesMessages> = {
       eyebrow: "Progmasoft Catch3",
       tagline: "C++-Tests jenseits von Assertions.",
       description:
-        "Catch3 behält das ausdrucksstarke Testmodell von Catch2 und ergänzt eine eigene C++20-Bibliothek: native Eigenschaftstests, Snapshots und strukturierte Ergebnisse.",
+        "Catch3 behält das ausdrucksstarke Testmodell von Catch2 und ergänzt eine eigene C++17-Bibliothek: native Eigenschaftstests, Snapshots und strukturierte Ergebnisse.",
       disclaimer:
         "Catch3 wird unabhängig gepflegt. Es ist keine offizielle Catch2-Version und wird von den Catch2-Maintainern nicht unterstützt.",
       exampleTitle: "Eine erste Eigenschaft",
@@ -141,7 +141,7 @@ export const sitesMessages: Record<Locale, SitesMessages> = {
       eyebrow: "Progmasoft Catch3",
       tagline: "Тестирование C++ за пределами утверждений.",
       description:
-        "Catch3 сохраняет выразительную модель тестов Catch2 и добавляет собственную библиотеку на C++20: тестирование на основе свойств, снимки и структурированные результаты.",
+        "Catch3 сохраняет выразительную модель тестов Catch2 и добавляет собственную библиотеку на C++17: тестирование на основе свойств, снимки и структурированные результаты.",
       disclaimer:
         "Catch3 развивается независимо. Это не официальный выпуск Catch2, и сопровождающие Catch2 его не поддерживают.",
       exampleTitle: "Первое свойство",
@@ -193,7 +193,7 @@ export const sitesMessages: Record<Locale, SitesMessages> = {
       eyebrow: "Progmasoft Catch3",
       tagline: "בדיקות C++‎ מעבר לטענות.",
       description:
-        "Catch3 שומרת על מודל כתיבת הבדיקות של Catch2 ומוסיפה ספריית C++20 משלה: בדיקות מבוססות תכונות, תמונות מצב ותוצאות מובנות.",
+        "Catch3 שומרת על מודל כתיבת הבדיקות של Catch2 ומוסיפה ספריית C++17 משלה: בדיקות מבוססות תכונות, תמונות מצב ותוצאות מובנות.",
       disclaimer:
         "Catch3 מתוחזקת באופן עצמאי. היא אינה גרסה רשמית של Catch2 ואינה נתמכת על ידי המתחזקים של Catch2.",
       exampleTitle: "תכונה ראשונה",

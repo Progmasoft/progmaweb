@@ -56,7 +56,7 @@ test("the catalog lists the projects, each with its repository", () => {
       `${slug}: released exactly when it has a release`,
     );
   }
-  assert.equal(products.catch3.site, "https://catch3.progmasoft.com/");
+  assert.equal(products.catch3.site, "https://catch3.uk/");
   assert.equal(isProductSlug("viget"), false);
   assert.equal(isProductSlug("xide"), false);
 });

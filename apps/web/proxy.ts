@@ -57,7 +57,14 @@ const ownSites: OwnSite[] = [
     route: productRoute,
     api: false,
   },
-  { hosts: hostsOf("catch3"), root: "/catch3", route: catch3Route, api: false },
+  // Catch3's site has a domain of its own; catch3.progmasoft.com sends a 308
+  // there from nginx.
+  {
+    hosts: new Set(["catch3.uk", "catch3.localhost"]),
+    root: "/catch3",
+    route: catch3Route,
+    api: false,
+  },
 ];
 
 export function proxy(request: NextRequest) {
