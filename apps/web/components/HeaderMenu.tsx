@@ -35,7 +35,9 @@ export function HeaderMenu({
       if (event.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
@@ -45,7 +47,9 @@ export function HeaderMenu({
         aria-expanded={open}
         aria-label={open ? closeLabel : menuLabel}
         className="menu-toggle"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          setOpen((value) => !value);
+        }}
         type="button"
       >
         <span aria-hidden="true" className="menu-toggle-bars" />
