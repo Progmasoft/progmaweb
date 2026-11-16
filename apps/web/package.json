@@ -15,7 +15,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:coverage": "c8 --reporter=lcov --reporter=text npm test",
     "lint": "eslint . --max-warnings=0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:layout": "playwright test"
   },
   "dependencies": {
     "next": "16.4.5",
@@ -23,6 +24,7 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.65.0",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

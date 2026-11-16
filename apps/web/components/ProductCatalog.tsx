@@ -124,12 +124,16 @@ export function ProductTable({
                   <a href={`/${slug}`}>{product.name}</a>
                   <span>{catalog.products[slug].tagline}</span>
                 </th>
-                <td>{catalog.categories[product.category]}</td>
-                <td dir="ltr">{product.language}</td>
-                <td>
+                <td data-label={catalog.table.category}>
+                  {catalog.categories[product.category]}
+                </td>
+                <td data-label={catalog.table.language}>
+                  <bdi dir="ltr">{product.language}</bdi>
+                </td>
+                <td data-label={catalog.table.status}>
                   <StatusBadge status={product.status} catalog={catalog} />
                 </td>
-                <td>
+                <td data-label={catalog.table.release}>
                   {release ? (
                     <a href={release.url}>
                       <bdi>{release.version}</bdi> ·{" "}

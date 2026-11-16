@@ -280,17 +280,6 @@ a.viget-catalog-card:hover {
 }
 
 @media (max-width: 980px) {
-  .viget-header .header-inner {
-    align-items: flex-start;
-    flex-direction: column;
-    padding-block: 16px;
-  }
-
-  .viget-header .primary-nav {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
   .viget-hero-grid,
   .viget-plugin-grid,
   .viget-contract-grid {
@@ -305,14 +294,6 @@ a.viget-catalog-card:hover {
 }
 
 @media (max-width: 680px) {
-  .viget-header .primary-nav {
-    gap: 14px;
-  }
-
-  .viget-header .primary-nav > a:not(.button) {
-    display: inline-flex;
-  }
-
   .viget-hero-grid,
   .viget-plugin-grid {
     padding-block: 56px;

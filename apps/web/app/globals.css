@@ -256,6 +256,164 @@ a {
   font-weight: 600;
 }
 
+/* The links keep their look; the padding makes each one a target of 40px. */
+.primary-nav > a:not(.button) {
+  padding-block: 10px;
+}
+
+/* The header menu: on a wide screen only the navigation shows, in the header
+   line; below 980px the header holds the brand and a menu button, and the
+   navigation opens as a panel under it. */
+.header-menu {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .header-inner {
+    gap: 12px;
+  }
+
+  .header-inner .brand {
+    min-width: 0;
+  }
+
+  .menu-toggle {
+    min-height: 44px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 0 14px;
+    background: var(--surface);
+    color: var(--ink-800);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .menu-toggle:hover {
+    border-color: var(--blue-600);
+    background: var(--surface-blue);
+  }
+
+  .menu-toggle-bars,
+  .menu-toggle-bars::before,
+  .menu-toggle-bars::after {
+    width: 16px;
+    height: 2px;
+    display: block;
+    border-radius: 1px;
+    background: currentcolor;
+  }
+
+  .menu-toggle-bars {
+    position: relative;
+  }
+
+  .menu-toggle-bars::before,
+  .menu-toggle-bars::after {
+    position: absolute;
+    left: 0;
+    content: "";
+  }
+
+  .menu-toggle-bars::before {
+    top: -5px;
+  }
+
+  .menu-toggle-bars::after {
+    top: 5px;
+  }
+
+  .header-menu[data-open="true"] .menu-toggle-bars {
+    background: transparent;
+  }
+
+  .header-menu[data-open="true"] .menu-toggle-bars::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .header-menu[data-open="true"] .menu-toggle-bars::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  .header-menu .primary-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 6px max(14px, calc((100% - var(--shell)) / 2)) 18px;
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+  }
+
+  .header-menu[data-open="true"] .primary-nav {
+    display: flex;
+  }
+
+  .header-menu .primary-nav > a:not(.button) {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    font-size: 16px;
+  }
+
+  .header-menu .primary-nav > .button {
+    min-height: 44px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .header-menu .preference-controls {
+    padding: 16px 0 0;
+  }
+
+  .header-menu .preference-controls button,
+  .header-menu .preference-controls select {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .header-menu .preference-controls select {
+    flex: 1 1 auto;
+  }
+}
+
+/* A brand with a product name leaves no room for the word on a narrow phone:
+   the button keeps its icon and its accessible name. */
+@media (max-width: 420px) {
+  .menu-toggle {
+    width: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .menu-toggle-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 .primary-nav > a:hover {
   color: var(--blue-600);
   text-decoration: none;
@@ -990,9 +1148,9 @@ a {
 
 .consent-field input {
   flex: none;
-  width: 18px;
-  height: 18px;
-  margin: 2px 0 0;
+  width: 24px;
+  height: 24px;
+  margin: -1px 0 0;
   accent-color: var(--violet-600);
 }
 
@@ -1300,14 +1458,6 @@ a {
     min-height: 60px;
   }
 
-  .primary-nav > a:not(.button) {
-    display: none;
-  }
-
-  .preference-controls button span:last-child {
-    display: none;
-  }
-
   .hero-grid {
     min-height: auto;
     grid-template-columns: minmax(0, 1fr);
@@ -1431,23 +1581,6 @@ a {
 [data-text-direction="rtl"] :is(code, pre, kbd, samp, input) {
   direction: ltr;
   unicode-bidi: isolate;
-}
-
-/* A phone keeps the brand, the account button and both preferences on one
-   line: the gaps shrink, and the line may wrap rather than widen the page. */
-@media (max-width: 480px) {
-  .header-inner {
-    flex-wrap: wrap;
-    gap: 8px 12px;
-  }
-
-  .primary-nav {
-    gap: 10px;
-  }
-
-  .preference-controls {
-    padding-left: 0;
-  }
 }
 
 /* The theme changes in one frame; nothing animates its colours meanwhile. */
