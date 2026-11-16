@@ -22,3 +22,7 @@ obj/
 # DocFX output
 docs/api/_site/
 docs/api/reference/
+
+# Playwright layout tests
+apps/web/test-results/
+apps/web/playwright-report/

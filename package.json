@@ -18,6 +18,7 @@
     "check": "pnpm --filter @progmasoft/web check",
     "test": "pnpm --filter @progmasoft/web test",
     "test:coverage": "pnpm --filter @progmasoft/web test:coverage",
+    "test:layout": "pnpm --filter @progmasoft/web test:layout",
     "lint": "pnpm --filter @progmasoft/web lint",
     "format": "pnpm --filter @progmasoft/web format"
   }

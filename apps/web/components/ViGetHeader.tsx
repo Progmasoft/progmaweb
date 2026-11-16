@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { getMessages, type Locale } from "@/lib/localization";
 import { Brand } from "./Brand";
+import { HeaderMenu } from "./HeaderMenu";
 import { PreferenceControls } from "./PreferenceControls";
 
 export function ViGetHeader({ locale }: { locale: Locale }) {
@@ -15,7 +16,11 @@ export function ViGetHeader({ locale }: { locale: Locale }) {
           <Brand />
           <span>ViGet</span>
         </div>
-        <nav className="primary-nav" aria-label={viget.navigationLabel}>
+        <HeaderMenu
+          closeLabel={navigation.closeMenu}
+          label={viget.navigationLabel}
+          menuLabel={navigation.menu}
+        >
           <Link href="https://viget.progmasoft.com/#languages-title">
             {viget.packages}
           </Link>
@@ -30,7 +35,7 @@ export function ViGetHeader({ locale }: { locale: Locale }) {
             {viget.register}
           </Link>
           <PreferenceControls locale={locale} labels={navigation} />
-        </nav>
+        </HeaderMenu>
       </div>
     </header>
   );

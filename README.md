@@ -93,6 +93,8 @@ pnpm check
 pnpm test
 pnpm test:coverage
 pnpm build
+pnpm --filter @progmasoft/web exec playwright install chromium
+pnpm test:layout
 dotnet build apps/api/Progmaweb.Api.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release
 dotnet test --project apps/api-tests/Progmaweb.Api.Tests.csproj --configuration Release --coverlet --coverlet-output-format cobertura
@@ -102,6 +104,10 @@ dotnet run docs/api/CheckDocumentation.cs -- docs/api
 ```
 
 Frontend tests exercise the published locale contract and account/ViGet metadata without starting a production service.
+`pnpm test:layout` runs the built site with `next start` and opens one page of each kind on every host in Chromium at
+360, 390, 768 and 1280 pixels; every host name resolves to the local server, so no request leaves the machine. It
+fails when anything reaches past the edge of the screen, a header takes more than one line or covers its own brand,
+a control is smaller than 24 by 24 pixels, or the header menu of a phone does not open and close.
 The frontend LCOV and API Cobertura reports are retained as one-day artifacts, then uploaded to Codecov by separate
 jobs. Only those upload jobs receive `id-token: write`; dependency installation, builds, and tests do not receive OIDC
 permissions, and fork-originated pull requests skip the upload jobs. CodeQL and Codacy provide static analysis;

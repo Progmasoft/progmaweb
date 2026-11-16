@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getHomeMessages } from "@/lib/home-messages";
 import { getMessages, type Locale } from "@/lib/localization";
 import { Brand } from "./Brand";
+import { HeaderMenu } from "./HeaderMenu";
 import { PreferenceControls } from "./PreferenceControls";
 
 interface SiteHeaderProps {
@@ -24,7 +25,11 @@ export function SiteHeader({
     <header className="site-header">
       <div className="shell header-inner">
         <Brand account={account} accountLabel={navigation.account} />
-        <nav className="primary-nav" aria-label={navigation.primary}>
+        <HeaderMenu
+          closeLabel={navigation.closeMenu}
+          label={navigation.primary}
+          menuLabel={navigation.menu}
+        >
           {account ? (
             <>
               <Link href="https://progmasoft.com/">
@@ -61,7 +66,7 @@ export function SiteHeader({
             </>
           )}
           <PreferenceControls locale={locale} labels={navigation} />
-        </nav>
+        </HeaderMenu>
       </div>
     </header>
   );

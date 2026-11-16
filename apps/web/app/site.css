@@ -502,6 +502,10 @@
     grid-column: auto;
   }
 
+  .pm-pool-visual {
+    display: none;
+  }
+
   .pm-band {
     padding: 36px 26px;
   }
@@ -512,12 +516,11 @@
 }
 
 @media (max-width: 560px) {
-  .pm-pool-visual {
-    grid-template-columns: 1fr;
-  }
-
-  .pm-pool-tile:nth-child(even) {
-    transform: none;
+  .pm-code {
+    padding: 18px;
+    font-size: 13px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 }
 

@@ -264,6 +264,59 @@
     grid-template-columns: 1fr;
   }
 
+  /* On a phone each project is a card: its name and tagline, then one line
+     per fact, labelled from the column it came from. */
+  .pm-table,
+  .pm-table tbody,
+  .pm-table tr,
+  .pm-table th,
+  .pm-table td {
+    display: block;
+  }
+
+  .pm-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pm-table tr {
+    border-block-end: 1px solid var(--line);
+    padding-block: 14px;
+  }
+
+  .pm-table tbody tr:last-child {
+    border-block-end: 0;
+  }
+
+  .pm-table tbody th {
+    min-inline-size: 0;
+    padding-block: 0 8px;
+  }
+
+  .pm-table th,
+  .pm-table td {
+    border-block-end: 0;
+  }
+
+  .pm-table td {
+    display: grid;
+    grid-template-columns: minmax(96px, 35%) minmax(0, 1fr);
+    justify-items: start;
+    gap: 12px;
+    padding-block: 4px;
+  }
+
+  .pm-table td::before {
+    color: var(--ink-650);
+    content: attr(data-label);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
   .pm-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

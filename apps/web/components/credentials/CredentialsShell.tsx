@@ -6,6 +6,7 @@ import { getCredentialsMessages } from "@/lib/credentials-messages";
 import { siteOrigin, type OAuthSite } from "@/lib/hosts.server";
 import { getMessages, type Locale } from "@/lib/localization";
 import { Brand } from "../Brand";
+import { HeaderMenu } from "../HeaderMenu";
 import { PreferenceControls } from "../PreferenceControls";
 
 interface CredentialsShellProps {
@@ -58,7 +59,11 @@ export async function CredentialsShell({
             accountLabel={site === "console" ? common.console : "OAuth"}
             home="/"
           />
-          <nav className="primary-nav" aria-label={navigation.primary}>
+          <HeaderMenu
+            closeLabel={navigation.closeMenu}
+            label={navigation.primary}
+            menuLabel={navigation.menu}
+          >
             <a href="https://progmasoft.com/">{common.organization}</a>
             <a href={`${authorizeOrigin}/account/applications`}>
               {common.allowedApplications}
@@ -70,7 +75,7 @@ export async function CredentialsShell({
               {common.developers}
             </a>
             <PreferenceControls locale={locale} labels={navigation} />
-          </nav>
+          </HeaderMenu>
         </div>
       </header>
       {layout === "split" ? (
