@@ -316,6 +316,23 @@ ssh root@91.151.88.130 'chown -R root:root /srv/schemastore && chmod 0644 /srv/s
 A schema's `$id` is its address. A change that would reject files the schema accepted before gets a new file name
 instead. The certificate of `progmasoft.com` must name `schemastore.progmasoft.com`.
 
+## Storage
+
+`storage.progmasoft.com` serves files Progmasoft publishes, each beside its `.sha256sums`: the license texts in
+`/pm-spl/<version>/` as `LICENSE-<version>.txt`, `.md` and `.rst`, the same files as in Progmasoft/licenses. It has no
+listing and no pages; a published version never changes, so its files are cached as immutable. Files live in
+`/srv/progmasoft-storage`, served by `ops/storage/nginx/storage.conf` (installed as
+`/etc/nginx/conf.d/storage.conf`):
+
+```sh
+semanage fcontext -a -t httpd_sys_content_t '/srv/progmasoft-storage(/.*)?'
+install -d -m 0755 /srv/progmasoft-storage/pm-spl/1.0
+scp LICENSE-1.0.* root@91.151.88.130:/srv/progmasoft-storage/pm-spl/1.0/
+ssh root@91.151.88.130 'chown -R root:root /srv/progmasoft-storage && restorecon -R /srv/progmasoft-storage'
+```
+
+The certificate of `progmasoft.com` must name `storage.progmasoft.com`.
+
 ## Git mirrors
 
 `git.progmasoft.com` shows read-only mirrors of the public repositories under development, such as
