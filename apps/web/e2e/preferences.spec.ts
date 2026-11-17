@@ -60,7 +60,9 @@ test("a theme of an earlier version in localStorage moves into the shared cookie
   page,
 }) => {
   await open(page, "account.progmasoft.com/");
-  await page.evaluate(() => localStorage.setItem("progmasoft_theme", "dark"));
+  await page.evaluate(() => {
+    localStorage.setItem("progmasoft_theme", "dark");
+  });
   await open(page, "account.progmasoft.com/");
   expect(await theme(page)).toBe("dark");
   await open(page, "viget.progmasoft.com/");
