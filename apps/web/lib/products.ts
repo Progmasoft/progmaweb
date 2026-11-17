@@ -70,8 +70,6 @@ export interface ProductFacts {
   accent: "violet" | "blue" | "green" | "orange" | "teal" | "slate";
 }
 
-const progmasoftLicense = "MPL-2.0 WITH AdditionRef-Progmasoft-Exception-2.0";
-
 function github(name: string) {
   return {
     source: `https://github.com/Progmasoft/${name}`,
@@ -84,7 +82,7 @@ export const products: Record<ProductSlug, ProductFacts> = {
     name: "Tazel",
     site: "https://tazel.net/",
     ...github("tazel"),
-    license: progmasoftLicense,
+    license: "MIT",
     language: "Kotlin",
     category: "build",
     status: "development",
@@ -95,7 +93,9 @@ export const products: Record<ProductSlug, ProductFacts> = {
     name: "Catch3",
     site: "https://catch3.uk/",
     ...github("catch3"),
-    license: "BSL-1.0",
+    // Files from Catch2 keep the Boost licence; Progmasoft's own files are
+    // LGPL-3.0-or-later from 0.5.0 on.
+    license: "BSL-1.0 AND LGPL-3.0-or-later",
     language: "C++",
     category: "testing",
     status: "released",
@@ -120,7 +120,7 @@ export const products: Record<ProductSlug, ProductFacts> = {
   archer: {
     name: "Archer",
     ...github("archer"),
-    license: progmasoftLicense,
+    license: "MIT",
     language: "Java",
     category: "data-format",
     status: "development",
@@ -130,7 +130,7 @@ export const products: Record<ProductSlug, ProductFacts> = {
   etincelle: {
     name: "Etincelle",
     ...github("etincelle"),
-    license: progmasoftLicense,
+    license: "MIT",
     language: "Java",
     category: "data-processing",
     status: "development",
