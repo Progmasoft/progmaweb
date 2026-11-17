@@ -565,3 +565,26 @@
   padding-top: 24px;
   border-top: 1px solid var(--line);
 }
+
+/* The page of an address the site has none for: one sentence in the middle of the page. */
+.pm-not-found {
+  display: grid;
+  min-height: 60vh;
+  align-items: center;
+  padding-block: 96px;
+  text-align: center;
+}
+
+.pm-not-found h1 {
+  margin: 0 auto;
+  max-width: 980px;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.pm-not-found p {
+  margin: 18px auto 0;
+  max-width: 640px;
+  color: var(--ink-650);
+}

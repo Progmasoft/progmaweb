@@ -10,7 +10,7 @@ import {
   StatusBadge,
 } from "@/components/ProductCatalog";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow } from "@/lib/localization";
+import { forwardArrow, getMessages } from "@/lib/localization";
 import { getCatalogMessages, isProductSlug, products } from "@/lib/products";
 
 interface ProductPageProps {
@@ -21,10 +21,15 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   if (!isProductSlug(slug)) {
-    return {};
+    // The page answers with the not-found page; its title says so too.
+    return {
+      title: getMessages(locale).notFound.pageTitle,
+      robots: { index: false },
+    };
   }
-  const catalog = getCatalogMessages(await getLocale());
+  const catalog = getCatalogMessages(locale);
   return {
     title: `${products[slug].name} · ${catalog.categories[products[slug].category]}`,
     description: catalog.products[slug].description,

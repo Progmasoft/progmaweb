@@ -163,6 +163,11 @@ export const messages = {
       dark: "Dark",
       language: "Language",
     },
+    notFound: {
+      title: "We are sorry, the page you requested cannot be found.",
+      text: "The address may be misspelled, or the page you are looking for is no longer available.",
+      pageTitle: "Page not found",
+    },
     footer: {
       summary:
         "Developer tools and data infrastructure built with durable contracts.",
@@ -423,6 +428,11 @@ export const messages = {
       light: "Hell",
       dark: "Dunkel",
       language: "Sprache",
+    },
+    notFound: {
+      title: "Es tut uns leid, die angeforderte Seite wurde nicht gefunden.",
+      text: "Die Adresse ist vielleicht falsch geschrieben, oder die gesuchte Seite ist nicht mehr verfügbar.",
+      pageTitle: "Seite nicht gefunden",
     },
     footer: {
       summary:
@@ -689,6 +699,11 @@ export const messages = {
       dark: "Тёмная",
       language: "Язык",
     },
+    notFound: {
+      title: "К сожалению, запрошенная страница не найдена.",
+      text: "Возможно, адрес написан с ошибкой или страница, которую вы ищете, больше недоступна.",
+      pageTitle: "Страница не найдена",
+    },
     footer: {
       summary:
         "Инструменты разработчика и инфраструктура данных, построенные на надёжных контрактах.",
@@ -952,6 +967,11 @@ export const messages = {
       light: "בהיר",
       dark: "כהה",
       language: "שפה",
+    },
+    notFound: {
+      title: "מצטערים, הדף שביקשת לא נמצא.",
+      text: "ייתכן שהכתובת שגויה, או שהדף שחיפשת כבר אינו זמין.",
+      pageTitle: "הדף לא נמצא",
     },
     footer: {
       summary: "כלי פיתוח ותשתית נתונים, הבנויים על חוזים יציבים.",
