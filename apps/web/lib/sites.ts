@@ -22,8 +22,3 @@ export function productRoute(pathname: string): string | null {
     ? `/products${path}`
     : null;
 }
-
-/** The public page of catch3.uk. */
-export function catch3Route(pathname: string): string | null {
-  return trimmed(pathname) === "/" ? "/catch3" : null;
-}

@@ -19,7 +19,6 @@ export const layoutPages = [
   "product.progmasoft.com/tazel",
   "product.progmasoft.com/catch3",
   "console.progmasoft.com/",
-  "catch3.uk/",
 ] as const;
 
 /** Every host name of the pages above. */

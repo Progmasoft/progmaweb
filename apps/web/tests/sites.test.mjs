@@ -5,14 +5,13 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { homeMessages } from "../lib/home-messages.ts";
 import { supportedLocales } from "../lib/localization.ts";
-import { sitesMessages } from "../lib/product-sites.ts";
 import {
   catalogMessages,
   isProductSlug,
   productSlugs,
   products,
 } from "../lib/products.ts";
-import { catch3Route, productRoute } from "../lib/sites.ts";
+import { productRoute } from "../lib/sites.ts";
 
 function shape(value) {
   if (Array.isArray(value)) {
@@ -28,8 +27,8 @@ function shape(value) {
   );
 }
 
-test("every language has the same home, catalog and product-site text", () => {
-  for (const messages of [homeMessages, catalogMessages, sitesMessages]) {
+test("every language has the same home and catalog text", () => {
+  for (const messages of [homeMessages, catalogMessages]) {
     const english = shape(messages["en-US"]);
     for (const locale of supportedLocales) {
       assert.deepEqual(shape(messages[locale]), english, locale);
@@ -79,6 +78,4 @@ test("the product hosts map to their internal routes", () => {
   assert.equal(productRoute("/catch3/"), "/products/catch3");
   assert.equal(productRoute("/tazel/extra"), null);
   assert.equal(productRoute("/../x"), null);
-  assert.equal(catch3Route("/"), "/catch3");
-  assert.equal(catch3Route("/docs"), null);
 });
