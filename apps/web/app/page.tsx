@@ -3,11 +3,13 @@
 
 import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { AreaIcon, areaKinds } from "@/components/site/AreaIcon";
 import { getHomeMessages } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
 import { forwardArrow, getMessages } from "@/lib/localization";
+import { organizationData, websiteData } from "@/lib/structured-data";
 import "./site.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,6 +32,7 @@ export default async function Homepage() {
   const arrow = forwardArrow(locale);
   return (
     <div className="pm-page">
+      <JsonLd data={[organizationData(), websiteData(locale)]} />
       <SiteHeader locale={locale} />
       <main>
         <section className="pm-hero">
