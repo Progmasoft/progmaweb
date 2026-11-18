@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import { JsonLd } from "@/components/JsonLd";
+import { catalogData } from "@/lib/structured-data";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
@@ -62,6 +64,7 @@ export default async function ProductsPage({ searchParams }: CatalogProps) {
       title={catalog.title}
       description={catalog.description}
     >
+      <JsonLd data={catalogData(locale)} />
       <section className="pm-section">
         <div className="pm-shell pm-index">
           <dl className="pm-stats">
