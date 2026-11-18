@@ -334,6 +334,34 @@ ssh root@91.151.88.130 'chown -R root:root /srv/progmasoft-storage && restorecon
 
 The certificate of `progmasoft.com` must name `storage.progmasoft.com`.
 
+## Cargo registry
+
+`rustreg.progmasoft.com` is Progmasoft's Cargo registry: a sparse index under `/index/` and the crates under
+`/crates/<name>/<name>-<version>.crate`, files in `/srv/rustreg` served by `ops/rustreg/nginx/rustreg.conf` (installed as
+`/etc/nginx/conf.d/rustreg.conf`). The index is served with `Cache-Control: no-cache`; a crate never changes, so it is
+cached as immutable. Nothing on the server writes: there is no publish API, so no token can be stolen to publish.
+A crate made by `cargo package` is published over SSH by `ops/rustreg/publish-crate.py`, which writes the index line
+from the manifest Cargo normalized into the crate and refuses a version that is published already:
+
+```sh
+semanage fcontext -a -t httpd_sys_content_t '/srv/rustreg(/.*)?'
+install -d -m 0755 /srv/rustreg/index /srv/rustreg/crates
+echo '{"dl":"https://rustreg.progmasoft.com/crates/{crate}/{crate}-{version}.crate"}' > /srv/rustreg/index/config.json
+restorecon -R /srv/rustreg
+
+cargo package -p <crate>
+python3 ops/rustreg/publish-crate.py target/package/<crate>-<version>.crate
+```
+
+A project that uses the registry names it in `.cargo/config.toml`:
+
+```toml
+[registries.progmasoft]
+index = "sparse+https://rustreg.progmasoft.com/index/"
+```
+
+The certificate of `progmasoft.com` must name `rustreg.progmasoft.com`.
+
 ## Git mirrors
 
 `git.progmasoft.com` shows read-only mirrors of the public repositories under development, such as
