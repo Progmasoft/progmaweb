@@ -23,11 +23,6 @@ export function productRoute(pathname: string): string | null {
     : null;
 }
 
-/** The public page of catch3.uk. */
-export function catch3Route(pathname: string): string | null {
-  return trimmed(pathname) === "/" ? "/catch3" : null;
-}
-
 /**
  * The public pages of license.progmasoft.com and the internal routes that
  * render them: the list of licenses, and the pages of each license version,

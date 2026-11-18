@@ -48,11 +48,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })),
     ];
   }
-  if (host === "catch3.uk") {
-    return [
-      { url: "https://catch3.uk/", changeFrequency: "weekly", priority: 1 },
-    ];
-  }
   if (host === "product.progmasoft.com") {
     return [
       {

@@ -81,12 +81,6 @@ for (const locale of locales) {
           domain: ".progmasoft.com",
           path: "/",
         },
-        {
-          name: "progmasoft_locale",
-          value: locale,
-          domain: "catch3.uk",
-          path: "/",
-        },
       ]);
     });
 
