@@ -3,6 +3,7 @@
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { expireShadowingCookies } from "@/lib/shared-cookies";
 import {
   languageRequest,
   localeCookieName,
@@ -65,7 +66,7 @@ const ownSites: OwnSite[] = [
   },
 ];
 
-export function proxy(request: NextRequest) {
+function handle(request: NextRequest) {
   // Every page gets its own nonce. Next reads the policy from the request to
   // mark its scripts, and the layout reads the nonce for the theme bootstrap.
   const nonce = createNonce();
@@ -276,3 +277,17 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|icon.svg|apple-icon.png|robots.txt|sitemap.xml|llms.txt).*)",
   ],
 };
+
+export function proxy(request: NextRequest) {
+  const response = handle(request);
+  const secure =
+    request.headers.get("x-forwarded-proto") === "https" ||
+    request.nextUrl.protocol === "https:";
+  for (const cookie of expireShadowingCookies(
+    request.headers.get("cookie") ?? "",
+    secure,
+  )) {
+    response.headers.append("set-cookie", cookie);
+  }
+  return response;
+}

@@ -6,21 +6,9 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { nonceHeader } from "@/lib/content-security-policy";
 import { getLocale } from "@/lib/locale.server";
+import { themeBootstrap } from "@/lib/theme";
 import "./globals.css";
 import "./viget.css";
-
-// Apply the stored theme before the body is painted. PreferenceControls keeps
-// this value synchronized after hydration, while this small bootstrap prevents
-// a light flash on every route—including dashboard loading and error states.
-const themeBootstrap = `
-  (() => {
-    try {
-      const theme = localStorage.getItem("progmasoft_theme") === "dark" ? "dark" : "light";
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.style.colorScheme = theme;
-    } catch {}
-  })();
-`;
 
 export const metadata: Metadata = {
   // The apex host is the only public organization canonical. The www host is a
@@ -48,7 +36,8 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      // data-theme belongs to the bootstrap script and the theme control only.
+      // data-theme belongs to the bootstrap script (lib/theme.ts) and the theme
+      // control only.
       // Rendered here, React would set it back to light whenever the server
       // re-renders the layout (a language switch), and the page would flash.
       suppressHydrationWarning
