@@ -9,7 +9,7 @@ import { layoutHosts } from "./e2e/pages";
  * tablet and a desktop.
  *
  * The site picks its pages by host name, so every public host name resolves
- * to the local server: the browser asks for http://viget.progmasoft.com/ and
+ * to the local server: the browser asks for http://product.progmasoft.com/ and
  * the request reaches `next start` on 127.0.0.1 with that Host header. No
  * request leaves the machine.
  */

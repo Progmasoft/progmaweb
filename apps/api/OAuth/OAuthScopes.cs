@@ -22,26 +22,11 @@ internal sealed record OAuthScope(string Name, string Consent, string? Resource)
 /// </remarks>
 internal static class OAuthScopes
 {
-    /// <summary>The audience of the ViGet scopes; ViGet accepts only access tokens issued for it.</summary>
-    public const string VigetResource = "viget";
-
-    /// <summary>Reading the packages the account has published.</summary>
-    public const string VigetPackagesRead = "viget.packages.read";
-
-    /// <summary>Publishing packages under the account.</summary>
-    public const string VigetPackagesPublish = "viget.packages.publish";
-
-    /// <summary>Yanking packages of the account.</summary>
-    public const string VigetPackagesYank = "viget.packages.yank";
-
     /// <summary>Every scope an application may request besides <c>openid</c>, in the order the consent page lists them.</summary>
     public static IReadOnlyList<OAuthScope> All { get; } =
     [
         new(Scopes.Profile, "Read your Progmasoft account name.", null),
         new(Scopes.Email, "Read the email address you sign in and registered with.", null),
-        new(VigetPackagesRead, "Read the packages you have published on ViGet.", VigetResource),
-        new(VigetPackagesPublish, "Publish packages to ViGet under your account.", VigetResource),
-        new(VigetPackagesYank, "Yank packages you have published on ViGet.", VigetResource),
         new(Scopes.OfflineAccess, "Keep this access when you are not signed in, until you revoke it.", null),
     ];
 

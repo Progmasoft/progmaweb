@@ -145,12 +145,6 @@ export const messages = {
       recoveryTitle: "Recover your account",
       recoveryDescription: "Get help regaining access to a Progmasoft account.",
       dashboardTitle: "Dashboard",
-      vigetTitle: "ViGet Package Registry by Progmasoft",
-      vigetDescription:
-        "The package registry for C, C++ and Objective-C is online, but no packages have been published yet.",
-      dslPluginsTitle: "DSL Plugins · ViGet Package Registry by Progmasoft",
-      dslPluginsDescription:
-        "The ViGet Kotlin DSL plugin catalog is online, but no plugins have been published yet.",
     },
     navigation: {
       primary: "Primary navigation",
@@ -197,7 +191,7 @@ export const messages = {
       identity: [
         [
           "Account name",
-          "Your durable public identity and ViGet publisher name",
+          "Your durable public identity",
         ],
         ["Email", "Recovery and security notices"],
         ["Session", "Secure, revocable browser access"],
@@ -209,7 +203,7 @@ export const messages = {
         ],
         [
           "Predictable names",
-          "Canonical account names prevent ambiguous URLs and case-only impersonation. ViGet uses this exact name as the package publisher; it does not create a second identity.",
+          "Canonical account names prevent ambiguous URLs and case-only impersonation.",
         ],
         [
           "Service boundaries",
@@ -293,7 +287,6 @@ export const messages = {
       navigation: "Dashboard navigation",
       overview: "Overview",
       security: "Security",
-      services: "Services",
       signOut: "Sign out",
       eyebrow: "Account overview",
       welcome: "Welcome",
@@ -301,101 +294,12 @@ export const messages = {
       profile: "Profile",
       identity: "Account identity",
       accountName: "Account name",
-      publisherName: "ViGet publisher name",
       email: "Email",
       created: "Created",
       passwordSessions: "Password and sessions",
       securityDescription:
         "Your browser uses an HttpOnly secure session cookie. Session secrets are never stored as plaintext.",
       changePassword: "Change password",
-      products: "Connected Progmasoft products",
-      publisherPrefix: "Publisher name",
-      sameAccount: "your Account name",
-      planned: "Planned",
-    },
-    viget: {
-      navigationLabel: "Registry navigation",
-      packages: "Packages",
-      dslPlugins: "DSL plugins",
-      account: "Account",
-      login: "Log in",
-      register: "Register",
-      homeEyebrow: "ViGet package registry",
-      homeTitle: "Packages for C, C++ and Objective-C.",
-      homeDescription:
-        "ViGet is the canonical source for C, C++ and Objective-C packages and for the DSL plugins of build systems, operated directly by Progmasoft.",
-      createAccount: "Create account",
-      exploreTazel: "Explore Tazel",
-      available: "Registry available",
-      emptyTitle: "The public catalog is empty.",
-      emptyDescription:
-        "No package releases have been published yet. ViGet will show real packages here as they become available.",
-      packageFormat: "Package format",
-      publisherIdentity: "Publisher identity",
-      publishing: "Publishing",
-      publishingClosed: "Not open yet",
-      catalogsEyebrow: "Catalogs",
-      catalogsTitle: "Two artifact types, one registry.",
-      catalogsDescription:
-        "Packages and project DSL plugins have separate, predictable coordinate spaces.",
-      languagePackages: "Packages",
-      vipkgCatalog: "ViPkg catalog",
-      vipkgDescription:
-        "Libraries and applications in C, C++ and Objective-C, distributed as .vipkg artifacts.",
-      projectExtensions: "Project extensions",
-      kotlinPlugins: "Kotlin DSL plugins",
-      kotlinDescription:
-        "Kotlin JAR plugins that extend the project file of Tazel.",
-      openCatalog: "Open catalog",
-      contractEyebrow: "Registry contract",
-      contractTitle: "Clear ownership from identity to artifact.",
-      principles: [
-        [
-          "One account name",
-          "Your Progmasoft Account name is also your ViGet publisher name.",
-        ],
-        [
-          "Case-sensitive coordinates",
-          "Publisher and package names retain their exact public spelling.",
-        ],
-        [
-          "No placeholder releases",
-          "The catalog stays honestly empty until a real signed artifact is published.",
-        ],
-      ],
-      pluginEyebrow: "ViGet · Kotlin DSL plugins",
-      pluginTitle: "Extend the project model.",
-      pluginDescription:
-        "Kotlin DSL plugins are JAR artifacts for the project file of Tazel. They are separate from .vipkg packages.",
-      backToPackages: "Back to packages",
-      followDevelopment: "Follow development",
-      pluginAvailable: "Catalog available",
-      pluginEmptyTitle: "No public DSL plugins yet.",
-      pluginEmptyDescription:
-        "The catalog is ready and intentionally contains no placeholder artifacts.",
-      guidance: [
-        [
-          "Format",
-          "Kotlin JAR",
-          "DSL plugins run as Kotlin/JVM project extensions.",
-        ],
-        [
-          "Location",
-          "Dedicated catalog",
-          "Plugin coordinates always begin with /dslplugins/tazel.",
-        ],
-        [
-          "Availability",
-          "Progmasoft first",
-          "Progmasoft publishes the first plugins; publishing opens to every account later.",
-        ],
-      ],
-      footerDescription:
-        "ViGet is the registry of packages for C, C++ and Objective-C and of Kotlin DSL plugins.",
-      registry: "Registry",
-      support: "Support",
-      source: "Source",
-      footerClosing: "ViGet Package Registry by Progmasoft",
     },
   },
   "de-DE": {
@@ -411,12 +315,6 @@ export const messages = {
       recoveryDescription:
         "Erhalten Sie Hilfe beim Wiederherstellen des Zugriffs auf ein Progmasoft-Konto.",
       dashboardTitle: "Kontoübersicht",
-      vigetTitle: "ViGet-Paketregistrierung von Progmasoft",
-      vigetDescription:
-        "Die Paketregistrierung für C, C++ und Objective-C ist online, enthält aber noch keine veröffentlichten Pakete.",
-      dslPluginsTitle: "DSL-Plugins · ViGet-Paketregistrierung von Progmasoft",
-      dslPluginsDescription:
-        "Der ViGet-Katalog für Kotlin-DSL-Plugins ist online, enthält aber noch keine veröffentlichten Plugins.",
     },
     navigation: {
       primary: "Hauptnavigation",
@@ -464,7 +362,7 @@ export const messages = {
       identity: [
         [
           "Kontoname",
-          "Ihre beständige öffentliche Identität und Ihr ViGet-Publishername",
+          "Ihre beständige öffentliche Identität",
         ],
         ["E-Mail", "Wiederherstellungs- und Sicherheitshinweise"],
         ["Sitzung", "Sicherer, widerrufbarer Browserzugriff"],
@@ -476,7 +374,7 @@ export const messages = {
         ],
         [
           "Eindeutige Namen",
-          "Kanonische Kontonamen verhindern mehrdeutige URLs und Nachahmung nur durch Groß-/Kleinschreibung. ViGet verwendet exakt diesen Namen als Publisher und erstellt keine zweite Identität.",
+          "Kanonische Kontonamen verhindern mehrdeutige URLs und Nachahmung nur durch Groß-/Kleinschreibung.",
         ],
         [
           "Klare Dienstgrenzen",
@@ -562,7 +460,6 @@ export const messages = {
       navigation: "Navigation der Kontoübersicht",
       overview: "Übersicht",
       security: "Sicherheit",
-      services: "Dienste",
       signOut: "Abmelden",
       eyebrow: "Kontoübersicht",
       welcome: "Willkommen",
@@ -571,101 +468,12 @@ export const messages = {
       profile: "Profil",
       identity: "Kontoidentität",
       accountName: "Kontoname",
-      publisherName: "ViGet-Publishername",
       email: "E-Mail",
       created: "Erstellt",
       passwordSessions: "Passwort und Sitzungen",
       securityDescription:
         "Ihr Browser verwendet ein sicheres HttpOnly-Sitzungs-Cookie. Sitzungsgeheimnisse werden niemals im Klartext gespeichert.",
       changePassword: "Passwort ändern",
-      products: "Verbundene Progmasoft-Produkte",
-      publisherPrefix: "Publishername",
-      sameAccount: "Ihr Kontoname",
-      planned: "Geplant",
-    },
-    viget: {
-      navigationLabel: "Navigation der Paketregistrierung",
-      packages: "Pakete",
-      dslPlugins: "DSL-Plugins",
-      account: "Konto",
-      login: "Anmelden",
-      register: "Registrieren",
-      homeEyebrow: "ViGet-Paketregistrierung",
-      homeTitle: "Pakete für C, C++ und Objective-C.",
-      homeDescription:
-        "ViGet ist die kanonische Quelle für Pakete in C, C++ und Objective-C und für die DSL-Plugins von Build-Systemen und wird direkt von Progmasoft betrieben.",
-      createAccount: "Konto erstellen",
-      exploreTazel: "Tazel entdecken",
-      available: "Paketregistrierung verfügbar",
-      emptyTitle: "Der öffentliche Katalog ist leer.",
-      emptyDescription:
-        "Es wurden noch keine Pakete veröffentlicht. ViGet zeigt hier echte Pakete, sobald sie verfügbar sind.",
-      packageFormat: "Paketformat",
-      publisherIdentity: "Publisher-Identität",
-      publishing: "Veröffentlichung",
-      publishingClosed: "Noch nicht geöffnet",
-      catalogsEyebrow: "Kataloge",
-      catalogsTitle: "Zwei Artefakttypen, eine Paketregistrierung.",
-      catalogsDescription:
-        "Pakete und Projekt-DSL-Plugins besitzen getrennte, vorhersehbare Koordinatenräume.",
-      languagePackages: "Pakete",
-      vipkgCatalog: "ViPkg-Katalog",
-      vipkgDescription:
-        "Bibliotheken und Anwendungen in C, C++ und Objective-C, verteilt als .vipkg-Artefakte.",
-      projectExtensions: "Projekterweiterungen",
-      kotlinPlugins: "Kotlin-DSL-Plugins",
-      kotlinDescription:
-        "Kotlin-JAR-Plugins, die die Projektdatei von Tazel erweitern.",
-      openCatalog: "Katalog öffnen",
-      contractEyebrow: "Vertrag der Paketregistrierung",
-      contractTitle: "Klare Zuständigkeit von der Identität bis zum Artefakt.",
-      principles: [
-        [
-          "Ein Kontoname",
-          "Ihr Progmasoft-Kontoname ist zugleich Ihr ViGet-Publishername.",
-        ],
-        [
-          "Groß-/Kleinschreibung in Koordinaten",
-          "Publisher- und Paketnamen behalten ihre exakte öffentliche Schreibweise.",
-        ],
-        [
-          "Keine Platzhalter-Releases",
-          "Der Katalog bleibt ehrlich leer, bis ein echtes signiertes Artefakt veröffentlicht wird.",
-        ],
-      ],
-      pluginEyebrow: "ViGet · Kotlin-DSL-Plugins",
-      pluginTitle: "Das Projektmodell erweitern.",
-      pluginDescription:
-        "Kotlin-DSL-Plugins sind JAR-Artefakte für die Projektdatei von Tazel. Sie sind von .vipkg-Paketen getrennt.",
-      backToPackages: "Zurück zu den Paketen",
-      followDevelopment: "Entwicklung verfolgen",
-      pluginAvailable: "Katalog verfügbar",
-      pluginEmptyTitle: "Noch keine öffentlichen DSL-Plugins.",
-      pluginEmptyDescription:
-        "Der Katalog ist bereit und enthält absichtlich keine Platzhalter-Artefakte.",
-      guidance: [
-        [
-          "Format",
-          "Kotlin JAR",
-          "DSL-Plugins werden als Kotlin/JVM-Projekterweiterungen ausgeführt.",
-        ],
-        [
-          "Ort",
-          "Eigener Katalog",
-          "Plugin-Koordinaten beginnen immer mit /dslplugins/tazel.",
-        ],
-        [
-          "Verfügbarkeit",
-          "Zuerst Progmasoft",
-          "Progmasoft veröffentlicht die ersten Plugins; später öffnet die Veröffentlichung für jedes Konto.",
-        ],
-      ],
-      footerDescription:
-        "ViGet ist die Registrierung für Pakete in C, C++ und Objective-C und für Kotlin-DSL-Plugins.",
-      registry: "Paketregistrierung",
-      support: "Support",
-      source: "Quellcode",
-      footerClosing: "ViGet-Paketregistrierung von Progmasoft",
     },
   },
   "ru-RU": {
@@ -681,12 +489,6 @@ export const messages = {
       recoveryDescription:
         "Получите помощь в восстановлении доступа к аккаунту Progmasoft.",
       dashboardTitle: "Панель управления",
-      vigetTitle: "Реестр пакетов ViGet от Progmasoft",
-      vigetDescription:
-        "Реестр пакетов для C, C++ и Objective-C работает, но опубликованных пакетов пока нет.",
-      dslPluginsTitle: "DSL-плагины · Реестр пакетов ViGet от Progmasoft",
-      dslPluginsDescription:
-        "Каталог Kotlin DSL-плагинов ViGet работает, но опубликованных плагинов пока нет.",
     },
     navigation: {
       primary: "Основная навигация",
@@ -735,7 +537,7 @@ export const messages = {
       identity: [
         [
           "Имя аккаунта",
-          "Ваше постоянное публичное имя и имя издателя в ViGet",
+          "Ваше постоянное публичное имя",
         ],
         ["Эл. почта", "Восстановление и уведомления безопасности"],
         ["Сеанс", "Защищённый отзываемый доступ из браузера"],
@@ -747,7 +549,7 @@ export const messages = {
         ],
         [
           "Предсказуемые имена",
-          "Канонические имена аккаунтов исключают неоднозначные URL и подмену имени, отличающегося только регистром. ViGet использует именно это имя как издателя пакетов и не создаёт вторую учётную запись.",
+          "Канонические имена аккаунтов исключают неоднозначные URL и подмену имени, отличающегося только регистром.",
         ],
         [
           "Границы сервисов",
@@ -832,7 +634,6 @@ export const messages = {
       navigation: "Навигация панели управления",
       overview: "Обзор",
       security: "Безопасность",
-      services: "Сервисы",
       signOut: "Выйти",
       eyebrow: "Обзор аккаунта",
       welcome: "Добро пожаловать",
@@ -841,101 +642,12 @@ export const messages = {
       profile: "Профиль",
       identity: "Учётная запись",
       accountName: "Имя аккаунта",
-      publisherName: "Имя издателя в ViGet",
       email: "Эл. почта",
       created: "Создан",
       passwordSessions: "Пароль и сеансы",
       securityDescription:
         "Ваш браузер использует защищённый сеансовый cookie с флагом HttpOnly. Секреты сеансов никогда не хранятся в открытом виде.",
       changePassword: "Сменить пароль",
-      products: "Подключённые продукты Progmasoft",
-      publisherPrefix: "Имя издателя",
-      sameAccount: "ваше имя аккаунта",
-      planned: "Запланировано",
-    },
-    viget: {
-      navigationLabel: "Навигация реестра",
-      packages: "Пакеты",
-      dslPlugins: "DSL-плагины",
-      account: "Аккаунт",
-      login: "Войти",
-      register: "Регистрация",
-      homeEyebrow: "Реестр пакетов ViGet",
-      homeTitle: "Пакеты для C, C++ и Objective-C.",
-      homeDescription:
-        "ViGet — канонический источник пакетов для C, C++ и Objective-C и DSL-плагинов систем сборки, которым напрямую управляет Progmasoft.",
-      createAccount: "Создать аккаунт",
-      exploreTazel: "Подробнее о Tazel",
-      available: "Реестр доступен",
-      emptyTitle: "Публичный каталог пуст.",
-      emptyDescription:
-        "Ни один выпуск пакета пока не опубликован. ViGet покажет здесь настоящие пакеты, когда они появятся.",
-      packageFormat: "Формат пакета",
-      publisherIdentity: "Имя издателя",
-      publishing: "Публикация",
-      publishingClosed: "Пока не открыта",
-      catalogsEyebrow: "Каталоги",
-      catalogsTitle: "Два вида артефактов, один реестр.",
-      catalogsDescription:
-        "У пакетов и DSL-плагинов проектов отдельные предсказуемые пространства координат.",
-      languagePackages: "Пакеты",
-      vipkgCatalog: "Каталог ViPkg",
-      vipkgDescription:
-        "Библиотеки и приложения на C, C++ и Objective-C распространяются как артефакты .vipkg.",
-      projectExtensions: "Расширения проектов",
-      kotlinPlugins: "Kotlin DSL-плагины",
-      kotlinDescription:
-        "Плагины в виде Kotlin JAR, расширяющие файл проекта Tazel.",
-      openCatalog: "Открыть каталог",
-      contractEyebrow: "Контракт реестра",
-      contractTitle: "Ясная ответственность от учётной записи до артефакта.",
-      principles: [
-        [
-          "Одно имя аккаунта",
-          "Имя вашего аккаунта Progmasoft — это и ваше имя издателя в ViGet.",
-        ],
-        [
-          "Координаты с учётом регистра",
-          "Имена издателей и пакетов сохраняют точное публичное написание.",
-        ],
-        [
-          "Никаких выпусков-заглушек",
-          "Каталог честно остаётся пустым, пока не опубликован настоящий подписанный артефакт.",
-        ],
-      ],
-      pluginEyebrow: "ViGet · Kotlin DSL-плагины",
-      pluginTitle: "Расширяйте модель проекта.",
-      pluginDescription:
-        "Kotlin DSL-плагины — это JAR-артефакты для файла проекта Tazel. Они отделены от пакетов в формате .vipkg.",
-      backToPackages: "Назад к пакетам",
-      followDevelopment: "Следить за разработкой",
-      pluginAvailable: "Каталог доступен",
-      pluginEmptyTitle: "Публичных DSL-плагинов пока нет.",
-      pluginEmptyDescription:
-        "Каталог готов и намеренно не содержит артефактов-заглушек.",
-      guidance: [
-        [
-          "Формат",
-          "Kotlin JAR",
-          "DSL-плагины работают как расширения проектов на Kotlin/JVM.",
-        ],
-        [
-          "Расположение",
-          "Отдельный каталог",
-          "Координаты плагинов всегда начинаются с /dslplugins/tazel.",
-        ],
-        [
-          "Доступность",
-          "Сначала Progmasoft",
-          "Первые плагины публикует Progmasoft; позже публикация откроется для всех учётных записей.",
-        ],
-      ],
-      footerDescription:
-        "ViGet — реестр пакетов для C, C++ и Objective-C и Kotlin DSL-плагинов.",
-      registry: "Реестр",
-      support: "Поддержка",
-      source: "Исходный код",
-      footerClosing: "Реестр пакетов ViGet от Progmasoft",
     },
   },
   "fr-FR": {
@@ -951,13 +663,6 @@ export const messages = {
       recoveryDescription:
         "Obtenez de l’aide pour retrouver l’accès à un compte Progmasoft.",
       dashboardTitle: "Tableau de bord",
-      vigetTitle: "ViGet, le registre de paquets de Progmasoft",
-      vigetDescription:
-        "Le registre de paquets pour C, C++ et Objective-C est en ligne, mais aucun paquet n’a encore été publié.",
-      dslPluginsTitle:
-        "Plugins DSL · ViGet, le registre de paquets de Progmasoft",
-      dslPluginsDescription:
-        "Le catalogue des plugins DSL Kotlin de ViGet est en ligne, mais aucun plugin n’a encore été publié.",
     },
     navigation: {
       primary: "Navigation principale",
@@ -1005,7 +710,7 @@ export const messages = {
       identity: [
         [
           "Nom de compte",
-          "Votre identité publique durable et votre nom d’éditeur ViGet",
+          "Votre identité publique durable",
         ],
         ["E-mail", "Récupération et avis de sécurité"],
         ["Session", "Accès navigateur sécurisé et révocable"],
@@ -1017,7 +722,7 @@ export const messages = {
         ],
         [
           "Des noms prévisibles",
-          "Les noms de compte canoniques évitent les URL ambiguës et l’usurpation par la seule casse. ViGet utilise exactement ce nom comme éditeur des paquets ; il ne crée pas de seconde identité.",
+          "Les noms de compte canoniques évitent les URL ambiguës et l’usurpation par la seule casse.",
         ],
         [
           "Des frontières entre services",
@@ -1102,7 +807,6 @@ export const messages = {
       navigation: "Navigation du tableau de bord",
       overview: "Vue d’ensemble",
       security: "Sécurité",
-      services: "Services",
       signOut: "Se déconnecter",
       eyebrow: "Vue d’ensemble du compte",
       welcome: "Bienvenue",
@@ -1110,101 +814,12 @@ export const messages = {
       profile: "Profil",
       identity: "Identité du compte",
       accountName: "Nom de compte",
-      publisherName: "Nom d’éditeur ViGet",
       email: "E-mail",
       created: "Créé le",
       passwordSessions: "Mot de passe et sessions",
       securityDescription:
         "Votre navigateur utilise un cookie de session sécurisé HttpOnly. Les secrets de session ne sont jamais conservés en clair.",
       changePassword: "Changer le mot de passe",
-      products: "Produits Progmasoft connectés",
-      publisherPrefix: "Nom d’éditeur",
-      sameAccount: "votre nom de compte",
-      planned: "Prévu",
-    },
-    viget: {
-      navigationLabel: "Navigation du registre",
-      packages: "Paquets",
-      dslPlugins: "Plugins DSL",
-      account: "Compte",
-      login: "Se connecter",
-      register: "S’inscrire",
-      homeEyebrow: "Registre de paquets ViGet",
-      homeTitle: "Des paquets pour C, C++ et Objective-C.",
-      homeDescription:
-        "ViGet est la source de référence des paquets C, C++ et Objective-C et des plugins DSL des systèmes de build, exploitée directement par Progmasoft.",
-      createAccount: "Créer un compte",
-      exploreTazel: "Découvrir Tazel",
-      available: "Registre disponible",
-      emptyTitle: "Le catalogue public est vide.",
-      emptyDescription:
-        "Aucune version de paquet n’a encore été publiée. ViGet affichera ici de vrais paquets dès qu’ils seront disponibles.",
-      packageFormat: "Format des paquets",
-      publisherIdentity: "Identité de l’éditeur",
-      publishing: "Publication",
-      publishingClosed: "Pas encore ouverte",
-      catalogsEyebrow: "Catalogues",
-      catalogsTitle: "Deux types d’artefacts, un seul registre.",
-      catalogsDescription:
-        "Les paquets et les plugins DSL de projet ont des espaces de coordonnées distincts et prévisibles.",
-      languagePackages: "Paquets",
-      vipkgCatalog: "Catalogue ViPkg",
-      vipkgDescription:
-        "Bibliothèques et applications en C, C++ et Objective-C, distribuées sous forme d’artefacts .vipkg.",
-      projectExtensions: "Extensions de projet",
-      kotlinPlugins: "Plugins DSL Kotlin",
-      kotlinDescription:
-        "Des plugins JAR Kotlin qui étendent le fichier de projet de Tazel.",
-      openCatalog: "Ouvrir le catalogue",
-      contractEyebrow: "Contrat du registre",
-      contractTitle: "Une propriété claire, de l’identité à l’artefact.",
-      principles: [
-        [
-          "Un seul nom de compte",
-          "Votre nom de compte Progmasoft est aussi votre nom d’éditeur ViGet.",
-        ],
-        [
-          "Des coordonnées sensibles à la casse",
-          "Les noms d’éditeur et de paquet gardent leur graphie publique exacte.",
-        ],
-        [
-          "Aucune version factice",
-          "Le catalogue reste honnêtement vide jusqu’à la publication d’un véritable artefact signé.",
-        ],
-      ],
-      pluginEyebrow: "ViGet · Plugins DSL Kotlin",
-      pluginTitle: "Étendez le modèle de projet.",
-      pluginDescription:
-        "Les plugins DSL Kotlin sont des artefacts JAR pour le fichier de projet de Tazel. Ils sont distincts des paquets .vipkg.",
-      backToPackages: "Retour aux paquets",
-      followDevelopment: "Suivre le développement",
-      pluginAvailable: "Catalogue disponible",
-      pluginEmptyTitle: "Aucun plugin DSL public pour l’instant.",
-      pluginEmptyDescription:
-        "Le catalogue est prêt et ne contient volontairement aucun artefact factice.",
-      guidance: [
-        [
-          "Format",
-          "JAR Kotlin",
-          "Les plugins DSL s’exécutent comme des extensions de projet Kotlin/JVM.",
-        ],
-        [
-          "Emplacement",
-          "Catalogue dédié",
-          "Les coordonnées des plugins commencent toujours par /dslplugins/tazel.",
-        ],
-        [
-          "Disponibilité",
-          "Progmasoft d’abord",
-          "Progmasoft publie les premiers plugins ; la publication s’ouvrira ensuite à tous les comptes.",
-        ],
-      ],
-      footerDescription:
-        "ViGet est le registre des paquets pour C, C++ et Objective-C et des plugins DSL Kotlin.",
-      registry: "Registre",
-      support: "Assistance",
-      source: "Source",
-      footerClosing: "ViGet, le registre de paquets de Progmasoft",
     },
   },
 } as const;

@@ -35,7 +35,7 @@ avoids depending on an apphost inode copied from a build machine retaining an ex
 2. Verify the API directly on `127.0.0.1:5085` and the frontend on `127.0.0.1:3010` before changing Nginx.
 3. Point a temporary symlink at the verified release and rename it over `current` atomically.
 4. Run `systemd-analyze verify`, `nginx -t`, then restart the two Progmaweb services and reload Nginx.
-5. Verify apex HTTPS, the canonical `www` redirect, account routes, ViGet catalog routes, host-specific robots and
+5. Verify apex HTTPS, the canonical `www` redirect, account routes, host-specific robots and
    sitemaps, `/api/v1/status`, and registration validation.
 6. On failure, restore the previous `current` target and restart only the Progmaweb services.
 
@@ -97,8 +97,7 @@ DELETE FROM accounts WHERE id = '<id>';
 COMMIT;
 ```
 
-The Tazel plugins an account published stay in ViGet under its name: projects depend on them, and a removed name
-could be registered by someone else. Delete the dump once the deletion is confirmed.
+Delete the dump once the deletion is confirmed.
 
 ### Logs without client addresses
 
@@ -141,7 +140,7 @@ There is no scheduled backup yet; see [Known limitations](../docs/LIMITATIONS.md
   of the frontend service.
 
 Every host of this server that Progmaweb serves has its own server block in `ops/nginx/progmaweb.conf`;
-`viget.progmasoft.com/api/v1/status` answers from the Progmaweb API like `progmasoft.com/api/v1/status`.
+`viget.progmasoft.com` answers 410 Gone on every address: ViGet was closed on 2026-11-18.
 
 ## Mail boundary
 
@@ -212,74 +211,28 @@ systemd-run --quiet --wait --pty --uid=progmaweb --gid=progmaweb \
 ```
 
 The name, the email address and the password follow the rules of registration; only the reserved names are accepted,
-and an existing account is never replaced. The account then signs in on `account.progmasoft.com` like any other, and
-is the ViGet publisher of the same name.
+and an existing account is never replaced. The account then signs in on `account.progmasoft.com` like any other.
 
-## ViGet: Tazel plugins
+## Closing ViGet
 
-ViGet opens in stages. Now only the accounts that `ViGet__TazelPublishers` names (Progmasoft by default) publish Tazel
-plugins, and they publish on the server; later every account will publish through the API. The catalog lives in the
-account database (`viget_*` tables, created by the API at start) and the JARs in `/srv/viget/files`, which Nginx
-serves:
-
-| Address on `viget.progmasoft.com` | Served by |
-| --- | --- |
-| `/dslplugins/tazel`, `/dslplugins/tazel/<Publisher>/<Name>`, `/dslplugins/gradle` | the Next.js site |
-| `/dslplugins/tazel/<Publisher>/<Name>/index.json` | the account API, `/api/v1/viget/dslplugins/tazel/...` |
-| `/dslplugins/tazel/<Publisher>/<Name>/<Version>/<Name>-<Version>.jar` | the files below `/srv/viget/files` |
-
-The directory belongs to the service user, and Nginx reads it:
+ViGet was closed on 2026-11-18. The API no longer has its endpoints, its command or its scopes, and Nginx answers
+410 Gone on `viget.progmasoft.com`. What it left on the first server is removed once, as root, after a dump:
 
 ```sh
-install -d -m 0755 -o progmaweb -g progmaweb /srv/viget /srv/viget/files
-semanage fcontext -a -t httpd_sys_content_t '/srv/viget/files(/.*)?'
-restorecon -R /srv/viget/files
+install -d -m 0700 /root/viget-20261118
+runuser -u progmaweb -- pg_dump --table='viget_*' progmaweb_accounts > /root/viget-20261118/viget.sql
+cp -a /srv/viget /root/viget-20261118/files
+runuser -u progmaweb -- psql -d progmaweb_accounts -c 'DROP TABLE viget_tazel_plugin_versions, viget_tazel_plugins, viget_schema_versions'
+rm -r /srv/viget
+semanage fcontext -d -t httpd_sys_content_t '/srv/viget/files(/.*)?'
 ```
 
-A plugin JAR is published with the configuration of the service, as its user. `systemd-run` reads the environment
-file itself, so no value of it appears on a command line:
-
-```sh
-install -d -m 0750 -o progmaweb -g progmaweb /srv/viget/incoming
-install -m 0640 -o progmaweb -g progmaweb CMake-0.1.0.jar /srv/viget/incoming/
-systemd-run --quiet --wait --pipe --uid=progmaweb --gid=progmaweb \
-  -p EnvironmentFile=/etc/progmaweb/account.env -p Environment=ASPNETCORE_ENVIRONMENT=Production \
-  -p WorkingDirectory=/srv/progmaweb/current/api \
-  /usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll \
-  viget publish-tazel-plugin /srv/viget/incoming/CMake-0.1.0.jar
-rm /srv/viget/incoming/CMake-0.1.0.jar
-restorecon -R /srv/viget/files
-```
-
-The publisher of the descriptor must be the name of an existing Progmasoft Account, spelled the same way.
-
-The command checks the descriptor of the JAR, the publisher, its account and the version, which is never replaced.
-`viget yank-tazel-plugin <Publisher> <Name> <Version>` yanks a version, and `--undo` takes the yank back.
-
-### Taking malicious software off ViGet
-
-The Security Policy (progmasoft.com/security) says that malicious software found on ViGet is taken off it and that
-the uploader's account is closed. A yank alone does not do that: it marks the version, while Nginx keeps serving the
-JAR and Cloudflare keeps its copy for a year. Taking a version off ViGet is four steps, as root:
-
-1. Yank the version with `viget yank-tazel-plugin`, as above, so Tazel no longer resolves it.
-2. Move the JAR out of `/srv/viget/files` into `/root/quarantine/viget/<Publisher>/<Name>/<Version>/` (mode 0700). It
-   stops being served, and the file stays as evidence for the authorities; it is not deleted.
-3. Purge its address from the Cloudflare cache (`POST /zones/<zone>/purge_cache` with
-   `{"files": ["https://viget.progmasoft.com/dslplugins/tazel/<Publisher>/<Name>/<Version>/<Name>-<Version>.jar"]}`)
-   and check that the address now answers 404.
-4. Close the account that uploaded it, as described under "Deleting an account", once whatever the authorities need
-   from it has been kept.
-
-ViGet takes uploads only from the publishers `ViGet__TazelPublishers` names, through the command above. When uploads
-open to every account, the upload endpoint has to keep the IP address of each upload with the upload, for as long as
-the upload is on ViGet and one year after it is removed: the Privacy Policy promises exactly that, and nothing else
-keeps an IP address.
+`ViGet__*` values go out of `/etc/progmaweb/account.env`.
 
 ## Maven repository
 
 `maven.progmasoft.com/tazel` is a static Maven repository: it holds `com.progmasoft.tazel:tazel-api`, which plugins of
-Tazel compile against. It lives in `/srv/maven/tazel`, labelled like the files of ViGet:
+Tazel compile against. It lives in `/srv/maven/tazel`, labelled so that Nginx may read it:
 
 ```sh
 install -d -m 0755 /srv/maven /srv/maven/tazel

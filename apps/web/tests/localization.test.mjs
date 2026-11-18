@@ -36,7 +36,7 @@ test("only the published locales are accepted", () => {
   }
 });
 
-test("both locales give the account and ViGet routes distinct page metadata", () => {
+test("both locales give the account routes distinct page metadata", () => {
   const english = messages["en-US"].metadata;
   const german = messages["de-DE"].metadata;
   for (const key of [
@@ -44,8 +44,6 @@ test("both locales give the account and ViGet routes distinct page metadata", ()
     "accountTitle",
     "loginTitle",
     "registerTitle",
-    "vigetTitle",
-    "dslPluginsTitle",
   ]) {
     assert.equal(typeof english[key], "string");
     assert.equal(typeof german[key], "string");
@@ -54,8 +52,6 @@ test("both locales give the account and ViGet routes distinct page metadata", ()
   }
   assert.notEqual(english.loginTitle, german.loginTitle);
   assert.notEqual(english.registerTitle, german.registerTitle);
-  assert.match(english.vigetTitle, /ViGet/);
-  assert.match(german.vigetTitle, /ViGet/);
 });
 
 test("each supported locale resolves to its own complete message tree", () => {
@@ -83,13 +79,13 @@ test("the language cookie is shared by production hosts and host-only elsewhere"
   for (const host of [
     "progmasoft.com",
     "account.progmasoft.com",
-    "viget.progmasoft.com",
+    "product.progmasoft.com",
   ]) {
     assert.equal(localeCookieOptions(host, true).domain, ".progmasoft.com");
   }
   for (const host of [
     "localhost",
-    "viget.localhost",
+    "account.localhost",
     "notprogmasoft.com",
     "progmasoft.com.example",
     "",
@@ -112,7 +108,7 @@ test("the request host prefers the forwarded host and drops port and case", () =
     requestHost("Account.Progmasoft.com", "127.0.0.1:3010"),
     "account.progmasoft.com",
   );
-  assert.equal(requestHost(null, "viget.localhost:3000"), "viget.localhost");
+  assert.equal(requestHost(null, "account.localhost:3000"), "account.localhost");
   assert.equal(requestHost(null, null), "");
 });
 
@@ -168,7 +164,7 @@ test("the Russian messages are written in Cyrillic", () => {
     russian.navigation.language,
     homeMessages["ru-RU"].hero.titleStart,
     russian.auth.signIn,
-    russian.viget.emptyTitle,
+    russian.dashboard.welcome,
   ]) {
     assert.match(text, /[А-Яа-яЁё]/);
   }
@@ -183,7 +179,7 @@ test("French is published, and Hebrew is retired", async () => {
   for (const text of [
     french.auth.signIn,
     french.metadata.homeDescription,
-    french.viget.emptyTitle,
+    french.dashboard.welcome,
   ]) {
     assert.match(text, /[a-zàâçéèêëîïôûùüÿœ]/);
     assert.ok(!/[֐-׿]/.test(text), text);

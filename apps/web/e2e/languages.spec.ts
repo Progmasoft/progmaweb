@@ -17,7 +17,7 @@ test("a visitor who chose French reads the site in French", async ({
   ]);
   await page.goto("http://progmasoft.com/");
   await expect(page.locator("html")).toHaveAttribute("lang", "fr-FR");
-  await page.goto("http://viget.progmasoft.com/nope");
+  await page.goto("http://product.progmasoft.com/nope");
   await expect(page.locator("h1")).toHaveText(
     "Nous sommes désolés, la page demandée est introuvable.",
   );

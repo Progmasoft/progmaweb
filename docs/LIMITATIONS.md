@@ -49,13 +49,6 @@ password.
 The dashboard sends a signed-out visitor to `/login?returnTo=...`. The sign-in form does not read the parameter and
 always continues to the dashboard of the account that signed in.
 
-## ViGet has no packages and no registry API here
-
-The catalog pages are real and intentionally empty: no package or plugin has been published. Publishing is closed.
-
-`viget.progmasoft.com/api/v1/status` is answered by a separate legacy process, not by this repository's API. Until
-that route moves here, the legacy process has to keep running.
-
 ## The rate limit is per process
 
 The authentication rate limit is counted in the memory of one API process, by client address. It is reset by a

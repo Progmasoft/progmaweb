@@ -9,14 +9,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Progmasoft.Progmaweb.Api.Accounts;
 using Progmasoft.OAuth;
 using Progmasoft.Progmaweb.Api.Security;
-using Progmasoft.Progmaweb.Api.ViGet;
 
-// `viget ...` runs a command of ViGet with the configuration of the service instead of the service itself; its
-// arguments are not configuration.
-// `accounts ...` provisions a reserved account the same way.
-bool vigetCommand = ViGetCommand.IsCommand(args);
+// `accounts ...` provisions a reserved account with the configuration of the service instead of running the service
+// itself; its arguments are not configuration.
 bool accountCommand = args is ["accounts", ..];
-WebApplicationBuilder builder = WebApplication.CreateBuilder(vigetCommand || accountCommand ? [] : args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(accountCommand ? [] : args);
 
 builder.Services.Configure<AccountSessionOptions>(builder.Configuration.GetSection(AccountSessionOptions.SectionName));
 builder.Services.AddSingleton(TimeProvider.System);
@@ -27,8 +24,6 @@ builder.Services.AddSingleton<AccountService>();
 builder.Services.AddSingleton<SessionService>();
 // Progmasoft OAuth, the OAuth 2.1 and OpenID Connect provider on its own host; see OAuth/OAuthRegistration.cs.
 builder.Services.AddProgmasoftOAuth(builder.Configuration, accountStore, builder.Environment.IsProduction());
-// ViGet: the Tazel plugin catalog beside the accounts; see ViGet/ViGetEndpoints.cs.
-builder.Services.AddViGet(builder.Configuration, accountStore);
 builder.Services.AddAuthorization();
 AuthenticationBuilder authentication = builder.Services
     .AddAuthentication()
@@ -118,13 +113,6 @@ if (accountCommand)
     return;
 }
 
-if (vigetCommand)
-{
-    Environment.ExitCode = await ViGetCommand.RunAsync(
-        app.Services, args[1..], Console.Out, Console.Error, CancellationToken.None);
-    return;
-}
-
 if (accountStore is AccountStoreKind.Memory)
 {
     AccountStoreRegistration.WarnThatAccountsAreInMemory(app.Logger);
@@ -156,7 +144,6 @@ app.MapGet("/api/v1/status", () => Results.Ok(new
 }));
 app.MapAccountEndpoints();
 app.MapProgmasoftOAuth();
-app.MapViGetEndpoints();
 
 app.Run();
 
