@@ -6,7 +6,10 @@ import { headers } from "next/headers";
 
 /** The hosts of Progmasoft OAuth and the account site they link to. */
 export type ProgmasoftSite =
-  "authorize" | "credentials" | "console" | "account";
+  | "authorize"
+  | "credentials"
+  | "console"
+  | "account";
 
 /** The two sites whose pages share the OAuth frame. */
 export type OAuthSite = "authorize" | "console";
