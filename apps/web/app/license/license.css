@@ -1,0 +1,76 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* license.progmasoft.com: the pages that explain each license. */
+
+.pm-license-notice {
+  margin-top: 40px;
+  border-inline-start: 3px solid var(--line);
+  padding-inline-start: 14px;
+}
+
+.pm-license-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 22px;
+}
+
+.pm-license-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.pm-license-nav a[aria-current="page"] {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pm-license-texts {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-license-texts li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.pm-license-texts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
+
+.pm-license-ids code {
+  overflow-wrap: anywhere;
+}
+
+.pm-license-faq dt {
+  margin-top: 22px;
+  font-weight: 700;
+}
+
+.pm-license-faq dd {
+  margin: 6px 0 0;
+}
+
+.pm-license-table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.pm-license-table th,
+.pm-license-table td {
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  text-align: start;
+  vertical-align: top;
+}

@@ -10,7 +10,7 @@ import {
   requestHost,
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
-import { catch3Route, productRoute } from "@/lib/sites";
+import { catch3Route, licenseRoute, productRoute } from "@/lib/sites";
 import {
   contentSecurityPolicy,
   createNonce,
@@ -55,6 +55,12 @@ const ownSites: OwnSite[] = [
     hosts: hostsOf("product"),
     root: "/products",
     route: productRoute,
+    api: false,
+  },
+  {
+    hosts: hostsOf("license"),
+    root: "/license",
+    route: licenseRoute,
     api: false,
   },
   // Catch3's site has a domain of its own; catch3.progmasoft.com sends a 308
