@@ -34,3 +34,12 @@ auditConfig:
     # repository. Remove this entry as soon as braces or the Next.js lint
     # plugin publishes a release without the advisory.
     - GHSA-vfj7-8cjw-p6xm
+    # picomatch <= 4.0.7: exponential backtracking on single-branch repeated
+    # extglobs such as +(*). No fixed release exists (4.0.7 is the latest).
+    # The package is reached only through the lint toolchain (fdir and
+    # tinyglobby under typescript-eslint and eslint-import-resolver-typescript,
+    # micromatch under @next/eslint-plugin-next, all from eslint-config-next),
+    # is not part of the built or deployed application, and only ever receives
+    # the glob patterns of this repository. Remove this entry as soon as
+    # picomatch publishes a release without the advisory.
+    - GHSA-fc5q-39xc-vjpf
