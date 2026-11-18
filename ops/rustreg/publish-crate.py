@@ -20,6 +20,7 @@ import shlex
 import subprocess
 import sys
 import tarfile
+
 import tomllib
 
 REGISTRY_INDEX = "sparse+https://rustreg.progmasoft.com/index/"
@@ -85,7 +86,11 @@ def dependencies(manifest):
         tables.append((table, target))
     result = []
     for table, target in tables:
-        for key, kind in (("dependencies", "normal"), ("build-dependencies", "build"), ("dev-dependencies", "dev")):
+        for key, kind in (
+            ("dependencies", "normal"),
+            ("build-dependencies", "build"),
+            ("dev-dependencies", "dev"),
+        ):
             for name, spec in table.get(key, {}).items():
                 result.append(dependency(name, spec, kind, target))
     return sorted(result, key=lambda entry: (entry["name"], entry["kind"]))
@@ -95,7 +100,11 @@ def index_line(manifest, checksum):
     """The line of the sparse index for this version."""
     package = manifest["package"]
     features = manifest.get("features", {})
-    plain = {key: value for key, value in features.items() if not any("dep:" in item or "?/" in item for item in value)}
+    plain = {
+        key: value
+        for key, value in features.items()
+        if not any("dep:" in item or "?/" in item for item in value)
+    }
     extended = {key: value for key, value in features.items() if key not in plain}
     line = {
         "name": package["name"],
@@ -115,14 +124,20 @@ def index_line(manifest, checksum):
 
 def run(host, script, data=None):
     """Runs a shell script on the server, as one argument of ssh."""
-    return subprocess.run(["ssh", host, script], input=data, check=True, capture_output=True)
+    return subprocess.run(
+        ["ssh", host, script], input=data, check=True, capture_output=True
+    )
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Publish a .crate to rustreg.progmasoft.com.")
+    parser = argparse.ArgumentParser(
+        description="Publish a .crate to rustreg.progmasoft.com."
+    )
     parser.add_argument("crate", help="the file cargo package wrote")
     parser.add_argument("--host", default="root@91.151.88.130")
-    parser.add_argument("--dry-run", action="store_true", help="print the index line and change nothing")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="print the index line and change nothing"
+    )
     arguments = parser.parse_args()
 
     with open(arguments.crate, "rb") as file:
@@ -131,7 +146,11 @@ def main():
     manifest = read_manifest(arguments.crate)
     name, version = manifest["package"]["name"], manifest["package"]["version"]
     publish = manifest["package"].get("publish")
-    if publish is not None and publish is not True and "progmasoft" not in (publish or []):
+    if (
+        publish is not None
+        and publish is not True
+        and "progmasoft" not in (publish or [])
+    ):
         sys.exit(f"{name} is not published to the progmasoft registry")
     line = index_line(manifest, checksum)
     print(line)
