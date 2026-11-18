@@ -192,8 +192,9 @@ token, so every application has to ask again. Back up both files with the databa
 The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `authorize.progmasoft.com`,
 `console.progmasoft.com`, `product.progmasoft.com` and `catch3.progmasoft.com` as well; expand it with certbot's webroot plugin before the vhosts are enabled, then check
 `/.well-known/openid-configuration`, the sign-in page and the console from outside. `catch3.progmasoft.com` only
-sends a 308 to `catch3.uk`, the site of Catch3, which has a certificate of its own for `catch3.uk` and
-`www.catch3.uk` (`certbot certonly --webroot -w /var/lib/letsencrypt -d catch3.uk -d www.catch3.uk --key-type
+sends a 308 to `catch3.uk`, the site of Catch3. That site is not Progmaweb's: it is the static output of
+Progmasoft/catch3.uk, served by its own nginx file (`catch3-uk.conf`), with a certificate of its own for `catch3.uk`
+and `www.catch3.uk` (`certbot certonly --webroot -w /var/lib/letsencrypt -d catch3.uk -d www.catch3.uk --key-type
 ecdsa`).
 
 ## Reserved accounts
