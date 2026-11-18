@@ -53,7 +53,7 @@ internal sealed class OAuthTestClient(AccountApiFactory factory)
 
     /// <summary>Makes a token in the developer portal and returns its identifier and secret.</summary>
     public async Task<(string ClientId, string? Secret)> RegisterApplicationAsync(
-        string scopes = "profile email offline_access viget.packages.read",
+        string scopes = "profile email offline_access",
         string kind = "web",
         string redirectUris = RedirectUri)
     {

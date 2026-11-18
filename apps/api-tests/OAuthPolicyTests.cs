@@ -104,8 +104,7 @@ public sealed class OAuthPolicyTests
         string scopes = document.GetProperty("scopes_supported").ToString();
         foreach (string scope in new[]
                  {
-                     "openid", "profile", "email", "offline_access", "viget.packages.read", "viget.packages.publish",
-                     "viget.packages.yank"
+                     "openid", "profile", "email", "offline_access"
                  })
         {
             Assert.Contains($"\"{scope}\"", scopes, StringComparison.Ordinal);

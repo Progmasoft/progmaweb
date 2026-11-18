@@ -32,7 +32,6 @@ test("a theme chosen on progmasoft.com holds on the other hosts", async ({
   await page.locator(".preference-controls button").click();
   expect(await theme(page)).toBe("dark");
   for (const host of [
-    "viget.progmasoft.com/",
     "account.progmasoft.com/",
     "product.progmasoft.com/",
   ]) {
@@ -50,7 +49,7 @@ test("a language chosen on progmasoft.com holds on the other hosts", async ({
   await open(page, "progmasoft.com/");
   await page.locator(".preference-controls select").selectOption("de-DE");
   await expect(page.locator("html")).toHaveAttribute("lang", "de-DE");
-  for (const host of ["viget.progmasoft.com/", "product.progmasoft.com/"]) {
+  for (const host of ["product.progmasoft.com/"]) {
     await open(page, host);
     await expect(page.locator("html"), host).toHaveAttribute("lang", "de-DE");
   }
@@ -65,7 +64,7 @@ test("a theme of an earlier version in localStorage moves into the shared cookie
   });
   await open(page, "account.progmasoft.com/");
   expect(await theme(page)).toBe("dark");
-  await open(page, "viget.progmasoft.com/");
+  await open(page, "product.progmasoft.com/");
   expect(await theme(page)).toBe("dark");
 });
 
@@ -77,7 +76,7 @@ test("a cookie of one host does not shadow the shared language", async ({
     {
       name: "progmasoft_locale",
       value: "ru-RU",
-      url: "http://viget.progmasoft.com/",
+      url: "http://product.progmasoft.com/",
     },
     {
       name: "progmasoft_locale",
@@ -86,10 +85,10 @@ test("a cookie of one host does not shadow the shared language", async ({
       path: "/",
     },
   ]);
-  await open(page, "viget.progmasoft.com/");
-  await open(page, "viget.progmasoft.com/");
+  await open(page, "product.progmasoft.com/");
+  await open(page, "product.progmasoft.com/");
   await expect(page.locator("html")).toHaveAttribute("lang", "de-DE");
-  const left = (await context.cookies("http://viget.progmasoft.com/")).filter(
+  const left = (await context.cookies("http://product.progmasoft.com/")).filter(
     (cookie) => cookie.name === "progmasoft_locale",
   );
   expect(left.map((cookie) => cookie.domain)).toEqual([".progmasoft.com"]);

@@ -12,6 +12,3 @@ apiRules:
   - exclude:
       uidRegex: ^Progmasoft\.Progmaweb\.Api\.Accounts\.AccountNamePolicy\.CanonicalPattern$
       type: Method
-  - exclude:
-      uidRegex: ^Progmasoft\.Progmaweb\.Api\.ViGet\.TazelPluginDescriptor\.(IdentifierPattern|VersionPattern)$
-      type: Method

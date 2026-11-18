@@ -14,17 +14,9 @@ the ASP.NET Core API.
 - `account.progmasoft.com/login` signs an existing account in.
 - `account.progmasoft.com/register` creates a new account after server-side validation.
 - `account.progmasoft.com/<Account>/dashboard` serves the authenticated account dashboard.
-- `viget.progmasoft.com` shows the state of the registry first, then two groups: LANGUAGES and BUILD SYSTEM DSL PLUGINS.
-  An open catalog links to its page; a catalog that is not offered yet is a gray, disabled button.
-- `viget.progmasoft.com/langs/c`, `/langs/cpp` and `/langs/objc` serve the catalogs of C, C++ and Objective-C packages
-  (`.vipkg`; Objective-C++ belongs to `/langs/objc`); `/langs` leads to the language list on the home page.
-- `viget.progmasoft.com/dslplugins/tazel` serves the catalog of Kotlin DSL plugins for Tazel; `/dslplugins` leads there.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
 duplicates. Email uniqueness is also evaluated case-insensitively by the API.
-
-ViGet does not maintain a separate publisher name. A package coordinate's `<Publisher>` segment is exactly the
-canonical Progmasoft `<Account>` name, with the same spelling and case.
 
 ## Languages
 
@@ -44,7 +36,7 @@ menu is remembered across the three hosts. See [Localization](docs/LOCALIZATION.
 
 ## Architecture
 
-- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization, account, and ViGet
+- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization, account, product and license
   surfaces in one build without coupling their page hierarchies.
 - `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, session issuance, secure
   cookies, rate limiting, and authorization.
@@ -102,7 +94,7 @@ dotnet docfx docs/api/docfx.json --warningsAsErrors
 dotnet run docs/api/CheckDocumentation.cs -- docs/api
 ```
 
-Frontend tests exercise the published locale contract and account/ViGet metadata without starting a production service.
+Frontend tests exercise the published locale contract and account metadata without starting a production service.
 `pnpm test:layout` runs the built site with `next start` and opens one page of each kind on every host in Chromium at
 360, 390, 768 and 1280 pixels; every host name resolves to the local server, so no request leaves the machine. It
 fails when anything reaches past the edge of the screen, a header takes more than one line or covers its own brand,

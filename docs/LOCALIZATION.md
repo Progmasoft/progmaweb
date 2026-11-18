@@ -60,7 +60,7 @@ A value that is not a published locale is ignored in both paths.
 | Attribute | Value |
 | --- | --- |
 | Name | `progmasoft_locale` |
-| Domain | `.progmasoft.com` on production hosts, so the choice follows the visitor to the account and ViGet hosts; host-only elsewhere |
+| Domain | `.progmasoft.com` on production hosts, so the choice follows the visitor to the other Progmasoft hosts; host-only elsewhere |
 | Lifetime | one year |
 | Flags | `HttpOnly`, `SameSite=Lax`, and `Secure` over TLS |
 

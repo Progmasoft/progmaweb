@@ -122,7 +122,6 @@ export function DashboardClient({
             {dashboard.overview}
           </a>
           <a href="#security">{dashboard.security}</a>
-          <a href="#services">{dashboard.services}</a>
         </nav>
         <div className="dashboard-sidebar-preferences">
           <PreferenceControls locale={locale} labels={navigation} />
@@ -149,10 +148,6 @@ export function DashboardClient({
                 <dd>{account.accountName}</dd>
               </div>
               <div>
-                <dt>{dashboard.publisherName}</dt>
-                <dd>{account.accountName}</dd>
-              </div>
-              <div>
                 <dt>{dashboard.email}</dt>
                 <dd>{account.email}</dd>
               </div>
@@ -171,22 +166,6 @@ export function DashboardClient({
             <button className="button button-secondary" type="button">
               {dashboard.changePassword}
             </button>
-          </section>
-          <section className="dashboard-card dashboard-card-wide" id="services">
-            <span className="card-kicker">{dashboard.services}</span>
-            <h2>{dashboard.products}</h2>
-            <div className="service-row">
-              <div>
-                <strong>ViGet Package Registry</strong>
-                <span>
-                  {dashboard.publisherPrefix}: {account.accountName} (
-                  {dashboard.sameAccount})
-                </span>
-              </div>
-              <span className="status-badge status-planned">
-                {dashboard.planned}
-              </span>
-            </div>
           </section>
         </div>
       </main>

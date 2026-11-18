@@ -5,8 +5,7 @@
  * The theme a visitor chose, shared by every host of Progmasoft.
  *
  * It is a cookie of the registrable domain, as the language is, so a choice
- * made on progmasoft.com holds on account., viget., product. and console. as
- * well. Scripts of the page read and write it, so it is not HttpOnly; it
+ * made on progmasoft.com holds on account., product. and console. as well. Scripts of the page read and write it, so it is not HttpOnly; it
  * carries nothing but "light" or "dark". A choice stored by earlier versions
  * of the site in localStorage, which each host kept for itself, moves into
  * the cookie the first time a page sees it.

@@ -40,10 +40,7 @@ ${projects.join("\n")}
 
 ## Services
 
-- [Progmasoft Account](https://account.progmasoft.com/): one account for the services of Progmasoft; its name is also
-  the publisher name on ViGet.
-- [ViGet](https://viget.progmasoft.com/): the package registry of Progmasoft, for C, C++ and Objective-C packages and
-  for the DSL plugins of build systems.
+- [Progmasoft Account](https://account.progmasoft.com/): one account for the services of Progmasoft.
 - [Progmasoft Console](https://console.progmasoft.com/): OAuth 2.1 and OpenID Connect clients for applications that
   sign people in with their Progmasoft Account.
 - [Progmasoft Git](https://git.progmasoft.com/): read-only mirrors of the public repositories; issues and pull

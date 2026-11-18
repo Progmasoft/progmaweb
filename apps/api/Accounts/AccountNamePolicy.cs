@@ -10,7 +10,6 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 /// <remarks>
 /// A name is 8 to 128 ASCII letters or digits and begins with an upper-case letter. Names are unique without regard
 /// to case, so two names that differ only in case cannot both exist, while each keeps the spelling its owner chose.
-/// The same name is the ViGet publisher name.
 /// </remarks>
 internal static partial class AccountNamePolicy
 {

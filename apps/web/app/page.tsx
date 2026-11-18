@@ -143,8 +143,6 @@ export default async function Homepage() {
                 {"    "}/.well-known/openid-configuration
                 {"\n\n"}
                 <b>scope</b> openid profile email
-                {"\n"}
-                {"      "}viget.packages.read
               </code>
             </pre>
           </div>

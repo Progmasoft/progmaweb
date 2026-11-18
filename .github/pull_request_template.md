@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 ## User-facing change
 
-Describe the Progmasoft, account, or ViGet behavior changed. State whether a deployed route or persistent account data
+Describe the Progmasoft or account behavior changed. State whether a deployed route or persistent account data
 is affected.
 
 ## Verification

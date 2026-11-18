@@ -17,7 +17,7 @@ test("the theme comes from its cookie and nothing else", () => {
 
 test("the theme cookie is shared by the Progmasoft hosts and secure over HTTPS", () => {
   assert.equal(
-    themeCookie("dark", "viget.progmasoft.com", true),
+    themeCookie("dark", "product.progmasoft.com", true),
     "progmasoft_theme=dark; Path=/; Max-Age=31536000; SameSite=Lax; Domain=.progmasoft.com; Secure",
   );
   assert.equal(
