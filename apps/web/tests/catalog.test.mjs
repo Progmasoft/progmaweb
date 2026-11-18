@@ -24,7 +24,8 @@ test("an empty search finds every project in catalog order", () => {
 });
 
 test("the query matches names, categories and text without regard to case", () => {
-  assert.deepEqual(filterProducts("en-US", { query: "ARCHER" }), [
+  assert.deepEqual(filterProducts("en-US", { query: "ARCHER" }), ["archer"]);
+  assert.deepEqual(filterProducts("en-US", { query: "jvm" }), [
     "archer",
     "etincelle",
   ]);

@@ -203,11 +203,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       etincelle: {
         tagline: "An engine for large data on Java and the JVM.",
         description:
-          "Etincelle processes large data on Java 21 and later and the JVM languages that call Java, in the part Apache Spark plays. Its columnar data lives in Archer.",
+          "Etincelle processes large data on Java 21 and later and the JVM languages that call Java, in the part Apache Spark plays. It keeps its data in columns of its own.",
         features: [
           "Typed schemas and columns",
           "Etincelle SQL",
-          "Columnar data in Archer",
+          "Columnar data of its own",
           "For Java, Kotlin and Scala",
         ],
       },
@@ -334,11 +334,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       etincelle: {
         tagline: "Eine Engine für große Datenmengen auf Java und der JVM.",
         description:
-          "Etincelle verarbeitet große Datenmengen auf Java 21 und neuer und den JVM-Sprachen, die Java aufrufen, in der Rolle von Apache Spark. Seine spaltenorientierten Daten liegen in Archer.",
+          "Etincelle verarbeitet große Datenmengen auf Java 21 und neuer und den JVM-Sprachen, die Java aufrufen, in der Rolle von Apache Spark. Seine Daten hält es in eigenen Spalten.",
         features: [
           "Typisierte Schemata und Spalten",
           "Etincelle SQL",
-          "Spaltenorientierte Daten in Archer",
+          "Eigene spaltenorientierte Daten",
           "Für Java, Kotlin und Scala",
         ],
       },
@@ -464,11 +464,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       etincelle: {
         tagline: "Движок для больших данных на Java и JVM.",
         description:
-          "Etincelle обрабатывает большие данные на Java 21 и новее и языках JVM, вызывающих Java, — в той же роли, что и Apache Spark. Его колоночные данные хранятся в Archer.",
+          "Etincelle обрабатывает большие данные на Java 21 и новее и языках JVM, вызывающих Java, — в той же роли, что и Apache Spark. Данные он хранит в собственных колонках.",
         features: [
           "Типизированные схемы и столбцы",
           "Etincelle SQL",
-          "Колоночные данные в Archer",
+          "Собственные колоночные данные",
           "Для Java, Kotlin и Scala",
         ],
       },
@@ -595,11 +595,11 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
         tagline:
           "Un moteur pour les grands volumes de données sur Java et la JVM.",
         description:
-          "Etincelle traite de grands volumes de données sur Java 21 et plus et sur les langages de la JVM qui appellent Java, dans le rôle que joue Apache Spark. Ses données en colonnes résident dans Archer.",
+          "Etincelle traite de grands volumes de données sur Java 21 et plus et sur les langages de la JVM qui appellent Java, dans le rôle que joue Apache Spark. Il garde ses données dans ses propres colonnes.",
         features: [
           "Des schémas et des colonnes typés",
           "Etincelle SQL",
-          "Des données en colonnes dans Archer",
+          "Ses propres données en colonnes",
           "Pour Java, Kotlin et Scala",
         ],
       },
