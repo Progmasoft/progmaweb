@@ -67,53 +67,78 @@ function smallControls(page: Page) {
   });
 }
 
-for (const target of layoutPages) {
-  test(`${target} fits the screen`, async ({ page }) => {
-    await open(page, target);
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth -
-        document.documentElement.clientWidth,
-    );
-    expect(overflow, "horizontal scroll").toBe(0);
-    expect(await elementsPastTheEdges(page)).toEqual([]);
-    expect(await smallControls(page)).toEqual([]);
-  });
+// Every page in every published language: German, Russian and French words
+// run longer than English ones and must fit as well.
+const locales = ["en-US", "de-DE", "ru-RU", "fr-FR"] as const;
 
-  test(`${target} keeps its header on one line`, async ({ page }) => {
-    await open(page, target);
-    const header = page.locator("header.site-header").first();
-    test.skip((await header.count()) === 0, "the page has no site header");
-    const box = await header.boundingBox();
-    expect(box?.height ?? 0).toBeLessThanOrEqual(80);
-    // The brand and the controls beside it must not cover each other.
-    const overlaps = await header.evaluate((element) => {
-      // The words of the brand are measured themselves: a squeezed brand box
-      // can be narrower than the text that spills out of it.
-      const parts = [
-        ...element.querySelectorAll(
-          ".brand-name, .brand-product, .viget-brand-lockup > span, .menu-toggle, .primary-nav > *",
-        ),
-      ]
-        .map((part) => ({ part, box: part.getBoundingClientRect() }))
-        .filter(({ box }) => box.width > 0 && box.height > 0);
-      const found: string[] = [];
-      for (const [i, a] of parts.entries()) {
-        for (const b of parts.slice(i + 1)) {
-          if (a.part.contains(b.part) || b.part.contains(a.part)) continue;
-          const x =
-            Math.min(a.box.right, b.box.right) -
-            Math.max(a.box.left, b.box.left);
-          const y =
-            Math.min(a.box.bottom, b.box.bottom) -
-            Math.max(a.box.top, b.box.top);
-          if (x > 1 && y > 1)
-            found.push(`${a.part.className} / ${b.part.className}`);
-        }
-      }
-      return found;
+for (const locale of locales) {
+  test.describe(locale, () => {
+    test.beforeEach(async ({ context }) => {
+      await context.addCookies([
+        {
+          name: "progmasoft_locale",
+          value: locale,
+          domain: ".progmasoft.com",
+          path: "/",
+        },
+        {
+          name: "progmasoft_locale",
+          value: locale,
+          domain: "catch3.uk",
+          path: "/",
+        },
+      ]);
     });
-    expect(overlaps).toEqual([]);
+
+    for (const target of layoutPages) {
+      test(`${target} fits the screen`, async ({ page }) => {
+        await open(page, target);
+        const overflow = await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth,
+        );
+        expect(overflow, "horizontal scroll").toBe(0);
+        expect(await elementsPastTheEdges(page)).toEqual([]);
+        expect(await smallControls(page)).toEqual([]);
+      });
+
+      test(`${target} keeps its header on one line`, async ({ page }) => {
+        await open(page, target);
+        const header = page.locator("header.site-header").first();
+        test.skip((await header.count()) === 0, "the page has no site header");
+        const box = await header.boundingBox();
+        expect(box?.height ?? 0).toBeLessThanOrEqual(80);
+        // The brand and the controls beside it must not cover each other.
+        const overlaps = await header.evaluate((element) => {
+          // The words of the brand are measured themselves: a squeezed brand box
+          // can be narrower than the text that spills out of it.
+          const parts = [
+            ...element.querySelectorAll(
+              ".brand-name, .brand-product, .viget-brand-lockup > span, .menu-toggle, .primary-nav > *",
+            ),
+          ]
+            .map((part) => ({ part, box: part.getBoundingClientRect() }))
+            .filter(({ box }) => box.width > 0 && box.height > 0);
+          const found: string[] = [];
+          for (const [i, a] of parts.entries()) {
+            for (const b of parts.slice(i + 1)) {
+              if (a.part.contains(b.part) || b.part.contains(a.part)) continue;
+              const x =
+                Math.min(a.box.right, b.box.right) -
+                Math.max(a.box.left, b.box.left);
+              const y =
+                Math.min(a.box.bottom, b.box.bottom) -
+                Math.max(a.box.top, b.box.top);
+              if (x > 1 && y > 1)
+                found.push(`${a.part.className} / ${b.part.className}`);
+            }
+          }
+          return found;
+        });
+        expect(overlaps).toEqual([]);
+      });
+    }
   });
 }
 

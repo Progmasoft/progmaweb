@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow } from "@/lib/localization";
 import { catalogText } from "@/lib/viget-catalogs";
 import { gradlePlugins, pluginText } from "@/lib/viget-plugins";
 
@@ -49,7 +48,7 @@ export default async function GradlePluginsPage() {
                   href="https://plugins.gradle.org/"
                   rel="noopener"
                 >
-                  {text.gradlePortal} {forwardArrow(locale)}
+                  {text.gradlePortal} →
                 </a>
               </div>
             </div>
@@ -78,7 +77,7 @@ export default async function GradlePluginsPage() {
                       href={`https://plugins.gradle.org/plugin/${plugin.id}`}
                       rel="noopener"
                     >
-                      {text.gradlePortal} {forwardArrow(locale)}
+                      {text.gradlePortal} →
                     </a>
                   </strong>
                 </article>

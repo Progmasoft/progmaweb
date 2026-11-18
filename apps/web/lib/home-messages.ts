@@ -277,78 +277,81 @@ export const homeMessages: Record<Locale, HomeMessages> = {
       account: "Аккаунт Progmasoft",
     },
   },
-  "he-IL": {
+  "fr-FR": {
     navigation: {
-      technology: "טכנולוגיה",
-      products: "מוצרים",
-      developers: "מפתחים",
+      technology: "Technologie",
+      products: "Produits",
+      developers: "Développeurs",
     },
     hero: {
       eyebrow: "Progmasoft",
-      titleStart: "טכנולוגיה שנבנתה",
-      titleAccent: "כדי להחזיק מעמד ולהסביר את עצמה.",
+      titleStart: "Une technologie faite pour",
+      titleAccent: "durer et s’expliquer d’elle-même.",
       description:
-        "Progmasoft מתכננת מערכות בנייה, כלי בדיקות, סביבות פיתוח מבוססות סוכנים, תשתית נתונים והשירותים שסביבם. הכול נשען על משמעת אחת: חוזים מפורשים, אימות אמיתי ושמות שאומרים את מה שהם מתכוונים.",
-      explore: "לגלות את הטכנולוגיה",
-      products: "למוצרים",
-      poolLabel: "התחומים במאגר הטכנולוגיה של Progmasoft",
+        "Progmasoft conçoit des systèmes de build, des outils de test, des environnements de développement agentiques, une infrastructure de données et les services qui les entourent. Tout partage une même discipline : des contrats explicites, une vérification réelle et des noms qui disent ce qu’ils désignent.",
+      explore: "Découvrir la technologie",
+      products: "Voir les produits",
+      poolLabel: "Domaines du socle technologique de Progmasoft",
     },
     pool: {
-      eyebrow: "מאגר טכנולוגיה",
-      title: "תחומים, לא רק מוצרים.",
+      eyebrow: "Socle technologique",
+      title: "Des domaines, pas seulement des produits.",
       description:
-        "מוצרים נולדים וגדלים; הטכנולוגיה שמתחתיהם היא מה שאנחנו ממשיכים לבנות. כל תחום משרת את כל מה ש־Progmasoft עושה.",
+        "Les produits naissent et grandissent ; la technologie qui les porte est ce que nous continuons de construire. Chaque domaine est partagé par tout ce que fait Progmasoft.",
       areas: [
         [
-          "תשתית נתונים",
-          "תבניות נתונים עמודתיות בזיכרון ומנועים לנתונים גדולים על ה־JVM.",
+          "Infrastructure de données",
+          "Formats et moteurs en colonnes, en mémoire, pour de grands volumes de données sur la JVM.",
         ],
         [
-          "בנייה וחבילות",
-          "בנייה שחוזרת על עצמה, פתרון תלויות, קובצי נעילה ומאגר חבילות.",
-        ],
-        ["כלי פיתוח", "מעצבי קוד, לינטרים וסביבות פיתוח מבוססות סוכנים."],
-        [
-          "איכות ובדיקות",
-          "בדיקות מבוססות תכונות, בדיקות עם מצב ובדיקות מוטציה, כיסוי ובחירת בדיקות.",
+          "Build et paquets",
+          "Builds reproductibles, résolution des dépendances, fichiers de verrouillage et un registre de paquets.",
         ],
         [
-          "זהות וגישה",
-          "חשבונות Progmasoft,‏ OAuth 2.1 ו־OpenID Connect לכל אפליקציה.",
+          "Outils pour développeurs",
+          "Formateurs, linters et environnements de développement agentiques.",
         ],
         [
-          "תשתית",
-          "שירותים ש־Progmasoft מפעילה בעצמה: אירוח, דואר, מאגרים ואינטגרציה רציפה.",
+          "Qualité et tests",
+          "Tests fondés sur les propriétés, tests à état et tests de mutation, couverture et sélection des tests.",
+        ],
+        [
+          "Identité et accès",
+          "Comptes Progmasoft, OAuth 2.1 et OpenID Connect pour chaque application.",
+        ],
+        [
+          "Infrastructure",
+          "Des services que Progmasoft exploite lui-même : hébergement, messagerie, registres et intégration continue.",
         ],
       ],
-      catalog: "מחפשים מוצר מסוים?",
-      catalogLink: "לקטלוג המוצרים",
+      catalog: "Vous cherchez un produit précis ?",
+      catalogLink: "Ouvrir le catalogue des produits",
     },
     principles: {
-      eyebrow: "איך אנחנו בונים",
-      title: "הנדסה שנשארת קריאה.",
+      eyebrow: "Notre façon de construire",
+      title: "Une ingénierie qui reste lisible.",
       items: [
         [
-          "חוזים מפורשים",
-          "גבולות עם טיפוסים חושפים בעלות, תאימות והתנהגות בכשל.",
+          "Des contrats explicites",
+          "Des frontières typées rendent visibles la propriété, la compatibilité et le comportement en cas d’échec.",
         ],
         [
-          "אימות אמיתי",
-          "הבדיקות מפעילות תוצרים מותקנים, נתיבים כמו בייצור והתנהגות נצפית.",
+          "Une vérification réelle",
+          "Les tests éprouvent les artefacts installés, des chemins semblables à la production et le comportement observable.",
         ],
         [
-          "שמות עמידים",
-          "אוצר המילים הציבורי הולך אחרי המודל, לא אחרי ההיסטוריה של מימוש.",
+          "Des noms durables",
+          "Le vocabulaire public suit le modèle, et non l’histoire d’une implémentation.",
         ],
       ],
     },
     developers: {
-      eyebrow: "למפתחים",
-      title: "לבנות על Progmasoft.",
+      eyebrow: "Pour les développeurs",
+      title: "Construisez sur Progmasoft.",
       description:
-        "אפשרו לאנשים להיכנס עם חשבון Progmasoft דרך OAuth 2.1, ונהלו את אסימוני האפליקציות שלכם ב־Progmasoft Console.",
-      console: "לפתוח את ה־Console",
-      account: "חשבון Progmasoft",
+        "Connectez les utilisateurs avec leur compte Progmasoft grâce à OAuth 2.1, et gérez les jetons de vos applications dans la Console Progmasoft.",
+      console: "Ouvrir la Console",
+      account: "Compte Progmasoft",
     },
   },
 };

@@ -6,7 +6,6 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { nonceHeader } from "@/lib/content-security-policy";
 import { getLocale } from "@/lib/locale.server";
-import { textDirection } from "@/lib/localization";
 import "./globals.css";
 import "./viget.css";
 
@@ -49,7 +48,6 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      data-text-direction={textDirection(locale)}
       // data-theme belongs to the bootstrap script and the theme control only.
       // Rendered here, React would set it back to light whenever the server
       // re-renders the layout (a language switch), and the page would flash.

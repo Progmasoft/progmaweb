@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-export const supportedLocales = ["en-US", "de-DE", "ru-RU", "he-IL"] as const;
+export const supportedLocales = ["en-US", "de-DE", "ru-RU", "fr-FR"] as const;
 export type Locale = (typeof supportedLocales)[number];
 
 /** The language of a visitor whose browser asks for none that is published. */
@@ -16,32 +16,37 @@ export const localeNames: Record<Locale, string> = {
   "en-US": "English",
   "de-DE": "Deutsch",
   "ru-RU": "Русский",
-  "he-IL": "עברית",
+  "fr-FR": "Français",
 };
 
 /**
- * The direction in which the text of a language runs.
- *
- * Only text follows it. The page layout, the navigation and code samples keep
- * their left-to-right arrangement in every language.
+ * A language the site published before and no longer does. A link that asks
+ * for it gets the clean address and the fallback language instead.
  */
-export function textDirection(locale: Locale): "ltr" | "rtl" {
-  return locale === "he-IL" ? "rtl" : "ltr";
+export const retiredLocales: readonly string[] = ["he-IL"];
+
+/**
+ * What a `?lang=` parameter asks of the proxy: the language to store and the
+ * status of the redirect to the clean address. A published language is a
+ * temporary redirect (307), as the visitor may choose again; a retired one is
+ * permanent (308) and stores the fallback. Anything else is ignored.
+ */
+export function languageRequest(
+  asked: string | undefined,
+): { locale: Locale; status: 307 | 308 } | undefined {
+  if (isLocale(asked)) return { locale: asked, status: 307 };
+  if (asked !== undefined && retiredLocales.includes(asked)) {
+    return { locale: fallbackLocale, status: 308 };
+  }
+  return undefined;
 }
 
-/** The arrow that points onward in the reading direction of a language. */
-export function forwardArrow(locale: Locale): string {
-  return textDirection(locale) === "rtl" ? "←" : "→";
-}
-
-// Primary language subtags and the published locale each one selects. `iw` is
-// the former code for Hebrew, which some browsers still send.
+// Primary language subtags and the published locale each one selects.
 const localeByLanguage = new Map<string, Locale>([
   ["en", "en-US"],
   ["de", "de-DE"],
   ["ru", "ru-RU"],
-  ["he", "he-IL"],
-  ["iw", "he-IL"],
+  ["fr", "fr-FR"],
 ]);
 
 /**
@@ -933,253 +938,273 @@ export const messages = {
       footerClosing: "Реестр пакетов ViGet от Progmasoft",
     },
   },
-  "he-IL": {
+  "fr-FR": {
     metadata: {
       homeTitle: "Progmasoft",
       homeDescription:
-        "Progmasoft בונה מערכות בנייה, כלי בדיקות, סביבת פיתוח מבוססת סוכנים ותשתית נתונים למפתחים.",
-      accountTitle: "חשבון",
-      accountDescription: "גישה לחשבון Progmasoft שלך וניהולו.",
-      loginTitle: "כניסה",
-      registerTitle: "יצירת חשבון",
-      recoveryTitle: "שחזור החשבון",
-      recoveryDescription: "קבלת עזרה בשחזור הגישה לחשבון Progmasoft.",
-      dashboardTitle: "לוח בקרה",
-      vigetTitle: "מאגר החבילות ViGet מבית Progmasoft",
+        "Progmasoft crée des systèmes de build, des outils de test, un IDE agentique et une infrastructure de données pour les développeurs.",
+      accountTitle: "Compte",
+      accountDescription: "Accédez à votre compte Progmasoft et gérez-le.",
+      loginTitle: "Se connecter",
+      registerTitle: "Créer un compte",
+      recoveryTitle: "Récupérer votre compte",
+      recoveryDescription:
+        "Obtenez de l’aide pour retrouver l’accès à un compte Progmasoft.",
+      dashboardTitle: "Tableau de bord",
+      vigetTitle: "ViGet, le registre de paquets de Progmasoft",
       vigetDescription:
-        "מאגר החבילות ל-C, ל-C++ ול-Objective-C פעיל, אך עדיין לא פורסמו בו חבילות.",
-      dslPluginsTitle: "תוספי DSL · מאגר החבילות ViGet מבית Progmasoft",
+        "Le registre de paquets pour C, C++ et Objective-C est en ligne, mais aucun paquet n’a encore été publié.",
+      dslPluginsTitle:
+        "Plugins DSL · ViGet, le registre de paquets de Progmasoft",
       dslPluginsDescription:
-        "קטלוג תוספי Kotlin DSL של ViGet פעיל, אך עדיין לא פורסמו בו תוספים.",
+        "Le catalogue des plugins DSL Kotlin de ViGet est en ligne, mais aucun plugin n’a encore été publié.",
     },
     navigation: {
-      primary: "ניווט ראשי",
-      organization: "הארגון",
-      products: "מוצרים",
-      principles: "עקרונות",
-      account: "חשבון",
-      dashboard: "לוח בקרה",
-      signIn: "כניסה",
-      createAccount: "יצירת חשבון",
-      menu: "תפריט",
-      closeMenu: "סגירת התפריט",
-      theme: "ערכת נושא",
-      light: "בהיר",
-      dark: "כהה",
-      language: "שפה",
+      primary: "Navigation principale",
+      organization: "Organisation",
+      products: "Produits",
+      principles: "Principes",
+      account: "Compte",
+      dashboard: "Tableau de bord",
+      signIn: "Se connecter",
+      createAccount: "Créer un compte",
+      menu: "Menu",
+      closeMenu: "Fermer le menu",
+      theme: "Thème",
+      light: "Clair",
+      dark: "Sombre",
+      language: "Langue",
     },
     notFound: {
-      title: "מצטערים, הדף שביקשת לא נמצא.",
-      text: "ייתכן שהכתובת שגויה, או שהדף שחיפשת כבר אינו זמין.",
-      pageTitle: "הדף לא נמצא",
+      title: "Nous sommes désolés, la page demandée est introuvable.",
+      text: "L’adresse est peut-être mal orthographiée, ou la page que vous cherchez n’est plus disponible.",
+      pageTitle: "Page introuvable",
     },
     footer: {
-      summary: "כלי פיתוח ותשתית נתונים, הבנויים על חוזים יציבים.",
-      products: "מוצרים",
-      openSource: "קוד פתוח",
-      organization: "הארגון",
-      support: "תמיכה",
-      websiteSource: "קוד המקור של האתר",
-      closing: "מתוכנן לבהירות, לאבטחה ולתחזוקה ארוכת טווח.",
+      summary:
+        "Des outils pour développeurs et une infrastructure de données bâtis sur des contrats durables.",
+      products: "Produits",
+      openSource: "Open source",
+      organization: "Organisation",
+      support: "Assistance",
+      websiteSource: "Source du site",
+      closing:
+        "Conçu pour la clarté, la sécurité et la maintenance à long terme.",
     },
     account: {
-      securityLabel: "מאפייני האבטחה של החשבון",
+      securityLabel: "Propriétés de sécurité du compte",
       trust: [
-        "עוגיית הפעלה מאובטחת",
-        "גיבוב סיסמאות בצד השרת",
-        "אימות עם הגבלת קצב",
+        "Cookie de session sécurisé",
+        "Hachage des mots de passe côté serveur",
+        "Authentification à débit limité",
       ],
-      landingEyebrow: "חשבון Progmasoft",
-      landingTitle: "זהות ברורה אחת לכל שירות נתמך.",
+      landingEyebrow: "Compte Progmasoft",
+      landingTitle: "Une identité claire pour chaque service pris en charge.",
       landingDescription:
-        "החשבון שומר את הפרופיל, האימות והגישה לשירותים בתוך גבול אבטחה ייעודי.",
+        "Votre compte place le profil, l’authentification et l’accès aux services derrière une frontière de sécurité dédiée.",
       identity: [
-        ["שם החשבון", "הזהות הציבורית היציבה שלך ושם המפרסם שלך ב-ViGet"],
-        ["דוא״ל", "שחזור והודעות אבטחה"],
-        ["הפעלה", "גישה מאובטחת מהדפדפן שניתן לבטל"],
+        [
+          "Nom de compte",
+          "Votre identité publique durable et votre nom d’éditeur ViGet",
+        ],
+        ["E-mail", "Récupération et avis de sécurité"],
+        ["Session", "Accès navigateur sécurisé et révocable"],
       ],
       features: [
         [
-          "אבטחה מכוונת",
-          "הסיסמאות מגובבות בצד השרת, ואסימוני ההפעלה נשמרים כתקצירים בלבד.",
+          "Une sécurité réfléchie",
+          "Les mots de passe sont hachés côté serveur et les jetons de session ne sont conservés que sous forme d’empreintes.",
         ],
         [
-          "שמות צפויים",
-          "שמות חשבון קנוניים מונעים כתובות דו־משמעיות והתחזות שמבוססת על הבדלי אותיות גדולות וקטנות בלבד. ViGet משתמש בשם הזה בדיוק כשם מפרסם החבילה ואינו יוצר זהות שנייה.",
+          "Des noms prévisibles",
+          "Les noms de compte canoniques évitent les URL ambiguës et l’usurpation par la seule casse. ViGet utilise exactement ce nom comme éditeur des paquets ; il ne crée pas de seconde identité.",
         ],
         [
-          "גבולות בין שירותים",
-          "המוצרים מבקשים גישה מפורשת לחשבון במקום לשתף מצב יישום נסתר.",
+          "Des frontières entre services",
+          "Les produits demandent un accès explicite au compte au lieu de partager un état applicatif caché.",
         ],
       ],
-      loginEyebrow: "חשבון Progmasoft",
-      loginTitle: "כניסה מאובטחת.",
-      loginDescription: "המשך ללוח הבקרה של החשבון ולשירותים המקושרים.",
-      registerEyebrow: "יצירת זהות",
-      registerTitle: "מתחילים עם חשבון יציב.",
-      registerDescription: "בחירת השם שישמש בכתובת חשבון Progmasoft שלך.",
-      recoveryEyebrow: "תמיכה בחשבון",
-      recoveryTitle: "שחזור החשבון.",
+      loginEyebrow: "Compte Progmasoft",
+      loginTitle: "Connectez-vous en toute sécurité.",
+      loginDescription:
+        "Poursuivez vers le tableau de bord de votre compte et les services connectés.",
+      registerEyebrow: "Créer une identité",
+      registerTitle: "Commencez avec un compte durable.",
+      registerDescription:
+        "Choisissez le nom utilisé dans l’URL de votre compte Progmasoft.",
+      recoveryEyebrow: "Assistance du compte",
+      recoveryTitle: "Récupérez votre compte.",
       recoveryDescription:
-        "כשאי אפשר עוד להיכנס, יש לפנות בערוץ התמיכה המאומת.",
-      recoveryPanelEyebrow: "שחזור חשבון",
-      recoveryPanelTitle: "שחזור גישה בבטחה",
+        "Utilisez le canal d’assistance vérifié lorsque vous ne pouvez plus vous connecter.",
+      recoveryPanelEyebrow: "Récupération du compte",
+      recoveryPanelTitle: "Retrouvez l’accès en toute sécurité",
       recoveryPanelDescription:
-        "שחזור סיסמה אוטומטי אינו זמין בשלב ההשקה הראשוני של מערכת החשבונות. יש לפנות לתמיכה של Progmasoft מכתובת הדוא״ל הרשומה בחשבון, כדי שניתן יהיה לאמת את הבעלות.",
-      recoveryEmailSubject: "שחזור חשבון Progmasoft",
-      contactSupport: "פנייה לתמיכה",
-      rememberedPassword: "נזכרת בסיסמה?",
-      returnToSignIn: "חזרה לכניסה",
+        "La récupération automatique du mot de passe n’est pas disponible pendant le premier déploiement du système de comptes. Écrivez à l’assistance de Progmasoft depuis l’adresse e-mail enregistrée sur votre compte, afin que la propriété puisse être vérifiée.",
+      recoveryEmailSubject: "Récupération du compte Progmasoft",
+      contactSupport: "Contacter l’assistance",
+      rememberedPassword: "Vous vous souvenez de votre mot de passe ?",
+      returnToSignIn: "Revenir à la connexion",
     },
     auth: {
-      createHeading: "יצירת החשבון שלך",
-      loginHeading: "ברוכים השבים",
-      createDescription: "זהות Progmasoft אחת לכל השירותים הנתמכים.",
-      loginDescription: "כניסה עם כתובת הדוא״ל המשויכת לחשבון Progmasoft שלך.",
-      accountName: "שם החשבון",
+      createHeading: "Créez votre compte",
+      loginHeading: "Bon retour",
+      createDescription:
+        "Utilisez une seule identité Progmasoft pour les services pris en charge.",
+      loginDescription:
+        "Connectez-vous avec l’adresse e-mail associée à votre compte Progmasoft.",
+      accountName: "Nom de compte",
       accountHint:
-        "8 עד 128 אותיות ASCII או ספרות, כשהתו הראשון הוא אות גדולה.",
-      email: "כתובת דוא״ל",
-      password: "סיסמה",
-      forgotPassword: "שכחת את הסיסמה?",
-      passwordHint: "לפחות 12 תווים. יש תמיכה במשפטי סיסמה ארוכים.",
-      confirmPassword: "אימות הסיסמה",
-      show: "הצגה",
-      hide: "הסתרה",
-      working: "בתהליך…",
-      create: "יצירת חשבון",
-      signIn: "כניסה",
-      or: "או",
-      google: "המשך עם Google",
-      already: "כבר יש לך חשבון?",
-      newUser: "פעם ראשונה ב-Progmasoft?",
-      createLink: "יצירת חשבון",
-      mismatch: "אימות הסיסמה אינו תואם.",
-      unreachable: "שירות החשבונות אינו זמין זמנית. יש לנסות שוב בקרוב.",
-      missingName: "השרת לא החזיר שם חשבון.",
-      unreadableName: "לא ניתן היה לקרוא את השדה ״שם החשבון״.",
-      requestFailed: "לא ניתן היה להשלים את הבקשה.",
+        "Utilisez de 8 à 128 lettres ou chiffres ASCII, en commençant par une majuscule.",
+      email: "Adresse e-mail",
+      password: "Mot de passe",
+      forgotPassword: "Mot de passe oublié ?",
+      passwordHint:
+        "Utilisez au moins 12 caractères. Les longues phrases de passe sont acceptées.",
+      confirmPassword: "Confirmer le mot de passe",
+      show: "Afficher",
+      hide: "Masquer",
+      working: "En cours…",
+      create: "Créer un compte",
+      signIn: "Se connecter",
+      or: "ou",
+      google: "Continuer avec Google",
+      already: "Vous avez déjà un compte ?",
+      newUser: "Nouveau chez Progmasoft ?",
+      createLink: "Créer un compte",
+      mismatch: "La confirmation du mot de passe ne correspond pas.",
+      unreachable:
+        "Le service des comptes est momentanément injoignable. Réessayez dans un instant.",
+      missingName: "Le serveur n’a renvoyé aucun nom de compte.",
+      unreadableName: "Le champ Nom de compte n’a pas pu être lu.",
+      requestFailed: "La requête n’a pas pu aboutir.",
       googleSignInFailed:
-        "לא ניתן היה להשלים את הכניסה עם Google. יש לנסות שוב.",
-      googleAccountNameRequired: "יש לבחור שם חשבון לפני ההמשך עם Google.",
-      googleAccountNameUnavailable: "שם החשבון הזה אינו זמין. יש לבחור שם אחר.",
-      googleInvalidAccountName: "יש להזין שם חשבון תקין לפני ההמשך עם Google.",
+        "La connexion avec Google n’a pas pu aboutir. Réessayez.",
+      googleAccountNameRequired:
+        "Choisissez un nom de compte avant de continuer avec Google.",
+      googleAccountNameUnavailable:
+        "Ce nom de compte n’est pas disponible. Choisissez-en un autre.",
+      googleInvalidAccountName:
+        "Utilisez un nom de compte valide avant de continuer avec Google.",
       googlePoliciesRequired:
-        "יש לקבל את מדיניות הפרטיות ואת מדיניות האבטחה לפני ההמשך עם Google.",
-      consentStart: "קראתי ואני מקבל/ת את ",
-      consentPrivacy: "מדיניות הפרטיות",
-      consentMiddle: " ואת ",
-      consentSecurity: "מדיניות האבטחה",
+        "Acceptez la politique de confidentialité et la politique de sécurité avant de continuer avec Google.",
+      consentStart: "J’ai lu et j’accepte la ",
+      consentPrivacy: "politique de confidentialité",
+      consentMiddle: " et la ",
+      consentSecurity: "politique de sécurité",
       consentEnd: ".",
       consentRequired:
-        "יש לקבל את מדיניות הפרטיות ואת מדיניות האבטחה כדי ליצור חשבון.",
+        "Acceptez la politique de confidentialité et la politique de sécurité pour créer un compte.",
     },
     dashboard: {
-      loading: "החשבון נטען…",
-      loadFailed: "לא ניתן היה לטעון את לוח הבקרה.",
-      unreachable: "שירות החשבונות אינו זמין זמנית.",
-      navigation: "ניווט בלוח הבקרה",
-      overview: "סקירה",
-      security: "אבטחה",
-      services: "שירותים",
-      signOut: "יציאה",
-      eyebrow: "סקירת החשבון",
-      welcome: "ברוכים הבאים",
-      description: "ניהול הזהות שמשמשת את שירותי Progmasoft.",
-      profile: "פרופיל",
-      identity: "זהות החשבון",
-      accountName: "שם החשבון",
-      publisherName: "שם המפרסם ב-ViGet",
-      email: "דוא״ל",
-      created: "נוצר",
-      passwordSessions: "סיסמה והפעלות",
+      loading: "Chargement du compte…",
+      loadFailed: "Le tableau de bord n’a pas pu être chargé.",
+      unreachable: "Le service des comptes est momentanément injoignable.",
+      navigation: "Navigation du tableau de bord",
+      overview: "Vue d’ensemble",
+      security: "Sécurité",
+      services: "Services",
+      signOut: "Se déconnecter",
+      eyebrow: "Vue d’ensemble du compte",
+      welcome: "Bienvenue",
+      description: "Gérez l’identité utilisée par les services de Progmasoft.",
+      profile: "Profil",
+      identity: "Identité du compte",
+      accountName: "Nom de compte",
+      publisherName: "Nom d’éditeur ViGet",
+      email: "E-mail",
+      created: "Créé le",
+      passwordSessions: "Mot de passe et sessions",
       securityDescription:
-        "הדפדפן שלך משתמש בעוגיית הפעלה מאובטחת מסוג HttpOnly. סודות ההפעלה לעולם אינם נשמרים כטקסט גלוי.",
-      changePassword: "שינוי סיסמה",
-      products: "מוצרי Progmasoft מקושרים",
-      publisherPrefix: "שם המפרסם",
-      sameAccount: "שם החשבון שלך",
-      planned: "מתוכנן",
+        "Votre navigateur utilise un cookie de session sécurisé HttpOnly. Les secrets de session ne sont jamais conservés en clair.",
+      changePassword: "Changer le mot de passe",
+      products: "Produits Progmasoft connectés",
+      publisherPrefix: "Nom d’éditeur",
+      sameAccount: "votre nom de compte",
+      planned: "Prévu",
     },
     viget: {
-      navigationLabel: "ניווט במאגר",
-      packages: "חבילות",
-      dslPlugins: "תוספי DSL",
-      account: "חשבון",
-      login: "כניסה",
-      register: "הרשמה",
-      homeEyebrow: "מאגר החבילות ViGet",
-      homeTitle: "חבילות ל-C, ל-C++ ול-Objective-C.",
+      navigationLabel: "Navigation du registre",
+      packages: "Paquets",
+      dslPlugins: "Plugins DSL",
+      account: "Compte",
+      login: "Se connecter",
+      register: "S’inscrire",
+      homeEyebrow: "Registre de paquets ViGet",
+      homeTitle: "Des paquets pour C, C++ et Objective-C.",
       homeDescription:
-        "ViGet הוא המקור הרשמי לחבילות C, ‏C++ ו-Objective-C ולתוספי DSL של מערכות בנייה, בהפעלה ישירה של Progmasoft.",
-      createAccount: "יצירת חשבון",
-      exploreTazel: "להכיר את Tazel",
-      available: "המאגר זמין",
-      emptyTitle: "הקטלוג הציבורי ריק.",
+        "ViGet est la source de référence des paquets C, C++ et Objective-C et des plugins DSL des systèmes de build, exploitée directement par Progmasoft.",
+      createAccount: "Créer un compte",
+      exploreTazel: "Découvrir Tazel",
+      available: "Registre disponible",
+      emptyTitle: "Le catalogue public est vide.",
       emptyDescription:
-        "עדיין לא פורסמו גרסאות של חבילות. ViGet יציג כאן חבילות אמיתיות כשיהיו זמינות.",
-      packageFormat: "תבנית החבילה",
-      publisherIdentity: "זהות המפרסם",
-      publishing: "פרסום",
-      publishingClosed: "עדיין לא נפתח",
-      catalogsEyebrow: "קטלוגים",
-      catalogsTitle: "שני סוגי תוצרים, מאגר אחד.",
+        "Aucune version de paquet n’a encore été publiée. ViGet affichera ici de vrais paquets dès qu’ils seront disponibles.",
+      packageFormat: "Format des paquets",
+      publisherIdentity: "Identité de l’éditeur",
+      publishing: "Publication",
+      publishingClosed: "Pas encore ouverte",
+      catalogsEyebrow: "Catalogues",
+      catalogsTitle: "Deux types d’artefacts, un seul registre.",
       catalogsDescription:
-        "לחבילות ולתוספי DSL לפרויקטים יש מרחבי קואורדינטות נפרדים וצפויים.",
-      languagePackages: "חבילות",
-      vipkgCatalog: "קטלוג ViPkg",
+        "Les paquets et les plugins DSL de projet ont des espaces de coordonnées distincts et prévisibles.",
+      languagePackages: "Paquets",
+      vipkgCatalog: "Catalogue ViPkg",
       vipkgDescription:
-        "ספריות ויישומים ב-C, ב-C++ וב-Objective-C, שמופצים כתוצרי ‎.vipkg.",
-      projectExtensions: "הרחבות לפרויקטים",
-      kotlinPlugins: "תוספי Kotlin DSL",
+        "Bibliothèques et applications en C, C++ et Objective-C, distribuées sous forme d’artefacts .vipkg.",
+      projectExtensions: "Extensions de projet",
+      kotlinPlugins: "Plugins DSL Kotlin",
       kotlinDescription:
-        "תוספי Kotlin בתבנית JAR שמרחיבים את קובץ הפרויקט של Tazel.",
-      openCatalog: "לפתיחת הקטלוג",
-      contractEyebrow: "חוזה המאגר",
-      contractTitle: "בעלות ברורה מהזהות ועד לתוצר.",
+        "Des plugins JAR Kotlin qui étendent le fichier de projet de Tazel.",
+      openCatalog: "Ouvrir le catalogue",
+      contractEyebrow: "Contrat du registre",
+      contractTitle: "Une propriété claire, de l’identité à l’artefact.",
       principles: [
         [
-          "שם חשבון אחד",
-          "שם חשבון Progmasoft שלך הוא גם שם המפרסם שלך ב-ViGet.",
+          "Un seul nom de compte",
+          "Votre nom de compte Progmasoft est aussi votre nom d’éditeur ViGet.",
         ],
         [
-          "קואורדינטות תלויות רישיות",
-          "שמות המפרסם והחבילה שומרים על האיות הציבורי המדויק שלהם.",
+          "Des coordonnées sensibles à la casse",
+          "Les noms d’éditeur et de paquet gardent leur graphie publique exacte.",
         ],
-        ["בלי גרסאות דמה", "הקטלוג נשאר ריק ביושר עד שמתפרסם תוצר חתום אמיתי."],
+        [
+          "Aucune version factice",
+          "Le catalogue reste honnêtement vide jusqu’à la publication d’un véritable artefact signé.",
+        ],
       ],
-      pluginEyebrow: "ViGet · תוספי Kotlin DSL",
-      pluginTitle: "להרחיב את מודל הפרויקט.",
+      pluginEyebrow: "ViGet · Plugins DSL Kotlin",
+      pluginTitle: "Étendez le modèle de projet.",
       pluginDescription:
-        "תוספי Kotlin DSL הם תוצרי JAR עבור קובץ הפרויקט של Tazel. הם נפרדים מחבילות ‎.vipkg.",
-      backToPackages: "חזרה לחבילות",
-      followDevelopment: "למעקב אחר הפיתוח",
-      pluginAvailable: "הקטלוג זמין",
-      pluginEmptyTitle: "עדיין אין תוספי DSL ציבוריים.",
-      pluginEmptyDescription: "הקטלוג מוכן, ובכוונה אינו מכיל תוצרי דמה.",
+        "Les plugins DSL Kotlin sont des artefacts JAR pour le fichier de projet de Tazel. Ils sont distincts des paquets .vipkg.",
+      backToPackages: "Retour aux paquets",
+      followDevelopment: "Suivre le développement",
+      pluginAvailable: "Catalogue disponible",
+      pluginEmptyTitle: "Aucun plugin DSL public pour l’instant.",
+      pluginEmptyDescription:
+        "Le catalogue est prêt et ne contient volontairement aucun artefact factice.",
       guidance: [
         [
-          "תבנית",
-          "Kotlin JAR",
-          "תוספי DSL פועלים כהרחבות פרויקט של Kotlin/JVM.",
+          "Format",
+          "JAR Kotlin",
+          "Les plugins DSL s’exécutent comme des extensions de projet Kotlin/JVM.",
         ],
         [
-          "מיקום",
-          "קטלוג ייעודי",
-          "קואורדינטות של תוסף מתחילות תמיד ב-‎/dslplugins/tazel.",
+          "Emplacement",
+          "Catalogue dédié",
+          "Les coordonnées des plugins commencent toujours par /dslplugins/tazel.",
         ],
         [
-          "זמינות",
-          "תחילה Progmasoft",
-          "‏Progmasoft מפרסמת את התוספים הראשונים; בהמשך הפרסום ייפתח לכל חשבון.",
+          "Disponibilité",
+          "Progmasoft d’abord",
+          "Progmasoft publie les premiers plugins ; la publication s’ouvrira ensuite à tous les comptes.",
         ],
       ],
       footerDescription:
-        "ViGet הוא המאגר של חבילות ל-C, ל-C++ ול-Objective-C ושל תוספי Kotlin DSL.",
-      registry: "מאגר",
-      support: "תמיכה",
-      source: "קוד מקור",
-      footerClosing: "מאגר החבילות ViGet מבית Progmasoft",
+        "ViGet est le registre des paquets pour C, C++ et Objective-C et des plugins DSL Kotlin.",
+      registry: "Registre",
+      support: "Assistance",
+      source: "Source",
+      footerClosing: "ViGet, le registre de paquets de Progmasoft",
     },
   },
 } as const;

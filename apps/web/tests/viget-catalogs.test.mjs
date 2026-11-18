@@ -13,7 +13,7 @@ import {
   languagesHeading,
 } from "../lib/viget-catalogs.ts";
 
-const locales = ["en-US", "de-DE", "ru-RU", "he-IL"];
+const locales = ["en-US", "de-DE", "ru-RU", "fr-FR"];
 
 test("the registry lists C, C++ and Objective-C, then Tazel and Gradle, under their own headings", () => {
   assert.equal(languagesHeading, "LANGUAGES");

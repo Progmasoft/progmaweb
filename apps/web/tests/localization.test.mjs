@@ -16,7 +16,7 @@ import {
 import { homeMessages } from "../lib/home-messages.ts";
 
 test("only the published locales are accepted", () => {
-  assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU", "he-IL"]);
+  assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU", "fr-FR"]);
   assert.equal(isLocale("en-US"), true);
   assert.equal(isLocale("de-DE"), true);
   assert.equal(isLocale("ru-RU"), true);
@@ -24,8 +24,9 @@ test("only the published locales are accepted", () => {
     "en",
     "de",
     "ru",
+    "fr",
     "he",
-    "iw",
+    "he-IL",
     "en-us",
     "tr-TR",
     "",
@@ -174,17 +175,32 @@ test("the Russian messages are written in Cyrillic", () => {
   assert.notEqual(russian.auth.signIn, messages["en-US"].auth.signIn);
 });
 
-test("Hebrew is published and is the only right-to-left language", async () => {
-  const { forwardArrow, textDirection } =
-    await import("../lib/localization.ts");
-  assert.equal(isLocale("he-IL"), true);
-  assert.equal(localeNames["he-IL"], "עברית");
-  for (const locale of supportedLocales) {
-    const expected = locale === "he-IL" ? "rtl" : "ltr";
-    assert.equal(textDirection(locale), expected, locale);
-    assert.equal(forwardArrow(locale), expected === "rtl" ? "←" : "→", locale);
+test("French is published, and Hebrew is retired", async () => {
+  const { retiredLocales } = await import("../lib/localization.ts");
+  assert.equal(isLocale("fr-FR"), true);
+  assert.equal(localeNames["fr-FR"], "Français");
+  const french = messages["fr-FR"];
+  for (const text of [
+    french.auth.signIn,
+    french.metadata.homeDescription,
+    french.viget.emptyTitle,
+  ]) {
+    assert.match(text, /[a-zàâçéèêëîïôûùüÿœ]/);
+    assert.ok(!/[֐-׿]/.test(text), text);
   }
-  assert.match(messages["he-IL"].auth.signIn, /[֐-׿]/);
+  assert.notEqual(french.auth.signIn, messages["en-US"].auth.signIn);
+  assert.deepEqual(retiredLocales, ["he-IL"]);
+  assert.equal(isLocale("he-IL"), false);
+});
+
+test("a ?lang= link stores a published language, and the fallback for a retired one", async () => {
+  const { languageRequest } = await import("../lib/localization.ts");
+  assert.deepEqual(languageRequest("fr-FR"), { locale: "fr-FR", status: 307 });
+  assert.deepEqual(languageRequest("de-DE"), { locale: "de-DE", status: 307 });
+  assert.deepEqual(languageRequest("he-IL"), { locale: "en-US", status: 308 });
+  for (const value of [undefined, "", "he", "fr", "tr-TR", "constructor"]) {
+    assert.equal(languageRequest(value), undefined, `${value}`);
+  }
 });
 
 test("the browser preference selects the language when nothing was chosen", async () => {
@@ -197,16 +213,18 @@ test("the browser preference selects the language when nothing was chosen", asyn
     ["de", "de-DE"],
     ["de-AT,de;q=0.9,en;q=0.8", "de-DE"],
     ["ru-RU,ru;q=0.9", "ru-RU"],
-    ["he-IL,he;q=0.9,en-US;q=0.8", "he-IL"],
-    ["iw", "he-IL"],
-    ["HE", "he-IL"],
+    ["fr-CA,fr;q=0.9,en-US;q=0.8", "fr-FR"],
+    ["FR", "fr-FR"],
+    // Hebrew is no longer published.
+    ["he-IL,he;q=0.9,en-US;q=0.8", "en-US"],
+    ["iw", "en-US"],
     // Quality decides, not position.
     ["en;q=0.3,ru;q=0.9", "ru-RU"],
     // The first of equally preferred languages wins.
     ["de,ru", "de-DE"],
     // An unpublished first choice falls through to a published one.
     ["tr-TR,tr;q=0.9,de;q=0.5", "de-DE"],
-    ["tr-TR,fr;q=0.9", "en-US"],
+    ["tr-TR,fr;q=0.9", "fr-FR"],
     ["*", "en-US"],
     // A refused or malformed quality never selects a language.
     ["de;q=0", "en-US"],

@@ -8,10 +8,10 @@ import { messages, supportedLocales } from "../lib/localization.ts";
 import { policyUrls, policyVersion } from "../lib/policies.ts";
 import { deDE } from "../lib/policies/de-DE.ts";
 import { enUS } from "../lib/policies/en-US.ts";
-import { heIL } from "../lib/policies/he-IL.ts";
+import { frFR } from "../lib/policies/fr-FR.ts";
 import { ruRU } from "../lib/policies/ru-RU.ts";
 
-const policies = { "en-US": enUS, "de-DE": deDE, "ru-RU": ruRU, "he-IL": heIL };
+const policies = { "en-US": enUS, "de-DE": deDE, "ru-RU": ruRU, "fr-FR": frFR };
 
 test("the page and the account API name the same version", () => {
   const api = readFileSync(

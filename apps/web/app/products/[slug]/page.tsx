@@ -10,7 +10,7 @@ import {
   StatusBadge,
 } from "@/components/ProductCatalog";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow, getMessages } from "@/lib/localization";
+import { getMessages } from "@/lib/localization";
 import { getCatalogMessages, isProductSlug, products } from "@/lib/products";
 
 interface ProductPageProps {
@@ -48,7 +48,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = products[slug];
   const text = catalog.products[slug];
   const release = product.latestRelease;
-  const arrow = forwardArrow(locale);
   return (
     <CatalogPage
       locale={locale}
@@ -118,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </dl>
             {product.site ? (
               <a className="button" href={product.site}>
-                {catalog.site} {arrow}
+                {catalog.site} →
               </a>
             ) : null}
             <a className="button button-secondary" href={product.source}>

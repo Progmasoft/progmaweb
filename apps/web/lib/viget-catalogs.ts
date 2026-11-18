@@ -201,45 +201,49 @@ const text: Record<Locale, CatalogText> = {
       "Плагины Kotlin JAR, расширяющие файл проекта Tazel — системы сборки для C, C++, Objective-C, Objective-C++ и Zig. Они отделены от пакетов .vipkg.",
     backToRegistry: "Назад к ViGet",
   },
-  "he-IL": {
-    statusEyebrow: "מצב ViGet",
-    languagesDescription: "חבילות שנכתבו בשפה, כתוצרי ‎.vipkg.",
-    buildSystemsDescription: "תוספים שמרחיבים את קובץ הפרויקט של מערכת בנייה.",
+  "fr-FR": {
+    statusEyebrow: "État de ViGet",
+    languagesDescription:
+      "Des paquets écrits dans un langage, sous forme d’artefacts .vipkg.",
+    buildSystemsDescription:
+      "Des plugins qui étendent le fichier de projet d’un système de build.",
     holds: {
-      C: "ספריות ויישומים שנכתבו ב-C.",
-      "C++": "ספריות ויישומים שנכתבו ב-C++.",
-      "Objective-C": "ספריות ויישומים שנכתבו ב-Objective-C וב-Objective-C++.",
-      Tazel: "תוספי Kotlin JAR עבור קובץ הפרויקט של Tazel.",
-      Gradle: "תוספי Gradle של Progmasoft, מ-Gradle Plugin Portal.",
+      C: "Bibliothèques et applications écrites en C.",
+      "C++": "Bibliothèques et applications écrites en C++.",
+      "Objective-C":
+        "Bibliothèques et applications écrites en Objective-C et en Objective-C++.",
+      Tazel: "Des plugins JAR Kotlin pour le fichier de projet de Tazel.",
+      Gradle:
+        "Les plugins Gradle de Progmasoft, depuis le Gradle Plugin Portal.",
     },
-    notAvailable: "עוד לא זמין",
-    open: "פתיחת הקטלוג",
+    notAvailable: "Pas encore disponible",
+    open: "Ouvrir le catalogue",
     languages: {
       c: {
-        title: "חבילות C",
+        title: "Paquets C",
         description:
-          "ספריות ויישומים ב-C, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
-        emptyTitle: "עוד אין חבילות C.",
+          "Bibliothèques et applications écrites en C, distribuées sous forme d’artefacts .vipkg et publiées sous un compte Progmasoft.",
+        emptyTitle: "Aucun paquet C pour l’instant.",
       },
       cpp: {
-        title: "חבילות C++",
+        title: "Paquets C++",
         description:
-          "ספריות ויישומים ב-C++, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
-        emptyTitle: "עוד אין חבילות C++.",
+          "Bibliothèques et applications écrites en C++, distribuées sous forme d’artefacts .vipkg et publiées sous un compte Progmasoft.",
+        emptyTitle: "Aucun paquet C++ pour l’instant.",
       },
       objc: {
-        title: "חבילות Objective-C",
+        title: "Paquets Objective-C",
         description:
-          "ספריות ויישומים ב-Objective-C וב-Objective-C++, שמופצים כתוצרי ‎.vipkg ומתפרסמים תחת חשבון Progmasoft.",
-        emptyTitle: "עוד אין חבילות Objective-C.",
+          "Bibliothèques et applications écrites en Objective-C et en Objective-C++, distribuées sous forme d’artefacts .vipkg et publiées sous un compte Progmasoft.",
+        emptyTitle: "Aucun paquet Objective-C pour l’instant.",
       },
     },
     languageEmptyDescription:
-      "הקטלוג מוכן, ובכוונה אין בו חבילות ממלאות מקום. הפרסום ייפתח יחד עם לקוח ה-ViGet של Tazel.",
-    tazelTitle: "תוספי DSL של Tazel",
+      "Le catalogue est prêt et ne contient volontairement aucun paquet factice. La publication ouvrira avec le client ViGet de Tazel.",
+    tazelTitle: "Plugins DSL de Tazel",
     tazelDescription:
-      "תוספי Kotlin JAR שמרחיבים את קובץ הפרויקט של Tazel, מערכת הבנייה ל-C, ל-C++, ל-Objective-C, ל-Objective-C++ ול-Zig. הם נפרדים מחבילות ‎.vipkg.",
-    backToRegistry: "חזרה ל-ViGet",
+      "Des plugins JAR Kotlin qui étendent le fichier de projet de Tazel, le système de build pour C, C++, Objective-C, Objective-C++ et Zig. Ils sont distincts des paquets .vipkg.",
+    backToRegistry: "Retour à ViGet",
   },
 };
 

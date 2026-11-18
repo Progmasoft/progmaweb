@@ -4,7 +4,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import {
-  isLocale,
+  languageRequest,
   localeCookieName,
   localeCookieOptions,
   requestHost,
@@ -102,8 +102,12 @@ function route(request: NextRequest, headers: Headers): NextResponse {
   // redirect to the clean URL so crawlers never index preference variants.
   // The header control switches in place through a server action; this
   // parameter remains for links and for browsers that run no script.
-  const requestedLocale = request.nextUrl.searchParams.get("lang") ?? undefined;
-  if (isLocale(requestedLocale)) {
+  // A language the site no longer publishes, such as he-IL, sends the link to
+  // the clean address for good, in the fallback language.
+  const language = languageRequest(
+    request.nextUrl.searchParams.get("lang") ?? undefined,
+  );
+  if (language) {
     const destination = request.nextUrl.clone();
     destination.searchParams.delete("lang");
     const forwardedProtocol = request.headers.get("x-forwarded-proto");
@@ -112,10 +116,10 @@ function route(request: NextRequest, headers: Headers): NextResponse {
     destination.protocol = isProductionHost
       ? "https:"
       : request.nextUrl.protocol;
-    const response = NextResponse.redirect(destination);
+    const response = NextResponse.redirect(destination, language.status);
     response.cookies.set(
       localeCookieName,
-      requestedLocale,
+      language.locale,
       localeCookieOptions(
         host,
         forwardedProtocol === "https" || request.nextUrl.protocol === "https:",
