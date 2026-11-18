@@ -66,7 +66,7 @@ restart and would not be shared between several instances.
 The Hebrew translation was written and revised without a native reader. It may contain wording a native speaker would
 not choose.
 
-## One audit advisory is ignored
+## Two audit advisories are ignored
 
-The dependency audit ignores a single advisory that has no fixed release and affects only the lint toolchain. The
-entry and its removal condition are described in [Development](DEVELOPMENT.md).
+The dependency audit ignores two advisories that have no fixed release and affect only the lint toolchain. The entries
+and their removal condition are described in [Development](DEVELOPMENT.md).
