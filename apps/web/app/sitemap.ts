@@ -3,6 +3,7 @@
 
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
+import { licensePages } from "@/lib/license-messages";
 import { productSlugs } from "@/lib/products";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -31,6 +32,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly",
         priority: 0.8,
       },
+    ];
+  }
+  if (host === "license.progmasoft.com") {
+    return [
+      {
+        url: "https://license.progmasoft.com/",
+        changeFrequency: "monthly",
+        priority: 1,
+      },
+      ...licensePages.map((page) => ({
+        url: `https://license.progmasoft.com/pm-spl/1.0/${page}/`,
+        changeFrequency: "yearly" as const,
+        priority: 0.8,
+      })),
     ];
   }
   if (host === "product.progmasoft.com") {

@@ -5,12 +5,16 @@
 
 Every page of Progmaweb is published in four languages. All of them live in `apps/web/lib/localization.ts`.
 
-| Locale | Language | Text direction |
-| --- | --- | --- |
-| `en-US` | English | left to right |
-| `de-DE` | German | left to right |
-| `ru-RU` | Russian | left to right |
-| `he-IL` | Hebrew | right to left |
+| Locale | Language |
+| --- | --- |
+| `en-US` | English |
+| `de-DE` | German |
+| `ru-RU` | Russian |
+| `fr-FR` | French |
+
+Hebrew (`he-IL`) was published until 2026-11-18 and is retired. A link that still asks for it with `?lang=he-IL` is
+redirected for good (308) to the address without the parameter, and the cookie is set to `en-US`. A browser that
+prefers Hebrew gets the fallback.
 
 A page has one URL in every language. There are no language-specific paths and no `hreflang` alternatives, because a
 language is a preference of the visitor, not a second address of the page.
@@ -22,14 +26,14 @@ For each request the server decides in this order (`apps/web/lib/locale.server.t
 1. **The visitor's choice.** A valid `progmasoft_locale` cookie always wins.
 2. **The browser.** Without that cookie the `Accept-Language` header is negotiated: the published language with the
    highest quality wins, and the order of the header breaks ties. Only the primary language is compared, so `de-AT`
-   selects German. `iw`, the former code for Hebrew, is accepted.
+   selects German.
 3. **The fallback.** A browser that prefers no published language gets `en-US`.
 
 Examples of the negotiation:
 
 | `Accept-Language` | Page language |
 | --- | --- |
-| `he-IL,he;q=0.9,en;q=0.8` | Hebrew |
+| `fr-CA,fr;q=0.9,en;q=0.8` | French |
 | `de-AT,de;q=0.9` | German |
 | `tr-TR,tr;q=0.9,de;q=0.5` | German, the first preference that is published |
 | `tr-TR,tr;q=0.9` | English, the fallback |
@@ -63,22 +67,6 @@ A value that is not a published locale is ignored in both paths.
 Both paths write the cookie through `localeCookieOptions`. Two writers with different attributes would leave two
 cookies behind, one shadowing the other.
 
-## Hebrew and text direction
-
-Hebrew does not mirror the page. The layout, the navigation and code keep their left-to-right arrangement; only text
-follows the language.
-
-- The root element carries `data-text-direction="rtl"`, not `dir="rtl"`.
-- Blocks of prose (headings and paragraphs) run right to left and align to the right.
-- Short pieces such as links, buttons and list items take the direction of their own first letter, so a product name
-  on its own still reads left to right.
-- Code and form inputs stay left to right.
-- The onward arrow comes from `forwardArrow(locale)` and points left in Hebrew.
-- A left-to-right mark (`‎`) follows a name that ends in a symbol, such as `C#`, in Hebrew strings. Without it the `#` would jump to the other
-  side of the name inside right-to-left text.
-
-The rules are at the end of `apps/web/app/globals.css`.
-
 ## Message tree
 
 `messages` holds one tree per locale with identical shape. Pages and components read it through
@@ -89,18 +77,19 @@ The tests in `apps/web/tests/localization.test.mjs` enforce that
 
 - every locale has exactly the keys and array lengths of `en-US`, with no empty string;
 - every locale has a name in its own language for the menu;
-- negotiation, cookie attributes and text direction behave as described above.
+- negotiation and cookie attributes behave as described above.
 
 ## Adding a language
 
 1. Add the locale to `supportedLocales`, its own name to `localeNames`, and its primary language to
    `localeByLanguage`.
-2. If the language is written right to left, extend `textDirection`.
+2. Every published language is written left to right. A language written right to left needs rules for the direction
+   of its text first.
 3. Add a complete message tree. Copy the `en-US` tree and translate every string; keep product names and technical
    identifiers such as `BUILD.kts` unchanged.
 4. Extend the tests: the list of published locales and a negotiation case for the new language.
 5. Run `pnpm check`, `pnpm test`, `pnpm lint` and `pnpm build`, then read every page in the new language in a
    browser, in both themes and at a narrow width.
 
-Have a native speaker read the text before it is published. The Hebrew text has not had that review yet; see
+Have a native speaker read the text before it is published. The French text has not had that review yet; see
 [Known limitations](LIMITATIONS.md).

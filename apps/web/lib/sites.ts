@@ -22,3 +22,17 @@ export function productRoute(pathname: string): string | null {
     ? `/products${path}`
     : null;
 }
+
+/**
+ * The public pages of license.progmasoft.com and the internal routes that
+ * render them: the list of licenses, and the pages of each license version,
+ * such as /pm-spl/1.0/faq/.
+ */
+export function licenseRoute(pathname: string): string | null {
+  const path = trimmed(pathname);
+  if (path === "/") {
+    return "/license";
+  }
+  const page = /^\/pm-spl\/1\.0\/(information|faq|categories)$/.exec(path);
+  return page ? `/license/pm-spl/1.0/${page[1]}` : null;
+}

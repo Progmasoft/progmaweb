@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow, getMessages } from "@/lib/localization";
+import { getMessages } from "@/lib/localization";
 import { catalogText } from "@/lib/viget-catalogs";
 import { pluginText, tazelPlugins } from "@/lib/viget-plugins";
 
@@ -49,7 +49,7 @@ export default async function TazelPluginsPage() {
                   {catalogs.backToRegistry}
                 </a>
                 <a className="viget-text-link" href="https://tazel.net/">
-                  Tazel {forwardArrow(locale)}
+                  Tazel →
                 </a>
               </div>
             </div>
@@ -103,8 +103,7 @@ export default async function TazelPluginsPage() {
                     ) : null}
                     <strong>
                       {text.latest} {plugin.latestVersion}
-                      {plugin.license ? ` · ${plugin.license}` : ""}{" "}
-                      {forwardArrow(locale)}
+                      {plugin.license ? ` · ${plugin.license}` : ""} →
                     </strong>
                   </a>
                 ))}

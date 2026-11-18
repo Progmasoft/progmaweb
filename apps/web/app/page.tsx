@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { AreaIcon, areaKinds } from "@/components/site/AreaIcon";
 import { getHomeMessages } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow, getMessages } from "@/lib/localization";
+import { getMessages } from "@/lib/localization";
 import { organizationData, websiteData } from "@/lib/structured-data";
 import "./site.css";
 
@@ -29,7 +29,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Homepage() {
   const locale = await getLocale();
   const { hero, pool, principles, developers } = getHomeMessages(locale);
-  const arrow = forwardArrow(locale);
   return (
     <div className="pm-page">
       <JsonLd data={[organizationData(), websiteData(locale)]} />
@@ -51,7 +50,7 @@ export default async function Homepage() {
                   className="button button-secondary"
                   href="https://product.progmasoft.com/"
                 >
-                  {hero.products} {arrow}
+                  {hero.products} →
                 </a>
               </div>
             </div>
@@ -92,7 +91,7 @@ export default async function Homepage() {
             <div className="pm-catalog">
               <p>{pool.catalog}</p>
               <a className="pm-link" href="https://product.progmasoft.com/">
-                {pool.catalogLink} {arrow}
+                {pool.catalogLink} →
               </a>
             </div>
           </div>

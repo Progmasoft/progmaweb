@@ -10,7 +10,7 @@ import {
   tazelPlugin,
 } from "../lib/viget-plugins.ts";
 
-const locales = ["en-US", "de-DE", "ru-RU", "he-IL"];
+const locales = ["en-US", "de-DE", "ru-RU", "fr-FR"];
 
 test("the plugin pages have every text in every language", () => {
   for (const locale of locales) {

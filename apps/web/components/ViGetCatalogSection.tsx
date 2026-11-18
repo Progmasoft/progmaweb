@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { forwardArrow, type Locale } from "@/lib/localization";
+import type { Locale } from "@/lib/localization";
 import { catalogText, type Catalog } from "@/lib/viget-catalogs";
 
 /**
@@ -48,9 +48,7 @@ export function ViGetCatalogSection({
               >
                 <h3>{catalog.name}</h3>
                 <small>{text.holds[catalog.name]}</small>
-                <strong>
-                  {text.open} {forwardArrow(locale)}
-                </strong>
+                <strong>{text.open} →</strong>
               </a>
             ) : (
               <button

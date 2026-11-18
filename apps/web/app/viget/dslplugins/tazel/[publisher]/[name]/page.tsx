@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import { ViGetFooter } from "@/components/ViGetFooter";
 import { ViGetHeader } from "@/components/ViGetHeader";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow } from "@/lib/localization";
 import {
   pluginDeclaration,
   pluginText,
@@ -71,7 +70,7 @@ export default async function TazelPluginPage({ params }: Parameters) {
                     href={plugin.homepage}
                     rel="noopener"
                   >
-                    {text.homepage} {forwardArrow(locale)}
+                    {text.homepage} →
                   </a>
                 ) : null}
                 {plugin.repository ? (
@@ -80,7 +79,7 @@ export default async function TazelPluginPage({ params }: Parameters) {
                     href={plugin.repository}
                     rel="noopener"
                   >
-                    {text.repository} {forwardArrow(locale)}
+                    {text.repository} →
                   </a>
                 ) : null}
               </div>

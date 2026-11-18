@@ -11,6 +11,12 @@ import {
   supportedLocales,
   type Locale,
 } from "@/lib/localization";
+import {
+  themeCookie,
+  themeCookieName,
+  themeFromCookies,
+  type Theme,
+} from "@/lib/theme";
 
 interface PreferenceControlsProps {
   locale: Locale;
@@ -22,14 +28,10 @@ interface PreferenceControlsProps {
   };
 }
 
-type Theme = "light" | "dark";
-
 const themeEvent = "progmasoft-theme-change";
 
 function readTheme(): Theme {
-  return window.localStorage.getItem("progmasoft_theme") === "dark"
-    ? "dark"
-    : "light";
+  return themeFromCookies(document.cookie) ?? "light";
 }
 
 /**
@@ -51,12 +53,24 @@ function applyTheme(theme: Theme) {
   );
 }
 
+/**
+ * The theme can change while the page stays open: in this tab, or on another
+ * host of Progmasoft, which shares the cookie. The page reads it again when it
+ * is shown or comes back into view.
+ */
 function subscribeTheme(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
+  const onVisible = () => {
+    if (document.visibilityState === "visible") onStoreChange();
+  };
   window.addEventListener(themeEvent, onStoreChange);
+  window.addEventListener("pageshow", onStoreChange);
+  window.addEventListener("focus", onStoreChange);
+  document.addEventListener("visibilitychange", onVisible);
   return () => {
-    window.removeEventListener("storage", onStoreChange);
     window.removeEventListener(themeEvent, onStoreChange);
+    window.removeEventListener("pageshow", onStoreChange);
+    window.removeEventListener("focus", onStoreChange);
+    document.removeEventListener("visibilitychange", onVisible);
   };
 }
 
@@ -81,7 +95,17 @@ export function PreferenceControls({
   function toggleTheme() {
     const selected: Theme = theme === "light" ? "dark" : "light";
     applyTheme(selected);
-    window.localStorage.setItem("progmasoft_theme", selected);
+    document.cookie = themeCookie(
+      selected,
+      window.location.hostname,
+      window.location.protocol === "https:",
+    );
+    // The choice lives in the cookie; an old per-host copy would only mislead.
+    try {
+      window.localStorage.removeItem(themeCookieName);
+    } catch {
+      // Storage may be unavailable; the cookie holds the choice.
+    }
     window.dispatchEvent(new Event(themeEvent));
   }
 

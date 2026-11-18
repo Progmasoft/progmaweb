@@ -190,7 +190,7 @@ clients still hold; replacing the encryption key invalidates every access token,
 token, so every application has to ask again. Back up both files with the database.
 
 The certificate of `progmasoft.com` must name `credentials.progmasoft.com`, `authorize.progmasoft.com`,
-`console.progmasoft.com`, `product.progmasoft.com` and `catch3.progmasoft.com` as well; expand it with certbot's webroot plugin before the vhosts are enabled, then check
+`console.progmasoft.com`, `product.progmasoft.com`, `license.progmasoft.com` and `catch3.progmasoft.com` as well; expand it with certbot's webroot plugin before the vhosts are enabled, then check
 `/.well-known/openid-configuration`, the sign-in page and the console from outside. `catch3.progmasoft.com` only
 sends a 308 to `catch3.uk`, the site of Catch3. That site is not Progmaweb's: it is the static output of
 Progmasoft/catch3.uk, served by its own nginx file (`catch3-uk.conf`), with a certificate of its own for `catch3.uk`
@@ -316,6 +316,23 @@ ssh root@91.151.88.130 'chown -R root:root /srv/schemastore && chmod 0644 /srv/s
 
 A schema's `$id` is its address. A change that would reject files the schema accepted before gets a new file name
 instead. The certificate of `progmasoft.com` must name `schemastore.progmasoft.com`.
+
+## Storage
+
+`storage.progmasoft.com` serves files Progmasoft publishes, each beside its `.sha256sums`: the license texts in
+`/pm-spl/<version>/` as `LICENSE-<version>.txt`, `.md` and `.rst`, the same files as in Progmasoft/licenses. It has no
+listing and no pages; a published version never changes, so its files are cached as immutable. Files live in
+`/srv/progmasoft-storage`, served by `ops/storage/nginx/storage.conf` (installed as
+`/etc/nginx/conf.d/storage.conf`):
+
+```sh
+semanage fcontext -a -t httpd_sys_content_t '/srv/progmasoft-storage(/.*)?'
+install -d -m 0755 /srv/progmasoft-storage/pm-spl/1.0
+scp LICENSE-1.0.* root@91.151.88.130:/srv/progmasoft-storage/pm-spl/1.0/
+ssh root@91.151.88.130 'chown -R root:root /srv/progmasoft-storage && restorecon -R /srv/progmasoft-storage'
+```
+
+The certificate of `progmasoft.com` must name `storage.progmasoft.com`.
 
 ## Git mirrors
 

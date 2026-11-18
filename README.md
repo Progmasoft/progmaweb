@@ -28,10 +28,9 @@ canonical Progmasoft `<Account>` name, with the same spelling and case.
 
 ## Languages
 
-Every page is published in English, German, Russian and Hebrew. A visitor who has not chosen a language gets the
+Every page is published in English, German, Russian and French. A visitor who has not chosen a language gets the
 language their browser prefers, and English when the browser prefers none of the four. A choice made in the language
-menu is remembered across the three hosts. Hebrew text runs right to left while the page layout stays as it is. See
-[Localization](docs/LOCALIZATION.md).
+menu is remembered across the three hosts. See [Localization](docs/LOCALIZATION.md).
 
 ## Documentation
 

@@ -3,14 +3,15 @@
 
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { expireShadowingCookies } from "@/lib/shared-cookies";
 import {
-  isLocale,
+  languageRequest,
   localeCookieName,
   localeCookieOptions,
   requestHost,
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
-import { productRoute } from "@/lib/sites";
+import { licenseRoute, productRoute } from "@/lib/sites";
 import {
   contentSecurityPolicy,
   createNonce,
@@ -57,9 +58,15 @@ const ownSites: OwnSite[] = [
     route: productRoute,
     api: false,
   },
+  {
+    hosts: hostsOf("license"),
+    root: "/license",
+    route: licenseRoute,
+    api: false,
+  },
 ];
 
-export function proxy(request: NextRequest) {
+function handle(request: NextRequest) {
   // Every page gets its own nonce. Next reads the policy from the request to
   // mark its scripts, and the layout reads the nonce for the theme bootstrap.
   const nonce = createNonce();
@@ -94,8 +101,12 @@ function route(request: NextRequest, headers: Headers): NextResponse {
   // redirect to the clean URL so crawlers never index preference variants.
   // The header control switches in place through a server action; this
   // parameter remains for links and for browsers that run no script.
-  const requestedLocale = request.nextUrl.searchParams.get("lang") ?? undefined;
-  if (isLocale(requestedLocale)) {
+  // A language the site no longer publishes, such as he-IL, sends the link to
+  // the clean address for good, in the fallback language.
+  const language = languageRequest(
+    request.nextUrl.searchParams.get("lang") ?? undefined,
+  );
+  if (language) {
     const destination = request.nextUrl.clone();
     destination.searchParams.delete("lang");
     const forwardedProtocol = request.headers.get("x-forwarded-proto");
@@ -104,10 +115,10 @@ function route(request: NextRequest, headers: Headers): NextResponse {
     destination.protocol = isProductionHost
       ? "https:"
       : request.nextUrl.protocol;
-    const response = NextResponse.redirect(destination);
+    const response = NextResponse.redirect(destination, language.status);
     response.cookies.set(
       localeCookieName,
-      requestedLocale,
+      language.locale,
       localeCookieOptions(
         host,
         forwardedProtocol === "https" || request.nextUrl.protocol === "https:",
@@ -266,3 +277,17 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|icon.svg|apple-icon.png|robots.txt|sitemap.xml|llms.txt).*)",
   ],
 };
+
+export function proxy(request: NextRequest) {
+  const response = handle(request);
+  const secure =
+    request.headers.get("x-forwarded-proto") === "https" ||
+    request.nextUrl.protocol === "https:";
+  for (const cookie of expireShadowingCookies(
+    request.headers.get("cookie") ?? "",
+    secure,
+  )) {
+    response.headers.append("set-cookie", cookie);
+  }
+  return response;
+}

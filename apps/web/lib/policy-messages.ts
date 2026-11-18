@@ -5,7 +5,7 @@ import type { Locale } from "./localization";
 import type { PolicyMessages } from "./policies";
 import { deDE } from "./policies/de-DE";
 import { enUS } from "./policies/en-US";
-import { heIL } from "./policies/he-IL";
+import { frFR } from "./policies/fr-FR";
 import { ruRU } from "./policies/ru-RU";
 
 /** The policies in every published language. */
@@ -13,7 +13,7 @@ export const policyMessages: Record<Locale, PolicyMessages> = {
   "en-US": enUS,
   "de-DE": deDE,
   "ru-RU": ruRU,
-  "he-IL": heIL,
+  "fr-FR": frFR,
 };
 
 export function getPolicyMessages(locale: Locale): PolicyMessages {

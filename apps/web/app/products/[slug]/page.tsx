@@ -11,7 +11,7 @@ import {
 } from "@/components/ProductCatalog";
 import { JsonLd } from "@/components/JsonLd";
 import { getLocale } from "@/lib/locale.server";
-import { forwardArrow } from "@/lib/localization";
+import { getMessages } from "@/lib/localization";
 import { getCatalogMessages, isProductSlug, products } from "@/lib/products";
 import { productData } from "@/lib/structured-data";
 
@@ -23,10 +23,15 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   if (!isProductSlug(slug)) {
-    return {};
+    // The page answers with the not-found page; its title says so too.
+    return {
+      title: getMessages(locale).notFound.pageTitle,
+      robots: { index: false },
+    };
   }
-  const catalog = getCatalogMessages(await getLocale());
+  const catalog = getCatalogMessages(locale);
   return {
     title: `${products[slug].name} · ${catalog.categories[products[slug].category]}`,
     description: catalog.products[slug].description,
@@ -45,7 +50,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = products[slug];
   const text = catalog.products[slug];
   const release = product.latestRelease;
-  const arrow = forwardArrow(locale);
   return (
     <CatalogPage
       locale={locale}
@@ -116,7 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </dl>
             {product.site ? (
               <a className="button" href={product.site}>
-                {catalog.site} {arrow}
+                {catalog.site} →
               </a>
             ) : null}
             <a className="button button-secondary" href={product.source}>

@@ -61,10 +61,10 @@ that route moves here, the legacy process has to keep running.
 The authentication rate limit is counted in the memory of one API process, by client address. It is reset by a
 restart and would not be shared between several instances.
 
-## The Hebrew text has not been reviewed by a native speaker
+## The French text has not been reviewed by a native speaker
 
-The Hebrew translation was written and revised without a native reader. It may contain wording a native speaker would
-not choose.
+The French translation was written from the English text without a native reader. It may contain wording a native
+speaker would not choose.
 
 ## Two audit advisories are ignored
 

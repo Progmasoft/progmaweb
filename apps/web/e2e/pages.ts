@@ -19,6 +19,10 @@ export const layoutPages = [
   "product.progmasoft.com/tazel",
   "product.progmasoft.com/catch3",
   "console.progmasoft.com/",
+  "license.progmasoft.com/",
+  "license.progmasoft.com/pm-spl/1.0/information/",
+  "license.progmasoft.com/pm-spl/1.0/faq/",
+  "license.progmasoft.com/pm-spl/1.0/categories/",
 ] as const;
 
 /** Every host name of the pages above. */
