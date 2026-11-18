@@ -115,12 +115,13 @@ and NuGet and never merges them itself.
 
 `main` is protected: changes arrive through pull requests with green checks.
 
-### The dependency audit exception
+### The dependency audit exceptions
 
-`pnpm-workspace.yaml` tells the audit to ignore one advisory, `GHSA-vfj7-8cjw-p6xm` (`braces` 3.0.3 and older). No
-fixed release exists, and the package is reached only through the lint toolchain; it is not part of the built or
-deployed application. Every other advisory of high severity still fails the check. Remove the entry as soon as a
-release without the advisory is available, and do not add another entry without the same analysis written next to it.
+`pnpm-workspace.yaml` tells the audit to ignore two advisories: `GHSA-vfj7-8cjw-p6xm` (`braces` 3.0.3 and older) and
+`GHSA-fc5q-39xc-vjpf` (`picomatch` 4.0.7 and older). For each, no fixed release exists, and the package is reached only
+through the lint toolchain; it is not part of the built or deployed application. Every other advisory of high severity
+still fails the check. Remove an entry as soon as a release without its advisory is available, and do not add another
+entry without the same analysis written next to it.
 
 ## API reference
 

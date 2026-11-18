@@ -9,9 +9,11 @@ import {
   formatDay,
   StatusBadge,
 } from "@/components/ProductCatalog";
+import { JsonLd } from "@/components/JsonLd";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
 import { getCatalogMessages, isProductSlug, products } from "@/lib/products";
+import { productData } from "@/lib/structured-data";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -56,6 +58,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       title={product.name}
       description={text.description}
     >
+      <JsonLd data={productData(slug, locale)} />
       <section className="pm-section">
         <div className="pm-shell pm-detail">
           <div>

@@ -170,12 +170,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       catch3: {
         tagline: "C++ testing beyond assertions.",
         description:
-          "Catch3 keeps Catch2 compatibility and adds a native property-testing engine, with more kinds of testing on its roadmap.",
+          "Catch3 keeps Catch2 compatibility and adds a runner of its own, property tests, mocks, snapshots and structured results.",
         features: [
           "Catch2-compatible tests",
           "Property, stateful and metamorphic tests with shrinking",
           "Text snapshots and JUnit-style XML results",
-          "Planned: own runner, mocking, coverage and mutation testing",
+          "Its own runner with parallel workers, retries, history and per-test coverage, and mocks",
         ],
       },
       agenceland: {
@@ -300,12 +300,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       catch3: {
         tagline: "C++-Tests jenseits von Assertions.",
         description:
-          "Catch3 bleibt Catch2-kompatibel und ergänzt eine native Engine für eigenschaftsbasierte Tests; weitere Testarten stehen auf dem Fahrplan.",
+          "Catch3 bleibt Catch2-kompatibel und ergänzt einen eigenen Runner, eigenschaftsbasierte Tests, Mocks, Snapshots und strukturierte Ergebnisse.",
         features: [
           "Catch2-kompatible Tests",
           "Eigenschafts-, zustandsbehaftete und metamorphe Tests mit Verkleinerung",
           "Text-Snapshots und XML-Ergebnisse im JUnit-Stil",
-          "Geplant: eigener Runner, Mocking, Abdeckung und Mutationstests",
+          "Ein eigener Runner mit parallelen Workern, Wiederholungen, Historie und Abdeckung pro Test, dazu Mocks",
         ],
       },
       agenceland: {
@@ -431,12 +431,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       catch3: {
         tagline: "Тестирование C++ за пределами утверждений.",
         description:
-          "Catch3 сохраняет совместимость с Catch2 и добавляет собственный движок тестирования на основе свойств; другие виды тестирования — в планах.",
+          "Catch3 сохраняет совместимость с Catch2 и добавляет собственный запускатель, тесты свойств, моки, снимки и структурированные результаты.",
         features: [
           "Тесты, совместимые с Catch2",
           "Тесты свойств, с состоянием и метаморфные, с упрощением",
           "Текстовые снимки и результаты в XML в стиле JUnit",
-          "В планах: свой запускатель, моки, покрытие и мутационное тестирование",
+          "Свой запускатель с параллельными процессами, повторами, историей и покрытием по тестам, а также моки",
         ],
       },
       agenceland: {
@@ -561,12 +561,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       catch3: {
         tagline: "Des tests C++ au-delà des assertions.",
         description:
-          "Catch3 reste compatible avec Catch2 et ajoute un moteur natif de tests fondés sur les propriétés, avec d’autres sortes de tests sur sa feuille de route.",
+          "Catch3 reste compatible avec Catch2 et ajoute son propre runner, des tests de propriétés, des mocks, des instantanés et des résultats structurés.",
         features: [
           "Des tests compatibles avec Catch2",
           "Tests de propriétés, tests à état et tests métamorphiques, avec réduction",
           "Instantanés de texte et résultats XML au format JUnit",
-          "Prévu : runner propre, mocking, couverture et tests de mutation",
+          "Son propre runner avec des workers parallèles, des reprises, un historique et la couverture par test, ainsi que des mocks",
         ],
       },
       agenceland: {
