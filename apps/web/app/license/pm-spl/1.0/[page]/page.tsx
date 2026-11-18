@@ -7,7 +7,9 @@ import { getLocale } from "@/lib/locale.server";
 import {
   getLicenseMessages,
   type LicensePage,
+  licensePageDescription,
   licensePages,
+  licensePageTitle,
   pmSplIdentifiers,
 } from "@/lib/license-messages";
 import { LicenseFrame, LicenseTexts } from "../../../LicenseFrame";
@@ -23,8 +25,8 @@ export async function generateMetadata({
   if (!isLicensePage(page)) return {};
   const text = getLicenseMessages(await getLocale());
   return {
-    title: `${text.pages[page]} · ${text.short}`,
-    description: text[page].description,
+    title: `${licensePageTitle(text, page)} · ${text.short}`,
+    description: licensePageDescription(text, page),
     alternates: {
       canonical: `https://license.progmasoft.com/pm-spl/1.0/${page}/`,
     },
@@ -42,8 +44,8 @@ export default async function PmSplPage({
   return (
     <LicenseFrame
       locale={locale}
-      title={text.pages[page]}
-      description={text[page].description}
+      title={licensePageTitle(text, page)}
+      description={licensePageDescription(text, page)}
       current={page}
     >
       {page === "information" ? (

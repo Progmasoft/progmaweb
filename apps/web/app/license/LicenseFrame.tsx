@@ -8,6 +8,7 @@ import {
   getLicenseMessages,
   type LicensePage,
   licensePages,
+  licensePageTitle,
   pmSplTexts,
 } from "@/lib/license-messages";
 import type { Locale } from "@/lib/localization";
@@ -45,7 +46,7 @@ export function LicenseFrame({
                     href={`/pm-spl/1.0/${page}/`}
                     aria-current={page === current ? "page" : undefined}
                   >
-                    {text.pages[page]}
+                    {licensePageTitle(text, page)}
                   </a>
                 ))}
               </nav>

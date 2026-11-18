@@ -1,5 +1,7 @@
-/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
-/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/*
+ * SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 
 /* license.progmasoft.com: the pages that explain each license. */
 
@@ -22,7 +24,7 @@
   min-height: 32px;
 }
 
-.pm-license-nav a[aria-current="page"] {
+.pm-license-nav [aria-current="page"] {
   font-weight: 700;
   text-decoration: none;
 }

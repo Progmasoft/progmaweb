@@ -6,6 +6,7 @@ import { getLocale } from "@/lib/locale.server";
 import {
   getLicenseMessages,
   licensePages,
+  licensePageTitle,
   pmSplIdentifiers,
 } from "@/lib/license-messages";
 import { LicenseFrame, LicenseTexts } from "./LicenseFrame";
@@ -44,7 +45,7 @@ export default async function LicensesPage() {
         <nav className="pm-license-nav" aria-label={text.short}>
           {licensePages.map((page) => (
             <a key={page} href={`/pm-spl/1.0/${page}/`}>
-              {text.pages[page]}
+              {licensePageTitle(text, page)}
             </a>
           ))}
         </nav>
