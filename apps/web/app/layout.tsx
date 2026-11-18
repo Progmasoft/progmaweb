@@ -8,7 +8,6 @@ import { nonceHeader } from "@/lib/content-security-policy";
 import { getLocale } from "@/lib/locale.server";
 import { themeBootstrap } from "@/lib/theme";
 import "./globals.css";
-import "./viget.css";
 
 export const metadata: Metadata = {
   // The apex host is the only public organization canonical. The www host is a

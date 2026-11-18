@@ -109,7 +109,7 @@ for (const locale of locales) {
           // can be narrower than the text that spills out of it.
           const parts = [
             ...element.querySelectorAll(
-              ".brand-name, .brand-product, .viget-brand-lockup > span, .menu-toggle, .primary-nav > *",
+              ".brand-name, .brand-product, .menu-toggle, .primary-nav > *",
             ),
           ]
             .map((part) => ({ part, box: part.getBoundingClientRect() }))

@@ -47,7 +47,6 @@ Open the three surfaces through their development host names:
 | --- | --- |
 | `http://localhost:3000/` | organization homepage |
 | `http://account.localhost:3000/` | account pages |
-| `http://viget.localhost:3000/` | ViGet catalogs |
 
 Accounts created locally live in the memory of the API process and are gone when it stops. To keep them, point the
 API at a PostgreSQL database before it starts; it creates its tables itself:

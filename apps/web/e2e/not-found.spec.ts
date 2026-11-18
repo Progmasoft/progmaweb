@@ -6,7 +6,6 @@ import { expect, test } from "@playwright/test";
 const hosts = [
   "progmasoft.com",
   "account.progmasoft.com",
-  "viget.progmasoft.com",
   "product.progmasoft.com",
 ];
 
@@ -44,7 +43,7 @@ test("the page of an unknown address speaks the visitor's language", async ({
       path: "/",
     },
   ]);
-  await page.goto("http://viget.progmasoft.com/nope");
+  await page.goto("http://product.progmasoft.com/nope");
   await expect(page.locator("h1")).toHaveText(
     "Es tut uns leid, die angeforderte Seite wurde nicht gefunden.",
   );

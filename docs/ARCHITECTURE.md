@@ -15,7 +15,7 @@ Both listen on loopback only. Nginx is the only public listener and terminates T
 browser
    |  HTTPS
    v
-Nginx  (progmasoft.com, www, account.progmasoft.com, viget.progmasoft.com)
+Nginx  (progmasoft.com, www, account.progmasoft.com, ...)
    |  http://127.0.0.1:3010
    v
 Next.js server (apps/web)
@@ -33,9 +33,8 @@ One build serves three hosts. The host of a request, not a separate deployment, 
 | `progmasoft.com` | the organization homepage; the only host that is meant to be indexed as the organization |
 | `www.progmasoft.com` | a permanent redirect to the apex host, issued by Nginx |
 | `account.progmasoft.com` | the account landing page, sign-in, registration, recovery and the dashboard |
-| `viget.progmasoft.com` | the ViGet package catalog and the Kotlin DSL plugin catalog |
 
-`*.localhost` names (`account.localhost`, `viget.localhost`) behave like the production hosts during development.
+`*.localhost` names (`account.localhost`, `product.localhost`) behave like the production hosts during development.
 
 ## Host-aware routing
 
@@ -45,12 +44,7 @@ One build serves three hosts. The host of a request, not a separate deployment, 
    same URL without the parameter. See [Localization](LOCALIZATION.md).
 2. **Account root.** `/` on the account host is rewritten to the internal `/account` page, so the account landing page
    has the short URL.
-3. **ViGet.** On the ViGet host `/` is rewritten to `/viget`, `/langs/c`, `/langs/cpp` and `/langs/objc` to
-   `/viget/langs/<language>` and `/dslplugins/tazel` to `/viget/dslplugins/tazel`. `/langs`
-   addresses redirect permanently to
-   the language list of the home page and `/dslplugins` to the Tazel catalog. `/login`, `/register` and `/recover` redirect to the account host.
-4. **Internal trees stay internal.** `/viget/...` on any other host redirects to the ViGet host, and `/account` on any
-   other host redirects to the account host.
+3. **Internal trees stay internal.** `/account` on any other host redirects to the account host.
 
 Internal rewrites use `http:` on purpose. TLS ends at Nginx, and Next.js would otherwise try TLS against its own
 plain-HTTP loopback listener.
@@ -65,12 +59,9 @@ The host is read from `X-Forwarded-Host` first and `Host` second, without the po
 | `/account` (shown as `/` on the account host) | account landing page | no |
 | `/login`, `/register`, `/recover` | authentication and recovery | no |
 | `/<Account>/dashboard` | dashboard of the signed-in account | no |
-| `/viget` (shown as `/` on the ViGet host) | registry status and the list of catalogs | yes |
-| `/viget/langs/<language>` (shown as `/langs/c`, `/langs/cpp`, `/langs/objc`) | catalog of the packages of one language | yes |
-| `/viget/dslplugins/tazel` (shown as `/dslplugins/tazel`) | catalog of Tazel DSL plugins | yes |
 
-`robots.txt` and `sitemap.xml` are generated per host: the ViGet host lists its home page and its two catalog pages,
-every other host lists the apex homepage only. Nginx additionally sends `X-Robots-Tag: noindex` for the whole account host.
+`robots.txt` and `sitemap.xml` are generated per host: the product and license hosts list their own pages, every
+other host lists the apex homepage only. Nginx additionally sends `X-Robots-Tag: noindex` for the whole account host.
 
 Pages are rendered on the server for every request, because the language depends on the request. Two components run
 in the browser: the authentication form and the dashboard.
@@ -112,12 +103,4 @@ a content security policy that allows nothing, `Cache-Control: no-store`, and no
 
 ## Shared account identity
 
-An account name is the public identity of its owner on every Progmasoft service. ViGet does not keep a separate
-publisher name: the `<Publisher>` segment of a package coordinate is exactly the canonical account name, with the same
-spelling and case.
-
-## ViGet status route
-
-`viget.progmasoft.com/api/v1/status` is proxied by Nginx to a separate legacy process on loopback port 5080. It is not
-part of this repository's API. Every other `/api/` path on the ViGet host is refused. See
-[Known limitations](LIMITATIONS.md).
+An account name is the public identity of its owner on every Progmasoft service.

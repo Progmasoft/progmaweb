@@ -21,7 +21,7 @@ public sealed class OAuthFlowTests
         (string clientId, string? secret) = await browser.RegisterApplicationAsync();
         (string verifier, string challenge) = OAuthTestClient.Pkce();
 
-        Uri redirect = await browser.AuthorizeAsync(clientId, "openid profile email offline_access viget.packages.read",
+        Uri redirect = await browser.AuthorizeAsync(clientId, "openid profile email offline_access",
             challenge);
         Assert.StartsWith(OAuthTestClient.RedirectUri, redirect.ToString(), StringComparison.Ordinal);
         Assert.Equal("state-123", OAuthTestClient.Query(redirect, "state"));
@@ -198,17 +198,17 @@ public sealed class OAuthFlowTests
         OAuthTestClient browser = new(factory);
         await browser.RegisterAndSignInAsync("OAuthHolder6", "holder6@example.com");
         (string clientId, _) = await browser.RegisterApplicationAsync(
-            "profile email viget.packages.read viget.packages.publish viget.packages.yank");
+            "profile email offline_access");
 
         HttpResponseMessage authorize = await browser.Browser.GetAsync(OAuthTestClient.AuthorizePath(clientId,
-            "openid profile email viget.packages.read viget.packages.publish viget.packages.yank",
+            "openid profile email offline_access",
             OAuthTestClient.Pkce().Challenge), Cancel);
         Uri consentPage = authorize.Headers.Location!;
         Assert.True(OAuthTestClient.IsConsentPage(consentPage), consentPage.OriginalString);
 
         JsonElement consent = await browser.Browser.GetFromJsonAsync<JsonElement>(
             "/api/v1/oauth/consent" + consentPage.OriginalString["/consent".Length..], Cancel);
-        Assert.Equal(["profile", "email", "viget.packages.read", "viget.packages.publish", "viget.packages.yank"],
+        Assert.Equal(["profile", "email", "offline_access"],
             consent.GetProperty("scopes").EnumerateArray().Select(scope => scope.GetString()));
         Assert.Equal("Example Client", consent.GetProperty("displayName").GetString());
         Assert.Equal("OAuthHolder6", consent.GetProperty("owner").GetString());
@@ -254,41 +254,6 @@ public sealed class OAuthFlowTests
         Assert.Equal(HttpStatusCode.Forbidden, forged.StatusCode);
         HttpResponseMessage blind = await browser.DecideAsync(consentPage, "allow", origin: null);
         Assert.Equal(HttpStatusCode.Forbidden, blind.StatusCode);
-    }
-
-    [Fact]
-    public async Task ViGetScopesGiveAccessTokensForViGet()
-    {
-        await using AccountApiFactory factory = new();
-        OAuthTestClient browser = new(factory);
-        await browser.RegisterAndSignInAsync("OAuthHolder7", "holder7@example.com");
-        (string clientId, string? secret) = await browser.RegisterApplicationAsync("viget.packages.publish");
-        (string verifier, string challenge) = OAuthTestClient.Pkce();
-        Uri redirect = await browser.AuthorizeAsync(clientId, "openid viget.packages.publish", challenge);
-        (HttpStatusCode status, JsonElement tokens) = await browser.TokenAsync(new Dictionary<string, string>
-        {
-            ["grant_type"] = "authorization_code",
-            ["code"] = OAuthTestClient.Query(redirect, "code")!,
-            ["redirect_uri"] = OAuthTestClient.RedirectUri,
-            ["code_verifier"] = verifier,
-            ["client_id"] = clientId,
-            ["client_secret"] = secret!
-        });
-        Assert.Equal(HttpStatusCode.OK, status);
-        Assert.Equal("openid viget.packages.publish", tokens.GetProperty("scope").GetString());
-
-        // The access token is encrypted for the resource servers; introspection shows its audience.
-        using HttpClient client = factory.CreateOAuthClient();
-        HttpResponseMessage response = await client.PostAsync("/connect/introspect", new FormUrlEncodedContent(
-            new Dictionary<string, string>
-            {
-                ["token"] = tokens.GetProperty("access_token").GetString()!,
-                ["client_id"] = clientId,
-                ["client_secret"] = secret!
-            }), Cancel);
-        JsonElement introspection = await response.Content.ReadFromJsonAsync<JsonElement>(Cancel);
-        Assert.True(introspection.GetProperty("active").GetBoolean(), introspection.ToString());
-        Assert.Contains("viget", introspection.GetProperty("aud").ToString(), StringComparison.Ordinal);
     }
 
     [Fact]

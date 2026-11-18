@@ -80,16 +80,10 @@ The implicit grant, the resource owner password grant and the device flow are no
 | `openid` | An OpenID Connect sign-in: the account identifier | `sub` |
 | `profile` | Reading the Progmasoft account name | `name`, `preferred_username` |
 | `email` | Reading the email address the account signs in and registered with | `email`, `email_verified` |
-| `viget.packages.read` | Reading the packages the account has published on ViGet | — |
-| `viget.packages.publish` | Publishing packages to ViGet under the account | — |
-| `viget.packages.yank` | Yanking packages of the account on ViGet | — |
 | `offline_access` | Refresh tokens: access while the account holder is not signed in | — |
 
 `sub` is a stable, opaque identifier; use it, not the account name or the address, to recognize an account. Account
 registration does not verify email addresses, so `email_verified` is always `false`.
-
-Access tokens that carry a ViGet scope have the audience `viget`; ViGet accepts only such tokens for its package
-operations.
 
 ## Consent
 

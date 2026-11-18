@@ -15,7 +15,6 @@ body:
         - Next.js frontend
         - ASP.NET Core backend
         - Authentication or account flows
-        - ViGet integration
         - Deployment or infrastructure
         - Other
     validations:

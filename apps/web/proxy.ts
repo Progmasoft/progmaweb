@@ -19,7 +19,6 @@ import {
 } from "@/lib/content-security-policy";
 
 const accountHosts = new Set(["account.progmasoft.com", "account.localhost"]);
-const vigetHosts = new Set(["viget.progmasoft.com", "viget.localhost"]);
 interface OwnSite {
   hosts: Set<string>;
   /** The internal tree of the site's pages. */
@@ -166,92 +165,6 @@ function route(request: NextRequest, headers: Headers): NextResponse {
     // loopback listener and fail before the account page can render.
     destination.protocol = "http:";
     return rewrite(headers, destination);
-  }
-
-  // ViGet is deployed by Progmaweb but keeps short public catalog URLs. The
-  // internal /viget tree prevents those routes from colliding with the apex
-  // organization page and the account surface.
-  if (vigetHosts.has(host)) {
-    if (pathname === "/") {
-      return rewrite(headers, internalRoute(request, "/viget"));
-    }
-    // Packages are grouped by the language they are written in and DSL
-    // plugins by the build system they extend.
-    const language = /^\/langs\/(c|cpp|objc)\/?$/.exec(pathname);
-    if (language) {
-      return rewrite(
-        headers,
-        internalRoute(request, `/viget/langs/${language[1]}`),
-      );
-    }
-    if (pathname === "/dslplugins/tazel" || pathname === "/dslplugins/tazel/") {
-      return rewrite(
-        headers,
-        internalRoute(request, "/viget/dslplugins/tazel"),
-      );
-    }
-    // The page of one plugin. Its index.json and JARs below it are served by
-    // Nginx, from the API and from the files of ViGet.
-    const plugin =
-      /^\/dslplugins\/tazel\/([A-Za-z_][A-Za-z0-9_]*)\/([A-Za-z_][A-Za-z0-9_]*)\/?$/.exec(
-        pathname,
-      );
-    if (plugin) {
-      return rewrite(
-        headers,
-        internalRoute(
-          request,
-          `/viget/dslplugins/tazel/${plugin[1]}/${plugin[2]}`,
-        ),
-      );
-    }
-    if (
-      pathname === "/dslplugins/gradle" ||
-      pathname === "/dslplugins/gradle/"
-    ) {
-      return rewrite(
-        headers,
-        internalRoute(request, "/viget/dslplugins/gradle"),
-      );
-    }
-    // The languages are listed on the home page of ViGet.
-    if (pathname === "/langs" || pathname === "/langs/") {
-      return NextResponse.redirect(
-        new URL("https://viget.progmasoft.com/#languages-title"),
-        308,
-      );
-    }
-    if (pathname === "/dslplugins" || pathname === "/dslplugins/") {
-      return NextResponse.redirect(
-        new URL("https://viget.progmasoft.com/dslplugins/tazel"),
-        308,
-      );
-    }
-    if (pathname === "/login" || pathname === "/login/") {
-      return NextResponse.redirect(
-        new URL("https://account.progmasoft.com/login"),
-      );
-    }
-    if (pathname === "/register" || pathname === "/register/") {
-      return NextResponse.redirect(
-        new URL("https://account.progmasoft.com/register"),
-      );
-    }
-    if (pathname === "/recover" || pathname === "/recover/") {
-      return NextResponse.redirect(
-        new URL("https://account.progmasoft.com/recover"),
-      );
-    }
-  }
-
-  if (
-    !vigetHosts.has(host) &&
-    (pathname === "/viget" || pathname.startsWith("/viget/"))
-  ) {
-    const publicPath = pathname.replace(/^\/viget/, "") || "/";
-    return NextResponse.redirect(
-      new URL(publicPath, "https://viget.progmasoft.com"),
-    );
   }
 
   // Corporate hosts must not accidentally expose the account-only landing page as a public navigation destination.

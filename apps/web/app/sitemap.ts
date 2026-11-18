@@ -15,25 +15,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
     .split(":", 1)[0]
     ?.toLowerCase();
-  if (host === "viget.progmasoft.com") {
-    return [
-      {
-        url: "https://viget.progmasoft.com/",
-        changeFrequency: "weekly",
-        priority: 1,
-      },
-      ...["c", "cpp", "objc"].map((language) => ({
-        url: `https://viget.progmasoft.com/langs/${language}`,
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-      })),
-      {
-        url: "https://viget.progmasoft.com/dslplugins/tazel",
-        changeFrequency: "weekly",
-        priority: 0.8,
-      },
-    ];
-  }
   if (host === "license.progmasoft.com") {
     return [
       {

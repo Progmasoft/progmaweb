@@ -1,6 +1,6 @@
 ---
 name: Progmaweb improvement
-about: Propose an account, ViGet, or corporate-web improvement
+about: Propose an account or corporate-web improvement
 title: "[Proposal] "
 ---
 
@@ -11,7 +11,7 @@ This repository owns the Next.js public surfaces and ASP.NET Core account API.
 
 ### User need and host
 
-Who needs the change, on which host and route, and what cannot they do today? For publisher-related changes, remember that the ViGet publisher is the canonical Progmasoft account name, not a second profile field.
+Who needs the change, on which host and route, and what cannot they do today?
 
 ### Proposed behavior
 

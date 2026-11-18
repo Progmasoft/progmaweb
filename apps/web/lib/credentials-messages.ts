@@ -165,7 +165,7 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       eyebrow: "OAuth 2.1 · OpenID Connect",
       title: "Sign in with Progmasoft",
       description:
-        "Let people sign in to your application with their Progmasoft account and, with their consent, act on ViGet for them. Any developer can make a token.",
+        "Let people sign in to your application with their Progmasoft account. Any developer can make a token.",
       signedOut:
         "Sign in to make OAuth 2.1 tokens for your applications or to review the applications you have allowed.",
       developersText: "Make and manage the tokens of your applications.",
@@ -285,9 +285,6 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       account: "Know which Progmasoft account you use.",
       profile: "Read your Progmasoft account name.",
       email: "Read the email address you sign in and registered with.",
-      "viget.packages.read": "Read the packages you have published on ViGet.",
-      "viget.packages.publish": "Publish packages to ViGet under your account.",
-      "viget.packages.yank": "Yank packages you have published on ViGet.",
       offline_access:
         "Keep this access when you are not using the application.",
     },
@@ -348,7 +345,7 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       eyebrow: "OAuth 2.1 · OpenID Connect",
       title: "Mit Progmasoft anmelden",
       description:
-        "Lassen Sie Menschen sich mit ihrem Progmasoft-Konto bei Ihrer Anwendung anmelden und mit ihrer Zustimmung auf ViGet für sie handeln. Jede Entwicklerin und jeder Entwickler kann ein Token erstellen.",
+        "Lassen Sie Menschen sich mit ihrem Progmasoft-Konto bei Ihrer Anwendung anmelden. Jede Entwicklerin und jeder Entwickler kann ein Token erstellen.",
       signedOut:
         "Melden Sie sich an, um OAuth-2.1-Tokens für Ihre Anwendungen zu erstellen oder die Anwendungen zu prüfen, denen Sie Zugriff erlaubt haben.",
       developersText: "Tokens Ihrer Anwendungen erstellen und verwalten.",
@@ -470,12 +467,6 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       profile: "Ihren Progmasoft-Kontonamen lesen.",
       email:
         "Die E-Mail-Adresse lesen, mit der Sie sich angemeldet und registriert haben.",
-      "viget.packages.read":
-        "Die Pakete lesen, die Sie auf ViGet veröffentlicht haben.",
-      "viget.packages.publish":
-        "Pakete unter Ihrem Konto auf ViGet veröffentlichen.",
-      "viget.packages.yank":
-        "Pakete zurückziehen, die Sie auf ViGet veröffentlicht haben.",
       offline_access:
         "Diesen Zugriff behalten, wenn Sie die Anwendung nicht verwenden.",
     },
@@ -536,7 +527,7 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       eyebrow: "OAuth 2.1 · OpenID Connect",
       title: "Вход через Progmasoft",
       description:
-        "Позвольте людям входить в ваше приложение с аккаунтом Progmasoft и с их согласия действовать от их имени в ViGet. Создать токен может любой разработчик.",
+        "Позвольте людям входить в ваше приложение с аккаунтом Progmasoft. Создать токен может любой разработчик.",
       signedOut:
         "Войдите, чтобы создавать токены OAuth 2.1 для своих приложений или просмотреть приложения, которым вы дали доступ.",
       developersText: "Создавайте токены своих приложений и управляйте ими.",
@@ -660,11 +651,6 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       profile: "Видеть имя вашего аккаунта Progmasoft.",
       email:
         "Видеть адрес электронной почты, с которым вы входите и регистрировались.",
-      "viget.packages.read": "Видеть пакеты, которые вы опубликовали в ViGet.",
-      "viget.packages.publish":
-        "Публиковать пакеты в ViGet от имени вашего аккаунта.",
-      "viget.packages.yank":
-        "Отзывать (yank) пакеты, которые вы опубликовали в ViGet.",
       offline_access:
         "Сохранять этот доступ, когда вы не пользуетесь приложением.",
     },
@@ -724,7 +710,7 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       eyebrow: "OAuth 2.1 · OpenID Connect",
       title: "Se connecter avec Progmasoft",
       description:
-        "Permettez aux gens de se connecter à votre application avec leur compte Progmasoft et, avec leur consentement, d’agir sur ViGet en leur nom. Tout développeur peut créer un jeton.",
+        "Permettez aux gens de se connecter à votre application avec leur compte Progmasoft. Tout développeur peut créer un jeton.",
       signedOut:
         "Connectez-vous pour créer des jetons OAuth 2.1 pour vos applications ou pour revoir les applications que vous avez autorisées.",
       developersText: "Créez et gérez les jetons de vos applications.",
@@ -849,12 +835,6 @@ export const credentialsMessages: Record<Locale, CredentialsMessages> = {
       profile: "Lire le nom de votre compte Progmasoft.",
       email:
         "Lire l’adresse e-mail avec laquelle vous vous connectez et vous êtes inscrit.",
-      "viget.packages.read":
-        "Lire les paquets que vous avez publiés sur ViGet.",
-      "viget.packages.publish":
-        "Publier des paquets sur ViGet sous votre compte.",
-      "viget.packages.yank":
-        "Retirer des paquets que vous avez publiés sur ViGet.",
       offline_access:
         "Conserver cet accès lorsque vous n’utilisez pas l’application.",
     },

@@ -33,9 +33,6 @@ export function signsPeopleIn(kind: ApplicationKind): boolean {
 export const oauthScopes = [
   "profile",
   "email",
-  "viget.packages.read",
-  "viget.packages.publish",
-  "viget.packages.yank",
   "offline_access",
 ] as const;
 export type OAuthScope = (typeof oauthScopes)[number];

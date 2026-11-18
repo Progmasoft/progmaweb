@@ -1,18 +1,18 @@
 ---
 name: Progmaweb bug
-about: Report a problem with Progmasoft, accounts, or ViGet
+about: Report a problem with Progmasoft or accounts
 title: "[Bug] "
 ---
 
 <!-- SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> -->
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
-This repository owns `progmasoft.com`, `account.progmasoft.com`, and `viget.progmasoft.com`. Never post passwords, verification codes, OAuth secrets, session cookies, email headers containing private data, or access tokens. Send security vulnerabilities privately to support@progmasoft.com.
+This repository owns `progmasoft.com`, and `account.progmasoft.com`. Never post passwords, verification codes, OAuth secrets, session cookies, email headers containing private data, or access tokens. Send security vulnerabilities privately to support@progmasoft.com.
 
 ### Affected host and flow
 
 - Host and sanitized path:
-- Area (corporate page, account registration/login/recovery, dashboard, ViGet package catalog, DSL plugin catalog, API, localization, or theme):
+- Area (corporate page, account registration/login/recovery, dashboard, API, localization, or theme):
 - Account state needed to reproduce (signed out, newly registered, signed in), without identifying a real account:
 
 ### Observed and expected behavior
