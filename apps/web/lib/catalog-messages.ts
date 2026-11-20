@@ -3,8 +3,15 @@
 
 import type { Locale } from "./localization";
 
-type Slug = "tazel" | "catch3" | "agenceland" | "archer" | "etincelle";
-type Category = "build" | "testing" | "ide" | "data-format" | "data-processing";
+type Slug =
+  "tazel" | "catch3" | "agenceland" | "archer" | "etincelle" | "opentala";
+type Category =
+  | "build"
+  | "testing"
+  | "ide"
+  | "data-format"
+  | "data-processing"
+  | "operating-system";
 
 interface ProductText {
   tagline: string;
@@ -145,6 +152,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       ide: "IDE",
       "data-format": "Data format",
       "data-processing": "Data processing",
+      "operating-system": "Operating system",
     },
     categoriesTitle: "Projects by category",
     categoriesDescription: "What each project is for.",
@@ -159,12 +167,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       tazel: {
         tagline: "Builds C, C++, Objective-C, Objective-C++ and Zig.",
         description:
-          "Tazel reads a module from MODULE.kts and one BUILD.kts per package, compiles each translation unit on its own and builds again only what changed.",
+          "Tazel reads a module from MODULE.csx and one BUILD.csx per package, compiles each translation unit on its own and builds again only what changed.",
         features: [
-          "Kotlin project files, MODULE.kts and BUILD.kts, with labels such as //app/:greeter",
-          "Clang, GCC and zig cc from the machine; cross builds by LLVM target triple",
+          "C# project files, MODULE.csx and BUILD.csx, with labels such as //app:greeter",
+          "Clang, GCC and zig from the machine, or toolchains declared as in Bazel",
           "Incremental per action, by the content of every input",
-          "Tests, formatting and linting built in",
+          "Tests, coverage, and custom commands in a MicroVM sandbox",
         ],
       },
       catch3: {
@@ -209,6 +217,17 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Etincelle SQL",
           "Columnar data of its own",
           "For Java, Kotlin and Scala",
+        ],
+      },
+      opentala: {
+        tagline: "A kernel with Darwin's system call ABI.",
+        description:
+          "OpenTala is the independent hybrid kernel of TalaOS. It loads as Mach-O, takes Darwin's system calls with XNU's numbers, and runs on amd64 and arm64.",
+        features: [
+          "Boots on amd64 through Multiboot and on arm64 on QEMU's virt machine",
+          "User mode with Darwin's BSD system calls and Mach traps",
+          "Mach IPC: ports, rights and mach_msg",
+          "Every boot checked in QEMU on both machines",
         ],
       },
     },
@@ -275,6 +294,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       ide: "IDE",
       "data-format": "Datenformat",
       "data-processing": "Datenverarbeitung",
+      "operating-system": "Betriebssystem",
     },
     categoriesTitle: "Projekte nach Kategorie",
     categoriesDescription: "Wofür jedes Projekt da ist.",
@@ -289,12 +309,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       tazel: {
         tagline: "Baut C, C++, Objective-C, Objective-C++ und Zig.",
         description:
-          "Tazel liest ein Modul aus MODULE.kts und einer BUILD.kts je Paket, übersetzt jede Übersetzungseinheit für sich und baut nur neu, was sich geändert hat.",
+          "Tazel liest ein Modul aus MODULE.csx und einer BUILD.csx je Paket, übersetzt jede Übersetzungseinheit für sich und baut nur neu, was sich geändert hat.",
         features: [
-          "Projektdateien in Kotlin, MODULE.kts und BUILD.kts, mit Labels wie //app/:greeter",
-          "Clang, GCC und zig cc vom Rechner; Cross-Builds per LLVM-Target-Triple",
+          "Projektdateien in C#, MODULE.csx und BUILD.csx, mit Labels wie //app:greeter",
+          "Clang, GCC und zig vom Rechner oder Toolchains wie in Bazel",
           "Inkrementell je Aktion, nach dem Inhalt jeder Eingabe",
-          "Tests, Formatierung und Linting eingebaut",
+          "Tests, Coverage und eigene Befehle in einer MicroVM-Sandbox",
         ],
       },
       catch3: {
@@ -340,6 +360,17 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Etincelle SQL",
           "Eigene spaltenorientierte Daten",
           "Für Java, Kotlin und Scala",
+        ],
+      },
+      opentala: {
+        tagline: "Ein Kernel mit Darwins Systemaufruf-ABI.",
+        description:
+          "OpenTala ist der eigenständige Hybridkernel von TalaOS. Er wird als Mach-O geladen, nimmt Darwins Systemaufrufe mit den Nummern von XNU entgegen und läuft auf amd64 und arm64.",
+        features: [
+          "Startet auf amd64 über Multiboot und auf arm64 auf QEMUs virt-Maschine",
+          "Benutzermodus mit Darwins BSD-Systemaufrufen und Mach-Traps",
+          "Mach-IPC: Ports, Rechte und mach_msg",
+          "Jeder Start in QEMU auf beiden Maschinen geprüft",
         ],
       },
     },
@@ -406,6 +437,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       ide: "Среда разработки",
       "data-format": "Формат данных",
       "data-processing": "Обработка данных",
+      "operating-system": "Операционная система",
     },
     categoriesTitle: "Проекты по категориям",
     categoriesDescription: "Для чего нужен каждый проект.",
@@ -420,12 +452,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       tazel: {
         tagline: "Собирает C, C++, Objective-C, Objective-C++ и Zig.",
         description:
-          "Tazel читает модуль из MODULE.kts и по одному BUILD.kts на пакет, компилирует каждую единицу трансляции отдельно и пересобирает только то, что изменилось.",
+          "Tazel читает модуль из MODULE.csx и по одному BUILD.csx на пакет, компилирует каждую единицу трансляции отдельно и пересобирает только то, что изменилось.",
         features: [
-          "Файлы проекта на Kotlin, MODULE.kts и BUILD.kts, с метками вида //app/:greeter",
-          "Clang, GCC и zig cc с машины; кросс-сборка по LLVM target triple",
-          "Инкрементальная сборка на уровне действий, по содержимому каждого входа",
-          "Встроенные тесты, форматирование и линтинг",
+          "Файлы проекта на C#, MODULE.csx и BUILD.csx, с метками вида //app:greeter",
+          "Clang, GCC и zig с машины или наборы инструментов, как в Bazel",
+          "Инкрементальная сборка по действиям, по содержимому каждого входа",
+          "Тесты, покрытие и свои команды в песочнице MicroVM",
         ],
       },
       catch3: {
@@ -470,6 +502,17 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Etincelle SQL",
           "Собственные колоночные данные",
           "Для Java, Kotlin и Scala",
+        ],
+      },
+      opentala: {
+        tagline: "Ядро с ABI системных вызовов Darwin.",
+        description:
+          "OpenTala — независимое гибридное ядро TalaOS. Оно загружается как Mach-O, принимает системные вызовы Darwin с номерами XNU и работает на amd64 и arm64.",
+        features: [
+          "Загружается на amd64 через Multiboot и на arm64 на машине virt в QEMU",
+          "Пользовательский режим с системными вызовами BSD и ловушками Mach из Darwin",
+          "Mach IPC: порты, права и mach_msg",
+          "Каждая загрузка проверяется в QEMU на обеих машинах",
         ],
       },
     },
@@ -536,6 +579,7 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       ide: "IDE",
       "data-format": "Format de données",
       "data-processing": "Traitement de données",
+      "operating-system": "Système d’exploitation",
     },
     categoriesTitle: "Projets par catégorie",
     categoriesDescription: "À quoi sert chaque projet.",
@@ -550,12 +594,12 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
       tazel: {
         tagline: "Compile C, C++, Objective-C, Objective-C++ et Zig.",
         description:
-          "Tazel lit un module depuis MODULE.kts et un BUILD.kts par paquet, compile chaque unité de traduction séparément et ne recompile que ce qui a changé.",
+          "Tazel lit un module depuis MODULE.csx et un BUILD.csx par paquet, compile chaque unité de traduction séparément et ne recompile que ce qui a changé.",
         features: [
-          "Des fichiers de projet en Kotlin, MODULE.kts et BUILD.kts, avec des étiquettes comme //app/:greeter",
-          "Clang, GCC et zig cc de la machine ; compilation croisée par triplet de cible LLVM",
-          "Incrémental à chaque action, selon le contenu de chaque entrée",
-          "Tests, formatage et analyse statique intégrés",
+          "Des fichiers de projet en C#, MODULE.csx et BUILD.csx, avec des étiquettes comme //app:greeter",
+          "Clang, GCC et zig de la machine, ou des chaînes d’outils déclarées comme dans Bazel",
+          "Incrémental par action, selon le contenu de chaque entrée",
+          "Tests, couverture et commandes personnalisées dans un bac à sable MicroVM",
         ],
       },
       catch3: {
@@ -601,6 +645,17 @@ export const catalogMessages: Record<Locale, CatalogMessages> = {
           "Etincelle SQL",
           "Ses propres données en colonnes",
           "Pour Java, Kotlin et Scala",
+        ],
+      },
+      opentala: {
+        tagline: "Un noyau avec l’ABI des appels système de Darwin.",
+        description:
+          "OpenTala est le noyau hybride indépendant de TalaOS. Il se charge en Mach-O, reçoit les appels système de Darwin avec les numéros de XNU et fonctionne sur amd64 et arm64.",
+        features: [
+          "Démarre sur amd64 par Multiboot et sur arm64 sur la machine virt de QEMU",
+          "Mode utilisateur avec les appels système BSD et les traps Mach de Darwin",
+          "IPC Mach : ports, droits et mach_msg",
+          "Chaque démarrage vérifié dans QEMU sur les deux machines",
         ],
       },
     },

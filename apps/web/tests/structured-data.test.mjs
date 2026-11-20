@@ -89,7 +89,8 @@ test("llms.txt lists every project with its facts and names no former project", 
     assert.ok(text.includes(products[slug].license), `${slug} license`);
   }
   assert.ok(text.includes("latest release 0.4.0"));
-  for (const word of ["Tala", "Xide", "Talac", "X#"]) {
-    assert.ok(!text.includes(word), word);
+  assert.ok(text.includes("latest release 0.1.0"));
+  for (const word of [/\bTala\b/, /\bXide\b/, /\bTalac\b/, /\bX#/]) {
+    assert.ok(!word.test(text), String(word));
   }
 });

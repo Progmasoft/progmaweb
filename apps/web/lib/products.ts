@@ -16,6 +16,7 @@ export const productSlugs = [
   "agenceland",
   "archer",
   "etincelle",
+  "opentala",
 ] as const;
 export type ProductSlug = (typeof productSlugs)[number];
 
@@ -29,10 +30,13 @@ export const productCategories = [
   "ide",
   "data-format",
   "data-processing",
+  "operating-system",
 ] as const;
 export type ProductCategory = (typeof productCategories)[number];
 
 export const productLanguages = [
+  "C",
+  "C#",
   "C++",
   "Java",
   "Kotlin",
@@ -83,10 +87,10 @@ export const products: Record<ProductSlug, ProductFacts> = {
     site: "https://tazel.net/",
     ...github("tazel"),
     license: "MIT",
-    language: "Kotlin",
+    language: "C#",
     category: "build",
     status: "development",
-    started: "2026-11-12",
+    started: "2026-11-20",
     accent: "orange",
   },
   catch3: {
@@ -136,6 +140,21 @@ export const products: Record<ProductSlug, ProductFacts> = {
     status: "development",
     started: "2026-11-14",
     accent: "teal",
+  },
+  opentala: {
+    name: "OpenTala",
+    ...github("opentala"),
+    license: "MIT",
+    language: "C",
+    category: "operating-system",
+    status: "released",
+    started: "2026-11-18",
+    latestRelease: {
+      version: "0.1.0",
+      date: "2026-11-20",
+      url: "https://github.com/Progmasoft/opentala/releases/tag/opentala-0.1.0",
+    },
+    accent: "slate",
   },
 };
 
