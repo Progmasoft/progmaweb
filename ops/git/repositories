@@ -2,7 +2,6 @@
 # Each must also have a repo.url entry in cgitrc. Installed as /etc/git-mirror/repositories.
 tazel
 tazelish
-tazel.net
 catch3
 progmasoft-cpp
 progmaweb
