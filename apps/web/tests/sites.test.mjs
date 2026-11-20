@@ -39,7 +39,7 @@ test("every language has the same home and catalog text", () => {
 test("the catalog lists the projects, each with its repository", () => {
   assert.deepEqual(
     [...productSlugs],
-    ["tazel", "catch3", "agenceland", "archer", "etincelle"],
+    ["tazel", "catch3", "agenceland", "archer", "etincelle", "opentala"],
   );
   for (const slug of productSlugs) {
     const product = products[slug];
