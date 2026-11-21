@@ -118,6 +118,8 @@ builder.Services.Configure<ForwardedHeadersOptions>(ForwardedHeadersPolicy.Confi
 builder.Services.Configure<GitOptions>(builder.Configuration.GetSection(GitOptions.Section));
 builder.Services.AddSingleton<GitCatalog>();
 builder.Services.AddSingleton<GitReader>();
+builder.Services.Configure<PolicyNoticeOptions>(builder.Configuration.GetSection(PolicyNoticeOptions.Section));
+builder.Services.AddSingleton<IPolicyNoticeSender, SmtpPolicyNoticeSender>();
 
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024);
 

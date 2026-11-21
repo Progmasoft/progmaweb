@@ -5,7 +5,7 @@ import type { PolicyMessages } from "../policies";
 
 export const deDE: PolicyMessages = {
   versionLabel: "Fassung vom",
-  versionDate: "6. November 2026",
+  versionDate: "6. Dezember 2026",
   seeAlso: "Siehe auch",
   privacy: {
     title: "Datenschutzerklärung",
@@ -15,7 +15,7 @@ export const deDE: PolicyMessages = {
       {
         heading: "Wer wir sind",
         paragraphs: [
-          "Progmasoft betreibt progmasoft.com, Progmasoft Account, Progmasoft Credentials und die Progmasoft Console, ViGet und die Produktseiten von Progmasoft. Diese Erklärung gilt für all diese Angebote. Fragen dazu richten Sie an support@progmasoft.com.",
+          "Progmasoft betreibt progmasoft.com, Progmasoft Account, Progmasoft Credentials und die Progmasoft Console, den Agenceland MCP Marketplace und die Produktseiten von Progmasoft. Diese Erklärung gilt für all diese Angebote. Fragen dazu richten Sie an support@progmasoft.com.",
         ],
       },
       {
@@ -29,7 +29,7 @@ export const deDE: PolicyMessages = {
       {
         heading: "Ihre IP-Adresse",
         paragraphs: [
-          "Wir speichern Ihre IP-Adresse nur zu einem einzigen Zweck. ViGet nimmt noch keine Uploads von Konten an: Bisher veröffentlicht nur Progmasoft dort. Sobald es das tut, speichert ViGet die IP-Adresse, von der ein Upload kam, zusammen mit dem Upload. Stellt sich heraus, dass ein Upload Schadsoftware enthält, verwenden wir diese Adresse, um festzustellen, woher er kam, und übergeben sie den zuständigen Behörden. Für nichts anderes verwenden wir sie.",
+          "Wir speichern Ihre IP-Adresse nur zu einem einzigen Zweck. Der Agenceland MCP Marketplace nimmt noch keine Uploads von Konten an. Sobald er das tut, speichert der Marketplace die IP-Adresse, von der ein Upload kam, zusammen mit dem Upload. Stellt sich heraus, dass ein Upload Schadsoftware enthält, verwenden wir diese Adresse, um festzustellen, woher er kam, und übergeben sie den zuständigen Behörden. Für nichts anderes verwenden wir sie.",
           "Wir speichern keine IP-Adressen zu Ihrem Konto, zu Ihren Sitzungen oder in den Zugriffsprotokollen unserer Webserver.",
           "Um das Erraten von Passwörtern zu bremsen, zählt der Anmeldedienst einige Minuten lang Anfragen je Adresse. Diese Zählung liegt nur im Arbeitsspeicher und wird nie gespeichert.",
         ],
@@ -56,7 +56,7 @@ export const deDE: PolicyMessages = {
       {
         heading: "Wie lange wir speichern",
         paragraphs: [
-          "Kontodaten bleiben gespeichert, solange das Konto besteht. Eine Sitzung wird entfernt, sobald sie beendet ist. Die IP-Adresse eines ViGet-Uploads wird gespeichert, solange der Upload auf ViGet liegt, und ein Jahr nach seiner Entfernung, damit auch einer spät eingehenden Meldung noch nachgegangen werden kann.",
+          "Kontodaten bleiben gespeichert, solange das Konto besteht. Eine Sitzung wird entfernt, sobald sie beendet ist. Die IP-Adresse eines Uploads in den Agenceland MCP Marketplace wird gespeichert, solange der Upload im Marketplace liegt, und ein Jahr nach seiner Entfernung, damit auch einer spät eingehenden Meldung noch nachgegangen werden kann.",
         ],
       },
       {
@@ -76,7 +76,7 @@ export const deDE: PolicyMessages = {
   security: {
     title: "Sicherheitsrichtlinie",
     description:
-      "Wie Progmasoft Ihr Konto und ViGet schützt, was auf ViGet verboten ist und wie Sie eine Schwachstelle melden.",
+      "Wie Progmasoft Ihr Konto und den Agenceland MCP Marketplace schützt, was im Marketplace verboten ist und wie Sie eine Schwachstelle melden.",
     sections: [
       {
         heading: "Ihr Konto",
@@ -92,11 +92,11 @@ export const deDE: PolicyMessages = {
         ],
       },
       {
-        heading: "Schadsoftware auf ViGet",
+        heading: "Schadsoftware im Agenceland MCP Marketplace",
         paragraphs: [
-          "Es ist verboten, Schadsoftware auf ViGet hochzuladen: Software, die den Computern, auf denen sie läuft, schadet, sie ausspäht oder die Kontrolle über sie übernimmt, oder die etwas anderes tut, als sie angibt.",
-          "Wenn wir solche Software finden oder auf sie hingewiesen werden, nehmen wir sie von ViGet: Ihre Dateien werden nicht mehr ausgeliefert und nur noch als Beweismittel unzugänglich aufbewahrt. Wir schließen das Konto, das sie hochgeladen hat, und übergeben die IP-Adresse des Uploads den zuständigen Behörden, wie es die Datenschutzerklärung beschreibt.",
-          "Jedes Plugin, das ViGet ausliefert, ist mit seinem SHA-256-Digest verzeichnet, und Tazel prüft den Digest, bevor es das Plugin verwendet.",
+          "Es ist verboten, Schadsoftware in den Agenceland MCP Marketplace hochzuladen: Software, die den Computern, auf denen sie läuft, schadet, sie ausspäht oder die Kontrolle über sie übernimmt, oder die etwas anderes tut, als sie angibt.",
+          "Wenn wir solche Software finden oder auf sie hingewiesen werden, nehmen wir sie aus dem Marketplace: Ihre Dateien werden nicht mehr ausgeliefert und nur noch als Beweismittel unzugänglich aufbewahrt. Wir schließen das Konto, das sie hochgeladen hat, und übergeben die IP-Adresse des Uploads den zuständigen Behörden, wie es die Datenschutzerklärung beschreibt.",
+          "Jeder MCP-Server, den der Marketplace ausliefert, ist mit seiner festen Version und seinem SHA-256-Digest verzeichnet, und Agenceland prüft den Digest, bevor es den Server installiert.",
         ],
       },
       {

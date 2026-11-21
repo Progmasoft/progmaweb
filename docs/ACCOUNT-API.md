@@ -46,7 +46,8 @@ Surrounding white space of an account name or email address is ignored.
 ```
 
 `acceptPolicies` says that the person accepted the Privacy Policy and the Security Policy; anything but `true` is
-refused on that field. The account records the version of the policies it accepted.
+refused on that field. The account records the version of the policies it accepted: the newest published one, even
+before it takes effect.
 
 **201 Created.** The session cookie is set, `Location` names the account, and the body is the account:
 
@@ -166,6 +167,7 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 | `AllowedHosts` | host names the service answers | the apex, `www`, `account`, `credentials`, `authorize` and `console` hosts, and loopback (`appsettings.json`) |
 | `ConnectionStrings:Accounts` | the PostgreSQL database of accounts, sessions and OAuth | none; without it the store is in memory (development) |
 | `Git:MirrorsPath`, `Git:CatalogPath`, `Git:Host` | the mirrors of git.progmasoft.com, their catalog, and the host | `/srv/git/mirrors`, `/etc/git-mirror/catalog.json`, `git.progmasoft.com` |
+| `PolicyNotices:SmtpHost`, `PolicyNotices:SmtpPort` | the mail server the notices of new policies go to | `127.0.0.1`, `25` |
 | `OAuth:SigningKeyPath`, `OAuth:EncryptionKeyPath` | the keys that sign identity tokens and encrypt access tokens | see [Progmasoft OAuth](OAUTH.md) |
 | `ASPNETCORE_URLS` | listener address | `http://127.0.0.1:5085` in production |
 
@@ -174,5 +176,5 @@ belong in the process environment or a secret manager and are never committed.
 
 ## What the API does not do
 
-It does not verify email addresses, send mail, reset passwords, list accounts or delete accounts. See
-[Known limitations](LIMITATIONS.md).
+It does not verify email addresses, reset passwords, list accounts or delete accounts, and the only mail it sends is
+the notice of a new version of the policies, from an operations command. See [Known limitations](LIMITATIONS.md).

@@ -6,6 +6,7 @@ export const layoutPages = [
   "progmasoft.com/",
   "progmasoft.com/privacy",
   "progmasoft.com/security",
+  "progmasoft.com/privacy/2026-12-06",
   "account.progmasoft.com/",
   "account.progmasoft.com/login",
   "account.progmasoft.com/register",

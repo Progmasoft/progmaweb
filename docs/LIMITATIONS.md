@@ -30,10 +30,10 @@ Registration accepts any well-formed address. Nothing proves that the person who
   never linked to an existing account by address.
 - **What closes it.** A verification message and a confirmed state on the account.
 
-## The API sends no mail
+## The API sends only the notices of new policies
 
-The mail host described in the [mail boundary](../ops/mail/README.md) is prepared for verification and recovery
-messages, but the API contains no code that sends mail.
+The API sends one kind of mail: the notice of a new version of the policies, from `noreply@progmasoft.com`, through
+`accounts notify-policies` (see [Operations](../ops/README.md)). It sends no verification or recovery message.
 
 - **Consequence.** There is no automated password recovery. The recovery page asks the user to write to support from
   the address registered to the account.

@@ -165,6 +165,48 @@ internal sealed class PostgresAccountStore(NpgsqlDataSource dataSource) : IAccou
         return await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
+    /// <inheritdoc/>
+    public async ValueTask<IReadOnlyList<AccountRecord>> ListAccountsToNotifyAsync(
+        string version,
+        CancellationToken cancellationToken)
+    {
+        await using NpgsqlCommand command = dataSource.CreateCommand(
+            $"""
+            SELECT {AccountColumns} FROM accounts
+            WHERE (policies_version IS NULL OR policies_version < $1)
+              AND NOT EXISTS (
+                  SELECT 1 FROM policy_notices WHERE account_id = accounts.id AND policies_version = $1)
+            ORDER BY created_at, id
+            """);
+        command.Parameters.AddWithValue(version);
+        await using NpgsqlDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+        List<AccountRecord> accounts = [];
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            accounts.Add(ReadAccount(reader));
+        }
+
+        return accounts;
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask RecordPolicyNoticeAsync(
+        Guid accountId,
+        string version,
+        DateTimeOffset sentAt,
+        CancellationToken cancellationToken)
+    {
+        await using NpgsqlCommand command = dataSource.CreateCommand(
+            """
+            INSERT INTO policy_notices (account_id, policies_version, sent_at) VALUES ($1, $2, $3)
+            ON CONFLICT (account_id, policies_version) DO NOTHING
+            """);
+        command.Parameters.AddWithValue(accountId);
+        command.Parameters.AddWithValue(version);
+        command.Parameters.AddWithValue(ToStoredPrecision(sentAt));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
     /// <summary>Finds the one account whose column has a value.</summary>
     /// <typeparam name="TKey">Type of the value.</typeparam>
     /// <param name="column">Name of a column with a unique index. It is written into the statement.</param>
