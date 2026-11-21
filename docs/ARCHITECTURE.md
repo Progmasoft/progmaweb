@@ -16,7 +16,7 @@ Both listen on loopback only. Nginx is the only public listener and terminates T
 browser
    |  HTTPS
    v
-Nginx  (progmasoft.com, account., credentials., authorize., console., product., license.)
+Nginx  (progmasoft.com, account., credentials., authorize., console., product., license., agencelandmcp.)
    |                                    |
    |  pages: http://127.0.0.1:3010      |  OAuth hosts only: /connect/*, /.well-known/* (issuer)
    v                                    |  and /api/* go straight to http://127.0.0.1:5085
@@ -44,6 +44,7 @@ One build serves every host. The host of a request, not a separate deployment, d
 | `console.progmasoft.com` | the Progmasoft Console: OAuth 2.1 tokens of the account's applications (`/credentials`, `/credentials/new`, `/credentials/<clientId>`) | `/console` |
 | `product.progmasoft.com` | the product catalog: `/`, `/<product>`, `/categories`, `/languages`, `/releases` | `/products` |
 | `license.progmasoft.com` | the Progmasoft Source License 1.0 and its pages | `/license` |
+| `agencelandmcp.progmasoft.com` | the Agenceland MCP Marketplace: one page, no server listed, no uploads | `/mcp` |
 
 Nginx alone answers three more names from the same file: `viget.progmasoft.com` with 410 Gone (ViGet was closed),
 `catch3.progmasoft.com` with a permanent redirect to `catch3.uk`, and `maven.progmasoft.com` with the static Maven
@@ -58,10 +59,10 @@ hosts during development.
 
 1. **Language parameter.** `?lang=<locale>` with a published locale stores the language cookie and redirects to the
    same URL without the parameter. See [Localization](LOCALIZATION.md).
-2. **Sites of their own.** On the credentials, authorize, console, product and license hosts, a public path is
+2. **Sites of their own.** On the credentials, authorize, console, product, license and agencelandmcp hosts, a public path is
    rewritten into the host's internal tree (the table above); a path the host does not have shows its not-found page.
    `/api/*` passes through on the credentials, authorize and console hosts only.
-3. **Internal trees stay internal.** `/issuer`, `/authorize`, `/console`, `/products` and `/license` on any other host
+3. **Internal trees stay internal.** `/issuer`, `/authorize`, `/console`, `/products`, `/license` and `/mcp` on any other host
    show the not-found page.
 4. **Account root.** `/` on the account host is rewritten to the internal `/account` page, so the account landing page
    has the short URL.
@@ -89,6 +90,7 @@ The host is read from `X-Forwarded-Host` first and `Host` second, without the po
 | `/`, `/credentials`, `/credentials/new[/<kind>]`, `/credentials/<clientId>` (console host) | the Progmasoft Console | no |
 | `/`, `/<product>`, `/categories`, `/languages`, `/releases` (product host) | the product catalog | yes |
 | `/`, `/pm-spl/1.0/<page>` (license host) | the Progmasoft Source License | yes |
+| `/` (agencelandmcp host) | the Agenceland MCP Marketplace | yes |
 
 `robots.txt` and `sitemap.xml` are generated per host: the product and license hosts list their own pages, every
 other host lists the apex homepage only. Nginx additionally sends `X-Robots-Tag: noindex` for the whole account host.

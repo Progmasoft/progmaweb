@@ -12,6 +12,7 @@ import {
   products,
 } from "../lib/products.ts";
 import { productRoute } from "../lib/sites.ts";
+import { mcpMessages, mcpRoute } from "../lib/mcp-messages.ts";
 
 function shape(value) {
   if (Array.isArray(value)) {
@@ -78,4 +79,14 @@ test("the product hosts map to their internal routes", () => {
   assert.equal(productRoute("/catch3/"), "/products/catch3");
   assert.equal(productRoute("/tazel/extra"), null);
   assert.equal(productRoute("/../x"), null);
+});
+
+test("the MCP Marketplace has its root alone, in every language", () => {
+  assert.equal(mcpRoute("/"), "/mcp");
+  assert.equal(mcpRoute("/servers"), null);
+  assert.equal(mcpRoute("/upload"), null);
+  const english = shape(mcpMessages["en-US"]);
+  for (const locale of supportedLocales) {
+    assert.deepEqual(shape(mcpMessages[locale]), english, locale);
+  }
 });
