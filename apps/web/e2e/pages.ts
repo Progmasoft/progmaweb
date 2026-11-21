@@ -22,6 +22,12 @@ export const layoutPages = [
   "license.progmasoft.com/pm-spl/1.0/faq/",
   "license.progmasoft.com/pm-spl/1.0/categories/",
   "agencelandmcp.progmasoft.com/",
+  "git.progmasoft.com/",
+  "git.progmasoft.com/example-with-a-rather-long-repository-name",
+  "git.progmasoft.com/example-with-a-rather-long-repository-name/tree?path=src/main.c",
+  "git.progmasoft.com/example-with-a-rather-long-repository-name/log",
+  "git.progmasoft.com/example-with-a-rather-long-repository-name/refs",
+  "git.progmasoft.com/example-with-a-rather-long-repository-name/commit/0123456789abcdef0123456789abcdef01234567",
 ] as const;
 
 /** Every host name of the pages above. */

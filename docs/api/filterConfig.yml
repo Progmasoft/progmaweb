@@ -12,3 +12,9 @@ apiRules:
   - exclude:
       uidRegex: ^Progmasoft\.Progmaweb\.Api\.Accounts\.AccountNamePolicy\.CanonicalPattern$
       type: Method
+  - exclude:
+      uidRegex: ^Progmasoft\.Progmaweb\.Api\.Git\.GitCatalog\.NamePattern$
+      type: Method
+  - exclude:
+      uidRegex: ^Progmasoft\.Progmaweb\.Api\.Git\.GitReader\.(CommitPattern|RefPattern)$
+      type: Method

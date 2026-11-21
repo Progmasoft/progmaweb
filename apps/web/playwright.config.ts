@@ -14,6 +14,7 @@ import { layoutHosts } from "./e2e/pages";
  * request leaves the machine.
  */
 const port = 3100;
+const fakeApiPort = 3101;
 const hostRules = layoutHosts
   .map((host) => `MAP ${host} 127.0.0.1:${port}`)
   .join(", ");
@@ -48,10 +49,21 @@ export default defineConfig({
     },
     { name: "desktop-1280", use: { viewport: { width: 1280, height: 800 } } },
   ],
-  webServer: {
-    command: `pnpm exec next start --hostname 127.0.0.1 --port ${port}`,
-    url: `http://127.0.0.1:${port}/robots.txt`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      // The Git endpoints the pages of git.progmasoft.com read, from fixed data.
+      command: `node e2e/fake-git-api.mjs`,
+      url: `http://127.0.0.1:${fakeApiPort}/health`,
+      env: { FAKE_GIT_API_PORT: String(fakeApiPort) },
+      reuseExistingServer: !process.env.CI,
+      timeout: 30_000,
+    },
+    {
+      command: `pnpm exec next start --hostname 127.0.0.1 --port ${port}`,
+      url: `http://127.0.0.1:${port}/robots.txt`,
+      env: { PROGMAWEB_API_ORIGIN: `http://127.0.0.1:${fakeApiPort}` },
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

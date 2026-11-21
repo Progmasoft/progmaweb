@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Progmasoft.Progmaweb.Api.Accounts;
+using Progmasoft.Progmaweb.Api.Git;
 using Progmasoft.OAuth;
 using Progmasoft.Progmaweb.Api.Security;
 
@@ -86,6 +87,19 @@ builder.Services.AddRateLimiter(options =>
             Window = TimeSpan.FromMinutes(1)
         });
     });
+    // git.progmasoft.com: every page is a few runs of Git; the limit keeps a crawler from starving the host.
+    options.AddPolicy("git", context =>
+    {
+        string partition = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetSlidingWindowLimiter(partition, _ => new SlidingWindowRateLimiterOptions
+        {
+            AutoReplenishment = true,
+            PermitLimit = 600,
+            QueueLimit = 0,
+            SegmentsPerWindow = 6,
+            Window = TimeSpan.FromMinutes(1)
+        });
+    });
     options.AddPolicy("account-auth", context =>
     {
         string partition = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
@@ -101,6 +115,9 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.Configure<ForwardedHeadersOptions>(ForwardedHeadersPolicy.Configure);
+builder.Services.Configure<GitOptions>(builder.Configuration.GetSection(GitOptions.Section));
+builder.Services.AddSingleton<GitCatalog>();
+builder.Services.AddSingleton<GitReader>();
 builder.Services.Configure<PolicyNoticeOptions>(builder.Configuration.GetSection(PolicyNoticeOptions.Section));
 builder.Services.AddSingleton<IPolicyNoticeSender, SmtpPolicyNoticeSender>();
 
@@ -130,6 +147,8 @@ app.UseHttpsRedirection();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 // Before authentication, where OpenIddict answers its own endpoints: OAuth only on its host, and nothing else there.
 app.UseMiddleware<OAuthHostFilter>();
+// The mirrors of git.progmasoft.com only there and on loopback, where Next.js renders their pages.
+app.UseMiddleware<GitHostFilter>();
 // Single-page applications call the token endpoints from the browser; see OAuth/Api/OAuthCors.cs.
 app.UseMiddleware<Progmasoft.OAuth.Api.OAuthCors>();
 app.UseAuthentication();
@@ -146,6 +165,7 @@ app.MapGet("/api/v1/status", () => Results.Ok(new
 }));
 app.MapAccountEndpoints();
 app.MapProgmasoftOAuth();
+app.MapGitEndpoints();
 
 app.Run();
 
