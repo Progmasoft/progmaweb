@@ -8,7 +8,9 @@ import { gitCommit, gitRepository } from "@/lib/git.server";
 import { getLocale } from "@/lib/locale.server";
 import { GitFrame, gitDate, gitHref } from "../../../GitFrame";
 
-type Props = { params: Promise<{ repo: string; sha: string }> };
+interface Props {
+  params: Promise<{ repo: string; sha: string }>;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { repo, sha } = await params;

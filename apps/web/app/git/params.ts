@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 /** The parameters of a repository page. */
-export type RepositoryProps = {
+export interface RepositoryProps {
   params: Promise<{ repo: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
+}
 
 /** One query parameter as text; the first when it is given more than once. */
 export function one(
