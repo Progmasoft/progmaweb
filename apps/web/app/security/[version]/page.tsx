@@ -6,7 +6,9 @@ import { notFound } from "next/navigation";
 import { PolicyPage, policyMetadata } from "@/components/PolicyPage";
 import { isPolicyVersion } from "@/lib/policies";
 
-type Props = { params: Promise<{ version: string }> };
+interface Props {
+  params: Promise<{ version: string }>;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { version } = await params;
