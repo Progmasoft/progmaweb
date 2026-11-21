@@ -59,5 +59,23 @@ internal interface IAccountStore
     /// <param name="cancellationToken">Cancels the operation.</param>
     /// <returns>The number of sessions that were removed.</returns>
     ValueTask<int> RemoveExpiredSessionsAsync(DateTimeOffset now, CancellationToken cancellationToken);
+
+    /// <summary>The accounts to tell about a version of the policies.</summary>
+    /// <remarks>
+    /// An account is told when it accepted an earlier version or none, and was not told about this version yet. A
+    /// version is the date it takes effect, <c>yyyy-MM-dd</c>, so versions compare as text.
+    /// </remarks>
+    /// <param name="version">The version of the policies.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>The accounts, oldest first.</returns>
+    ValueTask<IReadOnlyList<AccountRecord>> ListAccountsToNotifyAsync(string version, CancellationToken cancellationToken);
+
+    /// <summary>Records that an account was told about a version of the policies.</summary>
+    /// <param name="accountId">The account.</param>
+    /// <param name="version">The version.</param>
+    /// <param name="sentAt">When the notice was sent, in UTC.</param>
+    /// <param name="cancellationToken">Cancels the operation.</param>
+    /// <returns>A task that completes when the notice is recorded.</returns>
+    ValueTask RecordPolicyNoticeAsync(Guid accountId, string version, DateTimeOffset sentAt, CancellationToken cancellationToken);
 }
 

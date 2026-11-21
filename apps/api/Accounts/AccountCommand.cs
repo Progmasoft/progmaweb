@@ -6,11 +6,21 @@ using System.Text;
 namespace Progmasoft.Progmaweb.Api.Accounts;
 
 /// <summary>
-/// The command that provisions a reserved account on the server: <c>accounts provision-reserved &lt;Name&gt;
-/// &lt;email&gt;</c>. Public registration refuses the reserved names (Progmasoft, Leitwolf); this is the trusted
-/// operations tooling that creates them. The password is read from the terminal without echo, twice, or from one line
-/// of standard input when it is not a terminal; it never appears on a command line.
+/// The account commands of the server.
 /// </summary>
+/// <remarks>
+/// <para>
+/// <c>accounts provision-reserved &lt;Name&gt; &lt;email&gt;</c> provisions a reserved account. Public registration
+/// refuses the reserved names (Progmasoft, Leitwolf); this is the trusted operations tooling that creates them. The
+/// password is read from the terminal without echo, twice, or from one line of standard input when it is not a
+/// terminal; it never appears on a command line.
+/// </para>
+/// <para>
+/// <c>accounts notify-policies [--dry-run]</c> tells every account holder who accepted an earlier version of the
+/// policies about <see cref="PolicyAcceptance.CurrentVersion"/>, once: each notice sent is recorded, so the command can
+/// run again after a failure and sends only what is left. <c>--dry-run</c> counts them and sends nothing.
+/// </para>
+/// </remarks>
 internal static class AccountCommand
 {
     /// <summary>Runs an account command.</summary>
@@ -29,9 +39,11 @@ internal static class AccountCommand
         TextWriter errors,
         CancellationToken cancellationToken)
     {
-        if (args is not ["provision-reserved", string name, string email])
+        bool isNotice = args is ["notify-policies"] or ["notify-policies", "--dry-run"];
+        if (!isNotice && args is not ["provision-reserved", _, _])
         {
             await errors.WriteLineAsync("usage: accounts provision-reserved <Name> <email>");
+            await errors.WriteLineAsync("       accounts notify-policies [--dry-run]");
             return 2;
         }
 
@@ -40,6 +52,14 @@ internal static class AccountCommand
         {
             await AccountSchema.ApplyAsync(dataSource, cancellationToken);
         }
+
+        if (isNotice)
+        {
+            return await NotifyPoliciesAsync(services, args.Length == 2, output, errors, cancellationToken);
+        }
+
+        string name = args[1];
+        string email = args[2];
 
         string? password = input.Read("Password: ");
         if (input.IsTerminal && password != input.Read("Password again: "))
@@ -58,6 +78,54 @@ internal static class AccountCommand
         }
 
         await output.WriteLineAsync($"Created the reserved account {account.AccountName} ({account.Email}).");
+        return 0;
+    }
+
+    /// <summary>Sends the notices of the newest version of the policies that were not sent yet.</summary>
+    /// <param name="services">The services of the API.</param>
+    /// <param name="isDryRun">Whether to count them only.</param>
+    /// <param name="output">Where results go.</param>
+    /// <param name="errors">Where errors go.</param>
+    /// <param name="cancellationToken">Cancels the command.</param>
+    /// <returns>0 when every notice went out, 1 when one failed.</returns>
+    private static async Task<int> NotifyPoliciesAsync(
+        IServiceProvider services,
+        bool isDryRun,
+        TextWriter output,
+        TextWriter errors,
+        CancellationToken cancellationToken)
+    {
+        IAccountStore store = services.GetRequiredService<IAccountStore>();
+        string version = PolicyAcceptance.CurrentVersion;
+        IReadOnlyList<AccountRecord> accounts = await store.ListAccountsToNotifyAsync(version, cancellationToken);
+        if (isDryRun)
+        {
+            await output.WriteLineAsync($"{accounts.Count} account holders would be told about the policies of {version}.");
+            return 0;
+        }
+
+        IPolicyNoticeSender sender = services.GetRequiredService<IPolicyNoticeSender>();
+        TimeProvider time = services.GetService<TimeProvider>() ?? TimeProvider.System;
+        int sent = 0;
+        foreach (AccountRecord account in accounts)
+        {
+            try
+            {
+                await sender.SendAsync(PolicyNotice.For(account), cancellationToken);
+            }
+            catch (Exception exception) when (exception is IOException or MailKit.ProtocolException
+                or MailKit.Net.Smtp.SmtpCommandException or System.Net.Sockets.SocketException)
+            {
+                await errors.WriteLineAsync(
+                    $"Sent {sent} of {accounts.Count}; the notice to {account.AccountName} failed: {exception.Message}");
+                return 1;
+            }
+
+            await store.RecordPolicyNoticeAsync(account.Id, version, time.GetUtcNow(), cancellationToken);
+            sent++;
+        }
+
+        await output.WriteLineAsync($"Told {sent} account holders about the policies of {version}.");
         return 0;
     }
 }

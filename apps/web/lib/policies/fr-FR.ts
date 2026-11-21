@@ -5,7 +5,7 @@ import type { PolicyMessages } from "../policies";
 
 export const frFR: PolicyMessages = {
   versionLabel: "Version du",
-  versionDate: "6 novembre 2026",
+  versionDate: "6 décembre 2026",
   seeAlso: "Voir aussi",
   privacy: {
     title: "Politique de confidentialité",
@@ -15,7 +15,7 @@ export const frFR: PolicyMessages = {
       {
         heading: "Qui nous sommes",
         paragraphs: [
-          "Progmasoft exploite progmasoft.com, Progmasoft Account, Progmasoft Credentials et la Console Progmasoft, ViGet et les sites des produits Progmasoft. Cette politique les couvre tous. Écrivez à support@progmasoft.com pour toute question à son sujet.",
+          "Progmasoft exploite progmasoft.com, Progmasoft Account, Progmasoft Credentials et la Console Progmasoft, l’Agenceland MCP Marketplace et les sites des produits Progmasoft. Cette politique les couvre tous. Écrivez à support@progmasoft.com pour toute question à son sujet.",
         ],
       },
       {
@@ -29,7 +29,7 @@ export const frFR: PolicyMessages = {
       {
         heading: "Votre adresse IP",
         paragraphs: [
-          "Nous conservons votre adresse IP dans un seul but. ViGet n’accepte pas encore d’envois depuis les comptes : seul Progmasoft y publie. Lorsqu’il les acceptera, ViGet enregistrera l’adresse IP d’où provient chaque envoi, avec l’envoi. Si un envoi se révèle contenir un logiciel malveillant, nous utiliserons cette adresse pour établir sa provenance et la transmettrons aux autorités compétentes. Nous ne l’utiliserons à rien d’autre.",
+          "Nous conservons votre adresse IP dans un seul but. L’Agenceland MCP Marketplace n’accepte pas encore d’envois depuis les comptes. Lorsqu’il les acceptera, le Marketplace enregistrera l’adresse IP d’où provient chaque envoi, avec l’envoi. Si un envoi se révèle contenir un logiciel malveillant, nous utiliserons cette adresse pour établir sa provenance et la transmettrons aux autorités compétentes. Nous ne l’utiliserons à rien d’autre.",
           "Nous ne conservons pas d’adresses IP avec votre compte, avec vos sessions ni dans les journaux d’accès de nos serveurs web.",
           "Pour freiner les tentatives de deviner un mot de passe, le service de connexion compte les requêtes par adresse pendant quelques minutes. Ce décompte est tenu en mémoire et n’est jamais écrit.",
         ],
@@ -56,7 +56,7 @@ export const frFR: PolicyMessages = {
       {
         heading: "Combien de temps nous les conservons",
         paragraphs: [
-          "Les données du compte sont conservées aussi longtemps que le compte existe. Une session est supprimée une fois terminée. L’adresse IP d’un envoi sur ViGet sera conservée tant que l’envoi est sur ViGet et pendant un an après son retrait, afin qu’un signalement tardif puisse encore être suivi.",
+          "Les données du compte sont conservées aussi longtemps que le compte existe. Une session est supprimée une fois terminée. L’adresse IP d’un envoi sur l’Agenceland MCP Marketplace sera conservée tant que l’envoi est sur le Marketplace et pendant un an après son retrait, afin qu’un signalement tardif puisse encore être suivi.",
         ],
       },
       {
@@ -76,7 +76,7 @@ export const frFR: PolicyMessages = {
   security: {
     title: "Politique de sécurité",
     description:
-      "Comment Progmasoft protège votre compte et ViGet, ce qui est interdit sur ViGet, et comment signaler une faiblesse.",
+      "Comment Progmasoft protège votre compte et l’Agenceland MCP Marketplace, ce qui est interdit sur le Marketplace, et comment signaler une faiblesse.",
     sections: [
       {
         heading: "Votre compte",
@@ -92,11 +92,11 @@ export const frFR: PolicyMessages = {
         ],
       },
       {
-        heading: "Logiciels malveillants sur ViGet",
+        heading: "Logiciels malveillants sur l’Agenceland MCP Marketplace",
         paragraphs: [
-          "Il est interdit d’envoyer un logiciel malveillant sur ViGet : un logiciel qui nuit aux ordinateurs sur lesquels il s’exécute, les espionne ou en prend le contrôle, ou qui fait autre chose que ce qu’il annonce.",
-          "Lorsque nous trouvons un tel logiciel ou qu’on nous le signale, nous le retirons de ViGet : ses fichiers ne sont plus servis et ne sont conservés, hors d’atteinte, qu’à titre de preuve. Nous fermons le compte qui l’a envoyé et transmettons l’adresse IP de l’envoi aux autorités compétentes, comme le décrit la politique de confidentialité.",
-          "Chaque plugin que sert ViGet est listé avec son empreinte SHA-256, et Tazel vérifie l’empreinte avant d’utiliser le plugin.",
+          "Il est interdit d’envoyer un logiciel malveillant sur l’Agenceland MCP Marketplace : un logiciel qui nuit aux ordinateurs sur lesquels il s’exécute, les espionne ou en prend le contrôle, ou qui fait autre chose que ce qu’il annonce.",
+          "Lorsque nous trouvons un tel logiciel ou qu’on nous le signale, nous le retirons du Marketplace : ses fichiers ne sont plus servis et ne sont conservés, hors d’atteinte, qu’à titre de preuve. Nous fermons le compte qui l’a envoyé et transmettons l’adresse IP de l’envoi aux autorités compétentes, comme le décrit la politique de confidentialité.",
+          "Chaque serveur MCP que sert le Marketplace est listé avec sa version fixée et son empreinte SHA-256, et Agenceland vérifie l’empreinte avant d’installer le serveur.",
         ],
       },
       {

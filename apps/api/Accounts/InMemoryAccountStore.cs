@@ -24,6 +24,9 @@ internal sealed class InMemoryAccountStore : IAccountStore
     /// <summary>Sessions by the hexadecimal form of their token digest.</summary>
     private readonly Dictionary<string, SessionRecord> sessionsByDigest = new(StringComparer.Ordinal);
 
+    /// <summary>The notices sent: account and version.</summary>
+    private readonly HashSet<(Guid AccountId, string Version)> policyNotices = [];
+
     /// <inheritdoc/>
     public ValueTask<CreateAccountResult> CreateAsync(AccountRecord account, CancellationToken cancellationToken)
     {
@@ -158,5 +161,44 @@ internal sealed class InMemoryAccountStore : IAccountStore
             return ValueTask.FromResult(expired.Length);
         }
     }
-}
 
+    /// <inheritdoc/>
+    public ValueTask<IReadOnlyList<AccountRecord>> ListAccountsToNotifyAsync(
+        string version,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (gate)
+        {
+            AccountRecord[] accounts =
+            [
+                .. accountsById.Values
+                    .Where(account => account.PoliciesVersion is null
+                        || string.CompareOrdinal(account.PoliciesVersion, version) < 0)
+                    .Where(account => !policyNotices.Contains((account.Id, version)))
+                    .OrderBy(account => account.CreatedAt)
+                    .ThenBy(account => account.Id)
+            ];
+            return ValueTask.FromResult<IReadOnlyList<AccountRecord>>(accounts);
+        }
+    }
+
+    /// <inheritdoc/>
+    public ValueTask RecordPolicyNoticeAsync(
+        Guid accountId,
+        string version,
+        DateTimeOffset sentAt,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        lock (gate)
+        {
+            if (accountsById.ContainsKey(accountId))
+            {
+                policyNotices.Add((accountId, version));
+            }
+
+            return ValueTask.CompletedTask;
+        }
+    }
+}

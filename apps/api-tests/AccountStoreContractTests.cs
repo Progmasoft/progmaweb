@@ -249,6 +249,41 @@ public abstract class AccountStoreContractTests
         // The account outlives its sessions.
         Assert.NotNull(await store.FindByIdAsync(account.Id, Cancellation));
     }
+
+    [Fact]
+    public async Task AnAccountIsToldAboutANewVersionOfThePoliciesOnce()
+    {
+        IAccountStore store = await CreateStoreAsync();
+        AccountRecord none = Account("NoPolicies1", "none@example.com");
+        AccountRecord older = Account("OlderPolicies1", "older@example.com") with
+        {
+            PoliciesVersion = "2026-11-06",
+            PoliciesAcceptedAt = Moment
+        };
+        AccountRecord current = Account("CurrentPolicies1", "current@example.com") with
+        {
+            PoliciesVersion = "2026-12-06",
+            PoliciesAcceptedAt = Moment
+        };
+        foreach (AccountRecord account in new[] { none, older, current })
+        {
+            Assert.Equal(CreateAccountStatus.Created, (await store.CreateAsync(account, Cancellation)).Status);
+        }
+
+        IReadOnlyList<AccountRecord> toTell = await store.ListAccountsToNotifyAsync("2026-12-06", Cancellation);
+        Assert.Equal(
+            ["NoPolicies1", "OlderPolicies1"],
+            toTell.Select(account => account.AccountName).Order());
+
+        await store.RecordPolicyNoticeAsync(older.Id, "2026-12-06", Moment, Cancellation);
+        await store.RecordPolicyNoticeAsync(older.Id, "2026-12-06", Moment, Cancellation);
+        toTell = await store.ListAccountsToNotifyAsync("2026-12-06", Cancellation);
+        Assert.Equal(["NoPolicies1"], toTell.Select(account => account.AccountName));
+
+        // Another version is another notice.
+        toTell = await store.ListAccountsToNotifyAsync("2027-01-01", Cancellation);
+        Assert.Equal(3, toTell.Count);
+    }
 }
 
 public sealed class InMemoryAccountStoreTests : AccountStoreContractTests

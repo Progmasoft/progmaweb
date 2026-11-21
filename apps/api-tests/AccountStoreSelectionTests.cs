@@ -122,6 +122,18 @@ public sealed class ExpiredSessionCleanupTests
             throw new IOException("The database does not answer.");
         }
 
+        public ValueTask<IReadOnlyList<AccountRecord>> ListAccountsToNotifyAsync(
+            string version,
+            CancellationToken cancellationToken) =>
+            ValueTask.FromResult<IReadOnlyList<AccountRecord>>([]);
+
+        public ValueTask RecordPolicyNoticeAsync(
+            Guid accountId,
+            string version,
+            DateTimeOffset sentAt,
+            CancellationToken cancellationToken) =>
+            ValueTask.CompletedTask;
+
         public ValueTask<CreateAccountResult> CreateAsync(AccountRecord account, CancellationToken cancellationToken) =>
             throw new NotSupportedException();
 

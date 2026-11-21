@@ -5,7 +5,7 @@ import type { PolicyMessages } from "../policies";
 
 export const enUS: PolicyMessages = {
   versionLabel: "Version of",
-  versionDate: "6 November 2026",
+  versionDate: "6 December 2026",
   seeAlso: "See also",
   privacy: {
     title: "Privacy Policy",
@@ -15,7 +15,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "Who we are",
         paragraphs: [
-          "Progmasoft runs progmasoft.com, Progmasoft Account, Progmasoft Credentials and the Progmasoft Console, ViGet and the Progmasoft product sites. This policy covers all of them. Write to support@progmasoft.com with any question about it.",
+          "Progmasoft runs progmasoft.com, Progmasoft Account, Progmasoft Credentials and the Progmasoft Console, the Agenceland MCP Marketplace and the Progmasoft product sites. This policy covers all of them. Write to support@progmasoft.com with any question about it.",
         ],
       },
       {
@@ -29,7 +29,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "Your IP address",
         paragraphs: [
-          "We keep your IP address for one purpose only. ViGet does not yet take uploads from accounts: only Progmasoft publishes to it. Once it does, ViGet will record the IP address each upload came from, together with the upload. If an upload turns out to contain malicious software, we will use that address to establish where it came from and give it to the competent authorities. We will use it for nothing else.",
+          "We keep your IP address for one purpose only. The Agenceland MCP Marketplace does not yet take uploads from accounts. Once it does, the marketplace will record the IP address each upload came from, together with the upload. If an upload turns out to contain malicious software, we will use that address to establish where it came from and give it to the competent authorities. We will use it for nothing else.",
           "We do not keep IP addresses with your account, with your sessions or in the access logs of our web servers.",
           "To slow down password guessing, the sign-in service counts requests per address for a few minutes. The count is held in memory and never written down.",
         ],
@@ -56,7 +56,7 @@ export const enUS: PolicyMessages = {
       {
         heading: "How long we keep it",
         paragraphs: [
-          "Account data is kept for as long as the account exists. A session is removed once it has ended. The IP address of a ViGet upload will be kept while the upload is on ViGet and for one year after it was removed, so that a report that arrives late can still be followed.",
+          "Account data is kept for as long as the account exists. A session is removed once it has ended. The IP address of an upload to the Agenceland MCP Marketplace will be kept while the upload is on the marketplace and for one year after it was removed, so that a report that arrives late can still be followed.",
         ],
       },
       {
@@ -76,7 +76,7 @@ export const enUS: PolicyMessages = {
   security: {
     title: "Security Policy",
     description:
-      "How Progmasoft protects your account and ViGet, what is forbidden on ViGet, and how to report a weakness.",
+      "How Progmasoft protects your account and the Agenceland MCP Marketplace, what is forbidden on the marketplace, and how to report a weakness.",
     sections: [
       {
         heading: "Your account",
@@ -92,11 +92,11 @@ export const enUS: PolicyMessages = {
         ],
       },
       {
-        heading: "Malicious software on ViGet",
+        heading: "Malicious software on the Agenceland MCP Marketplace",
         paragraphs: [
-          "Uploading malicious software to ViGet is forbidden: software that harms, spies on or takes control of the computers it runs on, or that does something other than what it says it does.",
-          "When we find such software or are told about it, we take it off ViGet: its files are no longer served, and are kept out of reach only as evidence. We close the account that uploaded it and give the IP address of the upload to the competent authorities, as the Privacy Policy describes.",
-          "Every plugin ViGet serves is listed with its SHA-256 digest, and Tazel checks the digest before it uses the plugin.",
+          "Uploading malicious software to the Agenceland MCP Marketplace is forbidden: software that harms, spies on or takes control of the computers it runs on, or that does something other than what it says it does.",
+          "When we find such software or are told about it, we take it off the marketplace: its files are no longer served, and are kept out of reach only as evidence. We close the account that uploaded it and give the IP address of the upload to the competent authorities, as the Privacy Policy describes.",
+          "Every MCP server the marketplace serves is listed with its pinned version and its SHA-256 digest, and Agenceland checks the digest before it installs the server.",
         ],
       },
       {

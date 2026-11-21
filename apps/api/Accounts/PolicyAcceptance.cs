@@ -12,8 +12,15 @@ namespace Progmasoft.Progmaweb.Api.Accounts;
 /// </remarks>
 internal static class PolicyAcceptance
 {
-    /// <summary>The version of the policies, the date they took effect.</summary>
-    public const string CurrentVersion = "2026-11-06";
+    /// <summary>
+    /// The newest version of the policies, the date it takes effect. Registration records it from the day it is
+    /// published, and the account holders who accepted an earlier one are told before that date
+    /// (<c>accounts notify-policies</c>).
+    /// </summary>
+    public const string CurrentVersion = "2026-12-06";
+
+    /// <summary>The version before it, which applies until <see cref="CurrentVersion"/> takes effect.</summary>
+    public const string PreviousVersion = "2026-11-06";
 
     /// <summary>The message of a registration that did not accept the policies.</summary>
     public const string RequiredMessage = "Accept the Privacy Policy and the Security Policy to create an account.";

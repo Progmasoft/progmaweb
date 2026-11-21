@@ -240,5 +240,17 @@ public sealed class AccountServiceTests
 
         public ValueTask<int> RemoveExpiredSessionsAsync(DateTimeOffset now, CancellationToken cancellationToken) =>
             ValueTask.FromResult(0);
+
+        public ValueTask<IReadOnlyList<AccountRecord>> ListAccountsToNotifyAsync(
+            string version,
+            CancellationToken cancellationToken) =>
+            ValueTask.FromResult<IReadOnlyList<AccountRecord>>([]);
+
+        public ValueTask RecordPolicyNoticeAsync(
+            Guid accountId,
+            string version,
+            DateTimeOffset sentAt,
+            CancellationToken cancellationToken) =>
+            ValueTask.CompletedTask;
     }
 }

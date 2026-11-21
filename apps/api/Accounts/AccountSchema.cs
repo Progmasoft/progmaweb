@@ -64,6 +64,16 @@ internal static class AccountSchema
             ADD COLUMN policies_accepted_at timestamptz,
             ADD CONSTRAINT accounts_policies_check
                 CHECK ((policies_version IS NULL) = (policies_accepted_at IS NULL));
+        """,
+        // 3: the notices of a new version of the policies, one per account and version, so that a notice that was
+        // sent is never sent again.
+        """
+        CREATE TABLE policy_notices (
+            account_id       uuid        NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
+            policies_version text        NOT NULL,
+            sent_at          timestamptz NOT NULL,
+            PRIMARY KEY (account_id, policies_version)
+        );
         """
     ];
 
