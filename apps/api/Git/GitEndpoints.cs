@@ -72,10 +72,23 @@ internal static class GitEndpoints
         api.MapGet("/{name}/archive", ArchiveAsync);
     }
 
+    /// <summary>Where a repository is developed.</summary>
+    /// <param name="name">Its name.</param>
+    /// <returns>Its address on GitHub.</returns>
     private static string Homepage(string name) => $"https://github.com/Progmasoft/{name}";
 
+    /// <summary>Where a repository is cloned from.</summary>
+    /// <param name="options">The host of the mirrors.</param>
+    /// <param name="name">Its name.</param>
+    /// <returns>Its address on git.progmasoft.com.</returns>
     private static string CloneUrl(IOptions<GitOptions> options, string name) => $"https://{options.Value.Host}/{name}";
 
+    /// <summary>The sections of the catalog with their mirrored repositories.</summary>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="options">The host of the mirrors.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The sections.</returns>
     private static async Task<IResult> ListAsync(
         GitCatalog catalog,
         GitReader git,
@@ -105,6 +118,13 @@ internal static class GitEndpoints
         return Results.Ok(sections);
     }
 
+    /// <summary>Describes a repository: its addresses, default branch and when that last changed.</summary>
+    /// <param name="git">The reader.</param>
+    /// <param name="options">The host of the mirrors.</param>
+    /// <param name="repository">The repository.</param>
+    /// <param name="mirror">The path of its mirror.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The description.</returns>
     private static async Task<GitRepositoryResponse> DescribeAsync(
         GitReader git,
         IOptions<GitOptions> options,
@@ -124,6 +144,13 @@ internal static class GitEndpoints
             repository.Name, repository.Description, Homepage(repository.Name), CloneUrl(options, repository.Name), branch, updated);
     }
 
+    /// <summary>One repository.</summary>
+    /// <param name="name">Its name.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="options">The host of the mirrors.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The repository, or 404.</returns>
     private static async Task<IResult> ShowAsync(
         string name,
         GitCatalog catalog,
@@ -134,6 +161,12 @@ internal static class GitEndpoints
             ? Results.Ok(await DescribeAsync(git, options, found.Repository, found.MirrorPath, cancellationToken))
             : Results.NotFound();
 
+    /// <summary>The branches and the tags of a repository.</summary>
+    /// <param name="name">Its name.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The branches and tags, or 404.</returns>
     private static async Task<IResult> RefsAsync(
         string name,
         GitCatalog catalog,
@@ -175,6 +208,14 @@ internal static class GitEndpoints
         return (found.MirrorPath, named, commit, trimmed);
     }
 
+    /// <summary>A directory or a file of a branch, tag or commit.</summary>
+    /// <param name="name">The repository.</param>
+    /// <param name="ref">The branch, tag or commit; the default branch without one.</param>
+    /// <param name="path">The path; the root without one.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>What is there, or 404.</returns>
     private static async Task<IResult> TreeAsync(
         string name,
         string? @ref,
@@ -210,6 +251,15 @@ internal static class GitEndpoints
     /// <summary>Whether bytes are not text: a NUL in the first 8000, as Git decides.</summary>
     internal static bool IsBinary(ReadOnlySpan<byte> bytes) => bytes[..Math.Min(bytes.Length, 8000)].Contains((byte)0);
 
+    /// <summary>A page of the commits of a branch, tag or commit, of a path in it when one is given.</summary>
+    /// <param name="name">The repository.</param>
+    /// <param name="ref">The branch, tag or commit; the default branch without one.</param>
+    /// <param name="path">The path; the whole tree without one.</param>
+    /// <param name="page">The page, from zero.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The commits, or 404.</returns>
     private static async Task<IResult> LogAsync(
         string name,
         string? @ref,
@@ -230,6 +280,13 @@ internal static class GitEndpoints
         return Results.Ok(new { reference = at.Reference, commit = at.Commit, path = at.Path, page = page ?? 0, commits, hasMore });
     }
 
+    /// <summary>A commit with its message and patch.</summary>
+    /// <param name="name">The repository.</param>
+    /// <param name="commit">The full commit identifier.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The commit, or 404.</returns>
     private static async Task<IResult> CommitAsync(
         string name,
         string commit,
@@ -247,6 +304,15 @@ internal static class GitEndpoints
         return Results.Ok(await git.CommitAsync(found.MirrorPath, resolved, cancellationToken));
     }
 
+    /// <summary>A file as it is: plain text, or a download when it is binary.</summary>
+    /// <param name="name">The repository.</param>
+    /// <param name="ref">The branch, tag or commit; the default branch without one.</param>
+    /// <param name="path">The path of the file.</param>
+    /// <param name="context">The request, for the Content-Disposition header.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>The file, 404, or 413 past <see cref="GitReader.MaxRawBytes"/>.</returns>
     private static async Task<IResult> RawAsync(
         string name,
         string? @ref,
@@ -278,6 +344,14 @@ internal static class GitEndpoints
         return Results.Bytes(bytes, IsBinary(bytes) ? "application/octet-stream" : "text/plain; charset=utf-8");
     }
 
+    /// <summary>Writes a <c>.tar.gz</c> of a branch, tag or commit.</summary>
+    /// <param name="name">The repository.</param>
+    /// <param name="ref">The branch, tag or commit; the default branch without one.</param>
+    /// <param name="context">The request, which the archive is written to.</param>
+    /// <param name="catalog">The catalog.</param>
+    /// <param name="git">The reader.</param>
+    /// <param name="cancellationToken">Cancels the request.</param>
+    /// <returns>A task that completes when the archive is written.</returns>
     private static async Task ArchiveAsync(
         string name,
         string? @ref,

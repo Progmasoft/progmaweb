@@ -44,13 +44,17 @@ internal sealed record GitCatalogSection(string Name, IReadOnlyList<GitCatalogRe
 /// <param name="options">Where the catalog is.</param>
 internal sealed partial class GitCatalog(IOptions<GitOptions> options)
 {
+    /// <summary>How the catalog file is read: property names in any case.</summary>
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>Guards <see cref="cached"/>.</summary>
     private readonly Lock gate = new();
 
+    /// <summary>The catalog as last read, with the time its file was written then.</summary>
     private (DateTime Written, IReadOnlyList<GitCatalogSection> Sections)? cached;
 
-    /// <summary>Whether a text is a repository name: what GitHub allows, without a leading dot.</summary>
+    /// <summary>Matches a repository name: what GitHub allows, without a leading dot.</summary>
+    /// <returns>The compiled expression.</returns>
     [GeneratedRegex("^[A-Za-z0-9_-][A-Za-z0-9._-]{0,99}$", RegexOptions.CultureInvariant)]
     private static partial Regex NamePattern();
 
@@ -108,6 +112,10 @@ internal sealed partial class GitCatalog(IOptions<GitOptions> options)
     /// <returns>The path.</returns>
     public string MirrorOf(string name) => Path.Combine(options.Value.MirrorsPath, name + ".git");
 
+    /// <summary>Reads and checks the catalog file.</summary>
+    /// <param name="path">The file.</param>
+    /// <returns>Its sections.</returns>
+    /// <exception cref="InvalidDataException">The file is empty or names something that is not a repository name.</exception>
     private static IReadOnlyList<GitCatalogSection> Read(string path)
     {
         using FileStream stream = File.OpenRead(path);

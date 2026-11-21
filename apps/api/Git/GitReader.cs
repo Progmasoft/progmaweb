@@ -80,11 +80,13 @@ internal sealed partial class GitReader(IOptions<GitOptions> options)
     /// <summary>Commits per page of a log.</summary>
     public const int LogPageSize = 50;
 
-    /// <summary>A full commit identifier, SHA-1 or SHA-256.</summary>
+    /// <summary>Matches a full commit identifier, SHA-1 or SHA-256.</summary>
+    /// <returns>The compiled expression.</returns>
     [GeneratedRegex("^(?:[0-9a-f]{40}|[0-9a-f]{64})$", RegexOptions.CultureInvariant)]
     private static partial Regex CommitPattern();
 
-    /// <summary>The characters a branch or tag name of these repositories may have.</summary>
+    /// <summary>Matches the characters a branch or tag name of these repositories may have.</summary>
+    /// <returns>The compiled expression.</returns>
     [GeneratedRegex("^[A-Za-z0-9._+/-]{1,200}$", RegexOptions.CultureInvariant)]
     private static partial Regex RefPattern();
 
@@ -373,9 +375,16 @@ internal sealed partial class GitReader(IOptions<GitOptions> options)
     /// <param name="IsTruncated">Whether it wrote more than the limit.</param>
     private sealed record GitResult(bool Ok, byte[] Bytes, bool IsTruncated)
     {
+        /// <summary>What Git wrote, as UTF-8 text.</summary>
         public string Text => Encoding.UTF8.GetString(Bytes);
     }
 
+    /// <summary>Runs Git on a mirror and reads what it writes, up to a limit.</summary>
+    /// <param name="mirror">The path of the mirror.</param>
+    /// <param name="arguments">The arguments after the global options.</param>
+    /// <param name="cancellationToken">Cancels the run.</param>
+    /// <param name="limit">The most bytes to read; Git is stopped past it.</param>
+    /// <returns>The result.</returns>
     private async Task<GitResult> RunAsync(
         string mirror,
         IReadOnlyList<string> arguments,
@@ -422,6 +431,10 @@ internal sealed partial class GitReader(IOptions<GitOptions> options)
         }
     }
 
+    /// <summary>Starts Git on a mirror, without a shell, in a cleared environment.</summary>
+    /// <param name="mirror">The path of the mirror.</param>
+    /// <param name="arguments">The arguments after the global options.</param>
+    /// <returns>The process, its output redirected.</returns>
     private Process Start(string mirror, IReadOnlyList<string> arguments)
     {
         ProcessStartInfo start = new(options.Value.GitPath)
@@ -452,6 +465,8 @@ internal sealed partial class GitReader(IOptions<GitOptions> options)
         return Process.Start(start) ?? throw new InvalidOperationException("Git did not start.");
     }
 
+    /// <summary>Kills a run that has not exited.</summary>
+    /// <param name="process">The run.</param>
     private static void Stop(Process process)
     {
         try
@@ -467,9 +482,15 @@ internal sealed partial class GitReader(IOptions<GitOptions> options)
         }
     }
 
+    /// <summary>Splits output into the records a format ended with the record separator.</summary>
+    /// <param name="text">The output.</param>
+    /// <returns>The records that are not empty.</returns>
     private static IEnumerable<string> Records(string text) =>
         text.Split('\u001e').Select(record => record.TrimStart('\n')).Where(record => record.Length > 0);
 
+    /// <summary>Reads a strict ISO 8601 date Git wrote.</summary>
+    /// <param name="text">The date.</param>
+    /// <returns>The date, or the Unix epoch when it cannot be read.</returns>
     private static DateTimeOffset Date(string text) =>
         DateTimeOffset.TryParse(text, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset date)
             ? date
