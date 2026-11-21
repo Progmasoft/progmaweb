@@ -36,45 +36,47 @@ const commits = Array.from({ length: 12 }, (_, index) => ({
   subject: `Change ${index}: a subject line long enough to wrap on a phone screen of 360 pixels`,
 }));
 
-const routes = {
-  "/": [{ name: "Examples", repositories: [repository] }],
-  [`/${repository.name}`]: repository,
-  [`/${repository.name}/refs`]: {
-    branches: [
-      { name: "main", commit, date, subject: commits[0].subject },
-      { name: `feature/${long}`, commit: parent, date, subject: "Work" },
-    ],
-    tags: [{ name: "example-1.0.0", commit, date, subject: "Release" }],
-  },
-  [`/${repository.name}/log`]: {
-    reference: "main",
-    commit,
-    path: "",
-    page: 0,
-    commits,
-    hasMore: true,
-  },
-  [`/${repository.name}/commits/${commit}`]: {
-    commit,
-    parents: [parent],
-    author: "Progmasoft",
-    authorDate: date,
-    committer: "Progmasoft",
-    commitDate: date,
-    message: `${commits[0].subject}\n\nThe body of the message, with a line that is long: ${long}${long}.`,
-    diff: [
-      " src/main.c | 2 +-",
-      "",
-      "diff --git a/src/main.c b/src/main.c",
-      "--- a/src/main.c",
-      "+++ b/src/main.c",
-      "@@ -1 +1 @@",
-      `-${line}`,
-      `+${line}`,
-    ].join("\n"),
-    isDiffTruncated: false,
-  },
-};
+const routes = new Map(
+  Object.entries({
+    "/": [{ name: "Examples", repositories: [repository] }],
+    [`/${repository.name}`]: repository,
+    [`/${repository.name}/refs`]: {
+      branches: [
+        { name: "main", commit, date, subject: commits[0].subject },
+        { name: `feature/${long}`, commit: parent, date, subject: "Work" },
+      ],
+      tags: [{ name: "example-1.0.0", commit, date, subject: "Release" }],
+    },
+    [`/${repository.name}/log`]: {
+      reference: "main",
+      commit,
+      path: "",
+      page: 0,
+      commits,
+      hasMore: true,
+    },
+    [`/${repository.name}/commits/${commit}`]: {
+      commit,
+      parents: [parent],
+      author: "Progmasoft",
+      authorDate: date,
+      committer: "Progmasoft",
+      commitDate: date,
+      message: `${commits[0].subject}\n\nThe body of the message, with a line that is long: ${long}${long}.`,
+      diff: [
+        " src/main.c | 2 +-",
+        "",
+        "diff --git a/src/main.c b/src/main.c",
+        "--- a/src/main.c",
+        "+++ b/src/main.c",
+        "@@ -1 +1 @@",
+        `-${line}`,
+        `+${line}`,
+      ].join("\n"),
+      isDiffTruncated: false,
+    },
+  }),
+);
 
 function tree(path) {
   if (path.endsWith(".c") || path.endsWith(".txt") || path.endsWith(".md")) {
@@ -120,7 +122,7 @@ createServer((request, response) => {
       ? tree(url.searchParams.get("path") ?? "")
       : path === null
         ? undefined
-        : routes[path];
+        : routes.get(path);
   if (body === undefined) {
     response.statusCode = 404;
     response.end();

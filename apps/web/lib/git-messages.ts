@@ -217,19 +217,27 @@ export function gitRoute(pathname: string): string | null {
   if (path === "/") {
     return "/git";
   }
-  const [, name, view, extra, ...rest] = path.split("/");
-  if (!name || !repositoryName.test(name) || name.endsWith(".git")) {
-    return null;
-  }
-  if (view === undefined) {
+  const [, name = "", ...view] = path.split("/");
+  return isRepositoryName(name) ? viewRoute(name, view) : null;
+}
+
+/** Whether a path segment names a repository, not its .git clone address. */
+function isRepositoryName(name: string): boolean {
+  return repositoryName.test(name) && !name.endsWith(".git");
+}
+
+/** The views of one repository: its files, a tree, its log, refs or a commit. */
+const repositoryViews = new Set(["tree", "log", "refs"]);
+
+function viewRoute(name: string, view: string[]): string | null {
+  const [kind, commit] = view;
+  if (kind === undefined) {
     return `/git/${name}`;
   }
-  if (rest.length === 0 && extra === undefined) {
-    return view === "tree" || view === "log" || view === "refs"
-      ? `/git/${name}/${view}`
-      : null;
+  if (view.length === 1) {
+    return repositoryViews.has(kind) ? `/git/${name}/${kind}` : null;
   }
-  return view === "commit" && extra && commitId.test(extra) && rest.length === 0
-    ? `/git/${name}/commit/${extra}`
-    : null;
+  const isCommit =
+    view.length === 2 && kind === "commit" && commitId.test(commit ?? "");
+  return isCommit ? `/git/${name}/commit/${commit}` : null;
 }

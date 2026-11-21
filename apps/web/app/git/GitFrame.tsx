@@ -51,6 +51,44 @@ export function gitSize(bytes: number | null): string {
     : `${(bytes / 1024 / 1024).toFixed(1)} MiB`;
 }
 
+/** The navigation and clone address of a repository. */
+function RepositoryHeader({
+  locale,
+  repository,
+  view,
+  reference,
+}: Readonly<{
+  locale: Locale;
+  repository: GitRepository;
+  view?: GitView;
+  reference?: string;
+}>) {
+  const text = getGitMessages(locale);
+  const base = `/${repository.name}`;
+  const ref = reference === repository.defaultBranch ? undefined : reference;
+  const current = (name: GitView) => (view === name ? "page" : undefined);
+  return (
+    <>
+      <nav className="pm-git-nav" aria-label={text.repository}>
+        <a href={gitHref(base, { ref })} aria-current={current("summary")}>
+          {text.files}
+        </a>
+        <a href={gitHref(`${base}/log`, { ref })} aria-current={current("log")}>
+          {text.log}
+        </a>
+        <a href={`${base}/refs`} aria-current={current("refs")}>
+          {text.refs}
+        </a>
+        <a href={repository.homepage}>{text.developedOn}</a>
+      </nav>
+      <p className="pm-git-clone">
+        <span>{text.clone}</span>
+        <code>git clone {repository.cloneUrl}</code>
+      </p>
+    </>
+  );
+}
+
 /** The frame of every page of git.progmasoft.com. */
 export function GitFrame({
   locale,
@@ -68,11 +106,6 @@ export function GitFrame({
   children: ReactNode;
 }>) {
   const text = getGitMessages(locale);
-  const base = repository ? `/${repository.name}` : "";
-  const ref =
-    reference && reference !== repository?.defaultBranch
-      ? reference
-      : undefined;
   return (
     <div className="pm-page">
       <SiteHeader locale={locale} />
@@ -82,38 +115,17 @@ export function GitFrame({
             <p className="eyebrow">
               <Link href="/">{text.title}</Link>
             </p>
-            <h1>{repository ? repository.name : text.title}</h1>
+            <h1>{repository?.name ?? text.title}</h1>
             <p className="pm-lede">
-              {repository ? repository.description : text.description}
+              {repository?.description ?? text.description}
             </p>
             {repository ? (
-              <>
-                <nav className="pm-git-nav" aria-label={text.repository}>
-                  <a
-                    href={gitHref(base, { ref })}
-                    aria-current={view === "summary" ? "page" : undefined}
-                  >
-                    {text.files}
-                  </a>
-                  <a
-                    href={gitHref(`${base}/log`, { ref })}
-                    aria-current={view === "log" ? "page" : undefined}
-                  >
-                    {text.log}
-                  </a>
-                  <a
-                    href={`${base}/refs`}
-                    aria-current={view === "refs" ? "page" : undefined}
-                  >
-                    {text.refs}
-                  </a>
-                  <a href={repository.homepage}>{text.developedOn}</a>
-                </nav>
-                <p className="pm-git-clone">
-                  <span>{text.clone}</span>
-                  <code>git clone {repository.cloneUrl}</code>
-                </p>
-              </>
+              <RepositoryHeader
+                locale={locale}
+                repository={repository}
+                view={view}
+                reference={reference}
+              />
             ) : null}
           </div>
         </section>

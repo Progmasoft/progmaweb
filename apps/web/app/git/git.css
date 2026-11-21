@@ -1,10 +1,14 @@
-/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
-/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/*
+ * SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 
 /* git.progmasoft.com: the mirrors, in the tokens of the rest of the site. */
 
 .pm-git {
-  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --mono:
+    ui-monospace, "Cascadia Code", "SF Mono", "Menlo", "Consolas", monospace;
+
   min-width: 0;
 }
 
@@ -31,7 +35,7 @@
   min-height: 32px;
 }
 
-.pm-git-nav a[aria-current="page"] {
+.pm-git-nav [aria-current="page"] {
   font-weight: 700;
   text-decoration: underline;
 }
