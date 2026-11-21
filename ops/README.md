@@ -101,7 +101,7 @@ Delete the dump once the deletion is confirmed.
 
 ### Logs without client addresses
 
-The Privacy Policy says that IP addresses are kept only with ViGet uploads. On both servers the `main` log format of
+The logs keep no IP address. On both servers the `main` log format of
 `/etc/nginx/nginx.conf` therefore has no `$remote_addr` and no `$http_x_forwarded_for`, and `error_log` keeps only
 `crit` entries, because a lower level names the client of a failed request. The change was applied by hand on the
 first server on 2026-11-06, with a copy of the previous file in `/root/policy-20261106`. A new site in `conf.d` uses the `main` format or one of its own without an address.
