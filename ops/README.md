@@ -99,6 +99,24 @@ COMMIT;
 
 Delete the dump once the deletion is confirmed.
 
+### A new version of the policies
+
+The policies promise to write to account holders before a new version takes effect. A version is the date it takes
+effect (`apps/web/lib/policies.ts` and `PolicyAcceptance.CurrentVersion` name the newest); `/privacy` and `/security`
+show the version in effect and link the next one, and `/privacy/<version>` shows any published version. Once the new
+version is deployed, tell every account holder who accepted an earlier one, as the `progmaweb` user with the
+environment of the service:
+
+```sh
+cd /srv/progmaweb/current/api
+set -a; . /etc/progmaweb/account.env; set +a
+runuser -u progmaweb --preserve-environment -- /usr/bin/dotnet Progmaweb.Api.dll accounts notify-policies --dry-run
+runuser -u progmaweb --preserve-environment -- /usr/bin/dotnet Progmaweb.Api.dll accounts notify-policies
+```
+
+The notice comes from `noreply@progmasoft.com` with replies to support, in the four languages. Each one sent is
+recorded in `policy_notices`, so a run after a failure sends only what is left and a second run sends nothing.
+
 ### Logs without client addresses
 
 The logs keep no IP address. On both servers the `main` log format of

@@ -9,37 +9,67 @@ import {
   type PolicyKind,
   type PolicyMessages,
   type PolicyText,
+  type PolicyVersion,
+  policyAfter,
+  policyInEffect,
   policyUrls,
-  policyVersion,
+  policyVersionWords,
 } from "@/lib/policies";
 import { getPolicyMessages } from "@/lib/policy-messages";
+
+/** The path of a policy, and of one of its versions. */
+function pathOf(kind: PolicyKind, version?: PolicyVersion): string {
+  return version ? `/${kind}/${version}` : `/${kind}`;
+}
 
 /** One policy and the other, with their addresses. */
 function select(messages: PolicyMessages, kind: PolicyKind) {
   const privacy = { text: messages.privacy, url: policyUrls.privacy };
   const security = { text: messages.security, url: policyUrls.security };
   return kind === "privacy"
-    ? { policy: privacy, other: { ...security, path: "/security" } }
-    : { policy: security, other: { ...privacy, path: "/privacy" } };
+    ? { policy: privacy, other: { ...security, kind: "security" as const } }
+    : { policy: security, other: { ...privacy, kind: "privacy" as const } };
 }
 
 /** The title, description and canonical address of a policy page. */
-export async function policyMetadata(kind: PolicyKind): Promise<Metadata> {
-  const { policy } = select(getPolicyMessages(await getLocale()), kind);
+export async function policyMetadata(
+  kind: PolicyKind,
+  version?: PolicyVersion,
+): Promise<Metadata> {
+  const shown = version ?? policyInEffect(new Date());
+  const { policy } = select(getPolicyMessages(await getLocale(), shown), kind);
   return {
     title: policy.text.title,
     description: policy.text.description,
-    alternates: { canonical: policy.url },
+    alternates: {
+      canonical: version ? `${policy.url}/${version}` : policy.url,
+    },
   };
 }
 
-/** progmasoft.com/privacy and progmasoft.com/security. */
-export async function PolicyPage({ kind }: { kind: PolicyKind }) {
+/**
+ * progmasoft.com/privacy and progmasoft.com/security show the version in
+ * effect, and name the next one while it is published and not in effect yet;
+ * /privacy/<version> and /security/<version> show one version.
+ */
+export async function PolicyPage({
+  kind,
+  version,
+}: {
+  kind: PolicyKind;
+  version?: PolicyVersion;
+}) {
   const locale = await getLocale();
-  const messages = getPolicyMessages(locale);
+  const inEffect = policyInEffect(new Date());
+  const shown = version ?? inEffect;
+  const messages = getPolicyMessages(locale, shown);
+  const words = policyVersionWords[locale];
   const selected = select(messages, kind);
   const policy: PolicyText = selected.policy.text;
   const other = selected.other;
+  const next = shown === inEffect ? policyAfter(inEffect) : undefined;
+  const isFuture = shown > inEffect;
+  const linkVersion = version && version !== inEffect ? version : undefined;
   return (
     <div className="pm-page">
       <SiteHeader locale={locale} />
@@ -50,8 +80,24 @@ export async function PolicyPage({ kind }: { kind: PolicyKind }) {
             <p className="pm-lede">{policy.description}</p>
             <p className="pm-policy-version">
               {messages.versionLabel}{" "}
-              <time dateTime={policyVersion}>{messages.versionDate}</time>
+              <time dateTime={shown}>{messages.versionDate}</time>
             </p>
+            {next ? (
+              <p className="pm-policy-version">
+                {words.upcoming}{" "}
+                <time dateTime={next}>
+                  {getPolicyMessages(locale, next).versionDate}
+                </time>
+                . <a href={pathOf(kind, next)}>{words.readIt}</a>
+              </p>
+            ) : null}
+            {isFuture ? (
+              <p className="pm-policy-version">
+                {words.notYet}{" "}
+                <time dateTime={shown}>{messages.versionDate}</time>.{" "}
+                <a href={pathOf(kind)}>{words.inEffect}</a>
+              </p>
+            ) : null}
           </div>
         </section>
         <section className="pm-section">
@@ -65,7 +111,8 @@ export async function PolicyPage({ kind }: { kind: PolicyKind }) {
               </section>
             ))}
             <p className="pm-policy-see-also">
-              {messages.seeAlso}: <a href={other.path}>{other.text.title}</a>
+              {messages.seeAlso}:{" "}
+              <a href={pathOf(other.kind, linkVersion)}>{other.text.title}</a>
             </p>
           </article>
         </section>

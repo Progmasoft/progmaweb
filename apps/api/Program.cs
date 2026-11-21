@@ -101,6 +101,8 @@ builder.Services.AddRateLimiter(options =>
 });
 
 builder.Services.Configure<ForwardedHeadersOptions>(ForwardedHeadersPolicy.Configure);
+builder.Services.Configure<PolicyNoticeOptions>(builder.Configuration.GetSection(PolicyNoticeOptions.Section));
+builder.Services.AddSingleton<IPolicyNoticeSender, SmtpPolicyNoticeSender>();
 
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 16 * 1024);
 
