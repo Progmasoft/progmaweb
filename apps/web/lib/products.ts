@@ -89,8 +89,13 @@ export const products: Record<ProductSlug, ProductFacts> = {
     license: "MIT",
     language: "C#",
     category: "build",
-    status: "development",
+    status: "released",
     started: "2026-11-20",
+    latestRelease: {
+      version: "0.1.0",
+      date: "2026-11-21",
+      url: "https://github.com/Progmasoft/tazel/releases/tag/tazel-0.1.0",
+    },
     accent: "orange",
   },
   catch3: {
