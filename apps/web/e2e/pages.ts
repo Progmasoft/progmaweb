@@ -20,6 +20,7 @@ export const layoutPages = [
   "license.progmasoft.com/pm-spl/1.0/information/",
   "license.progmasoft.com/pm-spl/1.0/faq/",
   "license.progmasoft.com/pm-spl/1.0/categories/",
+  "agencelandmcp.progmasoft.com/",
 ] as const;
 
 /** Every host name of the pages above. */
