@@ -12,6 +12,7 @@ import {
 } from "@/lib/localization";
 import { authorizeRoute, consoleRoute, issuerRoute } from "@/lib/credentials";
 import { licenseRoute, productRoute } from "@/lib/sites";
+import { mcpRoute } from "@/lib/mcp-messages";
 import {
   contentSecurityPolicy,
   createNonce,
@@ -61,6 +62,12 @@ const ownSites: OwnSite[] = [
     hosts: hostsOf("license"),
     root: "/license",
     route: licenseRoute,
+    api: false,
+  },
+  {
+    hosts: hostsOf("agencelandmcp"),
+    root: "/mcp",
+    route: mcpRoute,
     api: false,
   },
 ];

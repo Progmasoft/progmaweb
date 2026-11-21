@@ -16,6 +16,7 @@ the ASP.NET Core API.
 - `credentials.progmasoft.com`, `authorize.progmasoft.com` and `console.progmasoft.com` serve Progmasoft OAuth: the
   issuer, the pages people sign in and consent on, and the Progmasoft Console. See [Progmasoft OAuth](docs/OAUTH.md).
 - `product.progmasoft.com` serves the product catalog, and `license.progmasoft.com` the Progmasoft Source License.
+- `agencelandmcp.progmasoft.com` serves the Agenceland MCP Marketplace, which lists no server and takes no uploads.
 
 The same Nginx file also answers `viget.progmasoft.com` with 410 Gone, sends `catch3.progmasoft.com` to `catch3.uk`,
 and serves the Maven repository on `maven.progmasoft.com`; [Operations](ops/README.md) describes those and the other
