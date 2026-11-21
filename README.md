@@ -9,11 +9,17 @@ the ASP.NET Core API.
 
 ## Public hosts
 
-- `progmasoft.com` serves the canonical organization homepage; `www.progmasoft.com` redirects to it.
-- `account.progmasoft.com` serves account discovery and authentication.
-- `account.progmasoft.com/login` signs an existing account in.
-- `account.progmasoft.com/register` creates a new account after server-side validation.
-- `account.progmasoft.com/<Account>/dashboard` serves the authenticated account dashboard.
+- `progmasoft.com` serves the organization homepage, the Privacy Policy and the Security Policy;
+  `www.progmasoft.com` redirects to it.
+- `account.progmasoft.com` serves the account: sign-in (`/login`), registration (`/register`), recovery (`/recover`)
+  and the dashboard (`/<Account>/dashboard`).
+- `credentials.progmasoft.com`, `authorize.progmasoft.com` and `console.progmasoft.com` serve Progmasoft OAuth: the
+  issuer, the pages people sign in and consent on, and the Progmasoft Console. See [Progmasoft OAuth](docs/OAUTH.md).
+- `product.progmasoft.com` serves the product catalog, and `license.progmasoft.com` the Progmasoft Source License.
+
+The same Nginx file also answers `viget.progmasoft.com` with 410 Gone, sends `catch3.progmasoft.com` to `catch3.uk`,
+and serves the Maven repository on `maven.progmasoft.com`; [Operations](ops/README.md) describes those and the other
+sites of the server.
 
 Account names preserve their original display case but reserve names case-insensitively, preventing visually confusing
 duplicates. Email uniqueness is also evaluated case-insensitively by the API.
@@ -28,6 +34,7 @@ menu is remembered across the three hosts. See [Localization](docs/LOCALIZATION.
 
 - [Architecture](docs/ARCHITECTURE.md): processes, hosts, routing and trust boundaries.
 - [Account API](docs/ACCOUNT-API.md): endpoints, errors, cookies and limits.
+- [Progmasoft OAuth](docs/OAUTH.md): the authorization server, the console and how an application uses them.
 - [Localization](docs/LOCALIZATION.md): language selection, text direction and adding a language.
 - [Development](docs/DEVELOPMENT.md): local setup, checks and what CI enforces.
 - [Known limitations](docs/LIMITATIONS.md): what is missing or temporary. Read this before operating the service;
@@ -36,10 +43,10 @@ menu is remembered across the three hosts. See [Localization](docs/LOCALIZATION.
 
 ## Architecture
 
-- `apps/web` is a Next.js App Router application. Host-aware routing keeps the public organization, account, product and license
-  surfaces in one build without coupling their page hierarchies.
-- `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, session issuance, secure
-  cookies, rate limiting, and authorization.
+- `apps/web` is a Next.js App Router application. Host-aware routing keeps the organization, account, OAuth, console,
+  product and license sites in one build without coupling their page hierarchies.
+- `apps/api` is an ASP.NET Core minimal API. It owns account-name policy, password hashing, sessions, secure cookies,
+  rate limiting, and Progmasoft OAuth (OpenIddict) with the applications of the console.
 - The browser never receives password hashes, session digests, deployment secrets, or database credentials.
 - Production account maintenance is an explicit operations workflow. The public API does not contain bulk-delete,
   reset-all, seed-password, or environment-password endpoints.

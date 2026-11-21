@@ -6,20 +6,19 @@
 This page lists what Progmaweb does not do yet, so that nobody has to discover it in production. Each entry says what
 is missing, what follows from it, and what would close it.
 
-## The account database has no backup yet
+## The backup is at most a day old
 
-Accounts and sessions are kept in PostgreSQL; see [Operations](../ops/README.md). Restarting or redeploying the API no
-longer loses them. Nothing copies the database anywhere else yet.
+Accounts, sessions and OAuth data are kept in PostgreSQL. Every night the database is dumped with `pg_dump` and copied
+with restic to the second Progmasoft server, with the OAuth keys of `/etc/progmaweb`; a restore has been tried.
 
-- **Consequence.** Losing the disk of the host, or dropping the database by mistake, loses every account.
-- **What closes it.** A scheduled `pg_dump` of the account database to storage outside the host, and a restore that
-  has been tried once.
+- **Consequence.** Losing the host loses what changed since the last night's backup.
 
-## Accounts cannot be deleted
+## Accounts cannot be deleted by their owners
 
 The store has no operation that removes an account, and the API has no endpoint for it.
 
-- **Consequence.** A request to erase an account has to be carried out by hand in the database, by its operator.
+- **Consequence.** A request to erase an account is carried out by support in the database, with the procedure in
+  [Operations](../ops/README.md) ("Deleting an account").
 - **What closes it.** A deletion operation in the store with an endpoint or an operator command, and a decision about
   what happens to the account name afterwards.
 

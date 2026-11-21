@@ -22,6 +22,10 @@ Every response carries `Cache-Control: no-store`.
 | `GET /api/v1/status` | report that the service is online | no |
 | `GET /health` | liveness probe for the service manager | no |
 
+The same service also serves Progmasoft OAuth: `/connect/*` and `/.well-known/*`, and the JSON endpoints of its pages
+under `/api/v1/oauth` (`session`, `signin`, `signout`, `consent`, `allowed`, `applications`). They answer only on the
+OAuth hosts and are described in [Progmasoft OAuth](OAUTH.md).
+
 ## Field rules
 
 | Field | Rule |
@@ -37,8 +41,11 @@ Surrounding white space of an account name or email address is ignored.
 `POST /api/v1/accounts/register`
 
 ```json
-{ "accountName": "ExampleUser1", "email": "user@example.com", "password": "a long passphrase" }
+{ "accountName": "ExampleUser1", "email": "user@example.com", "password": "a long passphrase", "acceptPolicies": true }
 ```
+
+`acceptPolicies` says that the person accepted the Privacy Policy and the Security Policy; anything but `true` is
+refused on that field. The account records the version of the policies it accepted.
 
 **201 Created.** The session cookie is set, `Location` names the account, and the body is the account:
 
@@ -83,8 +90,9 @@ revoked when it is seen.
 The flow is a server-side authorization-code flow. The browser is redirected; it never receives Google tokens.
 
 1. `GET /api/v1/accounts/oauth/google/start` sends the browser to Google. When a new account should be created, the
-   request carries `?accountName=<name>`. An invalid name redirects back to
-   `/register?google=invalid-account-name` without contacting Google.
+   request carries `?accountName=<name>` and the acceptance of the policies. An invalid name redirects back to
+   `/register?google=invalid-account-name`, and a missing acceptance to `/register?google=policies-required`, without
+   contacting Google.
 2. Google returns to `/api/v1/accounts/oauth/google/callback`, which the authentication middleware handles. The
    identity is kept for at most ten minutes in a separate cookie, `__Host-ProgmasoftExternal`.
 3. `GET /api/v1/accounts/oauth/google/complete` decides the outcome and removes that cookie.
@@ -94,6 +102,7 @@ The flow is a server-side authorization-code flow. The browser is redirected; it
 | the Google identity is already linked to an account | signed in; redirect to `/<Account>/dashboard` |
 | the identity is new and a valid, free account name was supplied | account created and signed in |
 | the identity is new and no account name was supplied | redirect to `/register?google=account-name-required` |
+| the identity is new and the policies were not accepted | redirect to `/register?google=policies-required` |
 | the supplied account name is invalid | redirect to `/register?google=invalid-account-name` |
 | the supplied account name is taken | redirect to `/register?google=account-name-unavailable` |
 | the email address of the identity belongs to another account | redirect to `/login?google=failed` |
@@ -137,7 +146,8 @@ Passwords are hashed with the ASP.NET Core Identity password hasher and are neve
 ## Limits
 
 - **Rate limit.** The endpoints marked above share one limit per client address: 12 requests in a sliding window of
-  three minutes. A request over the limit gets **429 Too Many Requests**.
+  three minutes; the sign-in of the authorize host shares it too. The OAuth endpoints and the console have their own,
+  60 requests a minute. A request over a limit gets **429 Too Many Requests**.
 - **Body size.** A request body larger than 16 KiB gets **413 Content Too Large**.
 - **Hosts.** The service answers only the host names listed in `AllowedHosts`; any other host gets **400**.
 
@@ -152,7 +162,9 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 | `AccountSessions:CookieDomain` | domain the session cookie is shared with | none; production `progmasoft.com` |
 | `Authentication:Google:ClientId` | Google OAuth client identifier | empty; Google sign-in is off |
 | `Authentication:Google:ClientSecret` | Google OAuth client secret | empty; Google sign-in is off |
-| `AllowedHosts` | host names the service answers | see `appsettings.json` |
+| `AllowedHosts` | host names the service answers | the apex, `www`, `account`, `credentials`, `authorize` and `console` hosts, and loopback (`appsettings.json`) |
+| `ConnectionStrings:Accounts` | the PostgreSQL database of accounts, sessions and OAuth | none; without it the store is in memory (development) |
+| `OAuth:SigningKeyPath`, `OAuth:EncryptionKeyPath` | the keys that sign identity tokens and encrypt access tokens | see [Progmasoft OAuth](OAUTH.md) |
 | `ASPNETCORE_URLS` | listener address | `http://127.0.0.1:5085` in production |
 
 Environment variables use a double underscore for the colon, for example `Authentication__Google__ClientId`. Secrets
