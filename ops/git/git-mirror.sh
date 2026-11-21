@@ -50,9 +50,6 @@ for name in $names; do
     fi
     # git-http-backend serves only repositories with this file.
     touch "$repository/git-daemon-export-ok"
-    # cgit shows the age of the last change of a repository from this file.
-    git -C "$repository" for-each-ref --sort=-committerdate --count=1 \
-      --format='%(committerdate:iso8601)' refs/heads > "$repository/info/web/last-modified"
   else
     echo "git-mirror: fetching $name failed" >&2
     status=1
