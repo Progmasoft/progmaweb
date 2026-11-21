@@ -49,11 +49,12 @@ test("every project has its data in every language", () => {
 
 test("a released project names its version, one in development does not", () => {
   assert.equal(productData("catch3", "en-US").creativeWorkStatus, "Released");
+  assert.equal(productData("tazel", "en-US").version, "0.1.0");
   assert.equal(
-    productData("tazel", "en-US").creativeWorkStatus,
+    productData("archer", "en-US").creativeWorkStatus,
     "In development",
   );
-  assert.equal(productData("tazel", "en-US").version, undefined);
+  assert.equal(productData("archer", "en-US").version, undefined);
 });
 
 test("the catalog lists every project in order", () => {

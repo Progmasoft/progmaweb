@@ -44,6 +44,7 @@ test("category, language and status narrow the search together", () => {
     "etincelle",
   ]);
   assert.deepEqual(filterProducts("en-US", { query: "", status: "released" }), [
+    "tazel",
     "catch3",
     "opentala",
   ]);
