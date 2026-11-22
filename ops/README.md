@@ -361,7 +361,10 @@ The files are in `ops/git`:
 | `nginx/git.conf` | `/etc/nginx/conf.d/git.conf` |
 
 Packages: `git-core`, and `fcgiwrap` from EPEL; `checkpolicy` builds the module. `githttp` is a system user without a
-shell or a home (`useradd --system --shell /sbin/nologin --no-create-home githttp`). The API reads the mirrors as
+shell, whose home does not exist (`useradd --system --shell /sbin/nologin --home-dir /nonexistent --no-create-home
+githttp`): with a home under `/home`, which `ProtectHome` hides, git-http-backend warns every clone that it cannot read
+`~/.config/git/attributes`. The fcgiwrap sockets share `/run/fcgiwrap`, which systemd removes when one of them stops:
+after stopping another instance, restart `fcgiwrap@githttp.socket`. The API reads the mirrors as
 `progmaweb`; `ProtectSystem=strict` leaves `/srv` readable.
 
 - **Mirrors.** `git-mirror` fetches only branches and tags from `https://github.com/Progmasoft/<name>.git` (never the
