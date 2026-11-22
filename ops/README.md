@@ -105,13 +105,18 @@ The policies promise to write to account holders before a new version takes effe
 effect (`apps/web/lib/policies.ts` and `PolicyAcceptance.CurrentVersion` name the newest); `/privacy` and `/security`
 show the version in effect and link the next one, and `/privacy/<version>` shows any published version. Once the new
 version is deployed, tell every account holder who accepted an earlier one, as the `progmaweb` user with the
-environment of the service:
+environment of the service. systemd reads `/etc/progmaweb/account.env` as the service does; a shell that sources it
+cuts the connection string at its first `;`.
 
 ```sh
-cd /srv/progmaweb/current/api
-set -a; . /etc/progmaweb/account.env; set +a
-runuser -u progmaweb --preserve-environment -- /usr/bin/dotnet Progmaweb.Api.dll accounts notify-policies --dry-run
-runuser -u progmaweb --preserve-environment -- /usr/bin/dotnet Progmaweb.Api.dll accounts notify-policies
+notify() {
+  systemd-run --quiet --wait --pipe --collect -p User=progmaweb -p Group=progmaweb \
+    -p WorkingDirectory=/srv/progmaweb/current/api -p EnvironmentFile=/etc/progmaweb/account.env \
+    -p Environment=ASPNETCORE_ENVIRONMENT=Production \
+    /usr/bin/dotnet /srv/progmaweb/current/api/Progmaweb.Api.dll accounts notify-policies "$@"
+}
+notify --dry-run
+notify
 ```
 
 The notice comes from `noreply@progmasoft.com` with replies to support, in the four languages. Each one sent is
