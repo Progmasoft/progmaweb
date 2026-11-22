@@ -1,0 +1,39 @@
+{
+  "sections": [
+    {
+      "name": "Tazel",
+      "repositories": [
+        {
+          "name": "tazel",
+          "description": "A build system for C, C++, Objective-C, Objective-C++ and Zig, with C# project files."
+        },
+        {
+          "name": "tazelish",
+          "description": "Installs Tazel and chooses which version of it runs."
+        }
+      ]
+    },
+    {
+      "name": "C++",
+      "repositories": [
+        {
+          "name": "catch3",
+          "description": "Progmasoft Catch3: an independently maintained C++17 test framework with a parallel runner, property checks, snapshots and structured results."
+        },
+        {
+          "name": "progmasoft-cpp",
+          "description": "The C++ style guide of Progmasoft: naming, formatting, language rules, errors, ownership, ABI, testing and tooling."
+        }
+      ]
+    },
+    {
+      "name": "Sites",
+      "repositories": [
+        {
+          "name": "progmaweb",
+          "description": "The site and account service of Progmasoft: a Next.js frontend and an ASP.NET Core API."
+        }
+      ]
+    }
+  ]
+}

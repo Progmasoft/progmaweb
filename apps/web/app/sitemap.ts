@@ -15,6 +15,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
     .split(":", 1)[0]
     ?.toLowerCase();
+  if (host === "git.progmasoft.com") {
+    return [{ url: "https://git.progmasoft.com/" }];
+  }
   if (host === "agencelandmcp.progmasoft.com") {
     return [{ url: "https://agencelandmcp.progmasoft.com/" }];
   }

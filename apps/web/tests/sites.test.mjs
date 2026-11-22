@@ -13,6 +13,7 @@ import {
 } from "../lib/products.ts";
 import { productRoute } from "../lib/sites.ts";
 import { mcpMessages, mcpRoute } from "../lib/mcp-messages.ts";
+import { gitMessages, gitRoute } from "../lib/git-messages.ts";
 
 function shape(value) {
   if (Array.isArray(value)) {
@@ -88,5 +89,33 @@ test("the MCP Marketplace has its root alone, in every language", () => {
   const english = shape(mcpMessages["en-US"]);
   for (const locale of supportedLocales) {
     assert.deepEqual(shape(mcpMessages[locale]), english, locale);
+  }
+});
+
+test("git.progmasoft.com has its listing and the views of each repository", () => {
+  const sha = "0123456789abcdef0123456789abcdef01234567";
+  assert.equal(gitRoute("/"), "/git");
+  assert.equal(gitRoute("/tazel"), "/git/tazel");
+  assert.equal(gitRoute("/tazel/"), "/git/tazel");
+  assert.equal(gitRoute("/tazel/tree"), "/git/tazel/tree");
+  assert.equal(gitRoute("/tazel/log"), "/git/tazel/log");
+  assert.equal(gitRoute("/tazel/refs"), "/git/tazel/refs");
+  assert.equal(gitRoute(`/tazel/commit/${sha}`), `/git/tazel/commit/${sha}`);
+  for (const path of [
+    "/tazel.git",
+    "/.hidden",
+    "/tazel/commit/HEAD",
+    "/tazel/commit",
+    `/tazel/commit/${sha}/extra`,
+    "/tazel/tree/src",
+    "/tazel/blame",
+    "/tazel/raw",
+    "/tazel/info/refs",
+  ]) {
+    assert.equal(gitRoute(path), null, path);
+  }
+  const english = shape(gitMessages["en-US"]);
+  for (const locale of supportedLocales) {
+    assert.deepEqual(shape(gitMessages[locale]), english, locale);
   }
 });

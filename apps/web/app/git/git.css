@@ -1,0 +1,214 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+/* git.progmasoft.com: the mirrors, in the tokens of the rest of the site. */
+
+.pm-git {
+  --mono:
+    ui-monospace, "Cascadia Code", "SF Mono", "Menlo", "Consolas", monospace;
+
+  min-width: 0;
+}
+
+.pm-git-block + .pm-git-block {
+  margin-top: 40px;
+}
+
+.pm-git-block h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 20px;
+}
+
+.pm-git-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.pm-git-nav [aria-current="page"] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.pm-git-clone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 16px;
+}
+
+.pm-git-clone code,
+.pm-git-meta code,
+.pm-git-facts code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-clone code {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  background: var(--surface-muted);
+  user-select: all;
+}
+
+.pm-git-repositories,
+.pm-git-commits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-git-repositories li,
+.pm-git-commits li {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.pm-git-repositories a,
+.pm-git-commits a {
+  display: inline-block;
+  min-height: 24px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-repositories p,
+.pm-git-commits p {
+  margin: 4px 0 0;
+}
+
+.pm-git-meta {
+  color: var(--ink-650);
+  font-size: 0.9rem;
+}
+
+.pm-git-path {
+  margin: 0 0 20px;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-ref {
+  display: inline-block;
+  margin-right: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.pm-git-scroll {
+  overflow-x: auto;
+}
+
+.pm-git-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pm-git-table th,
+.pm-git-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 8px 12px 8px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.pm-git-table td a {
+  display: inline-block;
+  min-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-table td:last-child {
+  color: var(--ink-650);
+  white-space: nowrap;
+}
+
+.pm-git-file,
+.pm-git-diff,
+.pm-git-message {
+  overflow-x: auto;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: var(--surface-muted);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  tab-size: 4;
+}
+
+.pm-git-message {
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-diff span {
+  display: block;
+  min-width: max-content;
+}
+
+.pm-git-diff-add {
+  background: rgb(22 130 93 / 14%);
+}
+
+.pm-git-diff-remove {
+  background: rgb(180 35 24 / 12%);
+}
+
+.pm-git-diff-hunk {
+  color: var(--blue-600);
+}
+
+.pm-git-diff-file {
+  font-weight: 700;
+}
+
+.pm-git-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  margin: 0 0 16px;
+}
+
+.pm-git-facts dt {
+  color: var(--ink-650);
+}
+
+.pm-git-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.pm-git-facts a {
+  display: inline-block;
+  min-height: 24px;
+}
+
+.pm-git-pages {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.pm-git-pages a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}

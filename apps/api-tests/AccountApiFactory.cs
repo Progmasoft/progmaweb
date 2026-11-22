@@ -25,7 +25,8 @@ internal sealed class AccountApiFactory(
     string? accountDatabase = null,
     string environment = "Testing",
     string? accountStore = null,
-    bool oauthKeys = true) : WebApplicationFactory<Program>
+    bool oauthKeys = true,
+    string? gitDirectory = null) : WebApplicationFactory<Program>
 {
     private readonly string keyDirectory = Path.Combine(Path.GetTempPath(), "progmaweb-oauth-keys-" + Guid.NewGuid().ToString("N"));
 
@@ -52,7 +53,11 @@ internal sealed class AccountApiFactory(
         builder.UseSetting("OAuth:AuthorizeHost", AuthorizeHost);
         builder.UseSetting("OAuth:ConsoleHost", ConsoleHost);
         builder.UseSetting("AllowedHosts",
-            $"localhost;127.0.0.1;progmasoft.com;account.progmasoft.com;www.progmasoft.com;{OAuthHost};{AuthorizeHost};{ConsoleHost}");
+            $"localhost;127.0.0.1;progmasoft.com;account.progmasoft.com;www.progmasoft.com;{OAuthHost};{AuthorizeHost};{ConsoleHost};git.progmasoft.com");
+        // The mirrors of git.progmasoft.com: a directory of the test, or one that does not exist.
+        string git = gitDirectory ?? Path.Combine(Path.GetTempPath(), "progmaweb-no-git-" + Guid.NewGuid().ToString("N"));
+        builder.UseSetting("Git:MirrorsPath", Path.Combine(git, "mirrors"));
+        builder.UseSetting("Git:CatalogPath", Path.Combine(git, "catalog.json"));
         if (oauthKeys && environment == "Production")
         {
             Directory.CreateDirectory(keyDirectory);

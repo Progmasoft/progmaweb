@@ -24,7 +24,8 @@ Every response carries `Cache-Control: no-store`.
 
 The same service also serves Progmasoft OAuth: `/connect/*` and `/.well-known/*`, and the JSON endpoints of its pages
 under `/api/v1/oauth` (`session`, `signin`, `signout`, `consent`, `allowed`, `applications`). They answer only on the
-OAuth hosts and are described in [Progmasoft OAuth](OAUTH.md).
+OAuth hosts and are described in [Progmasoft OAuth](OAUTH.md). The Git endpoints of git.progmasoft.com,
+`/api/v1/git/repositories/...`, answer only there and on loopback; [Operations](../ops/README.md) describes them.
 
 ## Field rules
 
@@ -165,6 +166,7 @@ The client address comes from `X-Forwarded-For`, which the service accepts from 
 | `Authentication:Google:ClientSecret` | Google OAuth client secret | empty; Google sign-in is off |
 | `AllowedHosts` | host names the service answers | the apex, `www`, `account`, `credentials`, `authorize` and `console` hosts, and loopback (`appsettings.json`) |
 | `ConnectionStrings:Accounts` | the PostgreSQL database of accounts, sessions and OAuth | none; without it the store is in memory (development) |
+| `Git:MirrorsPath`, `Git:CatalogPath`, `Git:Host` | the mirrors of git.progmasoft.com, their catalog, and the host | `/srv/git/mirrors`, `/etc/git-mirror/catalog.json`, `git.progmasoft.com` |
 | `PolicyNotices:SmtpHost`, `PolicyNotices:SmtpPort` | the mail server the notices of new policies go to | `127.0.0.1`, `25` |
 | `OAuth:SigningKeyPath`, `OAuth:EncryptionKeyPath` | the keys that sign identity tokens and encrypt access tokens | see [Progmasoft OAuth](OAUTH.md) |
 | `ASPNETCORE_URLS` | listener address | `http://127.0.0.1:5085` in production |

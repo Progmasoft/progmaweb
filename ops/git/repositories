@@ -1,5 +1,5 @@
 # The repositories git-mirror.service mirrors from https://github.com/Progmasoft, one per line.
-# Each must also have a repo.url entry in cgitrc. Installed as /etc/git-mirror/repositories.
+# Each must also be in catalog.json, which the pages read. Installed as /etc/git-mirror/repositories.
 tazel
 tazelish
 catch3
