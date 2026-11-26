@@ -13,12 +13,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.15" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-    <PackageReference Include="OpenIddict.AspNetCore" Version="7.8.0" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.8.0" />
+    <PackageReference Include="OpenIddict.AspNetCore" Version="7.9.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.9.0" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Progmaweb.Api.Tests" />
