@@ -49,7 +49,7 @@ test("every project has its data in every language", () => {
 
 test("a released project names its version, one in development does not", () => {
   assert.equal(productData("catch3", "en-US").creativeWorkStatus, "Released");
-  assert.equal(productData("tazel", "en-US").version, "0.1.0");
+  assert.equal(productData("tazel", "en-US").version, "0.2.0");
   assert.equal(
     productData("archer", "en-US").creativeWorkStatus,
     "In development",
@@ -90,7 +90,7 @@ test("llms.txt lists every project with its facts and names no former project", 
     assert.ok(text.includes(products[slug].license), `${slug} license`);
   }
   assert.ok(text.includes("latest release 0.4.0"));
-  assert.ok(text.includes("latest release 0.1.0"));
+  assert.ok(text.includes("latest release 0.2.0"));
   for (const word of [/\bTala\b/, /\bXide\b/, /\bTalac\b/, /\bX#/]) {
     assert.ok(!word.test(text), String(word));
   }
