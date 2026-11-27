@@ -18,7 +18,6 @@ export function Footer({ locale }: { locale: Locale }) {
       <div className="shell footer-grid">
         <div>
           <Brand />
-          <p>{footer.summary}</p>
         </div>
         <div>
           <strong>{footer.products}</strong>
@@ -41,7 +40,7 @@ export function Footer({ locale }: { locale: Locale }) {
       </div>
       <div className="shell footer-bottom">
         <span>© 2026 Progmasoft</span>
-        <span>{footer.closing}</span>
+        <a href="mailto:support@progmasoft.com">support@progmasoft.com</a>
       </div>
     </footer>
   );

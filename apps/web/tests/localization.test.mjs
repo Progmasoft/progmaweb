@@ -162,7 +162,7 @@ test("the Russian messages are written in Cyrillic", () => {
   const russian = messages["ru-RU"];
   for (const text of [
     russian.navigation.language,
-    homeMessages["ru-RU"].hero.titleStart,
+    homeMessages["ru-RU"].hero.title,
     russian.auth.signIn,
     russian.dashboard.welcome,
   ]) {

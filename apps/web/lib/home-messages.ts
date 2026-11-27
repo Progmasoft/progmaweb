@@ -4,9 +4,9 @@
 import type { Locale } from "./localization";
 
 /**
- * The text of progmasoft.com. The page describes Progmasoft as a pool of
- * technology areas, not as a list of products: the products have their own
- * catalog on product.progmasoft.com.
+ * The text of progmasoft.com. The page describes the areas Progmasoft works
+ * in, not a list of products: the products have their own catalog on
+ * product.progmasoft.com, and the releases the page lists come from it.
  */
 interface HomeMessages {
   navigation: {
@@ -15,343 +15,272 @@ interface HomeMessages {
     developers: string;
   };
   hero: {
-    eyebrow: string;
-    titleStart: string;
-    titleAccent: string;
-    description: string;
-    explore: string;
-    products: string;
-    poolLabel: string;
-  };
-  pool: {
-    eyebrow: string;
     title: string;
     description: string;
-    areas: [title: string, description: string][];
     catalog: string;
-    catalogLink: string;
+    source: string;
   };
-  principles: {
-    eyebrow: string;
+  areas: {
     title: string;
     items: [title: string, description: string][];
   };
+  releases: {
+    title: string;
+    all: string;
+  };
   developers: {
-    eyebrow: string;
     title: string;
     description: string;
     console: string;
     account: string;
+    discovery: string;
+  };
+  contact: {
+    title: string;
+    support: string;
+    security: string;
   };
 }
 
 export const homeMessages: Record<Locale, HomeMessages> = {
   "en-US": {
     navigation: {
-      technology: "Technology",
+      technology: "Areas",
       products: "Products",
       developers: "Developers",
     },
     hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Technology built to",
-      titleAccent: "last and to explain itself.",
+      title: "Developer tools and infrastructure, built in the open.",
       description:
-        "Progmasoft designs build systems, testing tools, agentic development environments, data infrastructure and the services around them. Everything shares one discipline: explicit contracts, real verification and names that mean what they say.",
-      explore: "Explore the technology",
-      products: "See the products",
-      poolLabel: "Areas of the Progmasoft technology pool",
+        "Progmasoft develops build systems, testing libraries, data infrastructure and an operating system, and runs the services they rely on. The source of every project is public.",
+      catalog: "Product catalog",
+      source: "Source on GitHub",
     },
-    pool: {
-      eyebrow: "Technology pool",
-      title: "Areas, not just products.",
-      description:
-        "Products come and grow; the technology underneath them is what we keep building. Each area is shared by everything Progmasoft makes.",
-      areas: [
+    areas: {
+      title: "Areas of work",
+      items: [
+        [
+          "Build and packages",
+          "Builds that run each action again only when its inputs change, toolchains, lockfiles and a module registry.",
+        ],
+        [
+          "Quality and testing",
+          "Testing libraries for C++: property-based, stateful and mutation testing, coverage and test selection.",
+        ],
+        [
+          "Development environments",
+          "An agentic development environment and the integrations of the tools with editors.",
+        ],
         [
           "Data infrastructure",
           "Columnar in-memory formats and engines for large data on the JVM.",
         ],
         [
-          "Build and packages",
-          "Reproducible builds, dependency resolution, lockfiles and a package registry.",
+          "Operating systems",
+          "A kernel with Darwin's system call ABI, its loader and the system around it.",
         ],
         [
-          "Developer tools",
-          "Formatters, linters and agentic development environments.",
-        ],
-        [
-          "Quality and testing",
-          "Property-based, stateful and mutation testing, coverage and test selection.",
-        ],
-        [
-          "Identity and access",
-          "Progmasoft accounts, OAuth 2.1 and OpenID Connect for every application.",
-        ],
-        [
-          "Infrastructure",
-          "Services Progmasoft operates itself: hosting, mail, registries and continuous integration.",
+          "Identity and services",
+          "Progmasoft accounts with OAuth 2.1 and OpenID Connect, Git mirrors, registries and continuous integration.",
         ],
       ],
-      catalog: "Looking for a specific product?",
-      catalogLink: "Open the product catalog",
     },
-    principles: {
-      eyebrow: "How we build",
-      title: "Engineering that stays legible.",
-      items: [
-        [
-          "Explicit contracts",
-          "Typed boundaries make ownership, compatibility and failure behaviour visible.",
-        ],
-        [
-          "Real verification",
-          "Tests exercise installed artifacts, production-shaped paths and observable behaviour.",
-        ],
-        [
-          "Durable names",
-          "Public vocabulary follows the model, not the history of an implementation.",
-        ],
-      ],
+    releases: {
+      title: "Recent releases",
+      all: "All releases",
     },
     developers: {
-      eyebrow: "For developers",
-      title: "Build on Progmasoft.",
+      title: "For developers",
       description:
-        "Sign people in with their Progmasoft account through OAuth 2.1, and manage the tokens of your applications in the Progmasoft Console.",
+        "Applications sign people in with their Progmasoft account through OAuth 2.1 and OpenID Connect. The Console manages the clients and tokens of your applications.",
       console: "Open the Console",
       account: "Progmasoft account",
+      discovery: "OpenID Connect discovery",
+    },
+    contact: {
+      title: "Contact",
+      support: "Questions and support",
+      security: "Report a vulnerability",
     },
   },
   "de-DE": {
     navigation: {
-      technology: "Technologie",
+      technology: "Bereiche",
       products: "Produkte",
       developers: "Entwickler",
     },
     hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Technologie, gebaut um",
-      titleAccent: "zu bleiben und sich zu erklären.",
+      title: "Entwicklerwerkzeuge und Infrastruktur, offen entwickelt.",
       description:
-        "Progmasoft entwirft Build-Systeme, Testwerkzeuge, agentische Entwicklungsumgebungen, Dateninfrastruktur und die Dienste um sie herum. Alles folgt einer Disziplin: explizite Verträge, echte Prüfung und Namen, die sagen, was sie meinen.",
-      explore: "Technologie entdecken",
-      products: "Zu den Produkten",
-      poolLabel: "Bereiche des Progmasoft-Technologiepools",
+        "Progmasoft entwickelt Build-Systeme, Testbibliotheken, Dateninfrastruktur und ein Betriebssystem und betreibt die Dienste, auf die sie angewiesen sind. Der Quellcode jedes Projekts ist öffentlich.",
+      catalog: "Produktkatalog",
+      source: "Quellcode auf GitHub",
     },
-    pool: {
-      eyebrow: "Technologiepool",
-      title: "Bereiche, nicht nur Produkte.",
-      description:
-        "Produkte entstehen und wachsen; die Technologie darunter bauen wir dauerhaft weiter. Jeder Bereich trägt alles, was Progmasoft macht.",
-      areas: [
+    areas: {
+      title: "Arbeitsbereiche",
+      items: [
+        [
+          "Build und Pakete",
+          "Builds, die eine Aktion nur dann erneut ausführen, wenn sich ihre Eingaben ändern, Toolchains, Lockfiles und eine Modulregistrierung.",
+        ],
+        [
+          "Qualität und Tests",
+          "Testbibliotheken für C++: eigenschaftsbasierte, zustandsbehaftete und Mutationstests, Abdeckung und Testauswahl.",
+        ],
+        [
+          "Entwicklungsumgebungen",
+          "Eine agentische Entwicklungsumgebung und die Integration der Werkzeuge in Editoren.",
+        ],
         [
           "Dateninfrastruktur",
           "Spaltenorientierte In-Memory-Formate und Engines für große Datenmengen auf der JVM.",
         ],
         [
-          "Build und Pakete",
-          "Reproduzierbare Builds, Abhängigkeitsauflösung, Lockfiles und eine Paketregistrierung.",
+          "Betriebssysteme",
+          "Ein Kernel mit Darwins Systemaufruf-ABI, sein Loader und das System um ihn herum.",
         ],
         [
-          "Entwicklerwerkzeuge",
-          "Formatierer, Linter und agentische Entwicklungsumgebungen.",
-        ],
-        [
-          "Qualität und Tests",
-          "Eigenschaftsbasierte, zustandsbehaftete und Mutationstests, Abdeckung und Testauswahl.",
-        ],
-        [
-          "Identität und Zugriff",
-          "Progmasoft-Konten, OAuth 2.1 und OpenID Connect für jede Anwendung.",
-        ],
-        [
-          "Infrastruktur",
-          "Dienste, die Progmasoft selbst betreibt: Hosting, Mail, Registrierungen und kontinuierliche Integration.",
+          "Identität und Dienste",
+          "Progmasoft-Konten mit OAuth 2.1 und OpenID Connect, Git-Spiegel, Registrierungen und kontinuierliche Integration.",
         ],
       ],
-      catalog: "Suchen Sie ein bestimmtes Produkt?",
-      catalogLink: "Produktkatalog öffnen",
     },
-    principles: {
-      eyebrow: "Wie wir bauen",
-      title: "Technik, die lesbar bleibt.",
-      items: [
-        [
-          "Explizite Verträge",
-          "Typisierte Grenzen machen Zuständigkeit, Kompatibilität und Fehlerverhalten sichtbar.",
-        ],
-        [
-          "Echte Prüfung",
-          "Tests prüfen installierte Artefakte, produktionsnahe Wege und beobachtbares Verhalten.",
-        ],
-        [
-          "Beständige Namen",
-          "Das öffentliche Vokabular folgt dem Modell, nicht der Geschichte einer Implementierung.",
-        ],
-      ],
+    releases: {
+      title: "Neueste Versionen",
+      all: "Alle Versionen",
     },
     developers: {
-      eyebrow: "Für Entwickler",
-      title: "Mit Progmasoft entwickeln.",
+      title: "Für Entwickler",
       description:
-        "Melden Sie Menschen mit ihrem Progmasoft-Konto über OAuth 2.1 an und verwalten Sie die Tokens Ihrer Anwendungen in der Progmasoft Console.",
+        "Anwendungen melden Personen über OAuth 2.1 und OpenID Connect mit ihrem Progmasoft-Konto an. In der Console verwalten Sie die Clients und Tokens Ihrer Anwendungen.",
       console: "Console öffnen",
       account: "Progmasoft-Konto",
+      discovery: "OpenID-Connect-Discovery",
+    },
+    contact: {
+      title: "Kontakt",
+      support: "Fragen und Support",
+      security: "Eine Schwachstelle melden",
     },
   },
   "ru-RU": {
     navigation: {
-      technology: "Технологии",
+      technology: "Направления",
       products: "Продукты",
       developers: "Разработчикам",
     },
     hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Технологии, созданные,",
-      titleAccent: "чтобы служить долго и быть понятными.",
+      title: "Инструменты разработчика и инфраструктура, создаваемые открыто.",
       description:
-        "Progmasoft создаёт системы сборки, инструменты тестирования, агентные среды разработки, инфраструктуру данных и сервисы вокруг них. Всё подчиняется одной дисциплине: явные контракты, настоящая проверка и имена, которые значат то, что говорят.",
-      explore: "Изучить технологии",
-      products: "Перейти к продуктам",
-      poolLabel: "Направления технологического пула Progmasoft",
+        "Progmasoft разрабатывает системы сборки, библиотеки тестирования, инфраструктуру данных и операционную систему, а также поддерживает сервисы, на которые они опираются. Исходный код каждого проекта открыт.",
+      catalog: "Каталог продуктов",
+      source: "Исходный код на GitHub",
     },
-    pool: {
-      eyebrow: "Технологический пул",
-      title: "Направления, а не только продукты.",
-      description:
-        "Продукты появляются и растут; технологии под ними мы развиваем постоянно. Каждое направление служит всему, что делает Progmasoft.",
-      areas: [
+    areas: {
+      title: "Направления работы",
+      items: [
+        [
+          "Сборка и пакеты",
+          "Сборка, повторяющая действие только при изменении его входных данных, наборы инструментов, lock-файлы и реестр модулей.",
+        ],
+        [
+          "Качество и тестирование",
+          "Библиотеки тестирования для C++: тестирование на основе свойств, с состоянием и мутационное, покрытие и выбор тестов.",
+        ],
+        [
+          "Среды разработки",
+          "Агентная среда разработки и интеграция инструментов с редакторами.",
+        ],
         [
           "Инфраструктура данных",
           "Колоночные форматы данных в памяти и движки для больших данных на JVM.",
         ],
         [
-          "Сборка и пакеты",
-          "Воспроизводимые сборки, разрешение зависимостей, lock-файлы и реестр пакетов.",
+          "Операционные системы",
+          "Ядро с ABI системных вызовов Darwin, его загрузчик и система вокруг него.",
         ],
         [
-          "Инструменты разработчика",
-          "Форматировщики, линтеры и агентные среды разработки.",
-        ],
-        [
-          "Качество и тестирование",
-          "Тестирование на основе свойств, с состоянием и мутационное, покрытие и выбор тестов.",
-        ],
-        [
-          "Идентификация и доступ",
-          "Аккаунты Progmasoft, OAuth 2.1 и OpenID Connect для любого приложения.",
-        ],
-        [
-          "Инфраструктура",
-          "Сервисы, которыми Progmasoft управляет сам: хостинг, почта, реестры и непрерывная интеграция.",
+          "Идентификация и сервисы",
+          "Аккаунты Progmasoft с OAuth 2.1 и OpenID Connect, зеркала Git, реестры и непрерывная интеграция.",
         ],
       ],
-      catalog: "Ищете конкретный продукт?",
-      catalogLink: "Открыть каталог продуктов",
     },
-    principles: {
-      eyebrow: "Как мы работаем",
-      title: "Инженерия, которая остаётся понятной.",
-      items: [
-        [
-          "Явные контракты",
-          "Типизированные границы делают видимыми ответственность, совместимость и поведение при ошибках.",
-        ],
-        [
-          "Настоящая проверка",
-          "Тесты проверяют установленные артефакты, пути как в продакшене и наблюдаемое поведение.",
-        ],
-        [
-          "Устойчивые имена",
-          "Публичный словарь следует модели, а не истории реализации.",
-        ],
-      ],
+    releases: {
+      title: "Последние выпуски",
+      all: "Все выпуски",
     },
     developers: {
-      eyebrow: "Разработчикам",
-      title: "Разрабатывайте на Progmasoft.",
+      title: "Разработчикам",
       description:
-        "Позвольте людям входить с аккаунтом Progmasoft через OAuth 2.1 и управляйте токенами своих приложений в Progmasoft Console.",
+        "Приложения выполняют вход пользователей с аккаунтом Progmasoft через OAuth 2.1 и OpenID Connect. В Console вы управляете клиентами и токенами своих приложений.",
       console: "Открыть Console",
       account: "Аккаунт Progmasoft",
+      discovery: "Обнаружение OpenID Connect",
+    },
+    contact: {
+      title: "Контакты",
+      support: "Вопросы и поддержка",
+      security: "Сообщить об уязвимости",
     },
   },
   "fr-FR": {
     navigation: {
-      technology: "Technologie",
+      technology: "Domaines",
       products: "Produits",
       developers: "Développeurs",
     },
     hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Une technologie faite pour",
-      titleAccent: "durer et s’expliquer d’elle-même.",
+      title: "Outils pour développeurs et infrastructure, développés en public.",
       description:
-        "Progmasoft conçoit des systèmes de build, des outils de test, des environnements de développement agentiques, une infrastructure de données et les services qui les entourent. Tout partage une même discipline : des contrats explicites, une vérification réelle et des noms qui disent ce qu’ils désignent.",
-      explore: "Découvrir la technologie",
-      products: "Voir les produits",
-      poolLabel: "Domaines du socle technologique de Progmasoft",
+        "Progmasoft développe des systèmes de build, des bibliothèques de test, une infrastructure de données et un système d'exploitation, et opère les services dont ils dépendent. Le code source de chaque projet est public.",
+      catalog: "Catalogue des produits",
+      source: "Code source sur GitHub",
     },
-    pool: {
-      eyebrow: "Socle technologique",
-      title: "Des domaines, pas seulement des produits.",
-      description:
-        "Les produits naissent et grandissent ; la technologie qui les porte est ce que nous continuons de construire. Chaque domaine est partagé par tout ce que fait Progmasoft.",
-      areas: [
+    areas: {
+      title: "Domaines de travail",
+      items: [
+        [
+          "Build et paquets",
+          "Des builds qui ne relancent une action que lorsque ses entrées changent, des chaînes d'outils, des fichiers de verrouillage et un registre de modules.",
+        ],
+        [
+          "Qualité et tests",
+          "Des bibliothèques de test pour C++ : tests fondés sur les propriétés, tests à état et tests de mutation, couverture et sélection des tests.",
+        ],
+        [
+          "Environnements de développement",
+          "Un environnement de développement agentique et l'intégration des outils dans les éditeurs.",
+        ],
         [
           "Infrastructure de données",
           "Formats et moteurs en colonnes, en mémoire, pour de grands volumes de données sur la JVM.",
         ],
         [
-          "Build et paquets",
-          "Builds reproductibles, résolution des dépendances, fichiers de verrouillage et un registre de paquets.",
+          "Systèmes d'exploitation",
+          "Un noyau avec l'ABI des appels système de Darwin, son chargeur et le système qui l'entoure.",
         ],
         [
-          "Outils pour développeurs",
-          "Formateurs, linters et environnements de développement agentiques.",
-        ],
-        [
-          "Qualité et tests",
-          "Tests fondés sur les propriétés, tests à état et tests de mutation, couverture et sélection des tests.",
-        ],
-        [
-          "Identité et accès",
-          "Comptes Progmasoft, OAuth 2.1 et OpenID Connect pour chaque application.",
-        ],
-        [
-          "Infrastructure",
-          "Des services que Progmasoft exploite lui-même : hébergement, messagerie, registres et intégration continue.",
+          "Identité et services",
+          "Comptes Progmasoft avec OAuth 2.1 et OpenID Connect, miroirs Git, registres et intégration continue.",
         ],
       ],
-      catalog: "Vous cherchez un produit précis ?",
-      catalogLink: "Ouvrir le catalogue des produits",
     },
-    principles: {
-      eyebrow: "Notre façon de construire",
-      title: "Une ingénierie qui reste lisible.",
-      items: [
-        [
-          "Des contrats explicites",
-          "Des frontières typées rendent visibles la propriété, la compatibilité et le comportement en cas d’échec.",
-        ],
-        [
-          "Une vérification réelle",
-          "Les tests éprouvent les artefacts installés, des chemins semblables à la production et le comportement observable.",
-        ],
-        [
-          "Des noms durables",
-          "Le vocabulaire public suit le modèle, et non l’histoire d’une implémentation.",
-        ],
-      ],
+    releases: {
+      title: "Versions récentes",
+      all: "Toutes les versions",
     },
     developers: {
-      eyebrow: "Pour les développeurs",
-      title: "Construisez sur Progmasoft.",
+      title: "Pour les développeurs",
       description:
-        "Connectez les utilisateurs avec leur compte Progmasoft grâce à OAuth 2.1, et gérez les jetons de vos applications dans la Console Progmasoft.",
+        "Les applications connectent les personnes avec leur compte Progmasoft via OAuth 2.1 et OpenID Connect. La Console gère les clients et les jetons de vos applications.",
       console: "Ouvrir la Console",
       account: "Compte Progmasoft",
+      discovery: "Découverte OpenID Connect",
+    },
+    contact: {
+      title: "Contact",
+      support: "Questions et assistance",
+      security: "Signaler une vulnérabilité",
     },
   },
 };

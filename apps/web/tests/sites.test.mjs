@@ -65,7 +65,7 @@ test("the catalog lists the projects, each with its repository", () => {
 test("the home page names areas, not products", () => {
   const productNames = Object.values(products).map((product) => product.name);
   for (const locale of supportedLocales) {
-    for (const [title, description] of homeMessages[locale].pool.areas) {
+    for (const [title, description] of homeMessages[locale].areas.items) {
       for (const name of productNames) {
         assert.ok(!title.includes(name), `${locale}: ${title}`);
         assert.ok(!description.includes(name), `${locale}: ${description}`);

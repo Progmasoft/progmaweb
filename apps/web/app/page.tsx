@@ -4,11 +4,13 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { formatDay } from "@/components/ProductCatalog";
 import { SiteHeader } from "@/components/SiteHeader";
-import { AreaIcon, areaKinds } from "@/components/site/AreaIcon";
 import { getHomeMessages } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
+import { policyUrls } from "@/lib/policies";
+import { getCatalogMessages, products, releases } from "@/lib/products";
 import { organizationData, websiteData } from "@/lib/structured-data";
 import "./site.css";
 
@@ -22,129 +24,120 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const discovery =
+  "https://credentials.progmasoft.com/.well-known/openid-configuration";
+
 /**
- * progmasoft.com. Progmasoft is presented as a pool of technology areas; the
- * products have their own catalog on product.progmasoft.com.
+ * progmasoft.com: the areas Progmasoft works in, the newest releases of the
+ * catalog, and where developers and everyone else go next. Plain text and
+ * rules, no decoration: the page says what is there.
  */
 export default async function Homepage() {
   const locale = await getLocale();
-  const { hero, pool, principles, developers } = getHomeMessages(locale);
+  const home = getHomeMessages(locale);
+  const catalog = getCatalogMessages(locale);
+  const recent = releases().slice(0, 5);
   return (
     <div className="pm-page">
       <JsonLd data={[organizationData(), websiteData(locale)]} />
       <SiteHeader locale={locale} />
       <main>
-        <section className="pm-hero">
-          <div className="pm-shell pm-hero-inner">
-            <div>
-              <p className="eyebrow">{hero.eyebrow}</p>
-              <h1>
-                {hero.titleStart} <span>{hero.titleAccent}</span>
-              </h1>
-              <p className="pm-lede">{hero.description}</p>
-              <div className="pm-actions">
-                <a className="button" href="#technology">
-                  {hero.explore}
-                </a>
-                <a
-                  className="button button-secondary"
-                  href="https://product.progmasoft.com/"
-                >
-                  {hero.products} →
-                </a>
-              </div>
-            </div>
-            <div className="pm-pool-visual" aria-label={hero.poolLabel}>
-              {pool.areas.map(([title], index) => (
-                <div className="pm-pool-tile" key={title}>
-                  <span className={`pm-icon pm-icon-${areaKinds[index]}`}>
-                    <AreaIcon kind={areaKinds[index] ?? "languages"} />
-                  </span>
-                  <strong>{title}</strong>
-                </div>
-              ))}
-            </div>
+        <section className="pm-intro">
+          <div className="pm-shell">
+            <h1>{home.hero.title}</h1>
+            <p className="pm-lede">{home.hero.description}</p>
+            <p className="pm-actions">
+              <a className="button" href="https://product.progmasoft.com/">
+                {home.hero.catalog}
+              </a>
+              <a className="pm-link" href="https://github.com/Progmasoft">
+                {home.hero.source}
+              </a>
+            </p>
           </div>
         </section>
 
         <section className="pm-section" id="technology">
-          <div className="pm-shell">
-            <div className="pm-heading">
-              <p className="eyebrow">{pool.eyebrow}</p>
-              <h2>{pool.title}</h2>
-              <p>{pool.description}</p>
-            </div>
-            <div className="pm-bento">
-              {pool.areas.map(([title, description], index) => (
-                <article
-                  className={`pm-card${[0, 3, 4].includes(index) ? " pm-card-wide" : ""}`}
-                  key={title}
-                >
-                  <span className={`pm-icon pm-icon-${areaKinds[index]}`}>
-                    <AreaIcon kind={areaKinds[index] ?? "languages"} />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </article>
+          <div className="pm-shell pm-split">
+            <h2>{home.areas.title}</h2>
+            <dl className="pm-areas">
+              {home.areas.items.map(([title, description]) => (
+                <div key={title}>
+                  <dt>{title}</dt>
+                  <dd>{description}</dd>
+                </div>
               ))}
-            </div>
-            <div className="pm-catalog">
-              <p>{pool.catalog}</p>
-              <a className="pm-link" href="https://product.progmasoft.com/">
-                {pool.catalogLink} →
+            </dl>
+          </div>
+        </section>
+
+        <section className="pm-section" id="releases">
+          <div className="pm-shell pm-split">
+            <h2>{home.releases.title}</h2>
+            <div>
+              <ul className="pm-releases">
+                {recent.map(({ slug, release }) => (
+                  <li key={slug}>
+                    <time dateTime={release.date}>
+                      {formatDay(locale, release.date)}
+                    </time>
+                    <a href={`https://product.progmasoft.com/${slug}`}>
+                      {products[slug].name} {release.version}
+                    </a>
+                    <span>{catalog.products[slug].tagline}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                className="pm-link"
+                href="https://product.progmasoft.com/releases"
+              >
+                {home.releases.all}
               </a>
             </div>
           </div>
         </section>
 
-        <section className="pm-section pm-section-muted" id="principles">
-          <div className="pm-shell">
-            <div className="pm-heading">
-              <p className="eyebrow">{principles.eyebrow}</p>
-              <h2>{principles.title}</h2>
-            </div>
-            <div className="pm-principles">
-              {principles.items.map(([title, description], index) => (
-                <article key={title}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </article>
-              ))}
+        <section className="pm-section" id="developers">
+          <div className="pm-shell pm-split">
+            <h2>{home.developers.title}</h2>
+            <div>
+              <p className="pm-text">{home.developers.description}</p>
+              <p className="pm-discovery">
+                <span>{home.developers.discovery}</span>
+                <code dir="ltr">{discovery}</code>
+              </p>
+              <p className="pm-actions">
+                <a className="button" href="https://console.progmasoft.com/">
+                  {home.developers.console}
+                </a>
+                <a className="pm-link" href="https://account.progmasoft.com/">
+                  {home.developers.account}
+                </a>
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="pm-section" id="developers">
-          <div className="pm-shell pm-band">
-            <div>
-              <p className="eyebrow">{developers.eyebrow}</p>
-              <h2>{developers.title}</h2>
-              <p>{developers.description}</p>
-              <div className="pm-actions">
-                <a
-                  className="button button-light"
-                  href="https://console.progmasoft.com/"
-                >
-                  {developers.console}
-                </a>
-                <a
-                  className="button button-secondary"
-                  href="https://account.progmasoft.com/"
-                >
-                  {developers.account}
-                </a>
+        <section className="pm-section" id="contact">
+          <div className="pm-shell pm-split">
+            <h2>{home.contact.title}</h2>
+            <dl className="pm-contact">
+              <div>
+                <dt>{home.contact.support}</dt>
+                <dd>
+                  <a href="mailto:support@progmasoft.com">
+                    support@progmasoft.com
+                  </a>
+                </dd>
               </div>
-            </div>
-            <pre className="pm-code" dir="ltr">
-              <code>
-                <b>GET</b> https://credentials.progmasoft.com
-                {"\n"}
-                {"    "}/.well-known/openid-configuration
-                {"\n\n"}
-                <b>scope</b> openid profile email
-              </code>
-            </pre>
+              <div>
+                <dt>{home.contact.security}</dt>
+                <dd>
+                  <a href={policyUrls.security}>{policyUrls.security}</a>
+                </dd>
+              </div>
+            </dl>
           </div>
         </section>
       </main>

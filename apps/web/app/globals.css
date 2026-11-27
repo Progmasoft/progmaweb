@@ -18,15 +18,8 @@
   --surface-muted: #f5f7f9;
   --surface-blue: #f1f8ff;
   --header-surface: rgb(255 255 255 / 94%);
-  --hero-background:
-    radial-gradient(circle at 85% 14%, rgb(0 120 212 / 10%), transparent 34%),
-    linear-gradient(180deg, #fff, #f7fbff);
-  --account-background: linear-gradient(
-    145deg,
-    #f8fbff 0%,
-    #fff 55%,
-    #f1f8ff 100%
-  );
+  --hero-background: #fff;
+  --account-background: #f5f7f9;
   --danger: #b42318;
   --shadow-sm: 0 2px 8px rgb(18 20 23 / 8%);
   --shadow-md: 0 16px 44px rgb(18 20 23 / 12%);
@@ -56,15 +49,8 @@
   --surface-muted: #171c22;
   --surface-blue: #10283a;
   --header-surface: rgb(16 19 23 / 94%);
-  --hero-background:
-    radial-gradient(circle at 85% 14%, rgb(54 159 232 / 16%), transparent 34%),
-    linear-gradient(180deg, #101317, #131a22);
-  --account-background: linear-gradient(
-    145deg,
-    #131a22 0%,
-    #101317 55%,
-    #102231 100%
-  );
+  --hero-background: #101317;
+  --account-background: #131a22;
   --danger: #ff8f86;
   --shadow-sm: 0 2px 8px rgb(0 0 0 / 28%);
   --shadow-md: 0 16px 44px rgb(0 0 0 / 42%);
@@ -488,11 +474,9 @@ a {
 
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--blue-700);
-  font-size: 13px;
-  font-weight: 750;
-  letter-spacing: 0.095em;
-  text-transform: uppercase;
+  color: var(--ink-500);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .hero {
@@ -844,6 +828,10 @@ a {
   padding-block: 22px;
   color: #aeb6bf;
   font-size: 13px;
+}
+
+.footer-bottom a {
+  color: #d8dde2;
 }
 
 .account-landing {
