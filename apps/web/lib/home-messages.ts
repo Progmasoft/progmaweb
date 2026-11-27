@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { Locale } from "./localization";
+import type { ProductSlug } from "./products";
 
 /**
- * The text of progmasoft.com. The page describes the areas Progmasoft works
- * in, not a list of products: the products have their own catalog on
- * product.progmasoft.com, and the releases the page lists come from it.
+ * The text of progmasoft.com, which tells Progmasoft: a statement, the latest
+ * release as a feature, the news, what it makes, how it works and how to reach
+ * it. Names, versions, dates and links come from the catalog.
  */
 interface HomeMessages {
   navigation: {
@@ -14,273 +15,347 @@ interface HomeMessages {
     products: string;
     developers: string;
   };
-  hero: {
-    title: string;
-    description: string;
-    catalog: string;
-    source: string;
+  /** The opening paragraph: a bold first sentence, then the rest. */
+  statement: { lead: string; rest: string };
+  feature: {
+    readMore: string;
+    /** "Get {name}". */
+    get: string;
+    follow: string;
+    label: string;
+    pause: string;
+    play: string;
   };
-  areas: {
+  news: {
     title: string;
-    items: [title: string, description: string][];
-  };
-  releases: {
-    title: string;
+    category: string;
+    product: string;
+    notes: string;
+    read: string;
     all: string;
   };
-  developers: {
+  showcase: { title: string; learnMore: string };
+  /** One line per product, as short as a headline. */
+  lines: Record<ProductSlug, string>;
+  principles: {
     title: string;
-    description: string;
-    console: string;
-    account: string;
-    discovery: string;
+    items: [title: string, text: string][];
   };
   contact: {
     title: string;
-    support: string;
-    security: string;
+    items: [title: string, text: string, action: string][];
   };
 }
 
 export const homeMessages: Record<Locale, HomeMessages> = {
   "en-US": {
     navigation: {
-      technology: "Areas",
+      technology: "News",
       products: "Products",
       developers: "Developers",
     },
-    hero: {
-      title: "Developer tools and infrastructure, built in the open.",
-      description:
-        "Progmasoft develops build systems, testing libraries, data infrastructure and an operating system, and runs the services they rely on. The source of every project is public.",
-      catalog: "Product catalog",
-      source: "Source on GitHub",
+    statement: {
+      lead: "Tools that turn source into running software.",
+      rest: "Progmasoft is an independent software organization. We build them to do exactly what they say, to explain what they did, and to stay maintained for as long as people rely on them.",
     },
-    areas: {
-      title: "Areas of work",
+    feature: {
+      readMore: "Read more",
+      get: "Get {name}",
+      follow: "Source on GitHub",
+      label: "Products",
+      pause: "Pause the animation",
+      play: "Play the animation",
+    },
+    news: {
+      title: "News",
+      category: "Release",
+      product: "Product",
+      notes: "Release notes",
+      read: "Read the announcement",
+      all: "All news",
+    },
+    showcase: { title: "What we make", learnMore: "Learn more" },
+    lines: {
+      tazel: "Builds C, C++ and Zig. Redoes only what changed.",
+      opentala: "A kernel that speaks Darwin. It boots today.",
+      catch3: "C++ tests that hunt for the failing case.",
+      agenceland: "An IDE where every agent works in its own worktree.",
+      etincelle: "SQL over large data, on the JVM.",
+      archer: "Columnar data in memory, for Java.",
+    },
+    principles: {
+      title: "How we work",
       items: [
         [
-          "Build and packages",
-          "Builds that run each action again only when its inputs change, toolchains, lockfiles and a module registry.",
+          "Our mission",
+          "Make building software dependable, from the first command to the last release.",
         ],
         [
-          "Quality and testing",
-          "Testing libraries for C++: property-based, stateful and mutation testing, coverage and test selection.",
+          "Transparent, always",
+          "We say what we decided, what changed and why, before and after every release.",
         ],
         [
-          "Development environments",
-          "An agentic development environment and the integrations of the tools with editors.",
+          "Secure by default",
+          "Signed results, checked downloads, and settings that start safe rather than open.",
         ],
         [
-          "Data infrastructure",
-          "Columnar in-memory formats and engines for large data on the JVM.",
-        ],
-        [
-          "Operating systems",
-          "A kernel with Darwin's system call ABI, its loader and the system around it.",
-        ],
-        [
-          "Identity and services",
-          "Progmasoft accounts with OAuth 2.1 and OpenID Connect, Git mirrors, registries and continuous integration.",
+          "Made to last",
+          "Each release names what it was tested on, and earlier versions stay documented.",
         ],
       ],
     },
-    releases: {
-      title: "Recent releases",
-      all: "All releases",
-    },
-    developers: {
-      title: "For developers",
-      description:
-        "Applications sign people in with their Progmasoft account through OAuth 2.1 and OpenID Connect. The Console manages the clients and tokens of your applications.",
-      console: "Open the Console",
-      account: "Progmasoft account",
-      discovery: "OpenID Connect discovery",
-    },
     contact: {
-      title: "Contact",
-      support: "Questions and support",
-      security: "Report a vulnerability",
+      title: "Get in touch",
+      items: [
+        [
+          "Ask us anything",
+          "Questions, problems and ideas reach the people who build the software.",
+          "Write to us",
+        ],
+        [
+          "Report a vulnerability",
+          "Tell us privately; we answer, fix it and say what happened.",
+          "Security Policy",
+        ],
+        [
+          "Follow the work",
+          "Releases, issues and discussions of our public projects.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "de-DE": {
     navigation: {
-      technology: "Bereiche",
+      technology: "Neuigkeiten",
       products: "Produkte",
       developers: "Entwickler",
     },
-    hero: {
-      title: "Entwicklerwerkzeuge und Infrastruktur, offen entwickelt.",
-      description:
-        "Progmasoft entwickelt Build-Systeme, Testbibliotheken, Dateninfrastruktur und ein Betriebssystem und betreibt die Dienste, auf die sie angewiesen sind. Der Quellcode jedes Projekts ist öffentlich.",
-      catalog: "Produktkatalog",
-      source: "Quellcode auf GitHub",
+    statement: {
+      lead: "Werkzeuge, die aus Quellcode laufende Software machen.",
+      rest: "Progmasoft ist eine unabhängige Software-Organisation. Wir bauen sie so, dass sie genau tun, was sie sagen, erklären, was sie getan haben, und gepflegt bleiben, solange Menschen sich auf sie verlassen.",
     },
-    areas: {
-      title: "Arbeitsbereiche",
+    feature: {
+      readMore: "Mehr lesen",
+      get: "{name} holen",
+      follow: "Quellcode auf GitHub",
+      label: "Produkte",
+      pause: "Animation anhalten",
+      play: "Animation abspielen",
+    },
+    news: {
+      title: "Neuigkeiten",
+      category: "Version",
+      product: "Produkt",
+      notes: "Versionshinweise",
+      read: "Ankündigung lesen",
+      all: "Alle Neuigkeiten",
+    },
+    showcase: { title: "Was wir machen", learnMore: "Mehr erfahren" },
+    lines: {
+      tazel: "Baut C, C++ und Zig. Und nur, was sich geändert hat.",
+      opentala: "Ein Kernel, der Darwin spricht. Er bootet schon heute.",
+      catch3: "C++-Tests, die den fehlschlagenden Fall aufspüren.",
+      agenceland:
+        "Eine IDE, in der jeder Agent in seinem eigenen Worktree arbeitet.",
+      etincelle: "SQL über große Datenmengen, auf der JVM.",
+      archer: "Spaltenorientierte Daten im Speicher, für Java.",
+    },
+    principles: {
+      title: "Wie wir arbeiten",
       items: [
         [
-          "Build und Pakete",
-          "Builds, die eine Aktion nur dann erneut ausführen, wenn sich ihre Eingaben ändern, Toolchains, Lockfiles und eine Modulregistrierung.",
+          "Unsere Mission",
+          "Software zu bauen soll verlässlich sein, vom ersten Befehl bis zur letzten Version.",
         ],
         [
-          "Qualität und Tests",
-          "Testbibliotheken für C++: eigenschaftsbasierte, zustandsbehaftete und Mutationstests, Abdeckung und Testauswahl.",
+          "Immer transparent",
+          "Wir sagen, was wir entschieden haben, was sich geändert hat und warum, vor und nach jeder Version.",
         ],
         [
-          "Entwicklungsumgebungen",
-          "Eine agentische Entwicklungsumgebung und die Integration der Werkzeuge in Editoren.",
+          "Sicher von Anfang an",
+          "Signierte Ergebnisse, geprüfte Downloads und Einstellungen, die sicher statt offen beginnen.",
         ],
         [
-          "Dateninfrastruktur",
-          "Spaltenorientierte In-Memory-Formate und Engines für große Datenmengen auf der JVM.",
-        ],
-        [
-          "Betriebssysteme",
-          "Ein Kernel mit Darwins Systemaufruf-ABI, sein Loader und das System um ihn herum.",
-        ],
-        [
-          "Identität und Dienste",
-          "Progmasoft-Konten mit OAuth 2.1 und OpenID Connect, Git-Spiegel, Registrierungen und kontinuierliche Integration.",
+          "Gemacht, um zu bleiben",
+          "Jede Version nennt, worauf sie getestet wurde, und frühere Versionen bleiben dokumentiert.",
         ],
       ],
     },
-    releases: {
-      title: "Neueste Versionen",
-      all: "Alle Versionen",
-    },
-    developers: {
-      title: "Für Entwickler",
-      description:
-        "Anwendungen melden Personen über OAuth 2.1 und OpenID Connect mit ihrem Progmasoft-Konto an. In der Console verwalten Sie die Clients und Tokens Ihrer Anwendungen.",
-      console: "Console öffnen",
-      account: "Progmasoft-Konto",
-      discovery: "OpenID-Connect-Discovery",
-    },
     contact: {
       title: "Kontakt",
-      support: "Fragen und Support",
-      security: "Eine Schwachstelle melden",
+      items: [
+        [
+          "Fragen Sie uns",
+          "Fragen, Probleme und Ideen erreichen die Menschen, die die Software bauen.",
+          "Schreiben Sie uns",
+        ],
+        [
+          "Eine Schwachstelle melden",
+          "Sagen Sie es uns vertraulich; wir antworten, beheben sie und sagen, was geschehen ist.",
+          "Sicherheitsrichtlinie",
+        ],
+        [
+          "Die Arbeit verfolgen",
+          "Versionen, Issues und Diskussionen unserer öffentlichen Projekte.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "ru-RU": {
     navigation: {
-      technology: "Направления",
+      technology: "Новости",
       products: "Продукты",
       developers: "Разработчикам",
     },
-    hero: {
-      title: "Инструменты разработчика и инфраструктура, создаваемые открыто.",
-      description:
-        "Progmasoft разрабатывает системы сборки, библиотеки тестирования, инфраструктуру данных и операционную систему, а также поддерживает сервисы, на которые они опираются. Исходный код каждого проекта открыт.",
-      catalog: "Каталог продуктов",
-      source: "Исходный код на GitHub",
+    statement: {
+      lead: "Инструменты, которые превращают исходный код в работающие программы.",
+      rest: "Progmasoft — независимая организация, создающая программное обеспечение. Мы делаем их так, чтобы они делали ровно то, что обещают, объясняли, что сделали, и поддерживались, пока на них полагаются.",
     },
-    areas: {
-      title: "Направления работы",
+    feature: {
+      readMore: "Подробнее",
+      get: "Скачать {name}",
+      follow: "Исходный код на GitHub",
+      label: "Продукты",
+      pause: "Остановить анимацию",
+      play: "Запустить анимацию",
+    },
+    news: {
+      title: "Новости",
+      category: "Выпуск",
+      product: "Продукт",
+      notes: "Примечания к выпуску",
+      read: "Читать объявление",
+      all: "Все новости",
+    },
+    showcase: { title: "Что мы делаем", learnMore: "Подробнее" },
+    lines: {
+      tazel: "Собирает C, C++ и Zig. Пересобирает только изменённое.",
+      opentala: "Ядро, говорящее на языке Darwin. Оно уже загружается.",
+      catch3: "Тесты C++, которые находят случай, где всё ломается.",
+      agenceland:
+        "Среда разработки, где каждый агент работает в своём worktree.",
+      etincelle: "SQL над большими данными, на JVM.",
+      archer: "Колоночные данные в памяти, для Java.",
+    },
+    principles: {
+      title: "Как мы работаем",
       items: [
         [
-          "Сборка и пакеты",
-          "Сборка, повторяющая действие только при изменении его входных данных, наборы инструментов, lock-файлы и реестр модулей.",
+          "Наша миссия",
+          "Сделать создание программ надёжным, от первой команды до последнего выпуска.",
         ],
         [
-          "Качество и тестирование",
-          "Библиотеки тестирования для C++: тестирование на основе свойств, с состоянием и мутационное, покрытие и выбор тестов.",
+          "Всегда открыто",
+          "Мы говорим, что решили, что изменилось и почему, до и после каждого выпуска.",
         ],
         [
-          "Среды разработки",
-          "Агентная среда разработки и интеграция инструментов с редакторами.",
+          "Безопасно по умолчанию",
+          "Подписанные результаты, проверенные загрузки и настройки, которые начинают с безопасного.",
         ],
         [
-          "Инфраструктура данных",
-          "Колоночные форматы данных в памяти и движки для больших данных на JVM.",
-        ],
-        [
-          "Операционные системы",
-          "Ядро с ABI системных вызовов Darwin, его загрузчик и система вокруг него.",
-        ],
-        [
-          "Идентификация и сервисы",
-          "Аккаунты Progmasoft с OAuth 2.1 и OpenID Connect, зеркала Git, реестры и непрерывная интеграция.",
+          "Сделано надолго",
+          "Каждый выпуск называет, на чём он проверен, а прежние версии остаются описанными.",
         ],
       ],
     },
-    releases: {
-      title: "Последние выпуски",
-      all: "Все выпуски",
-    },
-    developers: {
-      title: "Разработчикам",
-      description:
-        "Приложения выполняют вход пользователей с аккаунтом Progmasoft через OAuth 2.1 и OpenID Connect. В Console вы управляете клиентами и токенами своих приложений.",
-      console: "Открыть Console",
-      account: "Аккаунт Progmasoft",
-      discovery: "Обнаружение OpenID Connect",
-    },
     contact: {
-      title: "Контакты",
-      support: "Вопросы и поддержка",
-      security: "Сообщить об уязвимости",
+      title: "Связаться с нами",
+      items: [
+        [
+          "Спросите нас",
+          "Вопросы, проблемы и идеи попадают к тем, кто создаёт программы.",
+          "Написать нам",
+        ],
+        [
+          "Сообщить об уязвимости",
+          "Сообщите нам конфиденциально; мы ответим, исправим и расскажем, что произошло.",
+          "Политика безопасности",
+        ],
+        [
+          "Следить за работой",
+          "Выпуски, задачи и обсуждения наших открытых проектов.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "fr-FR": {
     navigation: {
-      technology: "Domaines",
+      technology: "Actualités",
       products: "Produits",
       developers: "Développeurs",
     },
-    hero: {
-      title: "Outils pour développeurs et infrastructure, développés en public.",
-      description:
-        "Progmasoft développe des systèmes de build, des bibliothèques de test, une infrastructure de données et un système d'exploitation, et opère les services dont ils dépendent. Le code source de chaque projet est public.",
-      catalog: "Catalogue des produits",
-      source: "Code source sur GitHub",
+    statement: {
+      lead: "Des outils qui transforment le code source en logiciel qui tourne.",
+      rest: "Progmasoft est une organisation logicielle indépendante. Nous les construisons pour qu'ils fassent exactement ce qu'ils disent, expliquent ce qu'ils ont fait et restent maintenus tant qu'on compte sur eux.",
     },
-    areas: {
-      title: "Domaines de travail",
+    feature: {
+      readMore: "En savoir plus",
+      get: "Obtenir {name}",
+      follow: "Code source sur GitHub",
+      label: "Produits",
+      pause: "Mettre l'animation en pause",
+      play: "Lancer l'animation",
+    },
+    news: {
+      title: "Actualités",
+      category: "Version",
+      product: "Produit",
+      notes: "Notes de version",
+      read: "Lire l'annonce",
+      all: "Toutes les actualités",
+    },
+    showcase: { title: "Ce que nous faisons", learnMore: "En savoir plus" },
+    lines: {
+      tazel: "Construit C, C++ et Zig. Ne refait que ce qui a changé.",
+      opentala: "Un noyau qui parle Darwin. Il démarre déjà.",
+      catch3: "Des tests C++ qui traquent le cas qui échoue.",
+      agenceland: "Un IDE où chaque agent travaille dans son propre worktree.",
+      etincelle: "Du SQL sur de grands volumes de données, sur la JVM.",
+      archer: "Des données en colonnes en mémoire, pour Java.",
+    },
+    principles: {
+      title: "Notre façon de travailler",
       items: [
         [
-          "Build et paquets",
-          "Des builds qui ne relancent une action que lorsque ses entrées changent, des chaînes d'outils, des fichiers de verrouillage et un registre de modules.",
+          "Notre mission",
+          "Rendre fiable la construction du logiciel, de la première commande à la dernière version.",
         ],
         [
-          "Qualité et tests",
-          "Des bibliothèques de test pour C++ : tests fondés sur les propriétés, tests à état et tests de mutation, couverture et sélection des tests.",
+          "Transparents, toujours",
+          "Nous disons ce que nous avons décidé, ce qui a changé et pourquoi, avant et après chaque version.",
         ],
         [
-          "Environnements de développement",
-          "Un environnement de développement agentique et l'intégration des outils dans les éditeurs.",
+          "Sûrs par défaut",
+          "Des résultats signés, des téléchargements vérifiés et des réglages qui commencent sûrs plutôt qu'ouverts.",
         ],
         [
-          "Infrastructure de données",
-          "Formats et moteurs en colonnes, en mémoire, pour de grands volumes de données sur la JVM.",
-        ],
-        [
-          "Systèmes d'exploitation",
-          "Un noyau avec l'ABI des appels système de Darwin, son chargeur et le système qui l'entoure.",
-        ],
-        [
-          "Identité et services",
-          "Comptes Progmasoft avec OAuth 2.1 et OpenID Connect, miroirs Git, registres et intégration continue.",
+          "Faits pour durer",
+          "Chaque version indique sur quoi elle a été testée, et les versions précédentes restent documentées.",
         ],
       ],
     },
-    releases: {
-      title: "Versions récentes",
-      all: "Toutes les versions",
-    },
-    developers: {
-      title: "Pour les développeurs",
-      description:
-        "Les applications connectent les personnes avec leur compte Progmasoft via OAuth 2.1 et OpenID Connect. La Console gère les clients et les jetons de vos applications.",
-      console: "Ouvrir la Console",
-      account: "Compte Progmasoft",
-      discovery: "Découverte OpenID Connect",
-    },
     contact: {
-      title: "Contact",
-      support: "Questions et assistance",
-      security: "Signaler une vulnérabilité",
+      title: "Nous contacter",
+      items: [
+        [
+          "Posez-nous vos questions",
+          "Questions, problèmes et idées arrivent aux personnes qui construisent le logiciel.",
+          "Nous écrire",
+        ],
+        [
+          "Signaler une vulnérabilité",
+          "Dites-le-nous en privé ; nous répondons, corrigeons et expliquons ce qui s'est passé.",
+          "Politique de sécurité",
+        ],
+        [
+          "Suivre le travail",
+          "Versions, tickets et discussions de nos projets publics.",
+          "GitHub",
+        ],
+      ],
     },
   },
 };

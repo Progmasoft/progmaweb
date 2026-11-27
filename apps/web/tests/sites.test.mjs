@@ -62,14 +62,13 @@ test("the catalog lists the projects, each with its repository", () => {
   assert.equal(isProductSlug("xide"), false);
 });
 
-test("the home page names areas, not products", () => {
-  const productNames = Object.values(products).map((product) => product.name);
+test("the home page has a line for every product", () => {
   for (const locale of supportedLocales) {
-    for (const [title, description] of homeMessages[locale].areas.items) {
-      for (const name of productNames) {
-        assert.ok(!title.includes(name), `${locale}: ${title}`);
-        assert.ok(!description.includes(name), `${locale}: ${description}`);
-      }
+    for (const slug of productSlugs) {
+      assert.ok(
+        homeMessages[locale].lines[slug]?.length > 0,
+        `${locale}: ${slug}`,
+      );
     }
   }
 });

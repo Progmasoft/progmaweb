@@ -2,29 +2,29 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
 :root {
-  --blue-700: #004e8c;
-  --blue-600: #0066b8;
-  --blue-500: #0078d4;
-  --blue-100: #dff0ff;
+  --blue-700: #13505f;
+  --blue-600: #1d6a80;
+  --blue-500: #2a7f96;
+  --blue-100: #dbe8e8;
   --violet-600: #6750a4;
   --green-600: #16825d;
-  --ink-950: #121417;
-  --ink-800: #2a2f35;
-  --ink-650: #4c545d;
-  --ink-500: #68717c;
-  --line: #d9dee4;
-  --line-strong: #b9c1ca;
-  --surface: #ffffff;
-  --surface-muted: #f5f7f9;
-  --surface-blue: #f1f8ff;
-  --header-surface: rgb(255 255 255 / 94%);
-  --hero-background: #fff;
-  --account-background: #f5f7f9;
+  --ink-950: #141413;
+  --ink-800: #2b2a27;
+  --ink-650: #5e5d59;
+  --ink-500: #6d6b64;
+  --line: #dcd8cc;
+  --line-strong: #c2bdb0;
+  --surface: #f0eee6;
+  --surface-muted: #e8e6dc;
+  --surface-blue: #e4e9e4;
+  --header-surface: rgb(240 238 230 / 86%);
+  --hero-background: #f0eee6;
+  --account-background: #e8e6dc;
   --danger: #b42318;
-  --shadow-sm: 0 2px 8px rgb(18 20 23 / 8%);
-  --shadow-md: 0 16px 44px rgb(18 20 23 / 12%);
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --shadow-sm: 0 2px 8px rgb(20 20 19 / 6%);
+  --shadow-md: 0 16px 44px rgb(20 20 19 / 10%);
+  --radius-sm: 8px;
+  --radius-md: 12px;
   --radius-lg: 16px;
   --shell: 1180px;
   color-scheme: light;
@@ -33,24 +33,24 @@
 /* Light is deliberately the product default. Dark mode is an explicit,
    persistent preference so operating-system changes do not surprise users. */
 :root[data-theme="dark"] {
-  --blue-700: #86c8ff;
-  --blue-600: #5db5f7;
-  --blue-500: #369fe8;
-  --blue-100: #14314a;
+  --blue-700: #a5d4de;
+  --blue-600: #7fb8c4;
+  --blue-500: #5fa3b2;
+  --blue-100: #1d3338;
   --violet-600: #a88eff;
   --green-600: #5bd5aa;
-  --ink-950: #f4f6f8;
-  --ink-800: #dfe4e9;
-  --ink-650: #bac3cc;
-  --ink-500: #98a4af;
-  --line: #343c45;
-  --line-strong: #53606d;
-  --surface: #101317;
-  --surface-muted: #171c22;
-  --surface-blue: #10283a;
-  --header-surface: rgb(16 19 23 / 94%);
-  --hero-background: #101317;
-  --account-background: #131a22;
+  --ink-950: #f0eee6;
+  --ink-800: #dedbd2;
+  --ink-650: #b0aea5;
+  --ink-500: #8f8d86;
+  --line: #34332f;
+  --line-strong: #4a4843;
+  --surface: #1a1a18;
+  --surface-muted: #262624;
+  --surface-blue: #1f2a2b;
+  --header-surface: rgb(26 26 24 / 86%);
+  --hero-background: #1a1a18;
+  --account-background: #222220;
   --danger: #ff8f86;
   --shadow-sm: 0 2px 8px rgb(0 0 0 / 28%);
   --shadow-md: 0 16px 44px rgb(0 0 0 / 42%);
@@ -1555,4 +1555,153 @@ a {
 .theme-switching *::before,
 .theme-switching *::after {
   transition: none !important;
+}
+
+/* The Progmasoft look (2026-11-27): warm paper, a serif for page titles, dark
+   buttons with rounded corners, a quiet header that stays at the top, and a
+   dark footer. These rules follow the older ones so that they win. */
+
+h1 {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.button {
+  border-color: var(--ink-950);
+  border-radius: 8px;
+  background: var(--ink-950);
+  color: var(--surface);
+  font-weight: 500;
+}
+
+.button:hover {
+  border-color: var(--ink-950);
+  background: color-mix(in srgb, var(--ink-950) 82%, var(--surface));
+  color: var(--surface);
+  box-shadow: none;
+}
+
+.button-small {
+  color: var(--surface) !important;
+}
+
+.button-secondary {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+.button-secondary:hover {
+  border-color: var(--ink-950);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+input,
+select,
+textarea {
+  border-radius: 8px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  transition: border-color 200ms ease;
+}
+
+.site-header:hover,
+.site-header:focus-within {
+  border-bottom-color: var(--line);
+}
+
+.primary-nav > a {
+  color: var(--ink-950);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.primary-nav > a:hover {
+  color: var(--ink-650);
+}
+
+.site-header .button-small {
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  padding-inline: 16px;
+  background: var(--ink-950);
+  color: var(--surface);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.site-header .button-small:hover {
+  background: color-mix(in srgb, var(--ink-950) 82%, var(--surface));
+}
+
+.preference-controls button,
+.preference-controls select {
+  border-color: var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-950);
+  font-weight: 500;
+}
+
+.preference-controls button:hover,
+.preference-controls select:hover {
+  border-color: var(--ink-950);
+  background: transparent;
+}
+
+.menu-toggle {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+@media (max-width: 980px) {
+  .header-menu .primary-nav {
+    border-bottom-color: var(--line);
+    background: var(--surface);
+    box-shadow: 0 24px 40px rgb(20 20 19 / 10%);
+  }
+}
+
+.site-footer {
+  border-top: 1px solid rgb(240 238 230 / 12%);
+  background: #141413;
+  color: #b0aea5;
+}
+
+.footer-grid {
+  padding-block: 56px 64px;
+}
+
+.footer-grid strong {
+  color: #f0eee6;
+  font-weight: 500;
+}
+
+.footer-grid a,
+.footer-bottom a {
+  color: #b0aea5;
+  font-size: 15px;
+  transition: color 200ms ease;
+}
+
+.footer-grid a:hover,
+.footer-bottom a:hover {
+  color: #f0eee6;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  border-top-color: rgb(240 238 230 / 12%);
+  color: #8a8880;
 }

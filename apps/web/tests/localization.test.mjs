@@ -108,7 +108,10 @@ test("the request host prefers the forwarded host and drops port and case", () =
     requestHost("Account.Progmasoft.com", "127.0.0.1:3010"),
     "account.progmasoft.com",
   );
-  assert.equal(requestHost(null, "account.localhost:3000"), "account.localhost");
+  assert.equal(
+    requestHost(null, "account.localhost:3000"),
+    "account.localhost",
+  );
   assert.equal(requestHost(null, null), "");
 });
 
@@ -162,7 +165,7 @@ test("the Russian messages are written in Cyrillic", () => {
   const russian = messages["ru-RU"];
   for (const text of [
     russian.navigation.language,
-    homeMessages["ru-RU"].hero.title,
+    homeMessages["ru-RU"].statement.lead,
     russian.auth.signIn,
     russian.dashboard.welcome,
   ]) {

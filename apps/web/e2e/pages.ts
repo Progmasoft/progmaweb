@@ -21,6 +21,8 @@ export const layoutPages = [
   "license.progmasoft.com/pm-spl/1.0/information/",
   "license.progmasoft.com/pm-spl/1.0/faq/",
   "license.progmasoft.com/pm-spl/1.0/categories/",
+  "news.progmasoft.com/",
+  "news.progmasoft.com/tazel-0-2-0-shares-results-through-a-remote-cache",
   "agencelandmcp.progmasoft.com/",
   "git.progmasoft.com/",
   "git.progmasoft.com/example-with-a-rather-long-repository-name",
