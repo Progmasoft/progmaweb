@@ -363,3 +363,8 @@ export const homeMessages: Record<Locale, HomeMessages> = {
 export function getHomeMessages(locale: Locale): HomeMessages {
   return homeMessages[locale];
 }
+
+/** The headline-length line of one product, in one language. */
+export function productLine(locale: Locale, slug: ProductSlug): string {
+  return homeMessages[locale].lines[slug];
+}

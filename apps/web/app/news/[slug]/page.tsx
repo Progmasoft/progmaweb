@@ -8,15 +8,16 @@ import { JsonLd } from "@/components/JsonLd";
 import { formatDay } from "@/components/ProductCatalog";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Flow } from "@/components/site/Flow";
-import { accentColours, accentFields } from "@/lib/brand-colours";
+import { accentColour, accentField } from "@/lib/brand-colours";
 import { getLocale } from "@/lib/locale.server";
 import {
   articleUrl,
   findArticle,
-  newsMessages,
+  getNewsMessages,
   releaseNotes,
+  articleText,
 } from "@/lib/news";
-import { products } from "@/lib/products";
+import { productFacts } from "@/lib/products";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -29,7 +30,7 @@ export async function generateMetadata({
   if (!article) {
     return {};
   }
-  const text = article.text[await getLocale()];
+  const text = articleText(article, await getLocale());
   return {
     title: text.title,
     description: text.summary,
@@ -51,9 +52,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
   const locale = await getLocale();
-  const news = newsMessages[locale];
-  const text = article.text[locale];
-  const product = products[article.product];
+  const news = getNewsMessages(locale);
+  const text = articleText(article, locale);
+  const product = productFacts(article.product);
   const notes = releaseNotes(article);
   return (
     <div className="pm-page pm-home pm-news-site">
@@ -87,7 +88,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <p className="pm-news-meta">
               <span
                 className="pm-chip"
-                style={{ background: accentColours[product.accent] }}
+                style={{ background: accentColour(product.accent) }}
                 aria-hidden="true"
               />
               <a href={`https://product.progmasoft.com/${article.product}`}>
@@ -102,7 +103,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </header>
           <div className="pm-shell">
             <Flow
-              colours={accentFields[product.accent]}
+              colours={accentField(product.accent)}
               seed={7.1}
               speed={0.5}
               className="pm-article-field"
@@ -110,7 +111,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
           <div className="pm-shell pm-article-body">
             {text.body.map((paragraph) => (
-              <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+              <p className="pm-article-paragraph" key={paragraph.slice(0, 32)}>
+                {paragraph}
+              </p>
             ))}
             <p className="pm-pills pm-article-links">
               {notes ? (
