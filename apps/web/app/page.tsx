@@ -13,13 +13,13 @@ import {
 } from "@/components/site/FeatureCarousel";
 import { Flow, type FlowColours } from "@/components/site/Flow";
 import { Reveal } from "@/components/site/Reveal";
-import { accentColours, accentFields } from "@/lib/brand-colours";
-import { getHomeMessages } from "@/lib/home-messages";
+import { accentColour, accentField } from "@/lib/brand-colours";
+import { getHomeMessages, productLine } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
-import { articles, articleUrl, releaseNotes } from "@/lib/news";
+import { articles, articleUrl, releaseNotes, articleText } from "@/lib/news";
 import { policyUrls } from "@/lib/policies";
-import { products, productSlugs } from "@/lib/products";
+import { productFacts, productSlugs } from "@/lib/products";
 import { organizationData, websiteData } from "@/lib/structured-data";
 import "./site.css";
 
@@ -55,7 +55,11 @@ const placements = [
 
 const step = (index: number) => ({ "--i": index }) as CSSProperties;
 const fill = (text: string, values: Record<string, string>) =>
-  text.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? "");
+  text.replace(
+    /\{(\w+)\}/g,
+    (_, key: string) =>
+      Object.entries(values).find(([name]) => name === key)?.[1] ?? "",
+  );
 
 /**
  * progmasoft.com: a statement of what Progmasoft is, every product in turn over
@@ -66,17 +70,17 @@ export default async function Homepage() {
   const home = getHomeMessages(locale);
   const news = articles.slice(0, 3);
   const made = [
-    ...productSlugs.filter((slug) => products[slug].status === "released"),
-    ...productSlugs.filter((slug) => products[slug].status !== "released"),
+    ...productSlugs.filter((slug) => productFacts(slug).status === "released"),
+    ...productSlugs.filter((slug) => productFacts(slug).status !== "released"),
   ];
   const feature: FeatureItem[] = made.map((slug) => {
-    const product = products[slug];
+    const product = productFacts(slug);
     const release = product.latestRelease;
     return {
       slug,
       name: product.name,
-      line: home.lines[slug],
-      colours: accentFields[product.accent],
+      line: productLine(locale, slug),
+      colours: accentField(product.accent),
       more: {
         label: home.feature.readMore,
         href: `https://product.progmasoft.com/${slug}`,
@@ -131,7 +135,7 @@ export default async function Homepage() {
           </div>
           <ul className="pm-news-cards">
             {news.map((article, index) => {
-              const text = article.text[locale];
+              const text = articleText(article, locale);
               const notes = releaseNotes(article);
               return (
                 <li
@@ -144,8 +148,9 @@ export default async function Homepage() {
                     <span
                       className="pm-chip"
                       style={{
-                        background:
-                          accentColours[products[article.product].accent],
+                        background: accentColour(
+                          productFacts(article.product).accent,
+                        ),
                       }}
                       aria-hidden="true"
                     />
@@ -165,7 +170,7 @@ export default async function Homepage() {
                         <a
                           href={`https://product.progmasoft.com/${article.product}`}
                         >
-                          {products[article.product].name} →
+                          {productFacts(article.product).name} →
                         </a>
                       </dd>
                     </div>
@@ -203,14 +208,14 @@ export default async function Homepage() {
                 data-reveal
                 style={
                   {
-                    "--colour": accentColours[products[slug].accent],
+                    "--colour": accentColour(productFacts(slug).accent),
                   } as CSSProperties
                 }
               >
                 <h3 className="pm-scatter-name pm-serif">
-                  {products[slug].name}
+                  {productFacts(slug).name}
                 </h3>
-                <p className="pm-scatter-line">{home.lines[slug]}</p>
+                <p className="pm-scatter-line">{productLine(locale, slug)}</p>
                 <p className="pm-more">
                   <a href={`https://product.progmasoft.com/${slug}`}>
                     {home.showcase.learnMore} →
@@ -230,8 +235,8 @@ export default async function Homepage() {
               <li key={title} data-reveal style={step(index)}>
                 <Flow
                   colours={
-                    principleFields[index % principleFields.length] ??
-                    accentFields.slate
+                    principleFields.at(index % principleFields.length) ??
+                    accentField("slate")
                   }
                   seed={index * 3.7 + 1}
                   speed={0.35}
@@ -260,7 +265,7 @@ export default async function Homepage() {
                   <p>{text}</p>
                   <a
                     className="pm-pill pm-pill-outline"
-                    href={contactLinks[index]}
+                    href={contactLinks.at(index)}
                   >
                     {action} ↗
                   </a>

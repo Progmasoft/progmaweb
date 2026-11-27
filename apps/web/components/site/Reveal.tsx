@@ -35,7 +35,9 @@ export function Reveal() {
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
     );
-    elements.forEach((element) => observer.observe(element));
+    elements.forEach((element) => {
+      observer.observe(element);
+    });
     return () => {
       observer.disconnect();
       root.classList.remove("pm-motion");

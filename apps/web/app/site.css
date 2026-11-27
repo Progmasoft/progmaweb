@@ -5,17 +5,17 @@
    surfaces, rules and type: no gradients, glows, shadows or icon tiles. */
 
 .pm-page {
-  --pm-violet: #6d4fe0;
-  --pm-teal: #0f9e94;
-  --pm-orange: #e46c2f;
+  --pm-violet: rgb(109 79 224);
+  --pm-teal: rgb(15 158 148);
+  --pm-orange: rgb(228 108 47);
   --pm-glow: rgb(0 120 212 / 14%);
   background: var(--surface);
 }
 
 :root[data-theme="dark"] .pm-page {
-  --pm-violet: #a98bff;
-  --pm-teal: #4fd1c5;
-  --pm-orange: #ff9a62;
+  --pm-violet: rgb(169 139 255);
+  --pm-teal: rgb(79 209 197);
+  --pm-orange: rgb(255 154 98);
   --pm-glow: rgb(54 159 232 / 18%);
 }
 
@@ -76,6 +76,7 @@
   --home-soft: var(--ink-650);
   --home-rule: var(--line);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
   background: var(--home-paper);
 }
 
@@ -146,8 +147,8 @@
   min-height: clamp(420px, 52vw, 640px);
   overflow: hidden;
   border-radius: 16px;
-  background: #1e5f78;
-  color: #fff;
+  background: rgb(30 95 120);
+  color: rgb(255 255 255);
   place-items: center;
   animation: pm-fade 1100ms var(--ease) 200ms both;
 }
@@ -200,11 +201,11 @@
   text-shadow: 0 1px 12px rgb(0 0 0 / 30%);
 }
 
-.pm-feature-names button[aria-current="true"] {
-  color: #fff;
+.pm-feature-names [aria-current="true"] {
+  color: rgb(255 255 255);
 }
 
-.pm-feature-names button[aria-current="true"]::after,
+.pm-feature-names [aria-current="true"]::after,
 .pm-feature-timer {
   position: absolute;
   right: 0;
@@ -214,13 +215,13 @@
   content: "";
 }
 
-.pm-feature-names button[aria-current="true"]::after {
+.pm-feature-names [aria-current="true"]::after {
   background: rgb(255 255 255 / 35%);
 }
 
 .pm-feature-timer {
   z-index: 1;
-  background: #fff;
+  background: rgb(255 255 255);
   transform-origin: left;
   animation: pm-timer 7000ms linear both;
 }
@@ -234,7 +235,7 @@
   border: 1px solid rgb(255 255 255 / 45%);
   border-radius: 50%;
   background: rgb(0 0 0 / 18%);
-  color: #fff;
+  color: rgb(255 255 255);
   font-size: 12px;
   cursor: pointer;
   backdrop-filter: blur(6px);
@@ -274,7 +275,7 @@
   line-height: 1.02;
 }
 
-.pm-feature-copy p:not(.pm-pills) {
+.pm-feature-line {
   margin: 20px auto 0;
   max-width: 420px;
   font-size: 18px;
@@ -307,13 +308,13 @@
 }
 
 .pm-pill-light {
-  background: #fff;
-  color: #141413;
+  background: rgb(255 255 255);
+  color: rgb(20 20 19);
 }
 
 .pm-pill-dark {
-  background: #141413;
-  color: #fff;
+  background: rgb(20 20 19);
+  color: rgb(255 255 255);
 }
 
 .pm-pill-outline {
@@ -461,22 +462,27 @@
 .pm-scatter-left {
   justify-self: start;
 }
+
 .pm-scatter-right {
   justify-self: end;
   margin-top: 40px;
 }
+
 .pm-scatter-centre {
   justify-self: start;
   margin-left: 22%;
 }
+
 .pm-scatter-far-right {
   justify-self: end;
 }
+
 .pm-scatter-left-low {
   justify-self: start;
   margin-left: 8%;
   margin-top: 56px;
 }
+
 .pm-scatter-right-high {
   justify-self: end;
   margin-right: 14%;
@@ -564,8 +570,8 @@
 
 .pm-contact {
   padding-block: clamp(72px, 9vw, 120px);
-  background: #141413;
-  color: #f0eee6;
+  background: rgb(20 20 19);
+  color: rgb(240 238 230);
 }
 
 .pm-contact-cards {
@@ -600,7 +606,7 @@
 
 .pm-contact-cards p {
   margin: 12px 0 24px;
-  color: #b0aea5;
+  color: rgb(176 174 165);
   font-size: 16px;
   line-height: 1.5;
 }
@@ -629,6 +635,7 @@
   from {
     transform: scaleX(0);
   }
+
   to {
     transform: scaleX(1);
   }
@@ -769,7 +776,7 @@
 }
 
 .pm-accent-slate {
-  background: #59606b;
+  background: rgb(89 96 107);
 }
 
 .pm-detail {
@@ -811,7 +818,7 @@
 
 .pm-code-light {
   border-color: var(--line);
-  background: #111722;
+  background: rgb(17 23 34);
   font-size: 13px;
 }
 
@@ -825,7 +832,7 @@
   content: "→";
 }
 
-@media (max-width: 960px) {
+@media (width <= 960px) {
   .pm-detail {
     grid-template-columns: 1fr;
   }
@@ -843,13 +850,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pm-scatter-item {
-    justify-self: stretch !important;
-    margin: 0 !important;
+  .pm-scatter > .pm-scatter-item {
+    justify-self: stretch;
+    margin: 0;
   }
 }
 
-@media (max-width: 520px) {
+@media (width <= 520px) {
   .pm-feature-names {
     flex-wrap: nowrap;
     min-width: 0;

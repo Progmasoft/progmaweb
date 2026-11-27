@@ -2,25 +2,25 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
 :root {
-  --blue-700: #13505f;
-  --blue-600: #1d6a80;
-  --blue-500: #2a7f96;
-  --blue-100: #dbe8e8;
-  --violet-600: #6750a4;
-  --green-600: #16825d;
-  --ink-950: #141413;
-  --ink-800: #2b2a27;
-  --ink-650: #5e5d59;
-  --ink-500: #6d6b64;
-  --line: #dcd8cc;
-  --line-strong: #c2bdb0;
-  --surface: #f0eee6;
-  --surface-muted: #e8e6dc;
-  --surface-blue: #e4e9e4;
+  --blue-700: rgb(19 80 95);
+  --blue-600: rgb(29 106 128);
+  --blue-500: rgb(42 127 150);
+  --blue-100: rgb(219 232 232);
+  --violet-600: rgb(103 80 164);
+  --green-600: rgb(22 130 93);
+  --ink-950: rgb(20 20 19);
+  --ink-800: rgb(43 42 39);
+  --ink-650: rgb(94 93 89);
+  --ink-500: rgb(109 107 100);
+  --line: rgb(220 216 204);
+  --line-strong: rgb(194 189 176);
+  --surface: rgb(240 238 230);
+  --surface-muted: rgb(232 230 220);
+  --surface-blue: rgb(228 233 228);
   --header-surface: rgb(240 238 230 / 86%);
-  --hero-background: #f0eee6;
-  --account-background: #e8e6dc;
-  --danger: #b42318;
+  --hero-background: rgb(240 238 230);
+  --account-background: rgb(232 230 220);
+  --danger: rgb(180 35 24);
   --shadow-sm: 0 2px 8px rgb(20 20 19 / 6%);
   --shadow-md: 0 16px 44px rgb(20 20 19 / 10%);
   --radius-sm: 8px;
@@ -33,25 +33,25 @@
 /* Light is deliberately the product default. Dark mode is an explicit,
    persistent preference so operating-system changes do not surprise users. */
 :root[data-theme="dark"] {
-  --blue-700: #a5d4de;
-  --blue-600: #7fb8c4;
-  --blue-500: #5fa3b2;
-  --blue-100: #1d3338;
-  --violet-600: #a88eff;
-  --green-600: #5bd5aa;
-  --ink-950: #f0eee6;
-  --ink-800: #dedbd2;
-  --ink-650: #b0aea5;
-  --ink-500: #8f8d86;
-  --line: #34332f;
-  --line-strong: #4a4843;
-  --surface: #1a1a18;
-  --surface-muted: #262624;
-  --surface-blue: #1f2a2b;
+  --blue-700: rgb(165 212 222);
+  --blue-600: rgb(127 184 196);
+  --blue-500: rgb(95 163 178);
+  --blue-100: rgb(29 51 56);
+  --violet-600: rgb(168 142 255);
+  --green-600: rgb(91 213 170);
+  --ink-950: rgb(240 238 230);
+  --ink-800: rgb(222 219 210);
+  --ink-650: rgb(176 174 165);
+  --ink-500: rgb(143 141 134);
+  --line: rgb(52 51 47);
+  --line-strong: rgb(74 72 67);
+  --surface: rgb(26 26 24);
+  --surface-muted: rgb(38 38 36);
+  --surface-blue: rgb(31 42 43);
   --header-surface: rgb(26 26 24 / 86%);
-  --hero-background: #1a1a18;
-  --account-background: #222220;
-  --danger: #ff8f86;
+  --hero-background: rgb(26 26 24);
+  --account-background: rgb(34 34 32);
+  --danger: rgb(255 143 134);
   --shadow-sm: 0 2px 8px rgb(0 0 0 / 28%);
   --shadow-md: 0 16px 44px rgb(0 0 0 / 42%);
   color-scheme: dark;
@@ -101,7 +101,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid #ffbf47;
+  outline: 3px solid rgb(255 191 71);
   outline-offset: 3px;
 }
 
@@ -153,23 +153,23 @@ a {
 }
 
 .brand-tile-slate {
-  background: #3b4658;
+  background: rgb(59 70 88);
 }
 
 .brand-tile-teal {
-  background: #1e7188;
+  background: rgb(30 113 136);
 }
 
 .brand-tile-violet {
-  background: #7655fa;
+  background: rgb(118 85 250);
 }
 
 .brand-tile-orange {
-  background: #dc7644;
+  background: rgb(220 118 68);
 }
 
 .brand-name {
-  color: #8e0000;
+  color: rgb(142 0 0);
   font-size: 20px;
   font-weight: 650;
   letter-spacing: -0.02em;
@@ -177,7 +177,7 @@ a {
 }
 
 :root[data-theme="dark"] .brand-name {
-  color: #f23636;
+  color: rgb(242 54 54);
 }
 
 .brand-product {
@@ -260,7 +260,7 @@ a {
   display: none;
 }
 
-@media (max-width: 980px) {
+@media (width <= 980px) {
   .header-inner {
     gap: 12px;
   }
@@ -383,7 +383,7 @@ a {
 
 /* A brand with a product name leaves no room for the word on a narrow phone:
    the button keeps its icon and its accessible name. */
-@media (max-width: 420px) {
+@media (width <= 420px) {
   .menu-toggle {
     width: 44px;
     justify-content: center;
@@ -468,7 +468,7 @@ a {
 
 .button-light:hover {
   border-color: white;
-  background: #eef7ff;
+  background: rgb(238 247 255);
   color: var(--blue-700);
 }
 
@@ -547,7 +547,7 @@ a {
 
 .system-window {
   overflow: hidden;
-  border: 1px solid #c6d1dd;
+  border: 1px solid rgb(198 209 221);
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-md);
@@ -568,7 +568,7 @@ a {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #a9b2bc;
+  background: rgb(169 178 188);
 }
 
 .window-bar code {
@@ -765,26 +765,26 @@ a {
   gap: 44px;
   border-radius: var(--radius-lg);
   padding: 52px 58px;
-  background: linear-gradient(125deg, #004e8c, #0078d4);
+  background: linear-gradient(125deg, rgb(0 78 140), rgb(0 120 212));
   color: white;
   box-shadow: var(--shadow-md);
 }
 
 .callout .eyebrow {
-  color: #d8eeff;
+  color: rgb(216 238 255);
 }
 
 .callout p:last-child {
   max-width: 650px;
   margin: 16px 0 0;
-  color: #e9f5ff;
+  color: rgb(233 245 255);
   font-size: 17px;
 }
 
 .site-footer {
-  border-top: 1px solid #343a40;
-  background: #20252a;
-  color: #d8dde2;
+  border-top: 1px solid rgb(52 58 64);
+  background: rgb(32 37 42);
+  color: rgb(216 221 226);
 }
 
 .site-footer .brand {
@@ -808,11 +808,11 @@ a {
 .footer-grid p {
   max-width: 430px;
   margin: 12px 0 0;
-  color: #aeb6bf;
+  color: rgb(174 182 191);
 }
 
 .footer-grid a {
-  color: #d8dde2;
+  color: rgb(216 221 226);
 }
 
 .footer-grid strong {
@@ -824,14 +824,14 @@ a {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  border-top: 1px solid #3a4148;
+  border-top: 1px solid rgb(58 65 72);
   padding-block: 22px;
-  color: #aeb6bf;
+  color: rgb(174 182 191);
   font-size: 13px;
 }
 
 .footer-bottom a {
-  color: #d8dde2;
+  color: rgb(216 221 226);
 }
 
 .account-landing {
@@ -976,7 +976,7 @@ a {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #dff6ed;
+  background: rgb(223 246 237);
   color: var(--green-600);
   content: "✓";
   font-size: 11px;
@@ -1014,8 +1014,8 @@ a {
 }
 
 .form-message-error {
-  border: 1px solid #f1aaa4;
-  background: #fff2f0;
+  border: 1px solid rgb(241 170 164);
+  background: rgb(255 242 240);
   color: var(--danger);
 }
 
@@ -1033,7 +1033,7 @@ a {
 .field-group input {
   width: 100%;
   height: 44px;
-  border: 1px solid #89939e;
+  border: 1px solid rgb(137 147 158);
   border-radius: var(--radius-sm);
   padding: 8px 11px;
   background: var(--surface);
@@ -1339,26 +1339,26 @@ a {
 }
 
 .status-planned {
-  background: #fff4ce;
-  color: #6a4b00;
+  background: rgb(255 244 206);
+  color: rgb(106 75 0);
 }
 
 :root[data-theme="dark"] .form-message-error {
-  border-color: #7a3936;
-  background: #321b1d;
+  border-color: rgb(122 57 54);
+  background: rgb(50 27 29);
 }
 
 :root[data-theme="dark"] .account-trust span::before {
-  background: #15392e;
+  background: rgb(21 57 46);
 }
 
 :root[data-theme="dark"] .status-planned {
-  background: #493a11;
-  color: #ffe58b;
+  background: rgb(73 58 17);
+  color: rgb(255 229 139);
 }
 
 :root[data-theme="dark"] .button-light {
-  color: #004e8c;
+  color: rgb(0 78 140);
 }
 
 .dashboard-state {
@@ -1385,7 +1385,7 @@ a {
   color: var(--danger);
 }
 
-@media (max-width: 920px) {
+@media (width <= 920px) {
   .hero-grid,
   .account-landing-grid,
   .account-main,
@@ -1435,7 +1435,7 @@ a {
   }
 }
 
-@media (max-width: 680px) {
+@media (width <= 680px) {
   .shell,
   .account-main {
     width: min(calc(100% - 28px), var(--shell));
@@ -1665,7 +1665,7 @@ textarea {
   color: var(--ink-950);
 }
 
-@media (max-width: 980px) {
+@media (width <= 980px) {
   .header-menu .primary-nav {
     border-bottom-color: var(--line);
     background: var(--surface);
@@ -1675,8 +1675,8 @@ textarea {
 
 .site-footer {
   border-top: 1px solid rgb(240 238 230 / 12%);
-  background: #141413;
-  color: #b0aea5;
+  background: rgb(20 20 19);
+  color: rgb(176 174 165);
 }
 
 .footer-grid {
@@ -1684,24 +1684,24 @@ textarea {
 }
 
 .footer-grid strong {
-  color: #f0eee6;
+  color: rgb(240 238 230);
   font-weight: 500;
 }
 
 .footer-grid a,
 .footer-bottom a {
-  color: #b0aea5;
+  color: rgb(176 174 165);
   font-size: 15px;
   transition: color 200ms ease;
 }
 
 .footer-grid a:hover,
 .footer-bottom a:hover {
-  color: #f0eee6;
+  color: rgb(240 238 230);
   text-decoration: none;
 }
 
 .footer-bottom {
   border-top-color: rgb(240 238 230 / 12%);
-  color: #8a8880;
+  color: rgb(138 136 128);
 }

@@ -8,7 +8,7 @@ import {
   articles,
   articleUrl,
   findArticle,
-  newsMessages,
+  getNewsMessages,
   newsRoute,
   releaseNotes,
   slugOf,
@@ -53,7 +53,7 @@ test("every article is written in every language", () => {
     }
   }
   for (const locale of supportedLocales) {
-    assert.ok(newsMessages[locale].title, locale);
+    assert.ok(getNewsMessages(locale).title, locale);
   }
 });
 

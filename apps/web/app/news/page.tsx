@@ -7,13 +7,13 @@ import { formatDay } from "@/components/ProductCatalog";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Flow } from "@/components/site/Flow";
 import { Reveal } from "@/components/site/Reveal";
-import { accentColours, accentFields } from "@/lib/brand-colours";
+import { accentColour, accentField } from "@/lib/brand-colours";
 import { getLocale } from "@/lib/locale.server";
-import { articles, articleUrl, newsMessages } from "@/lib/news";
-import { products } from "@/lib/products";
+import { articles, articleUrl, getNewsMessages, articleText } from "@/lib/news";
+import { productFacts } from "@/lib/products";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const news = newsMessages[await getLocale()];
+  const news = getNewsMessages(await getLocale());
   return {
     title: news.title,
     description: news.description,
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function NewsPage() {
   const locale = await getLocale();
-  const news = newsMessages[locale];
+  const news = getNewsMessages(locale);
   const [first, ...rest] = articles;
   return (
     <div className="pm-page pm-home pm-news-site">
@@ -43,7 +43,7 @@ export default async function NewsPage() {
           <section className="pm-shell">
             <a className="pm-news-lead" href={articleUrl(first)}>
               <Flow
-                colours={accentFields[products[first.product].accent]}
+                colours={accentField(productFacts(first.product).accent)}
                 seed={4.2}
                 speed={0.6}
                 className="pm-news-lead-field"
@@ -52,8 +52,10 @@ export default async function NewsPage() {
                 <time dateTime={first.date}>
                   {formatDay(locale, first.date)}
                 </time>
-                <strong className="pm-serif">{first.text[locale].title}</strong>
-                <span>{first.text[locale].summary}</span>
+                <strong className="pm-serif">
+                  {articleText(first, locale).title}
+                </strong>
+                <span>{articleText(first, locale).summary}</span>
               </span>
             </a>
           </section>
@@ -72,21 +74,22 @@ export default async function NewsPage() {
                     <span
                       className="pm-chip"
                       style={{
-                        background:
-                          accentColours[products[article.product].accent],
+                        background: accentColour(
+                          productFacts(article.product).accent,
+                        ),
                       }}
                       aria-hidden="true"
                     />
-                    <span>{products[article.product].name}</span>
+                    <span>{productFacts(article.product).name}</span>
                     <time dateTime={article.date}>
                       {formatDay(locale, article.date)}
                     </time>
                   </span>
                   <strong className="pm-serif">
-                    {article.text[locale].title}
+                    {articleText(article, locale).title}
                   </strong>
                   <span className="pm-news-text">
-                    {article.text[locale].summary}
+                    {articleText(article, locale).summary}
                   </span>
                 </a>
               </li>

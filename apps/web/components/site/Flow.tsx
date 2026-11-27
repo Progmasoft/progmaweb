@@ -126,7 +126,7 @@ export function Flow({
     const still =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       speed === 0;
-    const current = target.current.map((colour) => [...colour]);
+    let current = target.current.map((colour) => [...colour]);
     let visible = true;
     let frame = 0;
     let clock = seed * 10;
@@ -140,19 +140,20 @@ export function Flow({
       gl.uniform2f(size, element.width, element.height);
     };
     const draw = () => {
-      current.forEach((colour, index) =>
-        gl.uniform3fv(slots[index] ?? null, colour),
-      );
+      current.forEach((colour, index) => {
+        gl.uniform3fv(slots.at(index) ?? null, colour);
+      });
       gl.uniform1f(time, clock);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
+    /** Moves every colour the given share of the way to its target. */
     const blend = (amount: number) => {
-      current.forEach((colour, index) => {
-        const goal = target.current[index] ?? colour;
-        for (let channel = 0; channel < 3; channel += 1) {
-          const now = colour[channel] ?? 0;
-          colour[channel] = now + ((goal[channel] ?? 0) - now) * amount;
-        }
+      current = current.map((colour, index) => {
+        const goal = target.current.at(index) ?? colour;
+        return colour.map(
+          (value, channel) =>
+            value + ((goal.at(channel) ?? value) - value) * amount,
+        );
       });
     };
     const tick = (now: number) => {
@@ -180,8 +181,8 @@ export function Flow({
       draw();
     });
     resizer.observe(element);
-    const watcher = new IntersectionObserver(([entry]) => {
-      visible = entry?.isIntersecting ?? true;
+    const watcher = new IntersectionObserver((entries) => {
+      visible = entries.some((entry) => entry.isIntersecting);
     });
     watcher.observe(element);
     if (!still) frame = requestAnimationFrame(tick);

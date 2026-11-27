@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { Locale } from "./localization";
-import { products, type ProductSlug } from "./products.ts";
+import { productFacts, type ProductSlug } from "./products.ts";
 
 /** The words of one article in one language. */
 interface ArticleText {
@@ -195,7 +195,7 @@ export function articleUrl(article: Article): string {
 
 /** The release notes an article points to, from the catalog. */
 export function releaseNotes(article: Article): string | undefined {
-  const release = products[article.product].latestRelease;
+  const release = productFacts(article.product).latestRelease;
   return release && release.version === article.release
     ? release.url
     : undefined;
@@ -211,7 +211,7 @@ interface NewsMessages {
   read: string;
 }
 
-export const newsMessages: Record<Locale, NewsMessages> = {
+const newsMessages: Record<Locale, NewsMessages> = {
   "en-US": {
     title: "News",
     description: "Releases and announcements from Progmasoft.",
@@ -264,4 +264,14 @@ export function newsRoute(pathname: string): string | null {
   }
   const slug = /^\/([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(path)?.[1];
   return slug && findArticle(slug) ? `/news/${slug}` : null;
+}
+
+/** The words of news.progmasoft.com in one language. */
+export function getNewsMessages(locale: Locale): NewsMessages {
+  return newsMessages[locale];
+}
+
+/** An article in one language. */
+export function articleText(article: Article, locale: Locale): ArticleText {
+  return article.text[locale];
 }

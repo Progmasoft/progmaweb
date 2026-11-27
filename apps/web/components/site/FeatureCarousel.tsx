@@ -29,7 +29,9 @@ const stillQuery = "(prefers-reduced-motion: reduce)";
 function subscribeMotion(onChange: () => void) {
   const query = window.matchMedia(stillQuery);
   query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
+  return () => {
+    query.removeEventListener("change", onChange);
+  };
 }
 
 function prefersStill() {
@@ -61,14 +63,15 @@ export function FeatureCarousel({
       return;
     }
 
-    const timer = window.setTimeout(
-      () => setCurrent((index) => (index + 1) % items.length),
-      interval,
-    );
-    return () => window.clearTimeout(timer);
+    const timer = window.setTimeout(() => {
+      setCurrent((index) => (index + 1) % items.length);
+    }, interval);
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, [current, turning, items.length]);
 
-  const item = items[current];
+  const item = items.at(current);
   if (!item) {
     return null;
   }
@@ -92,7 +95,7 @@ export function FeatureCarousel({
         aria-live={turning ? "off" : "polite"}
       >
         <h2 className="pm-serif">{item.name}</h2>
-        <p>{item.line}</p>
+        <p className="pm-feature-line">{item.line}</p>
         <p className="pm-pills">
           <a className="pm-pill pm-pill-light" href={item.more.href}>
             {item.more.label}
@@ -126,7 +129,9 @@ export function FeatureCarousel({
           type="button"
           className="pm-flow-toggle"
           aria-label={paused ? play : pause}
-          onClick={() => setPaused(!paused)}
+          onClick={() => {
+            setPaused(!paused);
+          }}
         >
           {paused ? "▶" : "❚❚"}
         </button>
