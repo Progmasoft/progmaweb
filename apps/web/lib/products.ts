@@ -92,9 +92,9 @@ export const products: Record<ProductSlug, ProductFacts> = {
     status: "released",
     started: "2026-11-20",
     latestRelease: {
-      version: "0.1.0",
-      date: "2026-11-21",
-      url: "https://github.com/Progmasoft/tazel/releases/tag/tazel-0.1.0",
+      version: "0.2.0",
+      date: "2026-11-27",
+      url: "https://github.com/Progmasoft/tazel/releases/tag/tazel-0.2.0",
     },
     accent: "orange",
   },
