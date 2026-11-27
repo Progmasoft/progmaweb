@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import { supportedLocales } from "../lib/localization.ts";
 import {
   filterProducts,
@@ -15,78 +14,87 @@ const anything = { query: "" };
 
 test("an empty search finds every project in catalog order", () => {
   for (const locale of supportedLocales) {
-    assert.deepEqual(
-      filterProducts(locale, anything),
-      [...productSlugs],
-      locale,
-    );
+    expect(filterProducts(locale, anything), locale).toStrictEqual([
+      ...productSlugs,
+    ]);
   }
 });
 
 test("the query matches names, categories and text without regard to case", () => {
-  assert.deepEqual(filterProducts("en-US", { query: "ARCHER" }), ["archer"]);
-  assert.deepEqual(filterProducts("en-US", { query: "jvm" }), [
+  expect(filterProducts("en-US", { query: "ARCHER" })).toStrictEqual([
+    "archer",
+  ]);
+  expect(filterProducts("en-US", { query: "jvm" })).toStrictEqual([
     "archer",
     "etincelle",
   ]);
-  assert.deepEqual(filterProducts("en-US", { query: "spark" }), ["etincelle"]);
-  assert.deepEqual(filterProducts("en-US", { query: "build system" }), [
+  expect(filterProducts("en-US", { query: "spark" })).toStrictEqual([
+    "etincelle",
+  ]);
+  expect(filterProducts("en-US", { query: "build system" })).toStrictEqual([
     "tazel",
   ]);
-  assert.deepEqual(filterProducts("de-DE", { query: "testwerkzeug" }), []);
-  assert.deepEqual(filterProducts("de-DE", { query: "testen" }), ["catch3"]);
-  assert.deepEqual(filterProducts("en-US", { query: "no such project" }), []);
+  expect(filterProducts("de-DE", { query: "testwerkzeug" })).toStrictEqual([]);
+  expect(filterProducts("de-DE", { query: "testen" })).toStrictEqual([
+    "catch3",
+  ]);
+  expect(filterProducts("en-US", { query: "no such project" })).toStrictEqual(
+    [],
+  );
 });
 
 test("category, language and status narrow the search together", () => {
-  assert.deepEqual(filterProducts("en-US", { query: "", language: "Java" }), [
-    "archer",
-    "etincelle",
-  ]);
-  assert.deepEqual(filterProducts("en-US", { query: "", status: "released" }), [
-    "tazel",
-    "catch3",
-    "opentala",
-  ]);
-  assert.deepEqual(
+  expect(
+    filterProducts("en-US", { query: "", language: "Java" }),
+  ).toStrictEqual(["archer", "etincelle"]);
+  expect(
+    filterProducts("en-US", { query: "", status: "released" }),
+  ).toStrictEqual(["tazel", "catch3", "opentala"]);
+  expect(
     filterProducts("en-US", {
       query: "",
       language: "Java",
       category: "data-format",
     }),
-    ["archer"],
-  );
-  assert.deepEqual(
+  ).toStrictEqual(["archer"]);
+  expect(
     filterProducts("en-US", {
       query: "",
       language: "Java",
       status: "released",
     }),
-    [],
-  );
+  ).toStrictEqual([]);
 });
 
 test("the query string becomes a filter; unknown values ask for anything", () => {
-  assert.deepEqual(
+  expect(
     parseProductFilter({
       q: "  ide ",
       category: "ide",
       language: "Java",
       status: "released",
     }),
-    { query: "ide", category: "ide", language: "Java", status: "released" },
-  );
-  assert.deepEqual(
+  ).toStrictEqual({
+    query: "ide",
+    category: "ide",
+    language: "Java",
+    status: "released",
+  });
+  expect(
     parseProductFilter({
       q: ["a", "b"],
       category: "games",
       language: "Rust",
       status: "dead",
     }),
-    { query: "a", category: undefined, language: undefined, status: undefined },
-  );
-  assert.equal(parseProductFilter({ q: "x".repeat(500) }).query.length, 100);
-  assert.deepEqual(parseProductFilter({}), {
+  ).toStrictEqual({
+    query: "a",
+    category: undefined,
+    language: undefined,
+    status: undefined,
+  });
+  expect(parseProductFilter({ q: "x".repeat(500) }).query.length).toBe(100);
+  expect(parseProductFilter({})).toStrictEqual({
     query: "",
     category: undefined,
     language: undefined,
@@ -97,7 +105,7 @@ test("the query string becomes a filter; unknown values ask for anything", () =>
 test("releases are newest first", () => {
   const list = releases();
   for (let i = 1; i < list.length; i++) {
-    assert.ok(list[i - 1].release.date >= list[i].release.date);
+    expect(list[i - 1].release.date >= list[i].release.date).toBeTruthy();
   }
-  assert.ok(list.some(({ slug }) => slug === "catch3"));
+  expect(list.some(({ slug }) => slug === "catch3")).toBeTruthy();
 });

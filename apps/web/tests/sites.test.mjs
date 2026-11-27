@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import { homeMessages } from "../lib/home-messages.ts";
 import { supportedLocales } from "../lib/localization.ts";
 import {
@@ -33,73 +32,78 @@ test("every language has the same home and catalog text", () => {
   for (const messages of [homeMessages, catalogMessages]) {
     const english = shape(messages["en-US"]);
     for (const locale of supportedLocales) {
-      assert.deepEqual(shape(messages[locale]), english, locale);
+      expect(shape(messages[locale]), locale).toStrictEqual(english);
     }
   }
 });
 
 test("the catalog lists the projects, each with its repository", () => {
-  assert.deepEqual(
-    [...productSlugs],
-    ["tazel", "catch3", "agenceland", "archer", "etincelle", "opentala"],
-  );
+  expect([...productSlugs]).toStrictEqual([
+    "tazel",
+    "catch3",
+    "agenceland",
+    "archer",
+    "etincelle",
+    "opentala",
+  ]);
   for (const slug of productSlugs) {
     const product = products[slug];
     if (product.site !== undefined) {
-      assert.match(product.site, /^https:\/\//, slug);
+      expect(product.site, slug).toMatch(/^https:\/\//);
     }
-    assert.match(product.source, /^https:\/\/github\.com\/Progmasoft\//, slug);
-    assert.equal(product.issues, `${product.source}/issues`, slug);
-    assert.match(product.started, /^\d{4}-\d{2}-\d{2}$/, slug);
-    assert.equal(
-      product.status === "released",
-      product.latestRelease !== undefined,
-      `${slug}: released exactly when it has a release`,
+    expect(product.source, slug).toMatch(
+      /^https:\/\/github\.com\/Progmasoft\//,
     );
+    expect(product.issues, slug).toBe(`${product.source}/issues`);
+    expect(product.started, slug).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(
+      product.status === "released",
+      `${slug}: released exactly when it has a release`,
+    ).toBe(product.latestRelease !== undefined);
   }
-  assert.equal(products.catch3.site, "https://catch3.uk/");
-  assert.equal(isProductSlug("viget"), false);
-  assert.equal(isProductSlug("xide"), false);
+  expect(products.catch3.site).toBe("https://catch3.uk/");
+  expect(isProductSlug("viget")).toBe(false);
+  expect(isProductSlug("xide")).toBe(false);
 });
 
 test("the home page has a line for every product", () => {
   for (const locale of supportedLocales) {
     for (const slug of productSlugs) {
-      assert.ok(
+      expect(
         homeMessages[locale].lines[slug]?.length > 0,
         `${locale}: ${slug}`,
-      );
+      ).toBeTruthy();
     }
   }
 });
 
 test("the product hosts map to their internal routes", () => {
-  assert.equal(productRoute("/"), "/products");
-  assert.equal(productRoute("/tazel"), "/products/tazel");
-  assert.equal(productRoute("/catch3/"), "/products/catch3");
-  assert.equal(productRoute("/tazel/extra"), null);
-  assert.equal(productRoute("/../x"), null);
+  expect(productRoute("/")).toBe("/products");
+  expect(productRoute("/tazel")).toBe("/products/tazel");
+  expect(productRoute("/catch3/")).toBe("/products/catch3");
+  expect(productRoute("/tazel/extra")).toBe(null);
+  expect(productRoute("/../x")).toBe(null);
 });
 
 test("the MCP Marketplace has its root alone, in every language", () => {
-  assert.equal(mcpRoute("/"), "/mcp");
-  assert.equal(mcpRoute("/servers"), null);
-  assert.equal(mcpRoute("/upload"), null);
+  expect(mcpRoute("/")).toBe("/mcp");
+  expect(mcpRoute("/servers")).toBe(null);
+  expect(mcpRoute("/upload")).toBe(null);
   const english = shape(mcpMessages["en-US"]);
   for (const locale of supportedLocales) {
-    assert.deepEqual(shape(mcpMessages[locale]), english, locale);
+    expect(shape(mcpMessages[locale]), locale).toStrictEqual(english);
   }
 });
 
 test("git.progmasoft.com has its listing and the views of each repository", () => {
   const sha = "0123456789abcdef0123456789abcdef01234567";
-  assert.equal(gitRoute("/"), "/git");
-  assert.equal(gitRoute("/tazel"), "/git/tazel");
-  assert.equal(gitRoute("/tazel/"), "/git/tazel");
-  assert.equal(gitRoute("/tazel/tree"), "/git/tazel/tree");
-  assert.equal(gitRoute("/tazel/log"), "/git/tazel/log");
-  assert.equal(gitRoute("/tazel/refs"), "/git/tazel/refs");
-  assert.equal(gitRoute(`/tazel/commit/${sha}`), `/git/tazel/commit/${sha}`);
+  expect(gitRoute("/")).toBe("/git");
+  expect(gitRoute("/tazel")).toBe("/git/tazel");
+  expect(gitRoute("/tazel/")).toBe("/git/tazel");
+  expect(gitRoute("/tazel/tree")).toBe("/git/tazel/tree");
+  expect(gitRoute("/tazel/log")).toBe("/git/tazel/log");
+  expect(gitRoute("/tazel/refs")).toBe("/git/tazel/refs");
+  expect(gitRoute(`/tazel/commit/${sha}`)).toBe(`/git/tazel/commit/${sha}`);
   for (const path of [
     "/tazel.git",
     "/.hidden",
@@ -111,10 +115,10 @@ test("git.progmasoft.com has its listing and the views of each repository", () =
     "/tazel/raw",
     "/tazel/info/refs",
   ]) {
-    assert.equal(gitRoute(path), null, path);
+    expect(gitRoute(path), path).toBe(null);
   }
   const english = shape(gitMessages["en-US"]);
   for (const locale of supportedLocales) {
-    assert.deepEqual(shape(gitMessages[locale]), english, locale);
+    expect(shape(gitMessages[locale]), locale).toStrictEqual(english);
   }
 });

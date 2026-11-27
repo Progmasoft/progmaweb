@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { llmsText } from "../lib/llms.ts";
 import { supportedLocales } from "../lib/localization.ts";
 import { productSlugs, products } from "../lib/products.ts";
@@ -18,80 +17,83 @@ import {
 const locales = supportedLocales;
 
 test("an SPDX expression gives one URL per license it names", () => {
-  assert.deepEqual(licenseUrls("MIT"), ["https://spdx.org/licenses/MIT.html"]);
-  assert.deepEqual(licenseUrls("BSL-1.0 AND LGPL-3.0-or-later"), [
+  expect(licenseUrls("MIT")).toStrictEqual([
+    "https://spdx.org/licenses/MIT.html",
+  ]);
+  expect(licenseUrls("BSL-1.0 AND LGPL-3.0-or-later")).toStrictEqual([
     "https://spdx.org/licenses/BSL-1.0.html",
     "https://spdx.org/licenses/LGPL-3.0-or-later.html",
   ]);
-  assert.deepEqual(licenseUrls("(MIT OR Apache-2.0)"), [
+  expect(licenseUrls("(MIT OR Apache-2.0)")).toStrictEqual([
     "https://spdx.org/licenses/MIT.html",
     "https://spdx.org/licenses/Apache-2.0.html",
   ]);
-  assert.deepEqual(licenseUrls("GPL-2.0-only WITH Classpath-exception-2.0"), [
-    "https://spdx.org/licenses/GPL-2.0-only.html",
-  ]);
+  expect(
+    licenseUrls("GPL-2.0-only WITH Classpath-exception-2.0"),
+  ).toStrictEqual(["https://spdx.org/licenses/GPL-2.0-only.html"]);
 });
 
 test("every project has its data in every language", () => {
   for (const slug of productSlugs) {
     for (const locale of locales) {
       const data = productData(slug, locale);
-      assert.equal(data["@type"], "SoftwareSourceCode");
-      assert.equal(data.name, products[slug].name);
-      assert.equal(data.codeRepository, products[slug].source);
-      assert.equal(data.inLanguage, locale);
-      assert.ok(data.description.length > 20, `${slug} ${locale}`);
-      assert.ok(data.license, `${slug} has a license`);
-      assert.equal(data.version, products[slug].latestRelease?.version);
+      expect(data["@type"]).toBe("SoftwareSourceCode");
+      expect(data.name).toBe(products[slug].name);
+      expect(data.codeRepository).toBe(products[slug].source);
+      expect(data.inLanguage).toBe(locale);
+      expect(data.description.length > 20, `${slug} ${locale}`).toBeTruthy();
+      expect(data.license, `${slug} has a license`).toBeTruthy();
+      expect(data.version).toBe(products[slug].latestRelease?.version);
     }
   }
 });
 
 test("a released project names its version, one in development does not", () => {
-  assert.equal(productData("catch3", "en-US").creativeWorkStatus, "Released");
-  assert.equal(productData("tazel", "en-US").version, "0.2.0");
-  assert.equal(
-    productData("archer", "en-US").creativeWorkStatus,
+  expect(productData("catch3", "en-US").creativeWorkStatus).toBe("Released");
+  expect(productData("tazel", "en-US").version).toBe("0.2.0");
+  expect(productData("archer", "en-US").creativeWorkStatus).toBe(
     "In development",
   );
-  assert.equal(productData("archer", "en-US").version, undefined);
+  expect(productData("archer", "en-US").version).toBe(undefined);
 });
 
 test("the catalog lists every project in order", () => {
   const data = catalogData("en-US");
-  assert.equal(data.numberOfItems, productSlugs.length);
-  assert.deepEqual(
-    data.itemListElement.map((item) => item.position),
+  expect(data.numberOfItems).toBe(productSlugs.length);
+  expect(data.itemListElement.map((item) => item.position)).toStrictEqual(
     productSlugs.map((_, index) => index + 1),
   );
 });
 
 test("the organization and the site point at each other", () => {
-  assert.equal(
-    websiteData("en-US").publisher["@id"],
-    organizationData()["@id"],
-  );
-  assert.equal(organizationData()["@type"], "Organization");
+  expect(websiteData("en-US").publisher["@id"]).toBe(organizationData()["@id"]);
+  expect(organizationData()["@type"]).toBe("Organization");
 });
 
 test("JSON-LD text cannot close its script element", () => {
   const text = jsonLd({ name: "</script><script>alert(1)</script>" });
-  assert.ok(!text.includes("</script>"));
-  assert.deepEqual(JSON.parse(text), {
+  expect(!text.includes("</script>")).toBeTruthy();
+  expect(JSON.parse(text)).toStrictEqual({
     name: "</script><script>alert(1)</script>",
   });
 });
 
 test("llms.txt lists every project with its facts and names no former project", () => {
   const text = llmsText();
-  assert.match(text, /^# Progmasoft\n\n> /);
+  expect(text).toMatch(/^# Progmasoft\n\n> /);
   for (const slug of productSlugs) {
-    assert.ok(text.includes(`(https://product.progmasoft.com/${slug})`), slug);
-    assert.ok(text.includes(products[slug].license), `${slug} license`);
+    expect(
+      text.includes(`(https://product.progmasoft.com/${slug})`),
+      slug,
+    ).toBeTruthy();
+    expect(
+      text.includes(products[slug].license),
+      `${slug} license`,
+    ).toBeTruthy();
   }
-  assert.ok(text.includes("latest release 0.4.0"));
-  assert.ok(text.includes("latest release 0.2.0"));
+  expect(text.includes("latest release 0.4.0")).toBeTruthy();
+  expect(text.includes("latest release 0.2.0")).toBeTruthy();
   for (const word of [/\bTala\b/, /\bXide\b/, /\bTalac\b/, /\bX#/]) {
-    assert.ok(!word.test(text), String(word));
+    expect(!word.test(text), String(word)).toBeTruthy();
   }
 });

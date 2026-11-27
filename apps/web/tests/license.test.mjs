@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import {
   licenseMessages,
   licensePages,
@@ -13,14 +12,12 @@ import { supportedLocales } from "../lib/localization.ts";
 import { licenseRoute } from "../lib/sites.ts";
 
 test("license.progmasoft.com serves the list and the three pages of PM-SPL 1.0", () => {
-  assert.equal(licenseRoute("/"), "/license");
+  expect(licenseRoute("/")).toBe("/license");
   for (const page of licensePages) {
-    assert.equal(
-      licenseRoute(`/pm-spl/1.0/${page}/`),
+    expect(licenseRoute(`/pm-spl/1.0/${page}/`)).toBe(
       `/license/pm-spl/1.0/${page}`,
     );
-    assert.equal(
-      licenseRoute(`/pm-spl/1.0/${page}`),
+    expect(licenseRoute(`/pm-spl/1.0/${page}`)).toBe(
       `/license/pm-spl/1.0/${page}`,
     );
   }
@@ -31,7 +28,7 @@ test("license.progmasoft.com serves the list and the three pages of PM-SPL 1.0",
     "/faq",
     "/pm-spl/1.0/faq/x",
   ]) {
-    assert.equal(licenseRoute(path), null, path);
+    expect(licenseRoute(path), path).toBe(null);
   }
 });
 
@@ -49,7 +46,7 @@ function shape(value) {
 test("every language has the same pages, questions and categories as English", () => {
   const english = shape(licenseMessages["en-US"]);
   for (const locale of supportedLocales) {
-    assert.deepEqual(shape(licenseMessages[locale]), english, locale);
+    expect(shape(licenseMessages[locale]), locale).toStrictEqual(english);
     const strings = [];
     const collect = (value) => {
       if (typeof value === "string") strings.push(value);
@@ -57,17 +54,16 @@ test("every language has the same pages, questions and categories as English", (
         Object.values(value).forEach(collect);
     };
     collect(licenseMessages[locale]);
-    for (const text of strings) assert.notEqual(text.trim(), "", locale);
+    for (const text of strings) expect(text.trim(), locale).not.toBe("");
   }
 });
 
 test("the identifiers and the texts are those PM-SPL 1.0 was published with", () => {
-  assert.deepEqual(pmSplIdentifiers, [
+  expect(pmSplIdentifiers).toStrictEqual([
     "LicenseRef-PM-SPL-1.0-only",
     "LicenseRef-PM-SPL-1.0-or-later",
   ]);
-  assert.deepEqual(
-    pmSplTexts.map(([, url]) => url),
+  expect(pmSplTexts.map(([, url]) => url)).toStrictEqual(
     ["txt", "md", "rst"].map(
       (extension) =>
         `https://storage.progmasoft.com/pm-spl/1.0/LICENSE-1.0.${extension}`,
@@ -77,6 +73,6 @@ test("the identifiers and the texts are those PM-SPL 1.0 was published with", ()
     const letters = licenseMessages[locale].categories.items.map(
       (item) => item.letter,
     );
-    assert.deepEqual(letters, ["A", "B", "X"], locale);
+    expect(letters, locale).toStrictEqual(["A", "B", "X"]);
   }
 });
