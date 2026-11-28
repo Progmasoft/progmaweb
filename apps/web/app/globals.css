@@ -445,7 +445,6 @@ a {
 .button-small {
   min-height: 36px;
   padding: 8px 15px;
-  color: white !important;
 }
 
 .button-secondary {
@@ -1584,10 +1583,6 @@ h1 {
   box-shadow: none;
 }
 
-.button-small {
-  color: var(--surface) !important;
-}
-
 .button-secondary {
   border-color: var(--line-strong);
   background: transparent;
@@ -1642,6 +1637,7 @@ textarea {
 
 .site-header .button-small:hover {
   background: color-mix(in srgb, var(--ink-950) 82%, var(--surface));
+  color: var(--surface);
 }
 
 .preference-controls button,
