@@ -40,6 +40,7 @@ export default async function LanguagesPage() {
             );
             return slugs.length === 0 ? null : (
               <ProductGroup
+                locale={locale}
                 key={language}
                 title={language}
                 slugs={slugs}

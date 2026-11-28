@@ -40,6 +40,7 @@ export default async function CategoriesPage() {
             );
             return slugs.length === 0 ? null : (
               <ProductGroup
+                locale={locale}
                 key={category}
                 title={catalog.categories[category]}
                 slugs={slugs}

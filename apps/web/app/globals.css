@@ -23,9 +23,9 @@
   --danger: rgb(180 35 24);
   --shadow-sm: 0 2px 8px rgb(20 20 19 / 6%);
   --shadow-md: 0 16px 44px rgb(20 20 19 / 10%);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
   --shell: 1180px;
   color-scheme: light;
 }
@@ -1078,7 +1078,7 @@ a {
   right: 5px;
   height: 36px;
   border: 0;
-  border-radius: 3px;
+  border-radius: 999px;
   padding-inline: 10px;
   background: transparent;
   color: var(--blue-700);
@@ -1570,7 +1570,7 @@ h1 {
 
 .button {
   border-color: var(--ink-950);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--ink-950);
   color: var(--surface);
   font-weight: 500;
@@ -1598,7 +1598,7 @@ h1 {
 input,
 select,
 textarea {
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .site-header {
@@ -1627,7 +1627,7 @@ textarea {
 .site-header .button-small {
   min-height: 38px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 999px;
   padding-inline: 16px;
   background: var(--ink-950);
   color: var(--surface);
@@ -1643,7 +1643,7 @@ textarea {
 .preference-controls button,
 .preference-controls select {
   border-color: var(--line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: transparent;
   color: var(--ink-950);
   font-weight: 500;
@@ -1700,4 +1700,44 @@ textarea {
 .footer-bottom {
   border-top-color: rgb(240 238 230 / 12%);
   color: rgb(138 136 128);
+}
+
+/* A product's colour that moves: its four field colours drift slowly, like the fields of the home page. The colours
+   come from accentStyle() (lib/brand-colours.ts) as --field-1 to --field-4. */
+.pm-live-accent {
+  background: linear-gradient(
+    115deg,
+    var(--field-1),
+    var(--field-2) 28%,
+    var(--field-3) 52%,
+    var(--field-2) 74%,
+    var(--field-1)
+  );
+  background-size: 300% 300%;
+  animation: pm-accent-flow 9s ease-in-out infinite alternate;
+}
+
+@keyframes pm-accent-flow {
+  from {
+    background-position: 0% 40%;
+  }
+  to {
+    background-position: 100% 60%;
+  }
+}
+
+@keyframes pm-accent-rise {
+  from {
+    background-position: 50% 0%;
+  }
+  to {
+    background-position: 50% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-live-accent,
+  .pm-scatter-item::before {
+    animation: none;
+  }
 }

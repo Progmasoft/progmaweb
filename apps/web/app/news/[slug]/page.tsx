@@ -105,7 +105,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <Flow
               colours={accentField(product.accent)}
               seed={7.1}
-              speed={0.5}
+              speed={1.6}
               className="pm-article-field"
             />
           </div>

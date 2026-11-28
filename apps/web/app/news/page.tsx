@@ -7,7 +7,7 @@ import { formatDay } from "@/components/ProductCatalog";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Flow } from "@/components/site/Flow";
 import { Reveal } from "@/components/site/Reveal";
-import { accentColour, accentField } from "@/lib/brand-colours";
+import { accentField, accentStyle } from "@/lib/brand-colours";
 import { getLocale } from "@/lib/locale.server";
 import { articles, articleUrl, getNewsMessages, articleText } from "@/lib/news";
 import { productFacts } from "@/lib/products";
@@ -45,7 +45,7 @@ export default async function NewsPage() {
               <Flow
                 colours={accentField(productFacts(first.product).accent)}
                 seed={4.2}
-                speed={0.6}
+                speed={1.8}
                 className="pm-news-lead-field"
               />
               <span className="pm-news-lead-copy">
@@ -72,12 +72,8 @@ export default async function NewsPage() {
                 <a href={articleUrl(article)}>
                   <span className="pm-news-meta">
                     <span
-                      className="pm-chip"
-                      style={{
-                        background: accentColour(
-                          productFacts(article.product).accent,
-                        ),
-                      }}
+                      className="pm-chip pm-live-accent"
+                      style={accentStyle(productFacts(article.product).accent)}
                       aria-hidden="true"
                     />
                     <span>{productFacts(article.product).name}</span>

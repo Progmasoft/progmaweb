@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import type { CSSProperties } from "react";
 import type { ProductFacts } from "./products";
 
 type Accent = ProductFacts["accent"];
@@ -42,4 +43,19 @@ export function accentField(accent: Accent): FieldColours {
     case "teal":
       return ["#0f3440", "#1e7188", "#7fb8c4", "#efe9dc"];
   }
+}
+
+/**
+ * The colours of an accent as CSS custom properties: --colour, and --field-1 to --field-4 for the moving accent
+ * (.pm-live-accent) and the lines of the home page.
+ */
+export function accentStyle(accent: Accent): CSSProperties {
+  const [deep, middle, light, pale] = accentField(accent);
+  return {
+    "--colour": accentColour(accent),
+    "--field-1": deep,
+    "--field-2": middle,
+    "--field-3": light,
+    "--field-4": pale,
+  } as CSSProperties;
 }

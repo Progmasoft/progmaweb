@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { ReactNode } from "react";
+import { accentStyle } from "@/lib/brand-colours";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 import type { Locale } from "@/lib/localization";
@@ -64,13 +65,13 @@ export function CatalogPage({
   children: ReactNode;
 }) {
   return (
-    <div className="pm-page">
+    <div className="pm-page pm-catalog">
       <SiteHeader locale={locale} />
       <main>
         <section className="pm-hero">
           <div className="pm-shell pm-product-hero">
             <p className="eyebrow">{catalog.eyebrow}</p>
-            <h1>{title}</h1>
+            <h1 className="pm-serif">{title}</h1>
             <p className="pm-lede">{description}</p>
             <nav className="pm-views" aria-label={catalog.views.label}>
               {(Object.keys(viewPaths) as CatalogView[]).map((name) => (
@@ -92,8 +93,68 @@ export function CatalogPage({
   );
 }
 
-/** Projects as a table: name and tagline, category, language, status, latest release. */
-export function ProductTable({
+/**
+ * One project as a card: its moving colour, status, name and tagline, then its category, language and latest
+ * release. The name links to the project's page and the whole card answers to it; the release has its own link.
+ */
+function ProductCard({
+  slug,
+  locale,
+  catalog,
+}: {
+  slug: ProductSlug;
+  locale: Locale;
+  catalog: CatalogMessages;
+}) {
+  const product = products[slug];
+  const release = product.latestRelease;
+  return (
+    <article className="pm-product-card">
+      <span
+        className="pm-product-field pm-live-accent"
+        style={accentStyle(product.accent)}
+        aria-hidden="true"
+      />
+      <div className="pm-product-body">
+        <StatusBadge status={product.status} catalog={catalog} />
+        <h3 className="pm-serif">
+          <a className="pm-product-link" href={`/${slug}`}>
+            {product.name}
+          </a>
+        </h3>
+        <p>{catalog.products[slug].tagline}</p>
+        <dl className="pm-product-facts">
+          <div>
+            <dt>{catalog.table.category}</dt>
+            <dd>{catalog.categories[product.category]}</dd>
+          </div>
+          <div>
+            <dt>{catalog.table.language}</dt>
+            <dd>
+              <bdi dir="ltr">{product.language}</bdi>
+            </dd>
+          </div>
+          <div>
+            <dt>{catalog.table.release}</dt>
+            <dd>
+              {release ? (
+                <a className="pm-product-release" href={release.url}>
+                  <bdi>{release.version}</bdi> ·{" "}
+                  {formatDay(locale, release.date)}
+                </a>
+              ) : (
+                catalog.facts.none
+              )}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+  );
+}
+
+/** Projects as a grid of cards. */
+export function ProductCards({
   slugs,
   locale,
   catalog,
@@ -103,51 +164,10 @@ export function ProductTable({
   catalog: CatalogMessages;
 }) {
   return (
-    <div className="pm-table-wrap">
-      <table className="pm-table">
-        <thead>
-          <tr>
-            <th scope="col">{catalog.table.name}</th>
-            <th scope="col">{catalog.table.category}</th>
-            <th scope="col">{catalog.table.language}</th>
-            <th scope="col">{catalog.table.status}</th>
-            <th scope="col">{catalog.table.release}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {slugs.map((slug) => {
-            const product = products[slug];
-            const release = product.latestRelease;
-            return (
-              <tr key={slug}>
-                <th scope="row">
-                  <a href={`/${slug}`}>{product.name}</a>
-                  <span>{catalog.products[slug].tagline}</span>
-                </th>
-                <td data-label={catalog.table.category}>
-                  {catalog.categories[product.category]}
-                </td>
-                <td data-label={catalog.table.language}>
-                  <bdi dir="ltr">{product.language}</bdi>
-                </td>
-                <td data-label={catalog.table.status}>
-                  <StatusBadge status={product.status} catalog={catalog} />
-                </td>
-                <td data-label={catalog.table.release}>
-                  {release ? (
-                    <a href={release.url}>
-                      <bdi>{release.version}</bdi> ·{" "}
-                      {formatDay(locale, release.date)}
-                    </a>
-                  ) : (
-                    catalog.facts.none
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+    <div className="pm-product-grid">
+      {slugs.map((slug) => (
+        <ProductCard key={slug} slug={slug} locale={locale} catalog={catalog} />
+      ))}
     </div>
   );
 }
@@ -156,30 +176,20 @@ export function ProductTable({
 export function ProductGroup({
   title,
   slugs,
+  locale,
   catalog,
 }: {
   title: string;
   slugs: readonly ProductSlug[];
+  locale: Locale;
   catalog: CatalogMessages;
 }) {
   return (
     <section className="pm-group">
-      <h2>
+      <h2 className="pm-serif">
         {title} <span className="pm-count">{slugs.length}</span>
       </h2>
-      <div className="pm-product-grid">
-        {slugs.map((slug) => {
-          const product = products[slug];
-          return (
-            <a className="pm-card pm-product-card" href={`/${slug}`} key={slug}>
-              <span className={`pm-accent pm-accent-${product.accent}`} />
-              <StatusBadge status={product.status} catalog={catalog} />
-              <h3>{product.name}</h3>
-              <p>{catalog.products[slug].tagline}</p>
-            </a>
-          );
-        })}
-      </div>
+      <ProductCards slugs={slugs} locale={locale} catalog={catalog} />
     </section>
   );
 }
