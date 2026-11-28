@@ -22,8 +22,10 @@ interface FlowProps {
 const vertex = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
 
 /*
- * Layered value noise, warped by itself, mapped onto four colours: a slow
- * field like sand under water.
+ * Smoke: layered value noise that drifts upwards and to one side, warped by a
+ * second field that turns as it goes, so the colour rises and curls like smoke.
+ * Its densest parts carry the lighter colours as wisps, and the top of the
+ * field leans towards the palest colour.
  */
 const fragment = `precision mediump float;
 uniform vec2 r;uniform float t;uniform float s;
@@ -31,16 +33,19 @@ uniform vec3 c0;uniform vec3 c1;uniform vec3 c2;uniform vec3 c3;
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
 return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
-float b(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
-void main(){vec2 u=gl_FragCoord.xy/r.y;vec2 p=u*1.6+s;
-vec2 q=vec2(b(p+vec2(0.,t*.05)),b(p+vec2(5.2,1.3)-t*.04));
-vec2 w=vec2(b(p+3.*q+vec2(1.7,9.2)+t*.03),b(p+3.*q+vec2(8.3,2.8)));
-float v=b(p+2.5*w);
-float band=smoothstep(.25,.75,gl_FragCoord.y/r.y+.25*(v-.5));
-vec3 col=mix(c0,c1,smoothstep(.2,.6,v));
-col=mix(col,c2,smoothstep(.45,.85,length(w)*.9));
-col=mix(col,c3,band*.55);
-col+=(h(gl_FragCoord.xy+t)-.5)*.035;
+float b(vec2 p){float v=0.,a=.5;mat2 m=mat2(.8,.6,-.6,.8);
+for(int i=0;i<5;i++){v+=a*n(p);p=m*p*2.02+vec2(1.7,9.2);a*=.5;}return v;}
+void main(){vec2 u=gl_FragCoord.xy/r.y;vec2 p=u*1.4+s;float T=t*.35;
+vec2 d=vec2(T*.15,-T*.45);
+vec2 q=vec2(b(p+d+vec2(0.,T*.2)),b(p+d+vec2(5.2,1.3)-vec2(T*.17,0.)));
+vec2 w=vec2(b(p+d*1.3+2.2*q+vec2(1.7,9.2)+vec2(0.,T*.3)),b(p+d*1.3+2.2*q+vec2(8.3,2.8)-vec2(T*.25,0.)));
+float v=b(p+d*.8+3.*w);
+float wisp=smoothstep(.35,.95,v+.25*length(q-w));
+float band=smoothstep(.15,.85,gl_FragCoord.y/r.y+.3*(v-.5));
+vec3 col=mix(c0,c1,smoothstep(.15,.65,v));
+col=mix(col,c2,wisp*.85);
+col=mix(col,c3,band*.5*smoothstep(.3,.8,v));
+col+=(h(gl_FragCoord.xy+fract(t))-.5)*.03;
 gl_FragColor=vec4(col,1.);}`;
 
 function rgb(hex: string): number[] {

@@ -45,7 +45,7 @@ export default async function NewsPage() {
               <Flow
                 colours={accentField(productFacts(first.product).accent)}
                 seed={4.2}
-                speed={1.8}
+                speed={0.6}
                 className="pm-news-lead-field"
               />
               <span className="pm-news-lead-copy">

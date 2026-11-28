@@ -231,7 +231,7 @@ export default async function Homepage() {
                     accentField("slate")
                   }
                   seed={index * 3.7 + 1}
-                  speed={0.9}
+                  speed={0.35}
                   className="pm-learn-art"
                 />
                 <h3>{title}</h3>

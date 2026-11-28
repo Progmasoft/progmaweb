@@ -85,7 +85,7 @@ export function FeatureCarousel({
       <Flow
         colours={item.colours}
         seed={2.4}
-        speed={1.6}
+        speed={0.9}
         paused={paused}
         className="pm-feature-field"
       />
