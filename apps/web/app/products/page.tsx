@@ -8,14 +8,16 @@ import Link from "next/link";
 import {
   CatalogPage,
   formatDay,
-  ProductTable,
+  ProductCards,
 } from "@/components/ProductCatalog";
+import { accentStyle } from "@/lib/brand-colours";
 import { getLocale } from "@/lib/locale.server";
 import {
   filterProducts,
   getCatalogMessages,
   parseProductFilter,
   productCategories,
+  productFacts,
   productLanguages,
   productSlugs,
   productStatuses,
@@ -70,8 +72,8 @@ export default async function ProductsPage({ searchParams }: CatalogProps) {
           <dl className="pm-stats">
             {stats.map(([label, value]) => (
               <div key={label}>
-                <dt>{label}</dt>
                 <dd>{value}</dd>
+                <dt>{label}</dt>
               </div>
             ))}
           </dl>
@@ -136,17 +138,22 @@ export default async function ProductsPage({ searchParams }: CatalogProps) {
               : catalog.search.results.replace("{count}", String(found.length))}
           </p>
           {found.length > 0 ? (
-            <ProductTable slugs={found} locale={locale} catalog={catalog} />
+            <ProductCards slugs={found} locale={locale} catalog={catalog} />
           ) : null}
 
           <section className="pm-group">
-            <h2>{catalog.latestReleases}</h2>
+            <h2 className="pm-serif">{catalog.latestReleases}</h2>
             {latest.length === 0 ? (
               <p>{catalog.noReleases}</p>
             ) : (
               <ul className="pm-releases">
                 {latest.map(({ slug, release }) => (
                   <li key={`${slug}-${release.version}`}>
+                    <span
+                      className="pm-release-dot pm-live-accent"
+                      style={accentStyle(productFacts(slug).accent)}
+                      aria-hidden="true"
+                    />
                     <a href={release.url}>
                       {products[slug].name} <bdi>{release.version}</bdi>
                     </a>

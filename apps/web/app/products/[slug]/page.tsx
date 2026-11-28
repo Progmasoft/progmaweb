@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { Metadata } from "next";
+import { accentStyle } from "@/lib/brand-colours";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -76,7 +77,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </ul>
           </div>
           <aside className="pm-aside">
-            <span className={`pm-accent pm-accent-${product.accent}`} />
+            <span
+              className="pm-accent pm-live-accent"
+              style={accentStyle(product.accent)}
+              aria-hidden="true"
+            />
             <dl className="pm-facts">
               <div>
                 <dt>{catalog.facts.status}</dt>

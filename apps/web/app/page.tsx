@@ -13,7 +13,7 @@ import {
 } from "@/components/site/FeatureCarousel";
 import { Flow, type FlowColours } from "@/components/site/Flow";
 import { Reveal } from "@/components/site/Reveal";
-import { accentColour, accentField } from "@/lib/brand-colours";
+import { accentField, accentStyle } from "@/lib/brand-colours";
 import { getHomeMessages, productLine } from "@/lib/home-messages";
 import { getLocale } from "@/lib/locale.server";
 import { getMessages } from "@/lib/localization";
@@ -146,12 +146,8 @@ export default async function Homepage() {
                 >
                   <p className="pm-news-meta">
                     <span
-                      className="pm-chip"
-                      style={{
-                        background: accentColour(
-                          productFacts(article.product).accent,
-                        ),
-                      }}
+                      className="pm-chip pm-live-accent"
+                      style={accentStyle(productFacts(article.product).accent)}
                       aria-hidden="true"
                     />
                     <span>{home.news.category}</span>
@@ -206,11 +202,7 @@ export default async function Homepage() {
                 key={slug}
                 className={`pm-scatter-item pm-scatter-${placements[index % placements.length]}`}
                 data-reveal
-                style={
-                  {
-                    "--colour": accentColour(productFacts(slug).accent),
-                  } as CSSProperties
-                }
+                style={accentStyle(productFacts(slug).accent)}
               >
                 <h3 className="pm-scatter-name pm-serif">
                   {productFacts(slug).name}
