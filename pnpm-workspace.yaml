@@ -11,7 +11,7 @@ overrides:
   # Development tooling resolves an exact 5.0.9 through minimatch, which has
   # published denial-of-service advisories fixed by 5.0.12. Remove this once
   # minimatch depends on a fixed release itself.
-  "brace-expansion@>=5.0.0 <5.0.12": 5.0.12
+  "brace-expansion@>=5.0.0 <5.0.12": 5.0.13
   # eslint-plugin-react-hooks resolves zod 4.4.3, which can exhaust memory while
   # validating oversized constrained collections (fixed in 4.6.6). The plugin
   # accepts any zod 4; remove this once it resolves a fixed release itself.
@@ -22,8 +22,8 @@ overrides:
   # pattern without bound. test-exclude uses only their stable glob and match
   # calls, which the fixed majors keep. Remove these once test-exclude
   # depends on fixed releases itself.
-  "glob@>=9.0.0 <14.0.2": 14.0.4
-  "minimatch@>=7.0.0 <11.0.1": 11.0.5
+  "glob@>=9.0.0 <14.0.2": 14.0.6
+  "minimatch@>=7.0.0 <11.0.1": 11.0.9
 auditConfig:
   ignoreGhsas:
     # braces <= 3.0.3: stack exhaustion on deeply nested brace patterns. No
