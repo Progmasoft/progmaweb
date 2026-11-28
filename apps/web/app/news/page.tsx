@@ -9,7 +9,14 @@ import { Flow } from "@/components/site/Flow";
 import { Reveal } from "@/components/site/Reveal";
 import { accentField, accentStyle } from "@/lib/brand-colours";
 import { getLocale } from "@/lib/locale.server";
-import { articles, articleUrl, getNewsMessages, articleText } from "@/lib/news";
+import { NewsRail } from "@/components/site/NewsRail";
+import {
+  articleText,
+  articleUrl,
+  getNewsMessages,
+  leadArticle,
+  sideArticles,
+} from "@/lib/news";
 import { productFacts } from "@/lib/products";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,13 +29,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * news.progmasoft.com: the newest article large, over a field in the colour
- * of its product, then every other article as a card.
+ * news.progmasoft.com: the article that matters most large, over a field in
+ * the colour of its product, then the other articles in a rail that scrolls
+ * sideways.
  */
 export default async function NewsPage() {
   const locale = await getLocale();
   const news = getNewsMessages(locale);
-  const [first, ...rest] = articles;
+  const first = leadArticle();
+  const rest = sideArticles();
   return (
     <div className="pm-page pm-home pm-news-site">
       <SiteHeader locale={locale} />
@@ -61,37 +70,41 @@ export default async function NewsPage() {
           </section>
         ) : null}
 
-        <section className="pm-shell pm-news-list" aria-label={news.latest}>
-          <ul>
-            {rest.map((article, index) => (
-              <li
-                key={article.slug}
-                data-reveal
-                style={{ "--i": index } as React.CSSProperties}
-              >
-                <a href={articleUrl(article)}>
-                  <span className="pm-news-meta">
-                    <span
-                      className="pm-chip pm-live-accent"
-                      style={accentStyle(productFacts(article.product).accent)}
-                      aria-hidden="true"
-                    />
-                    <span>{productFacts(article.product).name}</span>
-                    <time dateTime={article.date}>
-                      {formatDay(locale, article.date)}
-                    </time>
-                  </span>
-                  <strong className="pm-serif">
-                    {articleText(article, locale).title}
-                  </strong>
-                  <span className="pm-news-text">
-                    {articleText(article, locale).summary}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {rest.length > 0 ? (
+          <section className="pm-shell pm-news-list" data-reveal>
+            <NewsRail
+              label={news.latest}
+              previous={news.previous}
+              next={news.next}
+            >
+              {rest.map((article) => (
+                <li key={article.slug}>
+                  <a href={articleUrl(article)}>
+                    <span className="pm-news-meta">
+                      <span
+                        className="pm-chip pm-live-accent"
+                        style={accentStyle(
+                          productFacts(article.product).accent,
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span>{productFacts(article.product).name}</span>
+                      <time dateTime={article.date}>
+                        {formatDay(locale, article.date)}
+                      </time>
+                    </span>
+                    <strong className="pm-serif">
+                      {articleText(article, locale).title}
+                    </strong>
+                    <span className="pm-news-text">
+                      {articleText(article, locale).summary}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </NewsRail>
+          </section>
+        ) : null}
       </main>
       <Footer locale={locale} />
     </div>
