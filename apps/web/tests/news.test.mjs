@@ -73,3 +73,23 @@ test("news.progmasoft.com serves the list and each article", () => {
   expect(newsRoute("/Tazel")).toBe(null);
   expect(findArticle(first.slug)).toBe(first);
 });
+
+test("the lead is the newest article marked lead, and the rail holds the rest", async () => {
+  const { leadArticle, sideArticles } = await import("../lib/news.ts");
+  const lead = leadArticle();
+  const marked = articles.filter((article) => article.lead);
+  expect(lead).toBe(marked.length > 0 ? marked[0] : articles[0]);
+  const side = sideArticles();
+  expect(side).not.toContain(lead);
+  expect(side.length).toBe(articles.length - 1);
+  expect([...side].sort((a, b) => b.date.localeCompare(a.date))).toEqual(side);
+});
+
+test("the rail's buttons are named in every language", () => {
+  for (const locale of supportedLocales) {
+    const news = getNewsMessages(locale);
+    expect(news.previous.length).toBeGreaterThan(0);
+    expect(news.next.length).toBeGreaterThan(0);
+    expect(news.previous).not.toBe(news.next);
+  }
+});

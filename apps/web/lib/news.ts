@@ -16,6 +16,11 @@ interface ArticleSource {
   product: ProductSlug;
   /** The release the article announces, when it announces one. */
   release?: string;
+  /**
+   * Set on the article that matters most: news.progmasoft.com shows it large
+   * above the others. Of several, the newest; of none, the newest article.
+   */
+  lead?: true;
   text: Record<Locale, ArticleText>;
 }
 
@@ -40,6 +45,7 @@ const sources: ArticleSource[] = [
   {
     date: "2026-11-27",
     product: "tazel",
+    lead: true,
     release: "0.2.0",
     text: {
       "en-US": {
@@ -185,6 +191,17 @@ export const articles: Article[] = sources
   .map((source) => ({ ...source, slug: slugOf(source.text["en-US"].title) }))
   .sort((a, b) => b.date.localeCompare(a.date));
 
+/** The article news.progmasoft.com shows large: the newest one marked lead, or else the newest. */
+export function leadArticle(): Article | undefined {
+  return articles.find((article) => article.lead) ?? articles[0];
+}
+
+/** Every article but the lead, newest first: the rail under it. */
+export function sideArticles(): Article[] {
+  const lead = leadArticle();
+  return articles.filter((article) => article !== lead);
+}
+
 export function findArticle(slug: string): Article | undefined {
   return articles.find((article) => article.slug === slug);
 }
@@ -205,6 +222,9 @@ interface NewsMessages {
   title: string;
   description: string;
   latest: string;
+  /** The buttons of the rail of articles. */
+  previous: string;
+  next: string;
   back: string;
   notes: string;
   product: string;
@@ -216,6 +236,8 @@ const newsMessages: Record<Locale, NewsMessages> = {
     title: "News",
     description: "Releases and announcements from Progmasoft.",
     latest: "Latest news",
+    previous: "Previous articles",
+    next: "Next articles",
     back: "All news",
     notes: "Release notes",
     product: "About {name}",
@@ -225,6 +247,8 @@ const newsMessages: Record<Locale, NewsMessages> = {
     title: "Neuigkeiten",
     description: "Versionen und Ankündigungen von Progmasoft.",
     latest: "Neueste Meldungen",
+    previous: "Vorherige Meldungen",
+    next: "Nächste Meldungen",
     back: "Alle Neuigkeiten",
     notes: "Versionshinweise",
     product: "Über {name}",
@@ -234,6 +258,8 @@ const newsMessages: Record<Locale, NewsMessages> = {
     title: "Новости",
     description: "Выпуски и объявления Progmasoft.",
     latest: "Последние новости",
+    previous: "Предыдущие новости",
+    next: "Следующие новости",
     back: "Все новости",
     notes: "Примечания к выпуску",
     product: "О {name}",
@@ -243,6 +269,8 @@ const newsMessages: Record<Locale, NewsMessages> = {
     title: "Actualités",
     description: "Versions et annonces de Progmasoft.",
     latest: "Dernières actualités",
+    previous: "Actualités précédentes",
+    next: "Actualités suivantes",
     back: "Toutes les actualités",
     notes: "Notes de version",
     product: "À propos de {name}",
