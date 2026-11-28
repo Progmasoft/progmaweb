@@ -245,3 +245,8 @@ export function releases(): { slug: ProductSlug; release: ProductRelease }[] {
     })
     .sort((a, b) => b.release.date.localeCompare(a.release.date));
 }
+
+/** The facts of one project of the catalog. */
+export function productFacts(slug: ProductSlug): ProductFacts {
+  return products[slug];
+}

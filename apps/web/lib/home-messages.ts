@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { Locale } from "./localization";
+import type { ProductSlug } from "./products";
 
 /**
- * The text of progmasoft.com. The page describes Progmasoft as a pool of
- * technology areas, not as a list of products: the products have their own
- * catalog on product.progmasoft.com.
+ * The text of progmasoft.com, which tells Progmasoft: a statement, the latest
+ * release as a feature, the news, what it makes, how it works and how to reach
+ * it. Names, versions, dates and links come from the catalog.
  */
 interface HomeMessages {
   navigation: {
@@ -14,348 +15,356 @@ interface HomeMessages {
     products: string;
     developers: string;
   };
-  hero: {
-    eyebrow: string;
-    titleStart: string;
-    titleAccent: string;
-    description: string;
-    explore: string;
-    products: string;
-    poolLabel: string;
+  /** The opening paragraph: a bold first sentence, then the rest. */
+  statement: { lead: string; rest: string };
+  feature: {
+    readMore: string;
+    /** "Get {name}". */
+    get: string;
+    follow: string;
+    label: string;
+    pause: string;
+    play: string;
   };
-  pool: {
-    eyebrow: string;
+  news: {
     title: string;
-    description: string;
-    areas: [title: string, description: string][];
-    catalog: string;
-    catalogLink: string;
+    category: string;
+    product: string;
+    notes: string;
+    read: string;
+    all: string;
   };
+  showcase: { title: string; learnMore: string };
+  /** One line per product, as short as a headline. */
+  lines: Record<ProductSlug, string>;
   principles: {
-    eyebrow: string;
     title: string;
-    items: [title: string, description: string][];
+    items: [title: string, text: string][];
   };
-  developers: {
-    eyebrow: string;
+  contact: {
     title: string;
-    description: string;
-    console: string;
-    account: string;
+    items: [title: string, text: string, action: string][];
   };
 }
 
 export const homeMessages: Record<Locale, HomeMessages> = {
   "en-US": {
     navigation: {
-      technology: "Technology",
+      technology: "News",
       products: "Products",
       developers: "Developers",
     },
-    hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Technology built to",
-      titleAccent: "last and to explain itself.",
-      description:
-        "Progmasoft designs build systems, testing tools, agentic development environments, data infrastructure and the services around them. Everything shares one discipline: explicit contracts, real verification and names that mean what they say.",
-      explore: "Explore the technology",
-      products: "See the products",
-      poolLabel: "Areas of the Progmasoft technology pool",
+    statement: {
+      lead: "Tools that turn source into running software.",
+      rest: "Progmasoft is an independent software organization. We build them to do exactly what they say, to explain what they did, and to stay maintained for as long as people rely on them.",
     },
-    pool: {
-      eyebrow: "Technology pool",
-      title: "Areas, not just products.",
-      description:
-        "Products come and grow; the technology underneath them is what we keep building. Each area is shared by everything Progmasoft makes.",
-      areas: [
-        [
-          "Data infrastructure",
-          "Columnar in-memory formats and engines for large data on the JVM.",
-        ],
-        [
-          "Build and packages",
-          "Reproducible builds, dependency resolution, lockfiles and a package registry.",
-        ],
-        [
-          "Developer tools",
-          "Formatters, linters and agentic development environments.",
-        ],
-        [
-          "Quality and testing",
-          "Property-based, stateful and mutation testing, coverage and test selection.",
-        ],
-        [
-          "Identity and access",
-          "Progmasoft accounts, OAuth 2.1 and OpenID Connect for every application.",
-        ],
-        [
-          "Infrastructure",
-          "Services Progmasoft operates itself: hosting, mail, registries and continuous integration.",
-        ],
-      ],
-      catalog: "Looking for a specific product?",
-      catalogLink: "Open the product catalog",
+    feature: {
+      readMore: "Read more",
+      get: "Get {name}",
+      follow: "Source on GitHub",
+      label: "Products",
+      pause: "Pause the animation",
+      play: "Play the animation",
+    },
+    news: {
+      title: "News",
+      category: "Release",
+      product: "Product",
+      notes: "Release notes",
+      read: "Read the announcement",
+      all: "All news",
+    },
+    showcase: { title: "What we make", learnMore: "Learn more" },
+    lines: {
+      tazel: "Builds C, C++ and Zig. Redoes only what changed.",
+      opentala: "A kernel that speaks Darwin. It boots today.",
+      catch3: "C++ tests that hunt for the failing case.",
+      agenceland: "An IDE where every agent works in its own worktree.",
+      etincelle: "SQL over large data, on the JVM.",
+      archer: "Columnar data in memory, for Java.",
     },
     principles: {
-      eyebrow: "How we build",
-      title: "Engineering that stays legible.",
+      title: "How we work",
       items: [
         [
-          "Explicit contracts",
-          "Typed boundaries make ownership, compatibility and failure behaviour visible.",
+          "Our mission",
+          "Make building software dependable, from the first command to the last release.",
         ],
         [
-          "Real verification",
-          "Tests exercise installed artifacts, production-shaped paths and observable behaviour.",
+          "Transparent, always",
+          "We say what we decided, what changed and why, before and after every release.",
         ],
         [
-          "Durable names",
-          "Public vocabulary follows the model, not the history of an implementation.",
+          "Secure by default",
+          "Signed results, checked downloads, and settings that start safe rather than open.",
+        ],
+        [
+          "Made to last",
+          "Each release names what it was tested on, and earlier versions stay documented.",
         ],
       ],
     },
-    developers: {
-      eyebrow: "For developers",
-      title: "Build on Progmasoft.",
-      description:
-        "Sign people in with their Progmasoft account through OAuth 2.1, and manage the tokens of your applications in the Progmasoft Console.",
-      console: "Open the Console",
-      account: "Progmasoft account",
+    contact: {
+      title: "Get in touch",
+      items: [
+        [
+          "Ask us anything",
+          "Questions, problems and ideas reach the people who build the software.",
+          "Write to us",
+        ],
+        [
+          "Report a vulnerability",
+          "Tell us privately; we answer, fix it and say what happened.",
+          "Security Policy",
+        ],
+        [
+          "Follow the work",
+          "Releases, issues and discussions of our public projects.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "de-DE": {
     navigation: {
-      technology: "Technologie",
+      technology: "Neuigkeiten",
       products: "Produkte",
       developers: "Entwickler",
     },
-    hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Technologie, gebaut um",
-      titleAccent: "zu bleiben und sich zu erklären.",
-      description:
-        "Progmasoft entwirft Build-Systeme, Testwerkzeuge, agentische Entwicklungsumgebungen, Dateninfrastruktur und die Dienste um sie herum. Alles folgt einer Disziplin: explizite Verträge, echte Prüfung und Namen, die sagen, was sie meinen.",
-      explore: "Technologie entdecken",
-      products: "Zu den Produkten",
-      poolLabel: "Bereiche des Progmasoft-Technologiepools",
+    statement: {
+      lead: "Werkzeuge, die aus Quellcode laufende Software machen.",
+      rest: "Progmasoft ist eine unabhängige Software-Organisation. Wir bauen sie so, dass sie genau tun, was sie sagen, erklären, was sie getan haben, und gepflegt bleiben, solange Menschen sich auf sie verlassen.",
     },
-    pool: {
-      eyebrow: "Technologiepool",
-      title: "Bereiche, nicht nur Produkte.",
-      description:
-        "Produkte entstehen und wachsen; die Technologie darunter bauen wir dauerhaft weiter. Jeder Bereich trägt alles, was Progmasoft macht.",
-      areas: [
-        [
-          "Dateninfrastruktur",
-          "Spaltenorientierte In-Memory-Formate und Engines für große Datenmengen auf der JVM.",
-        ],
-        [
-          "Build und Pakete",
-          "Reproduzierbare Builds, Abhängigkeitsauflösung, Lockfiles und eine Paketregistrierung.",
-        ],
-        [
-          "Entwicklerwerkzeuge",
-          "Formatierer, Linter und agentische Entwicklungsumgebungen.",
-        ],
-        [
-          "Qualität und Tests",
-          "Eigenschaftsbasierte, zustandsbehaftete und Mutationstests, Abdeckung und Testauswahl.",
-        ],
-        [
-          "Identität und Zugriff",
-          "Progmasoft-Konten, OAuth 2.1 und OpenID Connect für jede Anwendung.",
-        ],
-        [
-          "Infrastruktur",
-          "Dienste, die Progmasoft selbst betreibt: Hosting, Mail, Registrierungen und kontinuierliche Integration.",
-        ],
-      ],
-      catalog: "Suchen Sie ein bestimmtes Produkt?",
-      catalogLink: "Produktkatalog öffnen",
+    feature: {
+      readMore: "Mehr lesen",
+      get: "{name} holen",
+      follow: "Quellcode auf GitHub",
+      label: "Produkte",
+      pause: "Animation anhalten",
+      play: "Animation abspielen",
+    },
+    news: {
+      title: "Neuigkeiten",
+      category: "Version",
+      product: "Produkt",
+      notes: "Versionshinweise",
+      read: "Ankündigung lesen",
+      all: "Alle Neuigkeiten",
+    },
+    showcase: { title: "Was wir machen", learnMore: "Mehr erfahren" },
+    lines: {
+      tazel: "Baut C, C++ und Zig. Und nur, was sich geändert hat.",
+      opentala: "Ein Kernel, der Darwin spricht. Er bootet schon heute.",
+      catch3: "C++-Tests, die den fehlschlagenden Fall aufspüren.",
+      agenceland:
+        "Eine IDE, in der jeder Agent in seinem eigenen Worktree arbeitet.",
+      etincelle: "SQL über große Datenmengen, auf der JVM.",
+      archer: "Spaltenorientierte Daten im Speicher, für Java.",
     },
     principles: {
-      eyebrow: "Wie wir bauen",
-      title: "Technik, die lesbar bleibt.",
+      title: "Wie wir arbeiten",
       items: [
         [
-          "Explizite Verträge",
-          "Typisierte Grenzen machen Zuständigkeit, Kompatibilität und Fehlerverhalten sichtbar.",
+          "Unsere Mission",
+          "Software zu bauen soll verlässlich sein, vom ersten Befehl bis zur letzten Version.",
         ],
         [
-          "Echte Prüfung",
-          "Tests prüfen installierte Artefakte, produktionsnahe Wege und beobachtbares Verhalten.",
+          "Immer transparent",
+          "Wir sagen, was wir entschieden haben, was sich geändert hat und warum, vor und nach jeder Version.",
         ],
         [
-          "Beständige Namen",
-          "Das öffentliche Vokabular folgt dem Modell, nicht der Geschichte einer Implementierung.",
+          "Sicher von Anfang an",
+          "Signierte Ergebnisse, geprüfte Downloads und Einstellungen, die sicher statt offen beginnen.",
+        ],
+        [
+          "Gemacht, um zu bleiben",
+          "Jede Version nennt, worauf sie getestet wurde, und frühere Versionen bleiben dokumentiert.",
         ],
       ],
     },
-    developers: {
-      eyebrow: "Für Entwickler",
-      title: "Mit Progmasoft entwickeln.",
-      description:
-        "Melden Sie Menschen mit ihrem Progmasoft-Konto über OAuth 2.1 an und verwalten Sie die Tokens Ihrer Anwendungen in der Progmasoft Console.",
-      console: "Console öffnen",
-      account: "Progmasoft-Konto",
+    contact: {
+      title: "Kontakt",
+      items: [
+        [
+          "Fragen Sie uns",
+          "Fragen, Probleme und Ideen erreichen die Menschen, die die Software bauen.",
+          "Schreiben Sie uns",
+        ],
+        [
+          "Eine Schwachstelle melden",
+          "Sagen Sie es uns vertraulich; wir antworten, beheben sie und sagen, was geschehen ist.",
+          "Sicherheitsrichtlinie",
+        ],
+        [
+          "Die Arbeit verfolgen",
+          "Versionen, Issues und Diskussionen unserer öffentlichen Projekte.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "ru-RU": {
     navigation: {
-      technology: "Технологии",
+      technology: "Новости",
       products: "Продукты",
       developers: "Разработчикам",
     },
-    hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Технологии, созданные,",
-      titleAccent: "чтобы служить долго и быть понятными.",
-      description:
-        "Progmasoft создаёт системы сборки, инструменты тестирования, агентные среды разработки, инфраструктуру данных и сервисы вокруг них. Всё подчиняется одной дисциплине: явные контракты, настоящая проверка и имена, которые значат то, что говорят.",
-      explore: "Изучить технологии",
-      products: "Перейти к продуктам",
-      poolLabel: "Направления технологического пула Progmasoft",
+    statement: {
+      lead: "Инструменты, которые превращают исходный код в работающие программы.",
+      rest: "Progmasoft — независимая организация, создающая программное обеспечение. Мы делаем их так, чтобы они делали ровно то, что обещают, объясняли, что сделали, и поддерживались, пока на них полагаются.",
     },
-    pool: {
-      eyebrow: "Технологический пул",
-      title: "Направления, а не только продукты.",
-      description:
-        "Продукты появляются и растут; технологии под ними мы развиваем постоянно. Каждое направление служит всему, что делает Progmasoft.",
-      areas: [
-        [
-          "Инфраструктура данных",
-          "Колоночные форматы данных в памяти и движки для больших данных на JVM.",
-        ],
-        [
-          "Сборка и пакеты",
-          "Воспроизводимые сборки, разрешение зависимостей, lock-файлы и реестр пакетов.",
-        ],
-        [
-          "Инструменты разработчика",
-          "Форматировщики, линтеры и агентные среды разработки.",
-        ],
-        [
-          "Качество и тестирование",
-          "Тестирование на основе свойств, с состоянием и мутационное, покрытие и выбор тестов.",
-        ],
-        [
-          "Идентификация и доступ",
-          "Аккаунты Progmasoft, OAuth 2.1 и OpenID Connect для любого приложения.",
-        ],
-        [
-          "Инфраструктура",
-          "Сервисы, которыми Progmasoft управляет сам: хостинг, почта, реестры и непрерывная интеграция.",
-        ],
-      ],
-      catalog: "Ищете конкретный продукт?",
-      catalogLink: "Открыть каталог продуктов",
+    feature: {
+      readMore: "Подробнее",
+      get: "Скачать {name}",
+      follow: "Исходный код на GitHub",
+      label: "Продукты",
+      pause: "Остановить анимацию",
+      play: "Запустить анимацию",
+    },
+    news: {
+      title: "Новости",
+      category: "Выпуск",
+      product: "Продукт",
+      notes: "Примечания к выпуску",
+      read: "Читать объявление",
+      all: "Все новости",
+    },
+    showcase: { title: "Что мы делаем", learnMore: "Подробнее" },
+    lines: {
+      tazel: "Собирает C, C++ и Zig. Пересобирает только изменённое.",
+      opentala: "Ядро, говорящее на языке Darwin. Оно уже загружается.",
+      catch3: "Тесты C++, которые находят случай, где всё ломается.",
+      agenceland:
+        "Среда разработки, где каждый агент работает в своём worktree.",
+      etincelle: "SQL над большими данными, на JVM.",
+      archer: "Колоночные данные в памяти, для Java.",
     },
     principles: {
-      eyebrow: "Как мы работаем",
-      title: "Инженерия, которая остаётся понятной.",
+      title: "Как мы работаем",
       items: [
         [
-          "Явные контракты",
-          "Типизированные границы делают видимыми ответственность, совместимость и поведение при ошибках.",
+          "Наша миссия",
+          "Сделать создание программ надёжным, от первой команды до последнего выпуска.",
         ],
         [
-          "Настоящая проверка",
-          "Тесты проверяют установленные артефакты, пути как в продакшене и наблюдаемое поведение.",
+          "Всегда открыто",
+          "Мы говорим, что решили, что изменилось и почему, до и после каждого выпуска.",
         ],
         [
-          "Устойчивые имена",
-          "Публичный словарь следует модели, а не истории реализации.",
+          "Безопасно по умолчанию",
+          "Подписанные результаты, проверенные загрузки и настройки, которые начинают с безопасного.",
+        ],
+        [
+          "Сделано надолго",
+          "Каждый выпуск называет, на чём он проверен, а прежние версии остаются описанными.",
         ],
       ],
     },
-    developers: {
-      eyebrow: "Разработчикам",
-      title: "Разрабатывайте на Progmasoft.",
-      description:
-        "Позвольте людям входить с аккаунтом Progmasoft через OAuth 2.1 и управляйте токенами своих приложений в Progmasoft Console.",
-      console: "Открыть Console",
-      account: "Аккаунт Progmasoft",
+    contact: {
+      title: "Связаться с нами",
+      items: [
+        [
+          "Спросите нас",
+          "Вопросы, проблемы и идеи попадают к тем, кто создаёт программы.",
+          "Написать нам",
+        ],
+        [
+          "Сообщить об уязвимости",
+          "Сообщите нам конфиденциально; мы ответим, исправим и расскажем, что произошло.",
+          "Политика безопасности",
+        ],
+        [
+          "Следить за работой",
+          "Выпуски, задачи и обсуждения наших открытых проектов.",
+          "GitHub",
+        ],
+      ],
     },
   },
   "fr-FR": {
     navigation: {
-      technology: "Technologie",
+      technology: "Actualités",
       products: "Produits",
       developers: "Développeurs",
     },
-    hero: {
-      eyebrow: "Progmasoft",
-      titleStart: "Une technologie faite pour",
-      titleAccent: "durer et s’expliquer d’elle-même.",
-      description:
-        "Progmasoft conçoit des systèmes de build, des outils de test, des environnements de développement agentiques, une infrastructure de données et les services qui les entourent. Tout partage une même discipline : des contrats explicites, une vérification réelle et des noms qui disent ce qu’ils désignent.",
-      explore: "Découvrir la technologie",
-      products: "Voir les produits",
-      poolLabel: "Domaines du socle technologique de Progmasoft",
+    statement: {
+      lead: "Des outils qui transforment le code source en logiciel qui tourne.",
+      rest: "Progmasoft est une organisation logicielle indépendante. Nous les construisons pour qu'ils fassent exactement ce qu'ils disent, expliquent ce qu'ils ont fait et restent maintenus tant qu'on compte sur eux.",
     },
-    pool: {
-      eyebrow: "Socle technologique",
-      title: "Des domaines, pas seulement des produits.",
-      description:
-        "Les produits naissent et grandissent ; la technologie qui les porte est ce que nous continuons de construire. Chaque domaine est partagé par tout ce que fait Progmasoft.",
-      areas: [
-        [
-          "Infrastructure de données",
-          "Formats et moteurs en colonnes, en mémoire, pour de grands volumes de données sur la JVM.",
-        ],
-        [
-          "Build et paquets",
-          "Builds reproductibles, résolution des dépendances, fichiers de verrouillage et un registre de paquets.",
-        ],
-        [
-          "Outils pour développeurs",
-          "Formateurs, linters et environnements de développement agentiques.",
-        ],
-        [
-          "Qualité et tests",
-          "Tests fondés sur les propriétés, tests à état et tests de mutation, couverture et sélection des tests.",
-        ],
-        [
-          "Identité et accès",
-          "Comptes Progmasoft, OAuth 2.1 et OpenID Connect pour chaque application.",
-        ],
-        [
-          "Infrastructure",
-          "Des services que Progmasoft exploite lui-même : hébergement, messagerie, registres et intégration continue.",
-        ],
-      ],
-      catalog: "Vous cherchez un produit précis ?",
-      catalogLink: "Ouvrir le catalogue des produits",
+    feature: {
+      readMore: "En savoir plus",
+      get: "Obtenir {name}",
+      follow: "Code source sur GitHub",
+      label: "Produits",
+      pause: "Mettre l'animation en pause",
+      play: "Lancer l'animation",
+    },
+    news: {
+      title: "Actualités",
+      category: "Version",
+      product: "Produit",
+      notes: "Notes de version",
+      read: "Lire l'annonce",
+      all: "Toutes les actualités",
+    },
+    showcase: { title: "Ce que nous faisons", learnMore: "En savoir plus" },
+    lines: {
+      tazel: "Construit C, C++ et Zig. Ne refait que ce qui a changé.",
+      opentala: "Un noyau qui parle Darwin. Il démarre déjà.",
+      catch3: "Des tests C++ qui traquent le cas qui échoue.",
+      agenceland: "Un IDE où chaque agent travaille dans son propre worktree.",
+      etincelle: "Du SQL sur de grands volumes de données, sur la JVM.",
+      archer: "Des données en colonnes en mémoire, pour Java.",
     },
     principles: {
-      eyebrow: "Notre façon de construire",
-      title: "Une ingénierie qui reste lisible.",
+      title: "Notre façon de travailler",
       items: [
         [
-          "Des contrats explicites",
-          "Des frontières typées rendent visibles la propriété, la compatibilité et le comportement en cas d’échec.",
+          "Notre mission",
+          "Rendre fiable la construction du logiciel, de la première commande à la dernière version.",
         ],
         [
-          "Une vérification réelle",
-          "Les tests éprouvent les artefacts installés, des chemins semblables à la production et le comportement observable.",
+          "Transparents, toujours",
+          "Nous disons ce que nous avons décidé, ce qui a changé et pourquoi, avant et après chaque version.",
         ],
         [
-          "Des noms durables",
-          "Le vocabulaire public suit le modèle, et non l’histoire d’une implémentation.",
+          "Sûrs par défaut",
+          "Des résultats signés, des téléchargements vérifiés et des réglages qui commencent sûrs plutôt qu'ouverts.",
+        ],
+        [
+          "Faits pour durer",
+          "Chaque version indique sur quoi elle a été testée, et les versions précédentes restent documentées.",
         ],
       ],
     },
-    developers: {
-      eyebrow: "Pour les développeurs",
-      title: "Construisez sur Progmasoft.",
-      description:
-        "Connectez les utilisateurs avec leur compte Progmasoft grâce à OAuth 2.1, et gérez les jetons de vos applications dans la Console Progmasoft.",
-      console: "Ouvrir la Console",
-      account: "Compte Progmasoft",
+    contact: {
+      title: "Nous contacter",
+      items: [
+        [
+          "Posez-nous vos questions",
+          "Questions, problèmes et idées arrivent aux personnes qui construisent le logiciel.",
+          "Nous écrire",
+        ],
+        [
+          "Signaler une vulnérabilité",
+          "Dites-le-nous en privé ; nous répondons, corrigeons et expliquons ce qui s'est passé.",
+          "Politique de sécurité",
+        ],
+        [
+          "Suivre le travail",
+          "Versions, tickets et discussions de nos projets publics.",
+          "GitHub",
+        ],
+      ],
     },
   },
 };
 
 export function getHomeMessages(locale: Locale): HomeMessages {
   return homeMessages[locale];
+}
+
+/** The headline-length line of one product, in one language. */
+export function productLine(locale: Locale, slug: ProductSlug): string {
+  return homeMessages[locale].lines[slug];
 }

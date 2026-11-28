@@ -2,36 +2,29 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
 :root {
-  --blue-700: #004e8c;
-  --blue-600: #0066b8;
-  --blue-500: #0078d4;
-  --blue-100: #dff0ff;
-  --violet-600: #6750a4;
-  --green-600: #16825d;
-  --ink-950: #121417;
-  --ink-800: #2a2f35;
-  --ink-650: #4c545d;
-  --ink-500: #68717c;
-  --line: #d9dee4;
-  --line-strong: #b9c1ca;
-  --surface: #ffffff;
-  --surface-muted: #f5f7f9;
-  --surface-blue: #f1f8ff;
-  --header-surface: rgb(255 255 255 / 94%);
-  --hero-background:
-    radial-gradient(circle at 85% 14%, rgb(0 120 212 / 10%), transparent 34%),
-    linear-gradient(180deg, #fff, #f7fbff);
-  --account-background: linear-gradient(
-    145deg,
-    #f8fbff 0%,
-    #fff 55%,
-    #f1f8ff 100%
-  );
-  --danger: #b42318;
-  --shadow-sm: 0 2px 8px rgb(18 20 23 / 8%);
-  --shadow-md: 0 16px 44px rgb(18 20 23 / 12%);
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --blue-700: rgb(19 80 95);
+  --blue-600: rgb(29 106 128);
+  --blue-500: rgb(42 127 150);
+  --blue-100: rgb(219 232 232);
+  --violet-600: rgb(103 80 164);
+  --green-600: rgb(22 130 93);
+  --ink-950: rgb(20 20 19);
+  --ink-800: rgb(43 42 39);
+  --ink-650: rgb(94 93 89);
+  --ink-500: rgb(109 107 100);
+  --line: rgb(220 216 204);
+  --line-strong: rgb(194 189 176);
+  --surface: rgb(240 238 230);
+  --surface-muted: rgb(232 230 220);
+  --surface-blue: rgb(228 233 228);
+  --header-surface: rgb(240 238 230 / 86%);
+  --hero-background: rgb(240 238 230);
+  --account-background: rgb(232 230 220);
+  --danger: rgb(180 35 24);
+  --shadow-sm: 0 2px 8px rgb(20 20 19 / 6%);
+  --shadow-md: 0 16px 44px rgb(20 20 19 / 10%);
+  --radius-sm: 8px;
+  --radius-md: 12px;
   --radius-lg: 16px;
   --shell: 1180px;
   color-scheme: light;
@@ -40,32 +33,25 @@
 /* Light is deliberately the product default. Dark mode is an explicit,
    persistent preference so operating-system changes do not surprise users. */
 :root[data-theme="dark"] {
-  --blue-700: #86c8ff;
-  --blue-600: #5db5f7;
-  --blue-500: #369fe8;
-  --blue-100: #14314a;
-  --violet-600: #a88eff;
-  --green-600: #5bd5aa;
-  --ink-950: #f4f6f8;
-  --ink-800: #dfe4e9;
-  --ink-650: #bac3cc;
-  --ink-500: #98a4af;
-  --line: #343c45;
-  --line-strong: #53606d;
-  --surface: #101317;
-  --surface-muted: #171c22;
-  --surface-blue: #10283a;
-  --header-surface: rgb(16 19 23 / 94%);
-  --hero-background:
-    radial-gradient(circle at 85% 14%, rgb(54 159 232 / 16%), transparent 34%),
-    linear-gradient(180deg, #101317, #131a22);
-  --account-background: linear-gradient(
-    145deg,
-    #131a22 0%,
-    #101317 55%,
-    #102231 100%
-  );
-  --danger: #ff8f86;
+  --blue-700: rgb(165 212 222);
+  --blue-600: rgb(127 184 196);
+  --blue-500: rgb(95 163 178);
+  --blue-100: rgb(29 51 56);
+  --violet-600: rgb(168 142 255);
+  --green-600: rgb(91 213 170);
+  --ink-950: rgb(240 238 230);
+  --ink-800: rgb(222 219 210);
+  --ink-650: rgb(176 174 165);
+  --ink-500: rgb(143 141 134);
+  --line: rgb(52 51 47);
+  --line-strong: rgb(74 72 67);
+  --surface: rgb(26 26 24);
+  --surface-muted: rgb(38 38 36);
+  --surface-blue: rgb(31 42 43);
+  --header-surface: rgb(26 26 24 / 86%);
+  --hero-background: rgb(26 26 24);
+  --account-background: rgb(34 34 32);
+  --danger: rgb(255 143 134);
   --shadow-sm: 0 2px 8px rgb(0 0 0 / 28%);
   --shadow-md: 0 16px 44px rgb(0 0 0 / 42%);
   color-scheme: dark;
@@ -115,7 +101,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid #ffbf47;
+  outline: 3px solid rgb(255 191 71);
   outline-offset: 3px;
 }
 
@@ -167,23 +153,23 @@ a {
 }
 
 .brand-tile-slate {
-  background: #3b4658;
+  background: rgb(59 70 88);
 }
 
 .brand-tile-teal {
-  background: #1e7188;
+  background: rgb(30 113 136);
 }
 
 .brand-tile-violet {
-  background: #7655fa;
+  background: rgb(118 85 250);
 }
 
 .brand-tile-orange {
-  background: #dc7644;
+  background: rgb(220 118 68);
 }
 
 .brand-name {
-  color: #8e0000;
+  color: rgb(142 0 0);
   font-size: 20px;
   font-weight: 650;
   letter-spacing: -0.02em;
@@ -191,7 +177,7 @@ a {
 }
 
 :root[data-theme="dark"] .brand-name {
-  color: #f23636;
+  color: rgb(242 54 54);
 }
 
 .brand-product {
@@ -274,7 +260,7 @@ a {
   display: none;
 }
 
-@media (max-width: 980px) {
+@media (width <= 980px) {
   .header-inner {
     gap: 12px;
   }
@@ -397,7 +383,7 @@ a {
 
 /* A brand with a product name leaves no room for the word on a narrow phone:
    the button keeps its icon and its accessible name. */
-@media (max-width: 420px) {
+@media (width <= 420px) {
   .menu-toggle {
     width: 44px;
     justify-content: center;
@@ -459,7 +445,6 @@ a {
 .button-small {
   min-height: 36px;
   padding: 8px 15px;
-  color: white !important;
 }
 
 .button-secondary {
@@ -482,17 +467,15 @@ a {
 
 .button-light:hover {
   border-color: white;
-  background: #eef7ff;
+  background: rgb(238 247 255);
   color: var(--blue-700);
 }
 
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--blue-700);
-  font-size: 13px;
-  font-weight: 750;
-  letter-spacing: 0.095em;
-  text-transform: uppercase;
+  color: var(--ink-500);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .hero {
@@ -563,7 +546,7 @@ a {
 
 .system-window {
   overflow: hidden;
-  border: 1px solid #c6d1dd;
+  border: 1px solid rgb(198 209 221);
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-md);
@@ -584,7 +567,7 @@ a {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #a9b2bc;
+  background: rgb(169 178 188);
 }
 
 .window-bar code {
@@ -781,26 +764,26 @@ a {
   gap: 44px;
   border-radius: var(--radius-lg);
   padding: 52px 58px;
-  background: linear-gradient(125deg, #004e8c, #0078d4);
+  background: linear-gradient(125deg, rgb(0 78 140), rgb(0 120 212));
   color: white;
   box-shadow: var(--shadow-md);
 }
 
 .callout .eyebrow {
-  color: #d8eeff;
+  color: rgb(216 238 255);
 }
 
 .callout p:last-child {
   max-width: 650px;
   margin: 16px 0 0;
-  color: #e9f5ff;
+  color: rgb(233 245 255);
   font-size: 17px;
 }
 
 .site-footer {
-  border-top: 1px solid #343a40;
-  background: #20252a;
-  color: #d8dde2;
+  border-top: 1px solid rgb(52 58 64);
+  background: rgb(32 37 42);
+  color: rgb(216 221 226);
 }
 
 .site-footer .brand {
@@ -824,11 +807,11 @@ a {
 .footer-grid p {
   max-width: 430px;
   margin: 12px 0 0;
-  color: #aeb6bf;
+  color: rgb(174 182 191);
 }
 
 .footer-grid a {
-  color: #d8dde2;
+  color: rgb(216 221 226);
 }
 
 .footer-grid strong {
@@ -840,10 +823,14 @@ a {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  border-top: 1px solid #3a4148;
+  border-top: 1px solid rgb(58 65 72);
   padding-block: 22px;
-  color: #aeb6bf;
+  color: rgb(174 182 191);
   font-size: 13px;
+}
+
+.footer-bottom a {
+  color: rgb(216 221 226);
 }
 
 .account-landing {
@@ -988,7 +975,7 @@ a {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #dff6ed;
+  background: rgb(223 246 237);
   color: var(--green-600);
   content: "✓";
   font-size: 11px;
@@ -1026,8 +1013,8 @@ a {
 }
 
 .form-message-error {
-  border: 1px solid #f1aaa4;
-  background: #fff2f0;
+  border: 1px solid rgb(241 170 164);
+  background: rgb(255 242 240);
   color: var(--danger);
 }
 
@@ -1045,7 +1032,7 @@ a {
 .field-group input {
   width: 100%;
   height: 44px;
-  border: 1px solid #89939e;
+  border: 1px solid rgb(137 147 158);
   border-radius: var(--radius-sm);
   padding: 8px 11px;
   background: var(--surface);
@@ -1351,26 +1338,26 @@ a {
 }
 
 .status-planned {
-  background: #fff4ce;
-  color: #6a4b00;
+  background: rgb(255 244 206);
+  color: rgb(106 75 0);
 }
 
 :root[data-theme="dark"] .form-message-error {
-  border-color: #7a3936;
-  background: #321b1d;
+  border-color: rgb(122 57 54);
+  background: rgb(50 27 29);
 }
 
 :root[data-theme="dark"] .account-trust span::before {
-  background: #15392e;
+  background: rgb(21 57 46);
 }
 
 :root[data-theme="dark"] .status-planned {
-  background: #493a11;
-  color: #ffe58b;
+  background: rgb(73 58 17);
+  color: rgb(255 229 139);
 }
 
 :root[data-theme="dark"] .button-light {
-  color: #004e8c;
+  color: rgb(0 78 140);
 }
 
 .dashboard-state {
@@ -1397,7 +1384,7 @@ a {
   color: var(--danger);
 }
 
-@media (max-width: 920px) {
+@media (width <= 920px) {
   .hero-grid,
   .account-landing-grid,
   .account-main,
@@ -1447,7 +1434,7 @@ a {
   }
 }
 
-@media (max-width: 680px) {
+@media (width <= 680px) {
   .shell,
   .account-main {
     width: min(calc(100% - 28px), var(--shell));
@@ -1567,4 +1554,150 @@ a {
 .theme-switching *::before,
 .theme-switching *::after {
   transition: none !important;
+}
+
+/* The Progmasoft look (2026-11-27): warm paper, a serif for page titles, dark
+   buttons with rounded corners, a quiet header that stays at the top, and a
+   dark footer. These rules follow the older ones so that they win. */
+
+h1 {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.button {
+  border-color: var(--ink-950);
+  border-radius: 8px;
+  background: var(--ink-950);
+  color: var(--surface);
+  font-weight: 500;
+}
+
+.button:hover {
+  border-color: var(--ink-950);
+  background: color-mix(in srgb, var(--ink-950) 82%, var(--surface));
+  color: var(--surface);
+  box-shadow: none;
+}
+
+.button-secondary {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+.button-secondary:hover {
+  border-color: var(--ink-950);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+input,
+select,
+textarea {
+  border-radius: 8px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  transition: border-color 200ms ease;
+}
+
+.site-header:hover,
+.site-header:focus-within {
+  border-bottom-color: var(--line);
+}
+
+.primary-nav > a {
+  color: var(--ink-950);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.primary-nav > a:hover {
+  color: var(--ink-650);
+}
+
+.site-header .button-small {
+  min-height: 38px;
+  border: 0;
+  border-radius: 8px;
+  padding-inline: 16px;
+  background: var(--ink-950);
+  color: var(--surface);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.site-header .button-small:hover {
+  background: color-mix(in srgb, var(--ink-950) 82%, var(--surface));
+  color: var(--surface);
+}
+
+.preference-controls button,
+.preference-controls select {
+  border-color: var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-950);
+  font-weight: 500;
+}
+
+.preference-controls button:hover,
+.preference-controls select:hover {
+  border-color: var(--ink-950);
+  background: transparent;
+}
+
+.menu-toggle {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink-950);
+}
+
+@media (width <= 980px) {
+  .header-menu .primary-nav {
+    border-bottom-color: var(--line);
+    background: var(--surface);
+    box-shadow: 0 24px 40px rgb(20 20 19 / 10%);
+  }
+}
+
+.site-footer {
+  border-top: 1px solid rgb(240 238 230 / 12%);
+  background: rgb(20 20 19);
+  color: rgb(176 174 165);
+}
+
+.footer-grid {
+  padding-block: 56px 64px;
+}
+
+.footer-grid strong {
+  color: rgb(240 238 230);
+  font-weight: 500;
+}
+
+.footer-grid a,
+.footer-bottom a {
+  color: rgb(176 174 165);
+  font-size: 15px;
+  transition: color 200ms ease;
+}
+
+.footer-grid a:hover,
+.footer-bottom a:hover {
+  color: rgb(240 238 230);
+  text-decoration: none;
+}
+
+.footer-bottom {
+  border-top-color: rgb(240 238 230 / 12%);
+  color: rgb(138 136 128);
 }

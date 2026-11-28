@@ -23,7 +23,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     canonicalHost === "product.progmasoft.com" ||
     canonicalHost === "license.progmasoft.com" ||
     canonicalHost === "agencelandmcp.progmasoft.com" ||
-    canonicalHost === "git.progmasoft.com"
+    canonicalHost === "git.progmasoft.com" ||
+    canonicalHost === "news.progmasoft.com"
       ? `https://${canonicalHost}/sitemap.xml`
       : "https://progmasoft.com/sitemap.xml";
   return {

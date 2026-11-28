@@ -4,6 +4,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 import { licensePages } from "@/lib/license-messages";
+import { articleUrl, articles } from "@/lib/news";
 import { productSlugs } from "@/lib/products";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -15,6 +16,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
     .split(":", 1)[0]
     ?.toLowerCase();
+  if (host === "news.progmasoft.com") {
+    return [
+      {
+        url: "https://news.progmasoft.com/",
+        changeFrequency: "weekly",
+        priority: 1,
+      },
+      ...articles.map((article) => ({
+        url: articleUrl(article),
+        lastModified: article.date,
+        changeFrequency: "yearly" as const,
+        priority: 0.8,
+      })),
+    ];
+  }
   if (host === "git.progmasoft.com") {
     return [{ url: "https://git.progmasoft.com/" }];
   }

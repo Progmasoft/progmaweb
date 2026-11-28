@@ -168,14 +168,11 @@ export const messages = {
       pageTitle: "Page not found",
     },
     footer: {
-      summary:
-        "Developer tools and data infrastructure built with durable contracts.",
       products: "Products",
       openSource: "Open source",
       organization: "Organization",
       support: "Support",
       websiteSource: "Website source",
-      closing: "Designed for clarity, security, and long-term maintenance.",
     },
     account: {
       securityLabel: "Account security properties",
@@ -338,15 +335,11 @@ export const messages = {
       pageTitle: "Seite nicht gefunden",
     },
     footer: {
-      summary:
-        "Entwicklerwerkzeuge und Dateninfrastruktur auf der Grundlage beständiger Verträge.",
       products: "Produkte",
       openSource: "Open Source",
       organization: "Organisation",
       support: "Support",
       websiteSource: "Quellcode der Website",
-      closing:
-        "Entwickelt für Klarheit, Sicherheit und langfristige Wartbarkeit.",
     },
     account: {
       securityLabel: "Sicherheitsmerkmale des Kontos",
@@ -512,15 +505,11 @@ export const messages = {
       pageTitle: "Страница не найдена",
     },
     footer: {
-      summary:
-        "Инструменты разработчика и инфраструктура данных, построенные на надёжных контрактах.",
       products: "Продукты",
       openSource: "Открытый исходный код",
       organization: "Организация",
       support: "Поддержка",
       websiteSource: "Исходный код сайта",
-      closing:
-        "Создано ради ясности, безопасности и долгосрочного сопровождения.",
     },
     account: {
       securityLabel: "Свойства безопасности аккаунта",
@@ -686,15 +675,11 @@ export const messages = {
       pageTitle: "Page introuvable",
     },
     footer: {
-      summary:
-        "Des outils pour développeurs et une infrastructure de données bâtis sur des contrats durables.",
       products: "Produits",
       openSource: "Open source",
       organization: "Organisation",
       support: "Assistance",
       websiteSource: "Source du site",
-      closing:
-        "Conçu pour la clarté, la sécurité et la maintenance à long terme.",
     },
     account: {
       securityLabel: "Propriétés de sécurité du compte",

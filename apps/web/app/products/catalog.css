@@ -14,7 +14,7 @@
 
 .pm-views a {
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   padding: 6px 14px;
   background: var(--surface);
   color: var(--ink-800);

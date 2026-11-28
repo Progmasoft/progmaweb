@@ -1,0 +1,179 @@
+/* SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com> */
+
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* news.progmasoft.com: the language of the home page, with a large lead
+   article, cards for the rest, and articles set in a narrow column. */
+
+.pm-news-head {
+  padding-block: clamp(56px, 8vw, 104px) clamp(32px, 4vw, 48px);
+}
+
+.pm-news-head h1 {
+  margin: 0;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.pm-news-head p {
+  margin: 16px 0 0;
+  color: var(--home-soft);
+  font-size: clamp(18px, 1.8vw, 22px);
+}
+
+.pm-news-lead {
+  position: relative;
+  display: grid;
+  min-height: clamp(360px, 44vw, 520px);
+  overflow: hidden;
+  border-radius: 16px;
+  color: rgb(255 255 255);
+  align-items: end;
+  text-decoration: none;
+}
+
+.pm-news-lead:hover {
+  text-decoration: none;
+}
+
+.pm-news-lead-field {
+  position: absolute;
+  inset: 0;
+}
+
+.pm-news-lead::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(10 14 20 / 55%), transparent 65%);
+  content: "";
+}
+
+.pm-news-lead-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+  padding: clamp(28px, 4vw, 48px);
+}
+
+.pm-news-lead-copy time {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.pm-news-lead-copy strong {
+  font-size: clamp(32px, 4.4vw, 56px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.pm-news-lead-copy span {
+  max-width: 620px;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.pm-news-list {
+  padding-block: 24px clamp(72px, 9vw, 120px);
+}
+
+.pm-news-list ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pm-news-list a {
+  display: grid;
+  gap: 14px;
+  height: 100%;
+  padding: 28px;
+  border-radius: 16px;
+  background: var(--home-card);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 300ms var(--ease);
+}
+
+.pm-news-list a:hover {
+  transform: translateY(-3px);
+}
+
+.pm-news-list strong {
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+/* One article */
+
+.pm-article-head {
+  max-width: 860px;
+  padding-block: clamp(56px, 8vw, 104px) clamp(32px, 4vw, 48px);
+}
+
+.pm-article-head .pm-news-meta a {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  color: inherit;
+}
+
+.pm-article-head h1 {
+  margin: 20px 0 0;
+  font-size: clamp(40px, 5.6vw, 72px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+}
+
+.pm-article-summary {
+  margin: 24px 0 0;
+  color: var(--home-soft);
+  font-size: clamp(19px, 2vw, 24px);
+  line-height: 1.45;
+}
+
+.pm-article-field {
+  height: clamp(200px, 26vw, 340px);
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.pm-article-body {
+  max-width: 720px;
+  padding-block: clamp(40px, 5vw, 64px) clamp(72px, 9vw, 120px);
+}
+
+.pm-article-paragraph {
+  margin: 0 0 1.2em;
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.pm-article-links {
+  justify-content: flex-start;
+  margin-top: 40px;
+}
+
+.pm-article-back {
+  margin: 48px 0 0;
+}
+
+.pm-article-back a {
+  color: var(--home-soft);
+}
+
+@media (width <= 760px) {
+  .pm-news-list ul {
+    grid-template-columns: 1fr;
+  }
+}

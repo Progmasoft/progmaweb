@@ -2,12 +2,21 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { Metadata } from "next";
+import { Source_Serif_4 } from "next/font/google";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { nonceHeader } from "@/lib/content-security-policy";
 import { getLocale } from "@/lib/locale.server";
 import { themeBootstrap } from "@/lib/theme";
 import "./globals.css";
+
+/** The serif of the headlines, served from this site. */
+const serif = Source_Serif_4({
+  subsets: ["latin", "latin-ext", "cyrillic"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-serif",
+});
 
 export const metadata: Metadata = {
   // The apex host is the only public organization canonical. The www host is a
@@ -35,6 +44,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      className={serif.variable}
       // data-theme belongs to the bootstrap script (lib/theme.ts) and the theme
       // control only.
       // Rendered here, React would set it back to light whenever the server

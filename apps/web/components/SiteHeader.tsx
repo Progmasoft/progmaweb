@@ -53,7 +53,7 @@ export function SiteHeader({
             </>
           ) : (
             <>
-              <a href="https://progmasoft.com/#technology">{site.technology}</a>
+              <a href="https://news.progmasoft.com/">{site.technology}</a>
               <a href="https://product.progmasoft.com/">{site.products}</a>
               <a href="https://console.progmasoft.com/">{site.developers}</a>
               <a href="https://github.com/Progmasoft">GitHub</a>
