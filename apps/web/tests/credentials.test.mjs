@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import {
   applicationKinds,
   authorizeRoute,
@@ -30,7 +29,7 @@ function shape(value) {
 test("every language has every message of the OAuth pages", () => {
   const english = shape(credentialsMessages["en-US"]);
   for (const locale of supportedLocales) {
-    assert.deepEqual(shape(credentialsMessages[locale]), english, locale);
+    expect(shape(credentialsMessages[locale]), locale).toStrictEqual(english);
   }
 });
 
@@ -38,45 +37,45 @@ test("every type and scope has its text in every language", () => {
   for (const locale of supportedLocales) {
     const messages = credentialsMessages[locale];
     for (const kind of applicationKinds) {
-      assert.ok(messages.kinds[kind].title, `${locale} ${kind}`);
-      assert.ok(messages.kinds[kind].description, `${locale} ${kind}`);
+      expect(messages.kinds[kind].title, `${locale} ${kind}`).toBeTruthy();
+      expect(
+        messages.kinds[kind].description,
+        `${locale} ${kind}`,
+      ).toBeTruthy();
     }
     for (const scope of oauthScopes) {
-      assert.ok(messages.scopes[scope], `${locale} ${scope}`);
+      expect(messages.scopes[scope], `${locale} ${scope}`).toBeTruthy();
     }
   }
 });
 
 test("the pages people see map to the authorize host's routes", () => {
-  assert.equal(authorizeRoute("/"), "/authorize");
-  assert.equal(authorizeRoute("/signin"), "/authorize/signin");
-  assert.equal(authorizeRoute("/consent/"), "/authorize/consent");
-  assert.equal(
-    authorizeRoute("/account/applications"),
+  expect(authorizeRoute("/")).toBe("/authorize");
+  expect(authorizeRoute("/signin")).toBe("/authorize/signin");
+  expect(authorizeRoute("/consent/")).toBe("/authorize/consent");
+  expect(authorizeRoute("/account/applications")).toBe(
     "/authorize/applications",
   );
   for (const path of ["/login", "/register", "/credentials", "/new", "/x"]) {
-    assert.equal(authorizeRoute(path), null, path);
+    expect(authorizeRoute(path), path).toBe(null);
   }
 });
 
 test("the issuer has its home page only", () => {
-  assert.equal(issuerRoute("/"), "/issuer");
+  expect(issuerRoute("/")).toBe("/issuer");
   for (const path of ["/signin", "/consent", "/account/applications"]) {
-    assert.equal(issuerRoute(path), null, path);
+    expect(issuerRoute(path), path).toBe(null);
   }
 });
 
 test("the public pages of the console map to the internal routes", () => {
-  assert.equal(consoleRoute("/"), "/console");
-  assert.equal(consoleRoute("/credentials/"), "/console/credentials");
-  assert.equal(consoleRoute("/credentials/new"), "/console/credentials/new");
-  assert.equal(
-    consoleRoute("/credentials/new/spa"),
+  expect(consoleRoute("/")).toBe("/console");
+  expect(consoleRoute("/credentials/")).toBe("/console/credentials");
+  expect(consoleRoute("/credentials/new")).toBe("/console/credentials/new");
+  expect(consoleRoute("/credentials/new/spa")).toBe(
     "/console/credentials/new/spa",
   );
-  assert.equal(
-    consoleRoute("/credentials/pmo_abc"),
+  expect(consoleRoute("/credentials/pmo_abc")).toBe(
     "/console/credentials/pmo_abc",
   );
   for (const path of [
@@ -88,13 +87,12 @@ test("the public pages of the console map to the internal routes", () => {
     "/credentials/new/spa/x",
     "/login",
   ]) {
-    assert.equal(consoleRoute(path), null, path);
+    expect(consoleRoute(path), path).toBe(null);
   }
 });
 
 test("the sign-in page only returns to this host", () => {
-  assert.equal(
-    localReturnUrl("/connect/authorize?client_id=x"),
+  expect(localReturnUrl("/connect/authorize?client_id=x")).toBe(
     "/connect/authorize?client_id=x",
   );
   for (const value of [
@@ -106,19 +104,17 @@ test("the sign-in page only returns to this host", () => {
     null,
     undefined,
   ]) {
-    assert.equal(localReturnUrl(value), "/", String(value));
+    expect(localReturnUrl(value), String(value)).toBe("/");
   }
-  assert.equal(
-    signInPath("/credentials/new/web"),
+  expect(signInPath("/credentials/new/web")).toBe(
     "/signin?ReturnUrl=%2Fcredentials%2Fnew%2Fweb",
   );
 });
 
 test("text areas become distinct addresses and messages fill their placeholders", () => {
-  assert.deepEqual(
+  expect(
     lines(" https://a.example/cb \n\nhttps://a.example/cb\nb "),
-    ["https://a.example/cb", "b"],
-  );
-  assert.equal(format("Allow {name}?", { name: "Example" }), "Allow Example?");
-  assert.equal(format("{count} tokens", { count: 10 }), "10 tokens");
+  ).toStrictEqual(["https://a.example/cb", "b"]);
+  expect(format("Allow {name}?", { name: "Example" })).toBe("Allow Example?");
+  expect(format("{count} tokens", { count: 10 })).toBe("10 tokens");
 });

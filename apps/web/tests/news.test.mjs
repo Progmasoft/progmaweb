@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import { supportedLocales } from "../lib/localization.ts";
 import {
   articles,
@@ -16,15 +15,13 @@ import {
 import { products } from "../lib/products.ts";
 
 test("an article's address is its English title in kebab case", () => {
-  assert.equal(
-    slugOf("Tazel 0.2.0 shares results through a remote cache"),
+  expect(slugOf("Tazel 0.2.0 shares results through a remote cache")).toBe(
     "tazel-0-2-0-shares-results-through-a-remote-cache",
   );
-  assert.equal(slugOf("  C++ & Zig: ready!  "), "c-zig-ready");
+  expect(slugOf("  C++ & Zig: ready!  ")).toBe("c-zig-ready");
   for (const article of articles) {
-    assert.equal(article.slug, slugOf(article.text["en-US"].title));
-    assert.equal(
-      articleUrl(article),
+    expect(article.slug).toBe(slugOf(article.text["en-US"].title));
+    expect(articleUrl(article)).toBe(
       `https://news.progmasoft.com/${article.slug}`,
     );
   }
@@ -32,47 +29,47 @@ test("an article's address is its English title in kebab case", () => {
 
 test("every address names one article", () => {
   const slugs = articles.map((article) => article.slug);
-  assert.equal(new Set(slugs).size, slugs.length);
+  expect(new Set(slugs).size).toBe(slugs.length);
 });
 
 test("articles are newest first", () => {
   const dates = articles.map((article) => article.date);
-  assert.deepEqual(dates, [...dates].sort().reverse());
+  expect(dates).toStrictEqual([...dates].sort().reverse());
 });
 
 test("every article is written in every language", () => {
   for (const article of articles) {
     for (const locale of supportedLocales) {
       const text = article.text[locale];
-      assert.ok(text?.title && text.summary, `${article.slug} ${locale}`);
-      assert.equal(
-        text.body.length,
-        article.text["en-US"].body.length,
+      expect(
+        text?.title && text.summary,
         `${article.slug} ${locale}`,
+      ).toBeTruthy();
+      expect(text.body.length, `${article.slug} ${locale}`).toBe(
+        article.text["en-US"].body.length,
       );
     }
   }
   for (const locale of supportedLocales) {
-    assert.ok(getNewsMessages(locale).title, locale);
+    expect(getNewsMessages(locale).title, locale).toBeTruthy();
   }
 });
 
 test("an article that announces a release points to its notes", () => {
   for (const article of articles.filter((entry) => entry.release)) {
-    assert.equal(
-      releaseNotes(article),
+    expect(releaseNotes(article)).toBe(
       products[article.product].latestRelease?.url,
     );
   }
 });
 
 test("news.progmasoft.com serves the list and each article", () => {
-  assert.equal(newsRoute("/"), "/news");
+  expect(newsRoute("/")).toBe("/news");
   const [first] = articles;
-  assert.equal(newsRoute(`/${first.slug}`), `/news/${first.slug}`);
-  assert.equal(newsRoute(`/${first.slug}/`), `/news/${first.slug}`);
-  assert.equal(newsRoute("/no-such-article"), null);
-  assert.equal(newsRoute("/a/b"), null);
-  assert.equal(newsRoute("/Tazel"), null);
-  assert.equal(findArticle(first.slug), first);
+  expect(newsRoute(`/${first.slug}`)).toBe(`/news/${first.slug}`);
+  expect(newsRoute(`/${first.slug}/`)).toBe(`/news/${first.slug}`);
+  expect(newsRoute("/no-such-article")).toBe(null);
+  expect(newsRoute("/a/b")).toBe(null);
+  expect(newsRoute("/Tazel")).toBe(null);
+  expect(findArticle(first.slug)).toBe(first);
 });

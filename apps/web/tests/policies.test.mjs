@@ -1,9 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import { messages, supportedLocales } from "../lib/localization.ts";
 import {
   isPolicyVersion,
@@ -27,24 +26,28 @@ test("the page and the account API name the same version", () => {
     new URL("../../api/Accounts/PolicyAcceptance.cs", import.meta.url),
     "utf8",
   );
-  assert.match(api, new RegExp(`CurrentVersion = "${policyVersion}"`));
-  assert.match(policyVersion, /^\d{4}-\d{2}-\d{2}$/);
+  expect(api).toMatch(new RegExp(`CurrentVersion = "${policyVersion}"`));
+  expect(policyVersion).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 });
 
 test("every language has both policies, part for part", () => {
-  assert.deepEqual(Object.keys(policies).sort(), [...supportedLocales].sort());
+  expect(Object.keys(policies).sort()).toStrictEqual(
+    [...supportedLocales].sort(),
+  );
   for (const locale of supportedLocales) {
     for (const kind of ["privacy", "security"]) {
       const text = policies[locale][kind];
       const english = enUS[kind];
-      assert.equal(text.sections.length, english.sections.length, locale);
+      expect(text.sections.length, locale).toBe(english.sections.length);
       text.sections.forEach((section, index) => {
-        assert.ok(section.heading.length > 0, `${locale} ${kind} ${index}`);
-        assert.equal(
+        expect(
+          section.heading.length > 0,
+          `${locale} ${kind} ${index}`,
+        ).toBeTruthy();
+        expect(
           section.paragraphs.length,
-          english.sections[index].paragraphs.length,
           `${locale} ${kind} ${section.heading}`,
-        );
+        ).toBe(english.sections[index].paragraphs.length);
       });
     }
   }
@@ -57,32 +60,30 @@ test("the privacy policy keeps the IP address for marketplace uploads only and s
   const address = privacy.find((text) =>
     text.startsWith("We keep your IP address for one purpose only."),
   );
-  assert.ok(address);
-  assert.match(
-    address,
+  expect(address).toBeTruthy();
+  expect(address).toMatch(
     /the marketplace will record the IP address each upload came from/,
   );
-  assert.match(
-    address,
+  expect(address).toMatch(
     /The Agenceland MCP Marketplace does not yet take uploads from accounts/,
   );
-  assert.match(address, /competent authorities/);
-  assert.ok(
+  expect(address).toMatch(/competent authorities/);
+  expect(
     privacy.some((text) =>
       text.startsWith("We do not sell, rent or trade your data"),
     ),
-  );
+  ).toBeTruthy();
 });
 
 test("registration names the policies in every language", () => {
   for (const locale of supportedLocales) {
     const { auth } = messages[locale];
-    assert.ok(auth.consentPrivacy.length > 0, locale);
-    assert.ok(auth.consentSecurity.length > 0, locale);
-    assert.ok(auth.consentRequired.length > 0, locale);
-    assert.ok(auth.googlePoliciesRequired.length > 0, locale);
+    expect(auth.consentPrivacy.length > 0, locale).toBeTruthy();
+    expect(auth.consentSecurity.length > 0, locale).toBeTruthy();
+    expect(auth.consentRequired.length > 0, locale).toBeTruthy();
+    expect(auth.googlePoliciesRequired.length > 0, locale).toBeTruthy();
   }
-  assert.deepEqual(policyUrls, {
+  expect(policyUrls).toStrictEqual({
     privacy: "https://progmasoft.com/privacy",
     security: "https://progmasoft.com/security",
   });
@@ -91,30 +92,32 @@ test("registration names the policies in every language", () => {
 test("the newest version names the Agenceland MCP Marketplace and no closed service", () => {
   for (const locale of supportedLocales) {
     const text = JSON.stringify(policies[locale]);
-    assert.doesNotMatch(text, /ViGet|Tazel/, locale);
-    assert.match(text, /Agenceland MCP Marketplace/, locale);
+    expect(text, locale).not.toMatch(/ViGet|Tazel/);
+    expect(text, locale).toMatch(/Agenceland MCP Marketplace/);
   }
   // The version of 2026-11-06 stays as it was published.
-  assert.match(JSON.stringify(enUS20261106), /ViGet does not yet take uploads/);
-  assert.equal(enUS20261106.versionDate, "6 November 2026");
-  assert.equal(enUS.versionDate, "6 December 2026");
+  expect(JSON.stringify(enUS20261106)).toMatch(
+    /ViGet does not yet take uploads/,
+  );
+  expect(enUS20261106.versionDate).toBe("6 November 2026");
+  expect(enUS.versionDate).toBe("6 December 2026");
 });
 
 test("the version in effect is the newest whose date has come", () => {
-  assert.deepEqual([...policyVersions], ["2026-11-06", "2026-12-06"]);
-  assert.equal(policyVersion, policyVersions.at(-1));
-  assert.equal(policyInEffect(new Date("2026-11-21T12:00:00Z")), "2026-11-06");
-  assert.equal(policyInEffect(new Date("2026-12-05T23:59:59Z")), "2026-11-06");
-  assert.equal(policyInEffect(new Date("2026-12-06T00:00:00Z")), "2026-12-06");
-  assert.equal(policyInEffect(new Date("2030-01-01T00:00:00Z")), "2026-12-06");
-  assert.equal(policyAfter("2026-11-06"), "2026-12-06");
-  assert.equal(policyAfter("2026-12-06"), undefined);
-  assert.ok(isPolicyVersion("2026-11-06"));
-  assert.ok(!isPolicyVersion("2026-11-07"));
-  assert.ok(!isPolicyVersion("latest"));
+  expect([...policyVersions]).toStrictEqual(["2026-11-06", "2026-12-06"]);
+  expect(policyVersion).toBe(policyVersions.at(-1));
+  expect(policyInEffect(new Date("2026-11-21T12:00:00Z"))).toBe("2026-11-06");
+  expect(policyInEffect(new Date("2026-12-05T23:59:59Z"))).toBe("2026-11-06");
+  expect(policyInEffect(new Date("2026-12-06T00:00:00Z"))).toBe("2026-12-06");
+  expect(policyInEffect(new Date("2030-01-01T00:00:00Z"))).toBe("2026-12-06");
+  expect(policyAfter("2026-11-06")).toBe("2026-12-06");
+  expect(policyAfter("2026-12-06")).toBe(undefined);
+  expect(isPolicyVersion("2026-11-06")).toBeTruthy();
+  expect(!isPolicyVersion("2026-11-07")).toBeTruthy();
+  expect(!isPolicyVersion("latest")).toBeTruthy();
   for (const locale of supportedLocales) {
     for (const word of Object.values(policyVersionWords[locale])) {
-      assert.ok(word.length > 0, locale);
+      expect(word.length > 0, locale).toBeTruthy();
     }
   }
 });

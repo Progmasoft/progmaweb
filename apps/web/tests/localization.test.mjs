@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Progmasoft <support@progmasoft.com>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import assert from "node:assert/strict";
-import { test } from "node:test";
+import { expect, test } from "vitest";
 import {
   getMessages,
   isLocale,
@@ -16,10 +15,10 @@ import {
 import { homeMessages } from "../lib/home-messages.ts";
 
 test("only the published locales are accepted", () => {
-  assert.deepEqual(supportedLocales, ["en-US", "de-DE", "ru-RU", "fr-FR"]);
-  assert.equal(isLocale("en-US"), true);
-  assert.equal(isLocale("de-DE"), true);
-  assert.equal(isLocale("ru-RU"), true);
+  expect(supportedLocales).toStrictEqual(["en-US", "de-DE", "ru-RU", "fr-FR"]);
+  expect(isLocale("en-US")).toBe(true);
+  expect(isLocale("de-DE")).toBe(true);
+  expect(isLocale("ru-RU")).toBe(true);
   for (const value of [
     "en",
     "de",
@@ -32,7 +31,7 @@ test("only the published locales are accepted", () => {
     "",
     undefined,
   ]) {
-    assert.equal(isLocale(value), false, `unexpected locale: ${value}`);
+    expect(isLocale(value), `unexpected locale: ${value}`).toBe(false);
   }
 });
 
@@ -45,18 +44,18 @@ test("both locales give the account routes distinct page metadata", () => {
     "loginTitle",
     "registerTitle",
   ]) {
-    assert.equal(typeof english[key], "string");
-    assert.equal(typeof german[key], "string");
-    assert.notEqual(english[key].trim(), "");
-    assert.notEqual(german[key].trim(), "");
+    expect(typeof english[key]).toBe("string");
+    expect(typeof german[key]).toBe("string");
+    expect(english[key].trim()).not.toBe("");
+    expect(german[key].trim()).not.toBe("");
   }
-  assert.notEqual(english.loginTitle, german.loginTitle);
-  assert.notEqual(english.registerTitle, german.registerTitle);
+  expect(english.loginTitle).not.toBe(german.loginTitle);
+  expect(english.registerTitle).not.toBe(german.registerTitle);
 });
 
 test("each supported locale resolves to its own complete message tree", () => {
   for (const locale of supportedLocales) {
-    assert.strictEqual(getMessages(locale), messages[locale]);
+    expect(getMessages(locale)).toBe(messages[locale]);
   }
 
   function shape(value) {
@@ -66,22 +65,22 @@ test("each supported locale resolves to its own complete message tree", () => {
         Object.entries(value).map(([key, child]) => [key, shape(child)]),
       );
     }
-    assert.equal(typeof value, "string");
-    assert.notEqual(value.trim(), "");
+    expect(typeof value).toBe("string");
+    expect(value.trim()).not.toBe("");
     return "text";
   }
 
-  assert.deepEqual(shape(messages["de-DE"]), shape(messages["en-US"]));
+  expect(shape(messages["de-DE"])).toStrictEqual(shape(messages["en-US"]));
 });
 
 test("the language cookie is shared by production hosts and host-only elsewhere", () => {
-  assert.equal(localeCookieName, "progmasoft_locale");
+  expect(localeCookieName).toBe("progmasoft_locale");
   for (const host of [
     "progmasoft.com",
     "account.progmasoft.com",
     "product.progmasoft.com",
   ]) {
-    assert.equal(localeCookieOptions(host, true).domain, ".progmasoft.com");
+    expect(localeCookieOptions(host, true).domain).toBe(".progmasoft.com");
   }
   for (const host of [
     "localhost",
@@ -90,29 +89,25 @@ test("the language cookie is shared by production hosts and host-only elsewhere"
     "progmasoft.com.example",
     "",
   ]) {
-    assert.equal(localeCookieOptions(host, false).domain, undefined, host);
+    expect(localeCookieOptions(host, false).domain, host).toBe(undefined);
   }
 });
 
 test("the language cookie is unreadable by scripts and secure only over TLS", () => {
   const overTls = localeCookieOptions("progmasoft.com", true);
-  assert.equal(overTls.httpOnly, true);
-  assert.equal(overTls.sameSite, "lax");
-  assert.equal(overTls.secure, true);
-  assert.equal(overTls.maxAge, 60 * 60 * 24 * 365);
-  assert.equal(localeCookieOptions("localhost", false).secure, false);
+  expect(overTls.httpOnly).toBe(true);
+  expect(overTls.sameSite).toBe("lax");
+  expect(overTls.secure).toBe(true);
+  expect(overTls.maxAge).toBe(60 * 60 * 24 * 365);
+  expect(localeCookieOptions("localhost", false).secure).toBe(false);
 });
 
 test("the request host prefers the forwarded host and drops port and case", () => {
-  assert.equal(
-    requestHost("Account.Progmasoft.com", "127.0.0.1:3010"),
+  expect(requestHost("Account.Progmasoft.com", "127.0.0.1:3010")).toBe(
     "account.progmasoft.com",
   );
-  assert.equal(
-    requestHost(null, "account.localhost:3000"),
-    "account.localhost",
-  );
-  assert.equal(requestHost(null, null), "");
+  expect(requestHost(null, "account.localhost:3000")).toBe("account.localhost");
+  expect(requestHost(null, null)).toBe("");
 });
 
 // The shape of a message tree: object keys, array lengths and leaf types,
@@ -144,19 +139,18 @@ function leavesOf(value) {
 test("every locale has exactly the messages of the default locale", () => {
   const reference = shapeOf(messages["en-US"]);
   for (const locale of supportedLocales) {
-    assert.deepEqual(shapeOf(messages[locale]), reference, locale);
+    expect(shapeOf(messages[locale]), locale).toStrictEqual(reference);
     for (const text of leavesOf(messages[locale])) {
-      assert.equal(typeof text, "string", locale);
-      assert.notEqual(text.trim(), "", `${locale} has an empty message`);
+      expect(typeof text, locale).toBe("string");
+      expect(text.trim(), `${locale} has an empty message`).not.toBe("");
     }
   }
 });
 
 test("every locale has a name in its own language for the language menu", () => {
-  assert.deepEqual(Object.keys(localeNames), [...supportedLocales]);
-  assert.equal(localeNames["ru-RU"], "Русский");
-  assert.equal(
-    new Set(Object.values(localeNames)).size,
+  expect(Object.keys(localeNames)).toStrictEqual([...supportedLocales]);
+  expect(localeNames["ru-RU"]).toBe("Русский");
+  expect(new Set(Object.values(localeNames)).size).toBe(
     supportedLocales.length,
   );
 });
@@ -169,43 +163,52 @@ test("the Russian messages are written in Cyrillic", () => {
     russian.auth.signIn,
     russian.dashboard.welcome,
   ]) {
-    assert.match(text, /[А-Яа-яЁё]/);
+    expect(text).toMatch(/[А-Яа-яЁё]/);
   }
-  assert.notEqual(russian.auth.signIn, messages["en-US"].auth.signIn);
+  expect(russian.auth.signIn).not.toBe(messages["en-US"].auth.signIn);
 });
 
 test("French is published, and Hebrew is retired", async () => {
   const { retiredLocales } = await import("../lib/localization.ts");
-  assert.equal(isLocale("fr-FR"), true);
-  assert.equal(localeNames["fr-FR"], "Français");
+  expect(isLocale("fr-FR")).toBe(true);
+  expect(localeNames["fr-FR"]).toBe("Français");
   const french = messages["fr-FR"];
   for (const text of [
     french.auth.signIn,
     french.metadata.homeDescription,
     french.dashboard.welcome,
   ]) {
-    assert.match(text, /[a-zàâçéèêëîïôûùüÿœ]/);
-    assert.ok(!/[֐-׿]/.test(text), text);
+    expect(text).toMatch(/[a-zàâçéèêëîïôûùüÿœ]/);
+    expect(!/[֐-׿]/.test(text), text).toBeTruthy();
   }
-  assert.notEqual(french.auth.signIn, messages["en-US"].auth.signIn);
-  assert.deepEqual(retiredLocales, ["he-IL"]);
-  assert.equal(isLocale("he-IL"), false);
+  expect(french.auth.signIn).not.toBe(messages["en-US"].auth.signIn);
+  expect(retiredLocales).toStrictEqual(["he-IL"]);
+  expect(isLocale("he-IL")).toBe(false);
 });
 
 test("a ?lang= link stores a published language, and the fallback for a retired one", async () => {
   const { languageRequest } = await import("../lib/localization.ts");
-  assert.deepEqual(languageRequest("fr-FR"), { locale: "fr-FR", status: 307 });
-  assert.deepEqual(languageRequest("de-DE"), { locale: "de-DE", status: 307 });
-  assert.deepEqual(languageRequest("he-IL"), { locale: "en-US", status: 308 });
+  expect(languageRequest("fr-FR")).toStrictEqual({
+    locale: "fr-FR",
+    status: 307,
+  });
+  expect(languageRequest("de-DE")).toStrictEqual({
+    locale: "de-DE",
+    status: 307,
+  });
+  expect(languageRequest("he-IL")).toStrictEqual({
+    locale: "en-US",
+    status: 308,
+  });
   for (const value of [undefined, "", "he", "fr", "tr-TR", "constructor"]) {
-    assert.equal(languageRequest(value), undefined, `${value}`);
+    expect(languageRequest(value), `${value}`).toBe(undefined);
   }
 });
 
 test("the browser preference selects the language when nothing was chosen", async () => {
   const { fallbackLocale, negotiateLocale } =
     await import("../lib/localization.ts");
-  assert.equal(fallbackLocale, "en-US");
+  expect(fallbackLocale).toBe("en-US");
   const cases = [
     [null, "en-US"],
     ["", "en-US"],
@@ -232,8 +235,8 @@ test("the browser preference selects the language when nothing was chosen", asyn
     ["constructor,__proto__", "en-US"],
   ];
   for (const [header, expected] of cases) {
-    assert.equal(negotiateLocale(header), expected, String(header));
+    expect(negotiateLocale(header), String(header)).toBe(expected);
   }
   // Only the beginning of an oversized header is read.
-  assert.equal(negotiateLocale(`${"x,".repeat(2000)}de`), "en-US");
+  expect(negotiateLocale(`${"x,".repeat(2000)}de`)).toBe("en-US");
 });
