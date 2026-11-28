@@ -17,6 +17,7 @@ import {
   getCatalogMessages,
   parseProductFilter,
   productCategories,
+  productFacts,
   productLanguages,
   productSlugs,
   productStatuses,
@@ -150,7 +151,7 @@ export default async function ProductsPage({ searchParams }: CatalogProps) {
                   <li key={`${slug}-${release.version}`}>
                     <span
                       className="pm-release-dot pm-live-accent"
-                      style={accentStyle(products[slug].accent)}
+                      style={accentStyle(productFacts(slug).accent)}
                       aria-hidden="true"
                     />
                     <a href={release.url}>
