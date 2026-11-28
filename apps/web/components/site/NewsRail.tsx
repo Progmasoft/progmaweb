@@ -56,15 +56,17 @@ export function NewsRail({ label, previous, next, children }: NewsRailProps) {
 
   const move = (direction: 1 | -1) => {
     const element = track.current;
-    const card = element?.firstElementChild as HTMLElement | null;
-    if (!element || !card) return;
+    // One step is the width of a card and the gap after it.
+    const width = (element?.firstElementChild as HTMLElement | null)
+      ?.offsetWidth;
+    if (!element || width === undefined) return;
     const gap = Number.parseFloat(getComputedStyle(element).columnGap) || 0;
     const rtl = getComputedStyle(element).direction === "rtl" ? -1 : 1;
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     element.scrollBy({
-      left: direction * rtl * (card.offsetWidth + gap),
+      left: direction * rtl * (width + gap),
       behavior: reduce ? "auto" : "smooth",
     });
   };
@@ -79,7 +81,9 @@ export function NewsRail({ label, previous, next, children }: NewsRailProps) {
               type="button"
               aria-label={previous}
               disabled={atStart}
-              onClick={() => move(-1)}
+              onClick={() => {
+                move(-1);
+              }}
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M15 5l-7 7 7 7" />
@@ -89,7 +93,9 @@ export function NewsRail({ label, previous, next, children }: NewsRailProps) {
               type="button"
               aria-label={next}
               disabled={atEnd}
-              onClick={() => move(1)}
+              onClick={() => {
+                move(1);
+              }}
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M9 5l7 7-7 7" />
